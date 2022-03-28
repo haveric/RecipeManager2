@@ -85,6 +85,7 @@ title: Recipe Flags
         <div class='flaggroup'>
             <span class='flagtype flagtype-ingredient'>Ingredient Flags</span>
             <ul class='flaggroup__list'>
+                <li><a href='#axolotlbucketitem'><b>@axolotlbucketitem</b></a></li>
                 <li><a href='#banneritem'><b>@banneritem</b></a></li>
                 <li><a href='#bookitem'><b>@bookitem</b></a></li>
                 <li><a href='#bundleitem'><b>@bundleitem</b></a></li>
@@ -117,6 +118,7 @@ title: Recipe Flags
             <span class='flagtype flagtype-result'>Result Flags</span>
             <ul class='flaggroup__list'>
                 <li><a href='#applyenchantment'><b>@applyenchantment</b></a></li>
+                <li><a href='#axolotlbucketitem'><b>@axolotlbucketitem</b></a></li>
                 <li><a href='#banneritem'><b>@banneritem</b></a></li>
                 <li><a href='#biome'><b>@biome</b></a></li>
                 <li><a href='#blockpowered'><b>@blockpowered</b></a></li>
@@ -176,6 +178,7 @@ title: Recipe Flags
                 <li><a href='#skullowner'><b>@skullowner</b></a></li>
                 <li><a href='#sound'><b>@sound</b></a></li>
                 <li><a href='#spawnparticle'><b>@spawnparticle</b></a></li>
+                <li><a href='#storeenchantment'><b>@storeenchantment</b></a></li>
                 <li><a href='#summon'><b>@summon</b></a></li>
                 <li><a href='#suspiciousstewitem'><b>@suspiciousstewitem</b></a></li>
                 <li><a href='#temperature'><b>@temperature</b></a></li>
@@ -220,6 +223,7 @@ title: Recipe Flags
 
 <span>
     Applies the enchantments from books onto the result
+      If you want to store enchantments in an enchanted book, use: @storeenchantment
     Using this flag more than once will overwrite the previous one.
 
     As '&lt;arguments&gt;' you must define at least one feature to copy from the ingredient to the result.
@@ -229,12 +233,14 @@ title: Recipe Flags
       ignorelevel               = Ignore enchantment level restrictions
       maxlevel &lt;level&gt;          = Restrict the maximum level
       onlybooks                 = Only copies enchantments from Enchanted Books. Without this, all item enchantments will be copied
+      onlyitems                 = Only copies enchantments from items with enchantments. Without this, all enchanted books will be copied as well
+        onlybooks and onlyitems are mutually exclusive. If you use one, the other is set to false. Using both will set the last defined.
 
     Actions include:
-      largest = Use the largest of the two enchantments if two are merged (Sharpness I + Sharpness III = Sharpness III)
-      combine = Add the enchantment levels together (Sharpness I + Sharpness III = Sharpness IV)
-      anvil   = Combine enchantments similar to anvils (Sharpness I + Sharpness II = Sharpness II) and (Sharpness II + Sharpness II = Sharpness III)
-
+      smallest = Use the smallest of the two enchantments if two are merged (Sharpness I + Sharpness III = Sharpness I)
+      largest  = Use the largest of the two enchantments if two are merged (Sharpness I + Sharpness III = Sharpness III)
+      combine  = Add the enchantment levels together (Sharpness I + Sharpness III = Sharpness IV)
+      anvil    = Combine enchantments similar to anvils (Sharpness I + Sharpness II = Sharpness II) and (Sharpness II + Sharpness II = Sharpness III)
 </span>
 
     Setting to 'false' or 'remove' will disable the flag.
@@ -245,6 +251,27 @@ title: Recipe Flags
       @applyenchantment ingredientaction combine | ignorelevels | onlybooks // Combines all ingredients levels from books while allowing higher than vanilla allowed enchants
 
     <b>Aliases:</b> @applyenchant, @applyenchantments, @applyenchants
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='axolotlbucketitem'></a>
+        <h3 class='doc-section__title'>@axolotlbucketitem &lt;variant&gt;</h3>
+        <pre>
+    <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
+
+<span>
+    Customize an axolotl bucket item
+
+    &lt;variant&gt; is required and defines the variant of the axolotl in the bucket
+      values: lucy, wild, gold, cyan, blue
+</span>
+
+    Setting to 'false' or 'remove' will disable the flag.
+
+    <b>Examples:</b>
+      @axolotlbucketitem blue
+
+    <b>Aliases:</b> @axolotlbucket
 </pre>
     </div>
     <div class='doc-section__group'>
@@ -296,8 +323,8 @@ title: Recipe Flags
     Setting to 'false' or 'remove' will disable the flag.
 
     <b>Examples:</b>
-      @biome jungle, jungle_hills
-      @biome !mushroom_fields, !mushroom_field_shore
+      @biome jungle, bamboo_jungle, sparse_jungle
+      @biome !dripstone_caves, !lush_caves
 </pre>
     </div>
     <div class='doc-section__group'>
@@ -811,7 +838,7 @@ title: Recipe Flags
     <div class='doc-section__group'>
         <a href='#contents' class='back-to-top'>^ Contents</a><a id='fireworkitem'></a>
         <h3 class='doc-section__title'>@fireworkitem effect &lt;effect data&gt;</h3>
-        <h3 class='doc-section__title'>@fireworkitem power &lt;0-128&gt;</h3>
+        <h3 class='doc-section__title'>@fireworkitem power &lt;0-127&gt;</h3>
         <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
 
@@ -830,7 +857,7 @@ title: Recipe Flags
     Effects can be listed in any order.
     Colors must be 3 numbers ranging from 0 to 255, basic RGB format.
 
-    The 'power &lt;number 0-128&gt;' value sets how long rocket will fly, each number is 0.5 seconds of flight, default 2, recommended max 4.
+    The 'power &lt;number 0-127&gt;' value sets how long rocket will fly, each number is 0.5 seconds of flight, default 2, recommended max 4.
 
     Specific item: firework.
 </span>
@@ -1142,7 +1169,7 @@ title: Recipe Flags
       destroys       = Hide what the item can break/destroy
       enchants       = Hide enchants
       placedon       = Hide where this item can be placed on
-      potioneffects  = Hide potion effects on this item
+      potioneffects  = Hide potion effects, book and firework information, map tooltips, and enchantments of enchanted books
       unbreakable    = Hide the unbreakable state
       dye            = Hides dyes from colored leather armor
       all            = Hides everything
@@ -1791,7 +1818,7 @@ title: Recipe Flags
     <div class='doc-section__group'>
         <a href='#contents' class='back-to-top'>^ Contents</a><a id='launchfirework'></a>
         <h3 class='doc-section__title'>@launchfirework effect &lt;effects&gt;</h3>
-        <h3 class='doc-section__title'>@launchfirework power &lt;number 0-128&gt;</h3>
+        <h3 class='doc-section__title'>@launchfirework power &lt;number 0-127&gt;</h3>
         <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
 
@@ -1811,7 +1838,7 @@ title: Recipe Flags
     Effects can be listed in any order.
     Colors must be 3 numbers ranging from 0 to 255, basic RGB format.
 
-    The 'power &lt;number 0-128&gt;' value sets how long rocket will fly, each number is 0.5 seconds of flight, values above 4 are NOT recommended because it heavily affects client performance, default 2.
+    The 'power &lt;number 0-127&gt;' value sets how long rocket will fly, each number is 0.5 seconds of flight, values above 4 are NOT recommended because it heavily affects client performance, default 2.
 </span>
 
     Setting to 'false' or 'remove' will disable the flag.
@@ -2599,6 +2626,44 @@ title: Recipe Flags
       @spawnparticle lava | count 20 | randomoffset 0.5 1 .5 | offset 0 2
 
     <b>Aliases:</b> @particle
+</pre>
+    </div>
+    <div class='doc-section__group'>
+        <a href='#contents' class='back-to-top'>^ Contents</a><a id='storeenchantment'></a>
+        <h3 class='doc-section__title'>@storeenchantment &lt;arguments&gt;</h3>
+        <pre>
+    <span class='flagtype flagtype-result'>Result</span>
+
+<span>
+    Stores the enchantments from items into the resulting enchanted book
+      If you want to apply usable enchantments to an item, use: @applyenchantment
+    Using this flag more than once will overwrite the previous one.
+
+    As '&lt;arguments&gt;' you must define at least one feature to copy from the ingredient to the result.
+    Arguments can be one or more of the following, separated by | character:
+      ingredientaction &lt;action&gt; = (default largest) merge action for all of the ingredients
+      resultaction &lt;action&gt;     = (default largest) merge action applied to the result
+      ignorelevel               = Ignore enchantment level restrictions
+      maxlevel &lt;level&gt;          = Restrict the maximum level
+      onlybooks                 = Only copies enchantments from Enchanted Books. Without this, all item enchantments will be copied
+      onlyitems                 = Only copies enchantments from items with enchantments. Without this, all enchanted books will be copied as well
+        onlybooks and onlyitems are mutually exclusive. If you use one, the other is set to false. Using both will set the last defined.
+
+    Actions include:
+      smallest = Use the smallest of the two enchantments if two are merged (Sharpness I + Sharpness III = Sharpness I)
+      largest  = Use the largest of the two enchantments if two are merged (Sharpness I + Sharpness III = Sharpness III)
+      combine  = Add the enchantment levels together (Sharpness I + Sharpness III = Sharpness IV)
+      anvil    = Combine enchantments similar to anvils (Sharpness I + Sharpness II = Sharpness II) and (Sharpness II + Sharpness II = Sharpness III)
+</span>
+
+    Setting to 'false' or 'remove' will disable the flag.
+
+    <b>Examples:</b>
+      @storeenchantment
+      @storeenchantment resultaction combine // Combines the levels with the resulting item's enchants
+      @storeenchantment ingredientaction combine | ignorelevels | onlyitems // Combines all ingredients levels from items while allowing higher than vanilla allowed enchants
+
+    <b>Aliases:</b> @storeenchant, @storeenchantments, @storeenchants
 </pre>
     </div>
     <div class='doc-section__group'>

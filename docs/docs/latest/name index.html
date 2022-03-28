@@ -76,7 +76,7 @@ If you want to update this file just delete it and use '<i>rmreload</i>' or star
  0     OCEAN
  1     PLAINS
  2     DESERT
- 3     MOUNTAINS
+ 3     WINDSWEPT_HILLS
  4     FOREST
  5     TAIGA
  6     SWAMP
@@ -85,76 +85,56 @@ If you want to update this file just delete it and use '<i>rmreload</i>' or star
  9     THE_END
  10    FROZEN_OCEAN
  11    FROZEN_RIVER
- 12    SNOWY_TUNDRA
- 13    SNOWY_MOUNTAINS
- 14    MUSHROOM_FIELDS
- 15    MUSHROOM_FIELD_SHORE
- 16    BEACH
- 17    DESERT_HILLS
- 18    WOODED_HILLS
- 19    TAIGA_HILLS
- 20    MOUNTAIN_EDGE
- 21    JUNGLE
- 22    JUNGLE_HILLS
- 23    JUNGLE_EDGE
- 24    DEEP_OCEAN
- 25    STONE_SHORE
- 26    SNOWY_BEACH
- 27    BIRCH_FOREST
- 28    BIRCH_FOREST_HILLS
- 29    DARK_FOREST
- 30    SNOWY_TAIGA
- 31    SNOWY_TAIGA_HILLS
- 32    GIANT_TREE_TAIGA
- 33    GIANT_TREE_TAIGA_HILLS
- 34    WOODED_MOUNTAINS
- 35    SAVANNA
- 36    SAVANNA_PLATEAU
- 37    BADLANDS
- 38    WOODED_BADLANDS_PLATEAU
- 39    BADLANDS_PLATEAU
- 40    SMALL_END_ISLANDS
- 41    END_MIDLANDS
- 42    END_HIGHLANDS
- 43    END_BARRENS
- 44    WARM_OCEAN
- 45    LUKEWARM_OCEAN
- 46    COLD_OCEAN
- 47    DEEP_WARM_OCEAN
- 48    DEEP_LUKEWARM_OCEAN
- 49    DEEP_COLD_OCEAN
- 50    DEEP_FROZEN_OCEAN
- 51    THE_VOID
- 52    SUNFLOWER_PLAINS
- 53    DESERT_LAKES
- 54    GRAVELLY_MOUNTAINS
- 55    FLOWER_FOREST
- 56    TAIGA_MOUNTAINS
- 57    SWAMP_HILLS
- 58    ICE_SPIKES
- 59    MODIFIED_JUNGLE
- 60    MODIFIED_JUNGLE_EDGE
- 61    TALL_BIRCH_FOREST
- 62    TALL_BIRCH_HILLS
- 63    DARK_FOREST_HILLS
- 64    SNOWY_TAIGA_MOUNTAINS
- 65    GIANT_SPRUCE_TAIGA
- 66    GIANT_SPRUCE_TAIGA_HILLS
- 67    MODIFIED_GRAVELLY_MOUNTAINS
- 68    SHATTERED_SAVANNA
- 69    SHATTERED_SAVANNA_PLATEAU
- 70    ERODED_BADLANDS
- 71    MODIFIED_WOODED_BADLANDS_PLATEAU
- 72    MODIFIED_BADLANDS_PLATEAU
- 73    BAMBOO_JUNGLE
- 74    BAMBOO_JUNGLE_HILLS
- 75    SOUL_SAND_VALLEY
- 76    CRIMSON_FOREST
- 77    WARPED_FOREST
- 78    BASALT_DELTAS
- 79    DRIPSTONE_CAVES
- 80    LUSH_CAVES
- 81    CUSTOM
+ 12    SNOWY_PLAINS
+ 13    MUSHROOM_FIELDS
+ 14    BEACH
+ 15    JUNGLE
+ 16    SPARSE_JUNGLE
+ 17    DEEP_OCEAN
+ 18    STONY_SHORE
+ 19    SNOWY_BEACH
+ 20    BIRCH_FOREST
+ 21    DARK_FOREST
+ 22    SNOWY_TAIGA
+ 23    OLD_GROWTH_PINE_TAIGA
+ 24    WINDSWEPT_FOREST
+ 25    SAVANNA
+ 26    SAVANNA_PLATEAU
+ 27    BADLANDS
+ 28    WOODED_BADLANDS
+ 29    SMALL_END_ISLANDS
+ 30    END_MIDLANDS
+ 31    END_HIGHLANDS
+ 32    END_BARRENS
+ 33    WARM_OCEAN
+ 34    LUKEWARM_OCEAN
+ 35    COLD_OCEAN
+ 36    DEEP_LUKEWARM_OCEAN
+ 37    DEEP_COLD_OCEAN
+ 38    DEEP_FROZEN_OCEAN
+ 39    THE_VOID
+ 40    SUNFLOWER_PLAINS
+ 41    WINDSWEPT_GRAVELLY_HILLS
+ 42    FLOWER_FOREST
+ 43    ICE_SPIKES
+ 44    OLD_GROWTH_BIRCH_FOREST
+ 45    OLD_GROWTH_SPRUCE_TAIGA
+ 46    WINDSWEPT_SAVANNA
+ 47    ERODED_BADLANDS
+ 48    BAMBOO_JUNGLE
+ 49    SOUL_SAND_VALLEY
+ 50    CRIMSON_FOREST
+ 51    WARPED_FOREST
+ 52    BASALT_DELTAS
+ 53    DRIPSTONE_CAVES
+ 54    LUSH_CAVES
+ 55    MEADOW
+ 56    GROVE
+ 57    SNOWY_SLOPES
+ 58    FROZEN_PEAKS
+ 59    JAGGED_PEAKS
+ 60    STONY_PEAKS
+ 61    CUSTOM
 </pre></div><div class='doc-section__group'><pre><a id='chatcolor'></a><a href='#contents' class='back-to-top'>^ Contents</a><h3>CHAT COLOR LIST</h3><a href='https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/ChatColor.html'>BukkitAPI / ChatColor</a>
 
 <b> Name             Color character</b>
@@ -1408,12 +1388,13 @@ Data/damage/durability values are listed at <a href='https://minecraft.fandom.co
  MUSIC_DISC_WARD                    Music Disc Ward                    1                             Item
  MUSIC_DISC_11                      Music Disc 11                      1                             Item
  MUSIC_DISC_WAIT                    Music Disc Wait                    1                             Item
+ MUSIC_DISC_OTHERSIDE                                                  1                             Item
  MUSIC_DISC_PIGSTEP                                                    1                             Item
  TRIDENT                                                               1      250                    Item
  PHANTOM_MEMBRANE                                                      64                            Item
  NAUTILUS_SHELL                                                        64                            Item
  HEART_OF_THE_SEA                                                      64                            Item
- CROSSBOW                                                              1      326                    Item
+ CROSSBOW                                                              1      465                    Item
  SUSPICIOUS_STEW                                                       1                             Item
  LOOM                                                                  64                      Block Item
  FLOWER_BANNER_PATTERN                                                 1                             Item
@@ -1644,7 +1625,6 @@ Data/damage/durability values are listed at <a href='https://minecraft.fandom.co
  SNOW_SHOVEL
  SLIME
  HEART
- BARRIER
  ITEM_CRACK
  BLOCK_CRACK
  BLOCK_DUST
@@ -1685,7 +1665,6 @@ Data/damage/durability values are listed at <a href='https://minecraft.fandom.co
  LANDING_OBSIDIAN_TEAR
  REVERSE_PORTAL
  WHITE_ASH
- LIGHT
  DUST_COLOR_TRANSITION
  VIBRATION
  FALLING_SPORE_BLOSSOM
@@ -1702,6 +1681,7 @@ Data/damage/durability values are listed at <a href='https://minecraft.fandom.co
  WAX_OFF
  ELECTRIC_SPARK
  SCRAPE
+ BLOCK_MARKER
  LEGACY_BLOCK_CRACK
  LEGACY_BLOCK_DUST
  LEGACY_FALLING_DUST
@@ -1824,232 +1804,233 @@ More about potions, effects and custom effects: <a href="https://minecraft.gamep
  BLOCK_GLASS_PLACE                             BLOCK_GLASS_STEP                              BLOCK_GRASS_BREAK                             BLOCK_GRASS_FALL
  BLOCK_GRASS_HIT                               BLOCK_GRASS_PLACE                             BLOCK_GRASS_STEP                              BLOCK_GRAVEL_BREAK
  BLOCK_GRAVEL_FALL                             BLOCK_GRAVEL_HIT                              BLOCK_GRAVEL_PLACE                            BLOCK_GRAVEL_STEP
- BLOCK_GRINDSTONE_USE                          BLOCK_HANGING_ROOTS_BREAK                     BLOCK_HANGING_ROOTS_FALL                      BLOCK_HANGING_ROOTS_HIT
- BLOCK_HANGING_ROOTS_PLACE                     BLOCK_HANGING_ROOTS_STEP                      BLOCK_HONEY_BLOCK_BREAK                       BLOCK_HONEY_BLOCK_FALL
- BLOCK_HONEY_BLOCK_HIT                         BLOCK_HONEY_BLOCK_PLACE                       BLOCK_HONEY_BLOCK_SLIDE                       BLOCK_HONEY_BLOCK_STEP
- BLOCK_IRON_DOOR_CLOSE                         BLOCK_IRON_DOOR_OPEN                          BLOCK_IRON_TRAPDOOR_CLOSE                     BLOCK_IRON_TRAPDOOR_OPEN
- BLOCK_LADDER_BREAK                            BLOCK_LADDER_FALL                             BLOCK_LADDER_HIT                              BLOCK_LADDER_PLACE
- BLOCK_LADDER_STEP                             BLOCK_LANTERN_BREAK                           BLOCK_LANTERN_FALL                            BLOCK_LANTERN_HIT
- BLOCK_LANTERN_PLACE                           BLOCK_LANTERN_STEP                            BLOCK_LARGE_AMETHYST_BUD_BREAK                BLOCK_LARGE_AMETHYST_BUD_PLACE
- BLOCK_LAVA_AMBIENT                            BLOCK_LAVA_EXTINGUISH                         BLOCK_LAVA_POP                                BLOCK_LEVER_CLICK
- BLOCK_LILY_PAD_PLACE                          BLOCK_LODESTONE_BREAK                         BLOCK_LODESTONE_FALL                          BLOCK_LODESTONE_HIT
- BLOCK_LODESTONE_PLACE                         BLOCK_LODESTONE_STEP                          BLOCK_MEDIUM_AMETHYST_BUD_BREAK               BLOCK_MEDIUM_AMETHYST_BUD_PLACE
- BLOCK_METAL_BREAK                             BLOCK_METAL_FALL                              BLOCK_METAL_HIT                               BLOCK_METAL_PLACE
- BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF          BLOCK_METAL_PRESSURE_PLATE_CLICK_ON           BLOCK_METAL_STEP                              BLOCK_MOSS_BREAK
- BLOCK_MOSS_CARPET_BREAK                       BLOCK_MOSS_CARPET_FALL                        BLOCK_MOSS_CARPET_HIT                         BLOCK_MOSS_CARPET_PLACE
- BLOCK_MOSS_CARPET_STEP                        BLOCK_MOSS_FALL                               BLOCK_MOSS_HIT                                BLOCK_MOSS_PLACE
- BLOCK_MOSS_STEP                               BLOCK_NETHERITE_BLOCK_BREAK                   BLOCK_NETHERITE_BLOCK_FALL                    BLOCK_NETHERITE_BLOCK_HIT
- BLOCK_NETHERITE_BLOCK_PLACE                   BLOCK_NETHERITE_BLOCK_STEP                    BLOCK_NETHERRACK_BREAK                        BLOCK_NETHERRACK_FALL
- BLOCK_NETHERRACK_HIT                          BLOCK_NETHERRACK_PLACE                        BLOCK_NETHERRACK_STEP                         BLOCK_NETHER_BRICKS_BREAK
- BLOCK_NETHER_BRICKS_FALL                      BLOCK_NETHER_BRICKS_HIT                       BLOCK_NETHER_BRICKS_PLACE                     BLOCK_NETHER_BRICKS_STEP
- BLOCK_NETHER_GOLD_ORE_BREAK                   BLOCK_NETHER_GOLD_ORE_FALL                    BLOCK_NETHER_GOLD_ORE_HIT                     BLOCK_NETHER_GOLD_ORE_PLACE
- BLOCK_NETHER_GOLD_ORE_STEP                    BLOCK_NETHER_ORE_BREAK                        BLOCK_NETHER_ORE_FALL                         BLOCK_NETHER_ORE_HIT
- BLOCK_NETHER_ORE_PLACE                        BLOCK_NETHER_ORE_STEP                         BLOCK_NETHER_SPROUTS_BREAK                    BLOCK_NETHER_SPROUTS_FALL
- BLOCK_NETHER_SPROUTS_HIT                      BLOCK_NETHER_SPROUTS_PLACE                    BLOCK_NETHER_SPROUTS_STEP                     BLOCK_NETHER_WART_BREAK
- BLOCK_NOTE_BLOCK_BANJO                        BLOCK_NOTE_BLOCK_BASEDRUM                     BLOCK_NOTE_BLOCK_BASS                         BLOCK_NOTE_BLOCK_BELL
- BLOCK_NOTE_BLOCK_BIT                          BLOCK_NOTE_BLOCK_CHIME                        BLOCK_NOTE_BLOCK_COW_BELL                     BLOCK_NOTE_BLOCK_DIDGERIDOO
- BLOCK_NOTE_BLOCK_FLUTE                        BLOCK_NOTE_BLOCK_GUITAR                       BLOCK_NOTE_BLOCK_HARP                         BLOCK_NOTE_BLOCK_HAT
- BLOCK_NOTE_BLOCK_IRON_XYLOPHONE               BLOCK_NOTE_BLOCK_PLING                        BLOCK_NOTE_BLOCK_SNARE                        BLOCK_NOTE_BLOCK_XYLOPHONE
- BLOCK_NYLIUM_BREAK                            BLOCK_NYLIUM_FALL                             BLOCK_NYLIUM_HIT                              BLOCK_NYLIUM_PLACE
- BLOCK_NYLIUM_STEP                             BLOCK_PISTON_CONTRACT                         BLOCK_PISTON_EXTEND                           BLOCK_POINTED_DRIPSTONE_BREAK
- BLOCK_POINTED_DRIPSTONE_DRIP_LAVA             BLOCK_POINTED_DRIPSTONE_DRIP_LAVA_INTO_CAULDRONBLOCK_POINTED_DRIPSTONE_DRIP_WATER            BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRON
- BLOCK_POINTED_DRIPSTONE_FALL                  BLOCK_POINTED_DRIPSTONE_HIT                   BLOCK_POINTED_DRIPSTONE_LAND                  BLOCK_POINTED_DRIPSTONE_PLACE
- BLOCK_POINTED_DRIPSTONE_STEP                  BLOCK_POLISHED_DEEPSLATE_BREAK                BLOCK_POLISHED_DEEPSLATE_FALL                 BLOCK_POLISHED_DEEPSLATE_HIT
- BLOCK_POLISHED_DEEPSLATE_PLACE                BLOCK_POLISHED_DEEPSLATE_STEP                 BLOCK_PORTAL_AMBIENT                          BLOCK_PORTAL_TRAVEL
- BLOCK_PORTAL_TRIGGER                          BLOCK_POWDER_SNOW_BREAK                       BLOCK_POWDER_SNOW_FALL                        BLOCK_POWDER_SNOW_HIT
- BLOCK_POWDER_SNOW_PLACE                       BLOCK_POWDER_SNOW_STEP                        BLOCK_PUMPKIN_CARVE                           BLOCK_REDSTONE_TORCH_BURNOUT
- BLOCK_RESPAWN_ANCHOR_AMBIENT                  BLOCK_RESPAWN_ANCHOR_CHARGE                   BLOCK_RESPAWN_ANCHOR_DEPLETE                  BLOCK_RESPAWN_ANCHOR_SET_SPAWN
- BLOCK_ROOTED_DIRT_BREAK                       BLOCK_ROOTED_DIRT_FALL                        BLOCK_ROOTED_DIRT_HIT                         BLOCK_ROOTED_DIRT_PLACE
- BLOCK_ROOTED_DIRT_STEP                        BLOCK_ROOTS_BREAK                             BLOCK_ROOTS_FALL                              BLOCK_ROOTS_HIT
- BLOCK_ROOTS_PLACE                             BLOCK_ROOTS_STEP                              BLOCK_SAND_BREAK                              BLOCK_SAND_FALL
- BLOCK_SAND_HIT                                BLOCK_SAND_PLACE                              BLOCK_SAND_STEP                               BLOCK_SCAFFOLDING_BREAK
- BLOCK_SCAFFOLDING_FALL                        BLOCK_SCAFFOLDING_HIT                         BLOCK_SCAFFOLDING_PLACE                       BLOCK_SCAFFOLDING_STEP
- BLOCK_SCULK_SENSOR_BREAK                      BLOCK_SCULK_SENSOR_CLICKING                   BLOCK_SCULK_SENSOR_CLICKING_STOP              BLOCK_SCULK_SENSOR_FALL
- BLOCK_SCULK_SENSOR_HIT                        BLOCK_SCULK_SENSOR_PLACE                      BLOCK_SCULK_SENSOR_STEP                       BLOCK_SHROOMLIGHT_BREAK
- BLOCK_SHROOMLIGHT_FALL                        BLOCK_SHROOMLIGHT_HIT                         BLOCK_SHROOMLIGHT_PLACE                       BLOCK_SHROOMLIGHT_STEP
- BLOCK_SHULKER_BOX_CLOSE                       BLOCK_SHULKER_BOX_OPEN                        BLOCK_SLIME_BLOCK_BREAK                       BLOCK_SLIME_BLOCK_FALL
- BLOCK_SLIME_BLOCK_HIT                         BLOCK_SLIME_BLOCK_PLACE                       BLOCK_SLIME_BLOCK_STEP                        BLOCK_SMALL_AMETHYST_BUD_BREAK
- BLOCK_SMALL_AMETHYST_BUD_PLACE                BLOCK_SMALL_DRIPLEAF_BREAK                    BLOCK_SMALL_DRIPLEAF_FALL                     BLOCK_SMALL_DRIPLEAF_HIT
- BLOCK_SMALL_DRIPLEAF_PLACE                    BLOCK_SMALL_DRIPLEAF_STEP                     BLOCK_SMITHING_TABLE_USE                      BLOCK_SMOKER_SMOKE
- BLOCK_SNOW_BREAK                              BLOCK_SNOW_FALL                               BLOCK_SNOW_HIT                                BLOCK_SNOW_PLACE
- BLOCK_SNOW_STEP                               BLOCK_SOUL_SAND_BREAK                         BLOCK_SOUL_SAND_FALL                          BLOCK_SOUL_SAND_HIT
- BLOCK_SOUL_SAND_PLACE                         BLOCK_SOUL_SAND_STEP                          BLOCK_SOUL_SOIL_BREAK                         BLOCK_SOUL_SOIL_FALL
- BLOCK_SOUL_SOIL_HIT                           BLOCK_SOUL_SOIL_PLACE                         BLOCK_SOUL_SOIL_STEP                          BLOCK_SPORE_BLOSSOM_BREAK
- BLOCK_SPORE_BLOSSOM_FALL                      BLOCK_SPORE_BLOSSOM_HIT                       BLOCK_SPORE_BLOSSOM_PLACE                     BLOCK_SPORE_BLOSSOM_STEP
- BLOCK_STEM_BREAK                              BLOCK_STEM_FALL                               BLOCK_STEM_HIT                                BLOCK_STEM_PLACE
- BLOCK_STEM_STEP                               BLOCK_STONE_BREAK                             BLOCK_STONE_BUTTON_CLICK_OFF                  BLOCK_STONE_BUTTON_CLICK_ON
- BLOCK_STONE_FALL                              BLOCK_STONE_HIT                               BLOCK_STONE_PLACE                             BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF
- BLOCK_STONE_PRESSURE_PLATE_CLICK_ON           BLOCK_STONE_STEP                              BLOCK_SWEET_BERRY_BUSH_BREAK                  BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES
- BLOCK_SWEET_BERRY_BUSH_PLACE                  BLOCK_TRIPWIRE_ATTACH                         BLOCK_TRIPWIRE_CLICK_OFF                      BLOCK_TRIPWIRE_CLICK_ON
- BLOCK_TRIPWIRE_DETACH                         BLOCK_TUFF_BREAK                              BLOCK_TUFF_FALL                               BLOCK_TUFF_HIT
- BLOCK_TUFF_PLACE                              BLOCK_TUFF_STEP                               BLOCK_VINE_BREAK                              BLOCK_VINE_FALL
- BLOCK_VINE_HIT                                BLOCK_VINE_PLACE                              BLOCK_VINE_STEP                               BLOCK_WART_BLOCK_BREAK
- BLOCK_WART_BLOCK_FALL                         BLOCK_WART_BLOCK_HIT                          BLOCK_WART_BLOCK_PLACE                        BLOCK_WART_BLOCK_STEP
- BLOCK_WATER_AMBIENT                           BLOCK_WEEPING_VINES_BREAK                     BLOCK_WEEPING_VINES_FALL                      BLOCK_WEEPING_VINES_HIT
- BLOCK_WEEPING_VINES_PLACE                     BLOCK_WEEPING_VINES_STEP                      BLOCK_WET_GRASS_BREAK                         BLOCK_WET_GRASS_FALL
- BLOCK_WET_GRASS_HIT                           BLOCK_WET_GRASS_PLACE                         BLOCK_WET_GRASS_STEP                          BLOCK_WOODEN_BUTTON_CLICK_OFF
- BLOCK_WOODEN_BUTTON_CLICK_ON                  BLOCK_WOODEN_DOOR_CLOSE                       BLOCK_WOODEN_DOOR_OPEN                        BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF
- BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON          BLOCK_WOODEN_TRAPDOOR_CLOSE                   BLOCK_WOODEN_TRAPDOOR_OPEN                    BLOCK_WOOD_BREAK
- BLOCK_WOOD_FALL                               BLOCK_WOOD_HIT                                BLOCK_WOOD_PLACE                              BLOCK_WOOD_STEP
- BLOCK_WOOL_BREAK                              BLOCK_WOOL_FALL                               BLOCK_WOOL_HIT                                BLOCK_WOOL_PLACE
- BLOCK_WOOL_STEP                               ENCHANT_THORNS_HIT                            ENTITY_ARMOR_STAND_BREAK                      ENTITY_ARMOR_STAND_FALL
- ENTITY_ARMOR_STAND_HIT                        ENTITY_ARMOR_STAND_PLACE                      ENTITY_ARROW_HIT                              ENTITY_ARROW_HIT_PLAYER
- ENTITY_ARROW_SHOOT                            ENTITY_AXOLOTL_ATTACK                         ENTITY_AXOLOTL_DEATH                          ENTITY_AXOLOTL_HURT
- ENTITY_AXOLOTL_IDLE_AIR                       ENTITY_AXOLOTL_IDLE_WATER                     ENTITY_AXOLOTL_SPLASH                         ENTITY_AXOLOTL_SWIM
- ENTITY_BAT_AMBIENT                            ENTITY_BAT_DEATH                              ENTITY_BAT_HURT                               ENTITY_BAT_LOOP
- ENTITY_BAT_TAKEOFF                            ENTITY_BEE_DEATH                              ENTITY_BEE_HURT                               ENTITY_BEE_LOOP
- ENTITY_BEE_LOOP_AGGRESSIVE                    ENTITY_BEE_POLLINATE                          ENTITY_BEE_STING                              ENTITY_BLAZE_AMBIENT
- ENTITY_BLAZE_BURN                             ENTITY_BLAZE_DEATH                            ENTITY_BLAZE_HURT                             ENTITY_BLAZE_SHOOT
- ENTITY_BOAT_PADDLE_LAND                       ENTITY_BOAT_PADDLE_WATER                      ENTITY_CAT_AMBIENT                            ENTITY_CAT_BEG_FOR_FOOD
- ENTITY_CAT_DEATH                              ENTITY_CAT_EAT                                ENTITY_CAT_HISS                               ENTITY_CAT_HURT
- ENTITY_CAT_PURR                               ENTITY_CAT_PURREOW                            ENTITY_CAT_STRAY_AMBIENT                      ENTITY_CHICKEN_AMBIENT
- ENTITY_CHICKEN_DEATH                          ENTITY_CHICKEN_EGG                            ENTITY_CHICKEN_HURT                           ENTITY_CHICKEN_STEP
- ENTITY_COD_AMBIENT                            ENTITY_COD_DEATH                              ENTITY_COD_FLOP                               ENTITY_COD_HURT
- ENTITY_COW_AMBIENT                            ENTITY_COW_DEATH                              ENTITY_COW_HURT                               ENTITY_COW_MILK
- ENTITY_COW_STEP                               ENTITY_CREEPER_DEATH                          ENTITY_CREEPER_HURT                           ENTITY_CREEPER_PRIMED
- ENTITY_DOLPHIN_AMBIENT                        ENTITY_DOLPHIN_AMBIENT_WATER                  ENTITY_DOLPHIN_ATTACK                         ENTITY_DOLPHIN_DEATH
- ENTITY_DOLPHIN_EAT                            ENTITY_DOLPHIN_HURT                           ENTITY_DOLPHIN_JUMP                           ENTITY_DOLPHIN_PLAY
- ENTITY_DOLPHIN_SPLASH                         ENTITY_DOLPHIN_SWIM                           ENTITY_DONKEY_AMBIENT                         ENTITY_DONKEY_ANGRY
- ENTITY_DONKEY_CHEST                           ENTITY_DONKEY_DEATH                           ENTITY_DONKEY_EAT                             ENTITY_DONKEY_HURT
- ENTITY_DRAGON_FIREBALL_EXPLODE                ENTITY_DROWNED_AMBIENT                        ENTITY_DROWNED_AMBIENT_WATER                  ENTITY_DROWNED_DEATH
- ENTITY_DROWNED_DEATH_WATER                    ENTITY_DROWNED_HURT                           ENTITY_DROWNED_HURT_WATER                     ENTITY_DROWNED_SHOOT
- ENTITY_DROWNED_STEP                           ENTITY_DROWNED_SWIM                           ENTITY_EGG_THROW                              ENTITY_ELDER_GUARDIAN_AMBIENT
- ENTITY_ELDER_GUARDIAN_AMBIENT_LAND            ENTITY_ELDER_GUARDIAN_CURSE                   ENTITY_ELDER_GUARDIAN_DEATH                   ENTITY_ELDER_GUARDIAN_DEATH_LAND
- ENTITY_ELDER_GUARDIAN_FLOP                    ENTITY_ELDER_GUARDIAN_HURT                    ENTITY_ELDER_GUARDIAN_HURT_LAND               ENTITY_ENDERMAN_AMBIENT
- ENTITY_ENDERMAN_DEATH                         ENTITY_ENDERMAN_HURT                          ENTITY_ENDERMAN_SCREAM                        ENTITY_ENDERMAN_STARE
- ENTITY_ENDERMAN_TELEPORT                      ENTITY_ENDERMITE_AMBIENT                      ENTITY_ENDERMITE_DEATH                        ENTITY_ENDERMITE_HURT
- ENTITY_ENDERMITE_STEP                         ENTITY_ENDER_DRAGON_AMBIENT                   ENTITY_ENDER_DRAGON_DEATH                     ENTITY_ENDER_DRAGON_FLAP
- ENTITY_ENDER_DRAGON_GROWL                     ENTITY_ENDER_DRAGON_HURT                      ENTITY_ENDER_DRAGON_SHOOT                     ENTITY_ENDER_EYE_DEATH
- ENTITY_ENDER_EYE_LAUNCH                       ENTITY_ENDER_PEARL_THROW                      ENTITY_EVOKER_AMBIENT                         ENTITY_EVOKER_CAST_SPELL
- ENTITY_EVOKER_CELEBRATE                       ENTITY_EVOKER_DEATH                           ENTITY_EVOKER_FANGS_ATTACK                    ENTITY_EVOKER_HURT
- ENTITY_EVOKER_PREPARE_ATTACK                  ENTITY_EVOKER_PREPARE_SUMMON                  ENTITY_EVOKER_PREPARE_WOLOLO                  ENTITY_EXPERIENCE_BOTTLE_THROW
- ENTITY_EXPERIENCE_ORB_PICKUP                  ENTITY_FIREWORK_ROCKET_BLAST                  ENTITY_FIREWORK_ROCKET_BLAST_FAR              ENTITY_FIREWORK_ROCKET_LARGE_BLAST
- ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR        ENTITY_FIREWORK_ROCKET_LAUNCH                 ENTITY_FIREWORK_ROCKET_SHOOT                  ENTITY_FIREWORK_ROCKET_TWINKLE
- ENTITY_FIREWORK_ROCKET_TWINKLE_FAR            ENTITY_FISHING_BOBBER_RETRIEVE                ENTITY_FISHING_BOBBER_SPLASH                  ENTITY_FISHING_BOBBER_THROW
- ENTITY_FISH_SWIM                              ENTITY_FOX_AGGRO                              ENTITY_FOX_AMBIENT                            ENTITY_FOX_BITE
- ENTITY_FOX_DEATH                              ENTITY_FOX_EAT                                ENTITY_FOX_HURT                               ENTITY_FOX_SCREECH
- ENTITY_FOX_SLEEP                              ENTITY_FOX_SNIFF                              ENTITY_FOX_SPIT                               ENTITY_FOX_TELEPORT
- ENTITY_GENERIC_BIG_FALL                       ENTITY_GENERIC_BURN                           ENTITY_GENERIC_DEATH                          ENTITY_GENERIC_DRINK
- ENTITY_GENERIC_EAT                            ENTITY_GENERIC_EXPLODE                        ENTITY_GENERIC_EXTINGUISH_FIRE                ENTITY_GENERIC_HURT
- ENTITY_GENERIC_SMALL_FALL                     ENTITY_GENERIC_SPLASH                         ENTITY_GENERIC_SWIM                           ENTITY_GHAST_AMBIENT
- ENTITY_GHAST_DEATH                            ENTITY_GHAST_HURT                             ENTITY_GHAST_SCREAM                           ENTITY_GHAST_SHOOT
- ENTITY_GHAST_WARN                             ENTITY_GLOW_ITEM_FRAME_ADD_ITEM               ENTITY_GLOW_ITEM_FRAME_BREAK                  ENTITY_GLOW_ITEM_FRAME_PLACE
- ENTITY_GLOW_ITEM_FRAME_REMOVE_ITEM            ENTITY_GLOW_ITEM_FRAME_ROTATE_ITEM            ENTITY_GLOW_SQUID_AMBIENT                     ENTITY_GLOW_SQUID_DEATH
- ENTITY_GLOW_SQUID_HURT                        ENTITY_GLOW_SQUID_SQUIRT                      ENTITY_GOAT_AMBIENT                           ENTITY_GOAT_DEATH
- ENTITY_GOAT_EAT                               ENTITY_GOAT_HURT                              ENTITY_GOAT_LONG_JUMP                         ENTITY_GOAT_MILK
- ENTITY_GOAT_PREPARE_RAM                       ENTITY_GOAT_RAM_IMPACT                        ENTITY_GOAT_SCREAMING_AMBIENT                 ENTITY_GOAT_SCREAMING_DEATH
- ENTITY_GOAT_SCREAMING_EAT                     ENTITY_GOAT_SCREAMING_HURT                    ENTITY_GOAT_SCREAMING_LONG_JUMP               ENTITY_GOAT_SCREAMING_MILK
- ENTITY_GOAT_SCREAMING_PREPARE_RAM             ENTITY_GOAT_SCREAMING_RAM_IMPACT              ENTITY_GOAT_STEP                              ENTITY_GUARDIAN_AMBIENT
- ENTITY_GUARDIAN_AMBIENT_LAND                  ENTITY_GUARDIAN_ATTACK                        ENTITY_GUARDIAN_DEATH                         ENTITY_GUARDIAN_DEATH_LAND
- ENTITY_GUARDIAN_FLOP                          ENTITY_GUARDIAN_HURT                          ENTITY_GUARDIAN_HURT_LAND                     ENTITY_HOGLIN_AMBIENT
- ENTITY_HOGLIN_ANGRY                           ENTITY_HOGLIN_ATTACK                          ENTITY_HOGLIN_CONVERTED_TO_ZOMBIFIED          ENTITY_HOGLIN_DEATH
- ENTITY_HOGLIN_HURT                            ENTITY_HOGLIN_RETREAT                         ENTITY_HOGLIN_STEP                            ENTITY_HORSE_AMBIENT
- ENTITY_HORSE_ANGRY                            ENTITY_HORSE_ARMOR                            ENTITY_HORSE_BREATHE                          ENTITY_HORSE_DEATH
- ENTITY_HORSE_EAT                              ENTITY_HORSE_GALLOP                           ENTITY_HORSE_HURT                             ENTITY_HORSE_JUMP
- ENTITY_HORSE_LAND                             ENTITY_HORSE_SADDLE                           ENTITY_HORSE_STEP                             ENTITY_HORSE_STEP_WOOD
- ENTITY_HOSTILE_BIG_FALL                       ENTITY_HOSTILE_DEATH                          ENTITY_HOSTILE_HURT                           ENTITY_HOSTILE_SMALL_FALL
- ENTITY_HOSTILE_SPLASH                         ENTITY_HOSTILE_SWIM                           ENTITY_HUSK_AMBIENT                           ENTITY_HUSK_CONVERTED_TO_ZOMBIE
- ENTITY_HUSK_DEATH                             ENTITY_HUSK_HURT                              ENTITY_HUSK_STEP                              ENTITY_ILLUSIONER_AMBIENT
- ENTITY_ILLUSIONER_CAST_SPELL                  ENTITY_ILLUSIONER_DEATH                       ENTITY_ILLUSIONER_HURT                        ENTITY_ILLUSIONER_MIRROR_MOVE
- ENTITY_ILLUSIONER_PREPARE_BLINDNESS           ENTITY_ILLUSIONER_PREPARE_MIRROR              ENTITY_IRON_GOLEM_ATTACK                      ENTITY_IRON_GOLEM_DAMAGE
- ENTITY_IRON_GOLEM_DEATH                       ENTITY_IRON_GOLEM_HURT                        ENTITY_IRON_GOLEM_REPAIR                      ENTITY_IRON_GOLEM_STEP
- ENTITY_ITEM_BREAK                             ENTITY_ITEM_FRAME_ADD_ITEM                    ENTITY_ITEM_FRAME_BREAK                       ENTITY_ITEM_FRAME_PLACE
- ENTITY_ITEM_FRAME_REMOVE_ITEM                 ENTITY_ITEM_FRAME_ROTATE_ITEM                 ENTITY_ITEM_PICKUP                            ENTITY_LEASH_KNOT_BREAK
- ENTITY_LEASH_KNOT_PLACE                       ENTITY_LIGHTNING_BOLT_IMPACT                  ENTITY_LIGHTNING_BOLT_THUNDER                 ENTITY_LINGERING_POTION_THROW
- ENTITY_LLAMA_AMBIENT                          ENTITY_LLAMA_ANGRY                            ENTITY_LLAMA_CHEST                            ENTITY_LLAMA_DEATH
- ENTITY_LLAMA_EAT                              ENTITY_LLAMA_HURT                             ENTITY_LLAMA_SPIT                             ENTITY_LLAMA_STEP
- ENTITY_LLAMA_SWAG                             ENTITY_MAGMA_CUBE_DEATH                       ENTITY_MAGMA_CUBE_DEATH_SMALL                 ENTITY_MAGMA_CUBE_HURT
- ENTITY_MAGMA_CUBE_HURT_SMALL                  ENTITY_MAGMA_CUBE_JUMP                        ENTITY_MAGMA_CUBE_SQUISH                      ENTITY_MAGMA_CUBE_SQUISH_SMALL
- ENTITY_MINECART_INSIDE                        ENTITY_MINECART_INSIDE_UNDERWATER             ENTITY_MINECART_RIDING                        ENTITY_MOOSHROOM_CONVERT
- ENTITY_MOOSHROOM_EAT                          ENTITY_MOOSHROOM_MILK                         ENTITY_MOOSHROOM_SHEAR                        ENTITY_MOOSHROOM_SUSPICIOUS_MILK
- ENTITY_MULE_AMBIENT                           ENTITY_MULE_ANGRY                             ENTITY_MULE_CHEST                             ENTITY_MULE_DEATH
- ENTITY_MULE_EAT                               ENTITY_MULE_HURT                              ENTITY_OCELOT_AMBIENT                         ENTITY_OCELOT_DEATH
- ENTITY_OCELOT_HURT                            ENTITY_PAINTING_BREAK                         ENTITY_PAINTING_PLACE                         ENTITY_PANDA_AGGRESSIVE_AMBIENT
- ENTITY_PANDA_AMBIENT                          ENTITY_PANDA_BITE                             ENTITY_PANDA_CANT_BREED                       ENTITY_PANDA_DEATH
- ENTITY_PANDA_EAT                              ENTITY_PANDA_HURT                             ENTITY_PANDA_PRE_SNEEZE                       ENTITY_PANDA_SNEEZE
- ENTITY_PANDA_STEP                             ENTITY_PANDA_WORRIED_AMBIENT                  ENTITY_PARROT_AMBIENT                         ENTITY_PARROT_DEATH
- ENTITY_PARROT_EAT                             ENTITY_PARROT_FLY                             ENTITY_PARROT_HURT                            ENTITY_PARROT_IMITATE_BLAZE
- ENTITY_PARROT_IMITATE_CREEPER                 ENTITY_PARROT_IMITATE_DROWNED                 ENTITY_PARROT_IMITATE_ELDER_GUARDIAN          ENTITY_PARROT_IMITATE_ENDERMITE
- ENTITY_PARROT_IMITATE_ENDER_DRAGON            ENTITY_PARROT_IMITATE_EVOKER                  ENTITY_PARROT_IMITATE_GHAST                   ENTITY_PARROT_IMITATE_GUARDIAN
- ENTITY_PARROT_IMITATE_HOGLIN                  ENTITY_PARROT_IMITATE_HUSK                    ENTITY_PARROT_IMITATE_ILLUSIONER              ENTITY_PARROT_IMITATE_MAGMA_CUBE
- ENTITY_PARROT_IMITATE_PHANTOM                 ENTITY_PARROT_IMITATE_PIGLIN                  ENTITY_PARROT_IMITATE_PIGLIN_BRUTE            ENTITY_PARROT_IMITATE_PILLAGER
- ENTITY_PARROT_IMITATE_RAVAGER                 ENTITY_PARROT_IMITATE_SHULKER                 ENTITY_PARROT_IMITATE_SILVERFISH              ENTITY_PARROT_IMITATE_SKELETON
- ENTITY_PARROT_IMITATE_SLIME                   ENTITY_PARROT_IMITATE_SPIDER                  ENTITY_PARROT_IMITATE_STRAY                   ENTITY_PARROT_IMITATE_VEX
- ENTITY_PARROT_IMITATE_VINDICATOR              ENTITY_PARROT_IMITATE_WITCH                   ENTITY_PARROT_IMITATE_WITHER                  ENTITY_PARROT_IMITATE_WITHER_SKELETON
- ENTITY_PARROT_IMITATE_ZOGLIN                  ENTITY_PARROT_IMITATE_ZOMBIE                  ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER         ENTITY_PARROT_STEP
- ENTITY_PHANTOM_AMBIENT                        ENTITY_PHANTOM_BITE                           ENTITY_PHANTOM_DEATH                          ENTITY_PHANTOM_FLAP
- ENTITY_PHANTOM_HURT                           ENTITY_PHANTOM_SWOOP                          ENTITY_PIGLIN_ADMIRING_ITEM                   ENTITY_PIGLIN_AMBIENT
- ENTITY_PIGLIN_ANGRY                           ENTITY_PIGLIN_BRUTE_AMBIENT                   ENTITY_PIGLIN_BRUTE_ANGRY                     ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED
- ENTITY_PIGLIN_BRUTE_DEATH                     ENTITY_PIGLIN_BRUTE_HURT                      ENTITY_PIGLIN_BRUTE_STEP                      ENTITY_PIGLIN_CELEBRATE
- ENTITY_PIGLIN_CONVERTED_TO_ZOMBIFIED          ENTITY_PIGLIN_DEATH                           ENTITY_PIGLIN_HURT                            ENTITY_PIGLIN_JEALOUS
- ENTITY_PIGLIN_RETREAT                         ENTITY_PIGLIN_STEP                            ENTITY_PIG_AMBIENT                            ENTITY_PIG_DEATH
- ENTITY_PIG_HURT                               ENTITY_PIG_SADDLE                             ENTITY_PIG_STEP                               ENTITY_PILLAGER_AMBIENT
- ENTITY_PILLAGER_CELEBRATE                     ENTITY_PILLAGER_DEATH                         ENTITY_PILLAGER_HURT                          ENTITY_PLAYER_ATTACK_CRIT
- ENTITY_PLAYER_ATTACK_KNOCKBACK                ENTITY_PLAYER_ATTACK_NODAMAGE                 ENTITY_PLAYER_ATTACK_STRONG                   ENTITY_PLAYER_ATTACK_SWEEP
- ENTITY_PLAYER_ATTACK_WEAK                     ENTITY_PLAYER_BIG_FALL                        ENTITY_PLAYER_BREATH                          ENTITY_PLAYER_BURP
- ENTITY_PLAYER_DEATH                           ENTITY_PLAYER_HURT                            ENTITY_PLAYER_HURT_DROWN                      ENTITY_PLAYER_HURT_FREEZE
- ENTITY_PLAYER_HURT_ON_FIRE                    ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH           ENTITY_PLAYER_LEVELUP                         ENTITY_PLAYER_SMALL_FALL
- ENTITY_PLAYER_SPLASH                          ENTITY_PLAYER_SPLASH_HIGH_SPEED               ENTITY_PLAYER_SWIM                            ENTITY_POLAR_BEAR_AMBIENT
- ENTITY_POLAR_BEAR_AMBIENT_BABY                ENTITY_POLAR_BEAR_DEATH                       ENTITY_POLAR_BEAR_HURT                        ENTITY_POLAR_BEAR_STEP
- ENTITY_POLAR_BEAR_WARNING                     ENTITY_PUFFER_FISH_AMBIENT                    ENTITY_PUFFER_FISH_BLOW_OUT                   ENTITY_PUFFER_FISH_BLOW_UP
- ENTITY_PUFFER_FISH_DEATH                      ENTITY_PUFFER_FISH_FLOP                       ENTITY_PUFFER_FISH_HURT                       ENTITY_PUFFER_FISH_STING
- ENTITY_RABBIT_AMBIENT                         ENTITY_RABBIT_ATTACK                          ENTITY_RABBIT_DEATH                           ENTITY_RABBIT_HURT
- ENTITY_RABBIT_JUMP                            ENTITY_RAVAGER_AMBIENT                        ENTITY_RAVAGER_ATTACK                         ENTITY_RAVAGER_CELEBRATE
- ENTITY_RAVAGER_DEATH                          ENTITY_RAVAGER_HURT                           ENTITY_RAVAGER_ROAR                           ENTITY_RAVAGER_STEP
- ENTITY_RAVAGER_STUNNED                        ENTITY_SALMON_AMBIENT                         ENTITY_SALMON_DEATH                           ENTITY_SALMON_FLOP
- ENTITY_SALMON_HURT                            ENTITY_SHEEP_AMBIENT                          ENTITY_SHEEP_DEATH                            ENTITY_SHEEP_HURT
- ENTITY_SHEEP_SHEAR                            ENTITY_SHEEP_STEP                             ENTITY_SHULKER_AMBIENT                        ENTITY_SHULKER_BULLET_HIT
- ENTITY_SHULKER_BULLET_HURT                    ENTITY_SHULKER_CLOSE                          ENTITY_SHULKER_DEATH                          ENTITY_SHULKER_HURT
- ENTITY_SHULKER_HURT_CLOSED                    ENTITY_SHULKER_OPEN                           ENTITY_SHULKER_SHOOT                          ENTITY_SHULKER_TELEPORT
- ENTITY_SILVERFISH_AMBIENT                     ENTITY_SILVERFISH_DEATH                       ENTITY_SILVERFISH_HURT                        ENTITY_SILVERFISH_STEP
- ENTITY_SKELETON_AMBIENT                       ENTITY_SKELETON_CONVERTED_TO_STRAY            ENTITY_SKELETON_DEATH                         ENTITY_SKELETON_HORSE_AMBIENT
- ENTITY_SKELETON_HORSE_AMBIENT_WATER           ENTITY_SKELETON_HORSE_DEATH                   ENTITY_SKELETON_HORSE_GALLOP_WATER            ENTITY_SKELETON_HORSE_HURT
- ENTITY_SKELETON_HORSE_JUMP_WATER              ENTITY_SKELETON_HORSE_STEP_WATER              ENTITY_SKELETON_HORSE_SWIM                    ENTITY_SKELETON_HURT
- ENTITY_SKELETON_SHOOT                         ENTITY_SKELETON_STEP                          ENTITY_SLIME_ATTACK                           ENTITY_SLIME_DEATH
- ENTITY_SLIME_DEATH_SMALL                      ENTITY_SLIME_HURT                             ENTITY_SLIME_HURT_SMALL                       ENTITY_SLIME_JUMP
- ENTITY_SLIME_JUMP_SMALL                       ENTITY_SLIME_SQUISH                           ENTITY_SLIME_SQUISH_SMALL                     ENTITY_SNOWBALL_THROW
- ENTITY_SNOW_GOLEM_AMBIENT                     ENTITY_SNOW_GOLEM_DEATH                       ENTITY_SNOW_GOLEM_HURT                        ENTITY_SNOW_GOLEM_SHEAR
- ENTITY_SNOW_GOLEM_SHOOT                       ENTITY_SPIDER_AMBIENT                         ENTITY_SPIDER_DEATH                           ENTITY_SPIDER_HURT
- ENTITY_SPIDER_STEP                            ENTITY_SPLASH_POTION_BREAK                    ENTITY_SPLASH_POTION_THROW                    ENTITY_SQUID_AMBIENT
- ENTITY_SQUID_DEATH                            ENTITY_SQUID_HURT                             ENTITY_SQUID_SQUIRT                           ENTITY_STRAY_AMBIENT
- ENTITY_STRAY_DEATH                            ENTITY_STRAY_HURT                             ENTITY_STRAY_STEP                             ENTITY_STRIDER_AMBIENT
- ENTITY_STRIDER_DEATH                          ENTITY_STRIDER_EAT                            ENTITY_STRIDER_HAPPY                          ENTITY_STRIDER_HURT
- ENTITY_STRIDER_RETREAT                        ENTITY_STRIDER_SADDLE                         ENTITY_STRIDER_STEP                           ENTITY_STRIDER_STEP_LAVA
- ENTITY_TNT_PRIMED                             ENTITY_TROPICAL_FISH_AMBIENT                  ENTITY_TROPICAL_FISH_DEATH                    ENTITY_TROPICAL_FISH_FLOP
- ENTITY_TROPICAL_FISH_HURT                     ENTITY_TURTLE_AMBIENT_LAND                    ENTITY_TURTLE_DEATH                           ENTITY_TURTLE_DEATH_BABY
- ENTITY_TURTLE_EGG_BREAK                       ENTITY_TURTLE_EGG_CRACK                       ENTITY_TURTLE_EGG_HATCH                       ENTITY_TURTLE_HURT
- ENTITY_TURTLE_HURT_BABY                       ENTITY_TURTLE_LAY_EGG                         ENTITY_TURTLE_SHAMBLE                         ENTITY_TURTLE_SHAMBLE_BABY
- ENTITY_TURTLE_SWIM                            ENTITY_VEX_AMBIENT                            ENTITY_VEX_CHARGE                             ENTITY_VEX_DEATH
- ENTITY_VEX_HURT                               ENTITY_VILLAGER_AMBIENT                       ENTITY_VILLAGER_CELEBRATE                     ENTITY_VILLAGER_DEATH
- ENTITY_VILLAGER_HURT                          ENTITY_VILLAGER_NO                            ENTITY_VILLAGER_TRADE                         ENTITY_VILLAGER_WORK_ARMORER
- ENTITY_VILLAGER_WORK_BUTCHER                  ENTITY_VILLAGER_WORK_CARTOGRAPHER             ENTITY_VILLAGER_WORK_CLERIC                   ENTITY_VILLAGER_WORK_FARMER
- ENTITY_VILLAGER_WORK_FISHERMAN                ENTITY_VILLAGER_WORK_FLETCHER                 ENTITY_VILLAGER_WORK_LEATHERWORKER            ENTITY_VILLAGER_WORK_LIBRARIAN
- ENTITY_VILLAGER_WORK_MASON                    ENTITY_VILLAGER_WORK_SHEPHERD                 ENTITY_VILLAGER_WORK_TOOLSMITH                ENTITY_VILLAGER_WORK_WEAPONSMITH
- ENTITY_VILLAGER_YES                           ENTITY_VINDICATOR_AMBIENT                     ENTITY_VINDICATOR_CELEBRATE                   ENTITY_VINDICATOR_DEATH
- ENTITY_VINDICATOR_HURT                        ENTITY_WANDERING_TRADER_AMBIENT               ENTITY_WANDERING_TRADER_DEATH                 ENTITY_WANDERING_TRADER_DISAPPEARED
- ENTITY_WANDERING_TRADER_DRINK_MILK            ENTITY_WANDERING_TRADER_DRINK_POTION          ENTITY_WANDERING_TRADER_HURT                  ENTITY_WANDERING_TRADER_NO
- ENTITY_WANDERING_TRADER_REAPPEARED            ENTITY_WANDERING_TRADER_TRADE                 ENTITY_WANDERING_TRADER_YES                   ENTITY_WITCH_AMBIENT
- ENTITY_WITCH_CELEBRATE                        ENTITY_WITCH_DEATH                            ENTITY_WITCH_DRINK                            ENTITY_WITCH_HURT
- ENTITY_WITCH_THROW                            ENTITY_WITHER_AMBIENT                         ENTITY_WITHER_BREAK_BLOCK                     ENTITY_WITHER_DEATH
- ENTITY_WITHER_HURT                            ENTITY_WITHER_SHOOT                           ENTITY_WITHER_SKELETON_AMBIENT                ENTITY_WITHER_SKELETON_DEATH
- ENTITY_WITHER_SKELETON_HURT                   ENTITY_WITHER_SKELETON_STEP                   ENTITY_WITHER_SPAWN                           ENTITY_WOLF_AMBIENT
- ENTITY_WOLF_DEATH                             ENTITY_WOLF_GROWL                             ENTITY_WOLF_HOWL                              ENTITY_WOLF_HURT
- ENTITY_WOLF_PANT                              ENTITY_WOLF_SHAKE                             ENTITY_WOLF_STEP                              ENTITY_WOLF_WHINE
- ENTITY_ZOGLIN_AMBIENT                         ENTITY_ZOGLIN_ANGRY                           ENTITY_ZOGLIN_ATTACK                          ENTITY_ZOGLIN_DEATH
- ENTITY_ZOGLIN_HURT                            ENTITY_ZOGLIN_STEP                            ENTITY_ZOMBIE_AMBIENT                         ENTITY_ZOMBIE_ATTACK_IRON_DOOR
- ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR              ENTITY_ZOMBIE_BREAK_WOODEN_DOOR               ENTITY_ZOMBIE_CONVERTED_TO_DROWNED            ENTITY_ZOMBIE_DEATH
- ENTITY_ZOMBIE_DESTROY_EGG                     ENTITY_ZOMBIE_HORSE_AMBIENT                   ENTITY_ZOMBIE_HORSE_DEATH                     ENTITY_ZOMBIE_HORSE_HURT
- ENTITY_ZOMBIE_HURT                            ENTITY_ZOMBIE_INFECT                          ENTITY_ZOMBIE_STEP                            ENTITY_ZOMBIE_VILLAGER_AMBIENT
- ENTITY_ZOMBIE_VILLAGER_CONVERTED              ENTITY_ZOMBIE_VILLAGER_CURE                   ENTITY_ZOMBIE_VILLAGER_DEATH                  ENTITY_ZOMBIE_VILLAGER_HURT
- ENTITY_ZOMBIE_VILLAGER_STEP                   ENTITY_ZOMBIFIED_PIGLIN_AMBIENT               ENTITY_ZOMBIFIED_PIGLIN_ANGRY                 ENTITY_ZOMBIFIED_PIGLIN_DEATH
- ENTITY_ZOMBIFIED_PIGLIN_HURT                  EVENT_RAID_HORN                               ITEM_ARMOR_EQUIP_CHAIN                        ITEM_ARMOR_EQUIP_DIAMOND
- ITEM_ARMOR_EQUIP_ELYTRA                       ITEM_ARMOR_EQUIP_GENERIC                      ITEM_ARMOR_EQUIP_GOLD                         ITEM_ARMOR_EQUIP_IRON
- ITEM_ARMOR_EQUIP_LEATHER                      ITEM_ARMOR_EQUIP_NETHERITE                    ITEM_ARMOR_EQUIP_TURTLE                       ITEM_AXE_SCRAPE
- ITEM_AXE_STRIP                                ITEM_AXE_WAX_OFF                              ITEM_BONE_MEAL_USE                            ITEM_BOOK_PAGE_TURN
- ITEM_BOOK_PUT                                 ITEM_BOTTLE_EMPTY                             ITEM_BOTTLE_FILL                              ITEM_BOTTLE_FILL_DRAGONBREATH
- ITEM_BUCKET_EMPTY                             ITEM_BUCKET_EMPTY_AXOLOTL                     ITEM_BUCKET_EMPTY_FISH                        ITEM_BUCKET_EMPTY_LAVA
- ITEM_BUCKET_EMPTY_POWDER_SNOW                 ITEM_BUCKET_FILL                              ITEM_BUCKET_FILL_AXOLOTL                      ITEM_BUCKET_FILL_FISH
- ITEM_BUCKET_FILL_LAVA                         ITEM_BUCKET_FILL_POWDER_SNOW                  ITEM_CHORUS_FRUIT_TELEPORT                    ITEM_CROP_PLANT
+ BLOCK_GRINDSTONE_USE                          BLOCK_GROWING_PLANT_CROP                      BLOCK_HANGING_ROOTS_BREAK                     BLOCK_HANGING_ROOTS_FALL
+ BLOCK_HANGING_ROOTS_HIT                       BLOCK_HANGING_ROOTS_PLACE                     BLOCK_HANGING_ROOTS_STEP                      BLOCK_HONEY_BLOCK_BREAK
+ BLOCK_HONEY_BLOCK_FALL                        BLOCK_HONEY_BLOCK_HIT                         BLOCK_HONEY_BLOCK_PLACE                       BLOCK_HONEY_BLOCK_SLIDE
+ BLOCK_HONEY_BLOCK_STEP                        BLOCK_IRON_DOOR_CLOSE                         BLOCK_IRON_DOOR_OPEN                          BLOCK_IRON_TRAPDOOR_CLOSE
+ BLOCK_IRON_TRAPDOOR_OPEN                      BLOCK_LADDER_BREAK                            BLOCK_LADDER_FALL                             BLOCK_LADDER_HIT
+ BLOCK_LADDER_PLACE                            BLOCK_LADDER_STEP                             BLOCK_LANTERN_BREAK                           BLOCK_LANTERN_FALL
+ BLOCK_LANTERN_HIT                             BLOCK_LANTERN_PLACE                           BLOCK_LANTERN_STEP                            BLOCK_LARGE_AMETHYST_BUD_BREAK
+ BLOCK_LARGE_AMETHYST_BUD_PLACE                BLOCK_LAVA_AMBIENT                            BLOCK_LAVA_EXTINGUISH                         BLOCK_LAVA_POP
+ BLOCK_LEVER_CLICK                             BLOCK_LILY_PAD_PLACE                          BLOCK_LODESTONE_BREAK                         BLOCK_LODESTONE_FALL
+ BLOCK_LODESTONE_HIT                           BLOCK_LODESTONE_PLACE                         BLOCK_LODESTONE_STEP                          BLOCK_MEDIUM_AMETHYST_BUD_BREAK
+ BLOCK_MEDIUM_AMETHYST_BUD_PLACE               BLOCK_METAL_BREAK                             BLOCK_METAL_FALL                              BLOCK_METAL_HIT
+ BLOCK_METAL_PLACE                             BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF          BLOCK_METAL_PRESSURE_PLATE_CLICK_ON           BLOCK_METAL_STEP
+ BLOCK_MOSS_BREAK                              BLOCK_MOSS_CARPET_BREAK                       BLOCK_MOSS_CARPET_FALL                        BLOCK_MOSS_CARPET_HIT
+ BLOCK_MOSS_CARPET_PLACE                       BLOCK_MOSS_CARPET_STEP                        BLOCK_MOSS_FALL                               BLOCK_MOSS_HIT
+ BLOCK_MOSS_PLACE                              BLOCK_MOSS_STEP                               BLOCK_NETHERITE_BLOCK_BREAK                   BLOCK_NETHERITE_BLOCK_FALL
+ BLOCK_NETHERITE_BLOCK_HIT                     BLOCK_NETHERITE_BLOCK_PLACE                   BLOCK_NETHERITE_BLOCK_STEP                    BLOCK_NETHERRACK_BREAK
+ BLOCK_NETHERRACK_FALL                         BLOCK_NETHERRACK_HIT                          BLOCK_NETHERRACK_PLACE                        BLOCK_NETHERRACK_STEP
+ BLOCK_NETHER_BRICKS_BREAK                     BLOCK_NETHER_BRICKS_FALL                      BLOCK_NETHER_BRICKS_HIT                       BLOCK_NETHER_BRICKS_PLACE
+ BLOCK_NETHER_BRICKS_STEP                      BLOCK_NETHER_GOLD_ORE_BREAK                   BLOCK_NETHER_GOLD_ORE_FALL                    BLOCK_NETHER_GOLD_ORE_HIT
+ BLOCK_NETHER_GOLD_ORE_PLACE                   BLOCK_NETHER_GOLD_ORE_STEP                    BLOCK_NETHER_ORE_BREAK                        BLOCK_NETHER_ORE_FALL
+ BLOCK_NETHER_ORE_HIT                          BLOCK_NETHER_ORE_PLACE                        BLOCK_NETHER_ORE_STEP                         BLOCK_NETHER_SPROUTS_BREAK
+ BLOCK_NETHER_SPROUTS_FALL                     BLOCK_NETHER_SPROUTS_HIT                      BLOCK_NETHER_SPROUTS_PLACE                    BLOCK_NETHER_SPROUTS_STEP
+ BLOCK_NETHER_WART_BREAK                       BLOCK_NOTE_BLOCK_BANJO                        BLOCK_NOTE_BLOCK_BASEDRUM                     BLOCK_NOTE_BLOCK_BASS
+ BLOCK_NOTE_BLOCK_BELL                         BLOCK_NOTE_BLOCK_BIT                          BLOCK_NOTE_BLOCK_CHIME                        BLOCK_NOTE_BLOCK_COW_BELL
+ BLOCK_NOTE_BLOCK_DIDGERIDOO                   BLOCK_NOTE_BLOCK_FLUTE                        BLOCK_NOTE_BLOCK_GUITAR                       BLOCK_NOTE_BLOCK_HARP
+ BLOCK_NOTE_BLOCK_HAT                          BLOCK_NOTE_BLOCK_IRON_XYLOPHONE               BLOCK_NOTE_BLOCK_PLING                        BLOCK_NOTE_BLOCK_SNARE
+ BLOCK_NOTE_BLOCK_XYLOPHONE                    BLOCK_NYLIUM_BREAK                            BLOCK_NYLIUM_FALL                             BLOCK_NYLIUM_HIT
+ BLOCK_NYLIUM_PLACE                            BLOCK_NYLIUM_STEP                             BLOCK_PISTON_CONTRACT                         BLOCK_PISTON_EXTEND
+ BLOCK_POINTED_DRIPSTONE_BREAK                 BLOCK_POINTED_DRIPSTONE_DRIP_LAVA             BLOCK_POINTED_DRIPSTONE_DRIP_LAVA_INTO_CAULDRONBLOCK_POINTED_DRIPSTONE_DRIP_WATER
+ BLOCK_POINTED_DRIPSTONE_DRIP_WATER_INTO_CAULDRONBLOCK_POINTED_DRIPSTONE_FALL                  BLOCK_POINTED_DRIPSTONE_HIT                   BLOCK_POINTED_DRIPSTONE_LAND
+ BLOCK_POINTED_DRIPSTONE_PLACE                 BLOCK_POINTED_DRIPSTONE_STEP                  BLOCK_POLISHED_DEEPSLATE_BREAK                BLOCK_POLISHED_DEEPSLATE_FALL
+ BLOCK_POLISHED_DEEPSLATE_HIT                  BLOCK_POLISHED_DEEPSLATE_PLACE                BLOCK_POLISHED_DEEPSLATE_STEP                 BLOCK_PORTAL_AMBIENT
+ BLOCK_PORTAL_TRAVEL                           BLOCK_PORTAL_TRIGGER                          BLOCK_POWDER_SNOW_BREAK                       BLOCK_POWDER_SNOW_FALL
+ BLOCK_POWDER_SNOW_HIT                         BLOCK_POWDER_SNOW_PLACE                       BLOCK_POWDER_SNOW_STEP                        BLOCK_PUMPKIN_CARVE
+ BLOCK_REDSTONE_TORCH_BURNOUT                  BLOCK_RESPAWN_ANCHOR_AMBIENT                  BLOCK_RESPAWN_ANCHOR_CHARGE                   BLOCK_RESPAWN_ANCHOR_DEPLETE
+ BLOCK_RESPAWN_ANCHOR_SET_SPAWN                BLOCK_ROOTED_DIRT_BREAK                       BLOCK_ROOTED_DIRT_FALL                        BLOCK_ROOTED_DIRT_HIT
+ BLOCK_ROOTED_DIRT_PLACE                       BLOCK_ROOTED_DIRT_STEP                        BLOCK_ROOTS_BREAK                             BLOCK_ROOTS_FALL
+ BLOCK_ROOTS_HIT                               BLOCK_ROOTS_PLACE                             BLOCK_ROOTS_STEP                              BLOCK_SAND_BREAK
+ BLOCK_SAND_FALL                               BLOCK_SAND_HIT                                BLOCK_SAND_PLACE                              BLOCK_SAND_STEP
+ BLOCK_SCAFFOLDING_BREAK                       BLOCK_SCAFFOLDING_FALL                        BLOCK_SCAFFOLDING_HIT                         BLOCK_SCAFFOLDING_PLACE
+ BLOCK_SCAFFOLDING_STEP                        BLOCK_SCULK_SENSOR_BREAK                      BLOCK_SCULK_SENSOR_CLICKING                   BLOCK_SCULK_SENSOR_CLICKING_STOP
+ BLOCK_SCULK_SENSOR_FALL                       BLOCK_SCULK_SENSOR_HIT                        BLOCK_SCULK_SENSOR_PLACE                      BLOCK_SCULK_SENSOR_STEP
+ BLOCK_SHROOMLIGHT_BREAK                       BLOCK_SHROOMLIGHT_FALL                        BLOCK_SHROOMLIGHT_HIT                         BLOCK_SHROOMLIGHT_PLACE
+ BLOCK_SHROOMLIGHT_STEP                        BLOCK_SHULKER_BOX_CLOSE                       BLOCK_SHULKER_BOX_OPEN                        BLOCK_SLIME_BLOCK_BREAK
+ BLOCK_SLIME_BLOCK_FALL                        BLOCK_SLIME_BLOCK_HIT                         BLOCK_SLIME_BLOCK_PLACE                       BLOCK_SLIME_BLOCK_STEP
+ BLOCK_SMALL_AMETHYST_BUD_BREAK                BLOCK_SMALL_AMETHYST_BUD_PLACE                BLOCK_SMALL_DRIPLEAF_BREAK                    BLOCK_SMALL_DRIPLEAF_FALL
+ BLOCK_SMALL_DRIPLEAF_HIT                      BLOCK_SMALL_DRIPLEAF_PLACE                    BLOCK_SMALL_DRIPLEAF_STEP                     BLOCK_SMITHING_TABLE_USE
+ BLOCK_SMOKER_SMOKE                            BLOCK_SNOW_BREAK                              BLOCK_SNOW_FALL                               BLOCK_SNOW_HIT
+ BLOCK_SNOW_PLACE                              BLOCK_SNOW_STEP                               BLOCK_SOUL_SAND_BREAK                         BLOCK_SOUL_SAND_FALL
+ BLOCK_SOUL_SAND_HIT                           BLOCK_SOUL_SAND_PLACE                         BLOCK_SOUL_SAND_STEP                          BLOCK_SOUL_SOIL_BREAK
+ BLOCK_SOUL_SOIL_FALL                          BLOCK_SOUL_SOIL_HIT                           BLOCK_SOUL_SOIL_PLACE                         BLOCK_SOUL_SOIL_STEP
+ BLOCK_SPORE_BLOSSOM_BREAK                     BLOCK_SPORE_BLOSSOM_FALL                      BLOCK_SPORE_BLOSSOM_HIT                       BLOCK_SPORE_BLOSSOM_PLACE
+ BLOCK_SPORE_BLOSSOM_STEP                      BLOCK_STEM_BREAK                              BLOCK_STEM_FALL                               BLOCK_STEM_HIT
+ BLOCK_STEM_PLACE                              BLOCK_STEM_STEP                               BLOCK_STONE_BREAK                             BLOCK_STONE_BUTTON_CLICK_OFF
+ BLOCK_STONE_BUTTON_CLICK_ON                   BLOCK_STONE_FALL                              BLOCK_STONE_HIT                               BLOCK_STONE_PLACE
+ BLOCK_STONE_PRESSURE_PLATE_CLICK_OFF          BLOCK_STONE_PRESSURE_PLATE_CLICK_ON           BLOCK_STONE_STEP                              BLOCK_SWEET_BERRY_BUSH_BREAK
+ BLOCK_SWEET_BERRY_BUSH_PICK_BERRIES           BLOCK_SWEET_BERRY_BUSH_PLACE                  BLOCK_TRIPWIRE_ATTACH                         BLOCK_TRIPWIRE_CLICK_OFF
+ BLOCK_TRIPWIRE_CLICK_ON                       BLOCK_TRIPWIRE_DETACH                         BLOCK_TUFF_BREAK                              BLOCK_TUFF_FALL
+ BLOCK_TUFF_HIT                                BLOCK_TUFF_PLACE                              BLOCK_TUFF_STEP                               BLOCK_VINE_BREAK
+ BLOCK_VINE_FALL                               BLOCK_VINE_HIT                                BLOCK_VINE_PLACE                              BLOCK_VINE_STEP
+ BLOCK_WART_BLOCK_BREAK                        BLOCK_WART_BLOCK_FALL                         BLOCK_WART_BLOCK_HIT                          BLOCK_WART_BLOCK_PLACE
+ BLOCK_WART_BLOCK_STEP                         BLOCK_WATER_AMBIENT                           BLOCK_WEEPING_VINES_BREAK                     BLOCK_WEEPING_VINES_FALL
+ BLOCK_WEEPING_VINES_HIT                       BLOCK_WEEPING_VINES_PLACE                     BLOCK_WEEPING_VINES_STEP                      BLOCK_WET_GRASS_BREAK
+ BLOCK_WET_GRASS_FALL                          BLOCK_WET_GRASS_HIT                           BLOCK_WET_GRASS_PLACE                         BLOCK_WET_GRASS_STEP
+ BLOCK_WOODEN_BUTTON_CLICK_OFF                 BLOCK_WOODEN_BUTTON_CLICK_ON                  BLOCK_WOODEN_DOOR_CLOSE                       BLOCK_WOODEN_DOOR_OPEN
+ BLOCK_WOODEN_PRESSURE_PLATE_CLICK_OFF         BLOCK_WOODEN_PRESSURE_PLATE_CLICK_ON          BLOCK_WOODEN_TRAPDOOR_CLOSE                   BLOCK_WOODEN_TRAPDOOR_OPEN
+ BLOCK_WOOD_BREAK                              BLOCK_WOOD_FALL                               BLOCK_WOOD_HIT                                BLOCK_WOOD_PLACE
+ BLOCK_WOOD_STEP                               BLOCK_WOOL_BREAK                              BLOCK_WOOL_FALL                               BLOCK_WOOL_HIT
+ BLOCK_WOOL_PLACE                              BLOCK_WOOL_STEP                               ENCHANT_THORNS_HIT                            ENTITY_ARMOR_STAND_BREAK
+ ENTITY_ARMOR_STAND_FALL                       ENTITY_ARMOR_STAND_HIT                        ENTITY_ARMOR_STAND_PLACE                      ENTITY_ARROW_HIT
+ ENTITY_ARROW_HIT_PLAYER                       ENTITY_ARROW_SHOOT                            ENTITY_AXOLOTL_ATTACK                         ENTITY_AXOLOTL_DEATH
+ ENTITY_AXOLOTL_HURT                           ENTITY_AXOLOTL_IDLE_AIR                       ENTITY_AXOLOTL_IDLE_WATER                     ENTITY_AXOLOTL_SPLASH
+ ENTITY_AXOLOTL_SWIM                           ENTITY_BAT_AMBIENT                            ENTITY_BAT_DEATH                              ENTITY_BAT_HURT
+ ENTITY_BAT_LOOP                               ENTITY_BAT_TAKEOFF                            ENTITY_BEE_DEATH                              ENTITY_BEE_HURT
+ ENTITY_BEE_LOOP                               ENTITY_BEE_LOOP_AGGRESSIVE                    ENTITY_BEE_POLLINATE                          ENTITY_BEE_STING
+ ENTITY_BLAZE_AMBIENT                          ENTITY_BLAZE_BURN                             ENTITY_BLAZE_DEATH                            ENTITY_BLAZE_HURT
+ ENTITY_BLAZE_SHOOT                            ENTITY_BOAT_PADDLE_LAND                       ENTITY_BOAT_PADDLE_WATER                      ENTITY_CAT_AMBIENT
+ ENTITY_CAT_BEG_FOR_FOOD                       ENTITY_CAT_DEATH                              ENTITY_CAT_EAT                                ENTITY_CAT_HISS
+ ENTITY_CAT_HURT                               ENTITY_CAT_PURR                               ENTITY_CAT_PURREOW                            ENTITY_CAT_STRAY_AMBIENT
+ ENTITY_CHICKEN_AMBIENT                        ENTITY_CHICKEN_DEATH                          ENTITY_CHICKEN_EGG                            ENTITY_CHICKEN_HURT
+ ENTITY_CHICKEN_STEP                           ENTITY_COD_AMBIENT                            ENTITY_COD_DEATH                              ENTITY_COD_FLOP
+ ENTITY_COD_HURT                               ENTITY_COW_AMBIENT                            ENTITY_COW_DEATH                              ENTITY_COW_HURT
+ ENTITY_COW_MILK                               ENTITY_COW_STEP                               ENTITY_CREEPER_DEATH                          ENTITY_CREEPER_HURT
+ ENTITY_CREEPER_PRIMED                         ENTITY_DOLPHIN_AMBIENT                        ENTITY_DOLPHIN_AMBIENT_WATER                  ENTITY_DOLPHIN_ATTACK
+ ENTITY_DOLPHIN_DEATH                          ENTITY_DOLPHIN_EAT                            ENTITY_DOLPHIN_HURT                           ENTITY_DOLPHIN_JUMP
+ ENTITY_DOLPHIN_PLAY                           ENTITY_DOLPHIN_SPLASH                         ENTITY_DOLPHIN_SWIM                           ENTITY_DONKEY_AMBIENT
+ ENTITY_DONKEY_ANGRY                           ENTITY_DONKEY_CHEST                           ENTITY_DONKEY_DEATH                           ENTITY_DONKEY_EAT
+ ENTITY_DONKEY_HURT                            ENTITY_DRAGON_FIREBALL_EXPLODE                ENTITY_DROWNED_AMBIENT                        ENTITY_DROWNED_AMBIENT_WATER
+ ENTITY_DROWNED_DEATH                          ENTITY_DROWNED_DEATH_WATER                    ENTITY_DROWNED_HURT                           ENTITY_DROWNED_HURT_WATER
+ ENTITY_DROWNED_SHOOT                          ENTITY_DROWNED_STEP                           ENTITY_DROWNED_SWIM                           ENTITY_EGG_THROW
+ ENTITY_ELDER_GUARDIAN_AMBIENT                 ENTITY_ELDER_GUARDIAN_AMBIENT_LAND            ENTITY_ELDER_GUARDIAN_CURSE                   ENTITY_ELDER_GUARDIAN_DEATH
+ ENTITY_ELDER_GUARDIAN_DEATH_LAND              ENTITY_ELDER_GUARDIAN_FLOP                    ENTITY_ELDER_GUARDIAN_HURT                    ENTITY_ELDER_GUARDIAN_HURT_LAND
+ ENTITY_ENDERMAN_AMBIENT                       ENTITY_ENDERMAN_DEATH                         ENTITY_ENDERMAN_HURT                          ENTITY_ENDERMAN_SCREAM
+ ENTITY_ENDERMAN_STARE                         ENTITY_ENDERMAN_TELEPORT                      ENTITY_ENDERMITE_AMBIENT                      ENTITY_ENDERMITE_DEATH
+ ENTITY_ENDERMITE_HURT                         ENTITY_ENDERMITE_STEP                         ENTITY_ENDER_DRAGON_AMBIENT                   ENTITY_ENDER_DRAGON_DEATH
+ ENTITY_ENDER_DRAGON_FLAP                      ENTITY_ENDER_DRAGON_GROWL                     ENTITY_ENDER_DRAGON_HURT                      ENTITY_ENDER_DRAGON_SHOOT
+ ENTITY_ENDER_EYE_DEATH                        ENTITY_ENDER_EYE_LAUNCH                       ENTITY_ENDER_PEARL_THROW                      ENTITY_EVOKER_AMBIENT
+ ENTITY_EVOKER_CAST_SPELL                      ENTITY_EVOKER_CELEBRATE                       ENTITY_EVOKER_DEATH                           ENTITY_EVOKER_FANGS_ATTACK
+ ENTITY_EVOKER_HURT                            ENTITY_EVOKER_PREPARE_ATTACK                  ENTITY_EVOKER_PREPARE_SUMMON                  ENTITY_EVOKER_PREPARE_WOLOLO
+ ENTITY_EXPERIENCE_BOTTLE_THROW                ENTITY_EXPERIENCE_ORB_PICKUP                  ENTITY_FIREWORK_ROCKET_BLAST                  ENTITY_FIREWORK_ROCKET_BLAST_FAR
+ ENTITY_FIREWORK_ROCKET_LARGE_BLAST            ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR        ENTITY_FIREWORK_ROCKET_LAUNCH                 ENTITY_FIREWORK_ROCKET_SHOOT
+ ENTITY_FIREWORK_ROCKET_TWINKLE                ENTITY_FIREWORK_ROCKET_TWINKLE_FAR            ENTITY_FISHING_BOBBER_RETRIEVE                ENTITY_FISHING_BOBBER_SPLASH
+ ENTITY_FISHING_BOBBER_THROW                   ENTITY_FISH_SWIM                              ENTITY_FOX_AGGRO                              ENTITY_FOX_AMBIENT
+ ENTITY_FOX_BITE                               ENTITY_FOX_DEATH                              ENTITY_FOX_EAT                                ENTITY_FOX_HURT
+ ENTITY_FOX_SCREECH                            ENTITY_FOX_SLEEP                              ENTITY_FOX_SNIFF                              ENTITY_FOX_SPIT
+ ENTITY_FOX_TELEPORT                           ENTITY_GENERIC_BIG_FALL                       ENTITY_GENERIC_BURN                           ENTITY_GENERIC_DEATH
+ ENTITY_GENERIC_DRINK                          ENTITY_GENERIC_EAT                            ENTITY_GENERIC_EXPLODE                        ENTITY_GENERIC_EXTINGUISH_FIRE
+ ENTITY_GENERIC_HURT                           ENTITY_GENERIC_SMALL_FALL                     ENTITY_GENERIC_SPLASH                         ENTITY_GENERIC_SWIM
+ ENTITY_GHAST_AMBIENT                          ENTITY_GHAST_DEATH                            ENTITY_GHAST_HURT                             ENTITY_GHAST_SCREAM
+ ENTITY_GHAST_SHOOT                            ENTITY_GHAST_WARN                             ENTITY_GLOW_ITEM_FRAME_ADD_ITEM               ENTITY_GLOW_ITEM_FRAME_BREAK
+ ENTITY_GLOW_ITEM_FRAME_PLACE                  ENTITY_GLOW_ITEM_FRAME_REMOVE_ITEM            ENTITY_GLOW_ITEM_FRAME_ROTATE_ITEM            ENTITY_GLOW_SQUID_AMBIENT
+ ENTITY_GLOW_SQUID_DEATH                       ENTITY_GLOW_SQUID_HURT                        ENTITY_GLOW_SQUID_SQUIRT                      ENTITY_GOAT_AMBIENT
+ ENTITY_GOAT_DEATH                             ENTITY_GOAT_EAT                               ENTITY_GOAT_HURT                              ENTITY_GOAT_LONG_JUMP
+ ENTITY_GOAT_MILK                              ENTITY_GOAT_PREPARE_RAM                       ENTITY_GOAT_RAM_IMPACT                        ENTITY_GOAT_SCREAMING_AMBIENT
+ ENTITY_GOAT_SCREAMING_DEATH                   ENTITY_GOAT_SCREAMING_EAT                     ENTITY_GOAT_SCREAMING_HURT                    ENTITY_GOAT_SCREAMING_LONG_JUMP
+ ENTITY_GOAT_SCREAMING_MILK                    ENTITY_GOAT_SCREAMING_PREPARE_RAM             ENTITY_GOAT_SCREAMING_RAM_IMPACT              ENTITY_GOAT_STEP
+ ENTITY_GUARDIAN_AMBIENT                       ENTITY_GUARDIAN_AMBIENT_LAND                  ENTITY_GUARDIAN_ATTACK                        ENTITY_GUARDIAN_DEATH
+ ENTITY_GUARDIAN_DEATH_LAND                    ENTITY_GUARDIAN_FLOP                          ENTITY_GUARDIAN_HURT                          ENTITY_GUARDIAN_HURT_LAND
+ ENTITY_HOGLIN_AMBIENT                         ENTITY_HOGLIN_ANGRY                           ENTITY_HOGLIN_ATTACK                          ENTITY_HOGLIN_CONVERTED_TO_ZOMBIFIED
+ ENTITY_HOGLIN_DEATH                           ENTITY_HOGLIN_HURT                            ENTITY_HOGLIN_RETREAT                         ENTITY_HOGLIN_STEP
+ ENTITY_HORSE_AMBIENT                          ENTITY_HORSE_ANGRY                            ENTITY_HORSE_ARMOR                            ENTITY_HORSE_BREATHE
+ ENTITY_HORSE_DEATH                            ENTITY_HORSE_EAT                              ENTITY_HORSE_GALLOP                           ENTITY_HORSE_HURT
+ ENTITY_HORSE_JUMP                             ENTITY_HORSE_LAND                             ENTITY_HORSE_SADDLE                           ENTITY_HORSE_STEP
+ ENTITY_HORSE_STEP_WOOD                        ENTITY_HOSTILE_BIG_FALL                       ENTITY_HOSTILE_DEATH                          ENTITY_HOSTILE_HURT
+ ENTITY_HOSTILE_SMALL_FALL                     ENTITY_HOSTILE_SPLASH                         ENTITY_HOSTILE_SWIM                           ENTITY_HUSK_AMBIENT
+ ENTITY_HUSK_CONVERTED_TO_ZOMBIE               ENTITY_HUSK_DEATH                             ENTITY_HUSK_HURT                              ENTITY_HUSK_STEP
+ ENTITY_ILLUSIONER_AMBIENT                     ENTITY_ILLUSIONER_CAST_SPELL                  ENTITY_ILLUSIONER_DEATH                       ENTITY_ILLUSIONER_HURT
+ ENTITY_ILLUSIONER_MIRROR_MOVE                 ENTITY_ILLUSIONER_PREPARE_BLINDNESS           ENTITY_ILLUSIONER_PREPARE_MIRROR              ENTITY_IRON_GOLEM_ATTACK
+ ENTITY_IRON_GOLEM_DAMAGE                      ENTITY_IRON_GOLEM_DEATH                       ENTITY_IRON_GOLEM_HURT                        ENTITY_IRON_GOLEM_REPAIR
+ ENTITY_IRON_GOLEM_STEP                        ENTITY_ITEM_BREAK                             ENTITY_ITEM_FRAME_ADD_ITEM                    ENTITY_ITEM_FRAME_BREAK
+ ENTITY_ITEM_FRAME_PLACE                       ENTITY_ITEM_FRAME_REMOVE_ITEM                 ENTITY_ITEM_FRAME_ROTATE_ITEM                 ENTITY_ITEM_PICKUP
+ ENTITY_LEASH_KNOT_BREAK                       ENTITY_LEASH_KNOT_PLACE                       ENTITY_LIGHTNING_BOLT_IMPACT                  ENTITY_LIGHTNING_BOLT_THUNDER
+ ENTITY_LINGERING_POTION_THROW                 ENTITY_LLAMA_AMBIENT                          ENTITY_LLAMA_ANGRY                            ENTITY_LLAMA_CHEST
+ ENTITY_LLAMA_DEATH                            ENTITY_LLAMA_EAT                              ENTITY_LLAMA_HURT                             ENTITY_LLAMA_SPIT
+ ENTITY_LLAMA_STEP                             ENTITY_LLAMA_SWAG                             ENTITY_MAGMA_CUBE_DEATH                       ENTITY_MAGMA_CUBE_DEATH_SMALL
+ ENTITY_MAGMA_CUBE_HURT                        ENTITY_MAGMA_CUBE_HURT_SMALL                  ENTITY_MAGMA_CUBE_JUMP                        ENTITY_MAGMA_CUBE_SQUISH
+ ENTITY_MAGMA_CUBE_SQUISH_SMALL                ENTITY_MINECART_INSIDE                        ENTITY_MINECART_INSIDE_UNDERWATER             ENTITY_MINECART_RIDING
+ ENTITY_MOOSHROOM_CONVERT                      ENTITY_MOOSHROOM_EAT                          ENTITY_MOOSHROOM_MILK                         ENTITY_MOOSHROOM_SHEAR
+ ENTITY_MOOSHROOM_SUSPICIOUS_MILK              ENTITY_MULE_AMBIENT                           ENTITY_MULE_ANGRY                             ENTITY_MULE_CHEST
+ ENTITY_MULE_DEATH                             ENTITY_MULE_EAT                               ENTITY_MULE_HURT                              ENTITY_OCELOT_AMBIENT
+ ENTITY_OCELOT_DEATH                           ENTITY_OCELOT_HURT                            ENTITY_PAINTING_BREAK                         ENTITY_PAINTING_PLACE
+ ENTITY_PANDA_AGGRESSIVE_AMBIENT               ENTITY_PANDA_AMBIENT                          ENTITY_PANDA_BITE                             ENTITY_PANDA_CANT_BREED
+ ENTITY_PANDA_DEATH                            ENTITY_PANDA_EAT                              ENTITY_PANDA_HURT                             ENTITY_PANDA_PRE_SNEEZE
+ ENTITY_PANDA_SNEEZE                           ENTITY_PANDA_STEP                             ENTITY_PANDA_WORRIED_AMBIENT                  ENTITY_PARROT_AMBIENT
+ ENTITY_PARROT_DEATH                           ENTITY_PARROT_EAT                             ENTITY_PARROT_FLY                             ENTITY_PARROT_HURT
+ ENTITY_PARROT_IMITATE_BLAZE                   ENTITY_PARROT_IMITATE_CREEPER                 ENTITY_PARROT_IMITATE_DROWNED                 ENTITY_PARROT_IMITATE_ELDER_GUARDIAN
+ ENTITY_PARROT_IMITATE_ENDERMITE               ENTITY_PARROT_IMITATE_ENDER_DRAGON            ENTITY_PARROT_IMITATE_EVOKER                  ENTITY_PARROT_IMITATE_GHAST
+ ENTITY_PARROT_IMITATE_GUARDIAN                ENTITY_PARROT_IMITATE_HOGLIN                  ENTITY_PARROT_IMITATE_HUSK                    ENTITY_PARROT_IMITATE_ILLUSIONER
+ ENTITY_PARROT_IMITATE_MAGMA_CUBE              ENTITY_PARROT_IMITATE_PHANTOM                 ENTITY_PARROT_IMITATE_PIGLIN                  ENTITY_PARROT_IMITATE_PIGLIN_BRUTE
+ ENTITY_PARROT_IMITATE_PILLAGER                ENTITY_PARROT_IMITATE_RAVAGER                 ENTITY_PARROT_IMITATE_SHULKER                 ENTITY_PARROT_IMITATE_SILVERFISH
+ ENTITY_PARROT_IMITATE_SKELETON                ENTITY_PARROT_IMITATE_SLIME                   ENTITY_PARROT_IMITATE_SPIDER                  ENTITY_PARROT_IMITATE_STRAY
+ ENTITY_PARROT_IMITATE_VEX                     ENTITY_PARROT_IMITATE_VINDICATOR              ENTITY_PARROT_IMITATE_WITCH                   ENTITY_PARROT_IMITATE_WITHER
+ ENTITY_PARROT_IMITATE_WITHER_SKELETON         ENTITY_PARROT_IMITATE_ZOGLIN                  ENTITY_PARROT_IMITATE_ZOMBIE                  ENTITY_PARROT_IMITATE_ZOMBIE_VILLAGER
+ ENTITY_PARROT_STEP                            ENTITY_PHANTOM_AMBIENT                        ENTITY_PHANTOM_BITE                           ENTITY_PHANTOM_DEATH
+ ENTITY_PHANTOM_FLAP                           ENTITY_PHANTOM_HURT                           ENTITY_PHANTOM_SWOOP                          ENTITY_PIGLIN_ADMIRING_ITEM
+ ENTITY_PIGLIN_AMBIENT                         ENTITY_PIGLIN_ANGRY                           ENTITY_PIGLIN_BRUTE_AMBIENT                   ENTITY_PIGLIN_BRUTE_ANGRY
+ ENTITY_PIGLIN_BRUTE_CONVERTED_TO_ZOMBIFIED    ENTITY_PIGLIN_BRUTE_DEATH                     ENTITY_PIGLIN_BRUTE_HURT                      ENTITY_PIGLIN_BRUTE_STEP
+ ENTITY_PIGLIN_CELEBRATE                       ENTITY_PIGLIN_CONVERTED_TO_ZOMBIFIED          ENTITY_PIGLIN_DEATH                           ENTITY_PIGLIN_HURT
+ ENTITY_PIGLIN_JEALOUS                         ENTITY_PIGLIN_RETREAT                         ENTITY_PIGLIN_STEP                            ENTITY_PIG_AMBIENT
+ ENTITY_PIG_DEATH                              ENTITY_PIG_HURT                               ENTITY_PIG_SADDLE                             ENTITY_PIG_STEP
+ ENTITY_PILLAGER_AMBIENT                       ENTITY_PILLAGER_CELEBRATE                     ENTITY_PILLAGER_DEATH                         ENTITY_PILLAGER_HURT
+ ENTITY_PLAYER_ATTACK_CRIT                     ENTITY_PLAYER_ATTACK_KNOCKBACK                ENTITY_PLAYER_ATTACK_NODAMAGE                 ENTITY_PLAYER_ATTACK_STRONG
+ ENTITY_PLAYER_ATTACK_SWEEP                    ENTITY_PLAYER_ATTACK_WEAK                     ENTITY_PLAYER_BIG_FALL                        ENTITY_PLAYER_BREATH
+ ENTITY_PLAYER_BURP                            ENTITY_PLAYER_DEATH                           ENTITY_PLAYER_HURT                            ENTITY_PLAYER_HURT_DROWN
+ ENTITY_PLAYER_HURT_FREEZE                     ENTITY_PLAYER_HURT_ON_FIRE                    ENTITY_PLAYER_HURT_SWEET_BERRY_BUSH           ENTITY_PLAYER_LEVELUP
+ ENTITY_PLAYER_SMALL_FALL                      ENTITY_PLAYER_SPLASH                          ENTITY_PLAYER_SPLASH_HIGH_SPEED               ENTITY_PLAYER_SWIM
+ ENTITY_POLAR_BEAR_AMBIENT                     ENTITY_POLAR_BEAR_AMBIENT_BABY                ENTITY_POLAR_BEAR_DEATH                       ENTITY_POLAR_BEAR_HURT
+ ENTITY_POLAR_BEAR_STEP                        ENTITY_POLAR_BEAR_WARNING                     ENTITY_PUFFER_FISH_AMBIENT                    ENTITY_PUFFER_FISH_BLOW_OUT
+ ENTITY_PUFFER_FISH_BLOW_UP                    ENTITY_PUFFER_FISH_DEATH                      ENTITY_PUFFER_FISH_FLOP                       ENTITY_PUFFER_FISH_HURT
+ ENTITY_PUFFER_FISH_STING                      ENTITY_RABBIT_AMBIENT                         ENTITY_RABBIT_ATTACK                          ENTITY_RABBIT_DEATH
+ ENTITY_RABBIT_HURT                            ENTITY_RABBIT_JUMP                            ENTITY_RAVAGER_AMBIENT                        ENTITY_RAVAGER_ATTACK
+ ENTITY_RAVAGER_CELEBRATE                      ENTITY_RAVAGER_DEATH                          ENTITY_RAVAGER_HURT                           ENTITY_RAVAGER_ROAR
+ ENTITY_RAVAGER_STEP                           ENTITY_RAVAGER_STUNNED                        ENTITY_SALMON_AMBIENT                         ENTITY_SALMON_DEATH
+ ENTITY_SALMON_FLOP                            ENTITY_SALMON_HURT                            ENTITY_SHEEP_AMBIENT                          ENTITY_SHEEP_DEATH
+ ENTITY_SHEEP_HURT                             ENTITY_SHEEP_SHEAR                            ENTITY_SHEEP_STEP                             ENTITY_SHULKER_AMBIENT
+ ENTITY_SHULKER_BULLET_HIT                     ENTITY_SHULKER_BULLET_HURT                    ENTITY_SHULKER_CLOSE                          ENTITY_SHULKER_DEATH
+ ENTITY_SHULKER_HURT                           ENTITY_SHULKER_HURT_CLOSED                    ENTITY_SHULKER_OPEN                           ENTITY_SHULKER_SHOOT
+ ENTITY_SHULKER_TELEPORT                       ENTITY_SILVERFISH_AMBIENT                     ENTITY_SILVERFISH_DEATH                       ENTITY_SILVERFISH_HURT
+ ENTITY_SILVERFISH_STEP                        ENTITY_SKELETON_AMBIENT                       ENTITY_SKELETON_CONVERTED_TO_STRAY            ENTITY_SKELETON_DEATH
+ ENTITY_SKELETON_HORSE_AMBIENT                 ENTITY_SKELETON_HORSE_AMBIENT_WATER           ENTITY_SKELETON_HORSE_DEATH                   ENTITY_SKELETON_HORSE_GALLOP_WATER
+ ENTITY_SKELETON_HORSE_HURT                    ENTITY_SKELETON_HORSE_JUMP_WATER              ENTITY_SKELETON_HORSE_STEP_WATER              ENTITY_SKELETON_HORSE_SWIM
+ ENTITY_SKELETON_HURT                          ENTITY_SKELETON_SHOOT                         ENTITY_SKELETON_STEP                          ENTITY_SLIME_ATTACK
+ ENTITY_SLIME_DEATH                            ENTITY_SLIME_DEATH_SMALL                      ENTITY_SLIME_HURT                             ENTITY_SLIME_HURT_SMALL
+ ENTITY_SLIME_JUMP                             ENTITY_SLIME_JUMP_SMALL                       ENTITY_SLIME_SQUISH                           ENTITY_SLIME_SQUISH_SMALL
+ ENTITY_SNOWBALL_THROW                         ENTITY_SNOW_GOLEM_AMBIENT                     ENTITY_SNOW_GOLEM_DEATH                       ENTITY_SNOW_GOLEM_HURT
+ ENTITY_SNOW_GOLEM_SHEAR                       ENTITY_SNOW_GOLEM_SHOOT                       ENTITY_SPIDER_AMBIENT                         ENTITY_SPIDER_DEATH
+ ENTITY_SPIDER_HURT                            ENTITY_SPIDER_STEP                            ENTITY_SPLASH_POTION_BREAK                    ENTITY_SPLASH_POTION_THROW
+ ENTITY_SQUID_AMBIENT                          ENTITY_SQUID_DEATH                            ENTITY_SQUID_HURT                             ENTITY_SQUID_SQUIRT
+ ENTITY_STRAY_AMBIENT                          ENTITY_STRAY_DEATH                            ENTITY_STRAY_HURT                             ENTITY_STRAY_STEP
+ ENTITY_STRIDER_AMBIENT                        ENTITY_STRIDER_DEATH                          ENTITY_STRIDER_EAT                            ENTITY_STRIDER_HAPPY
+ ENTITY_STRIDER_HURT                           ENTITY_STRIDER_RETREAT                        ENTITY_STRIDER_SADDLE                         ENTITY_STRIDER_STEP
+ ENTITY_STRIDER_STEP_LAVA                      ENTITY_TNT_PRIMED                             ENTITY_TROPICAL_FISH_AMBIENT                  ENTITY_TROPICAL_FISH_DEATH
+ ENTITY_TROPICAL_FISH_FLOP                     ENTITY_TROPICAL_FISH_HURT                     ENTITY_TURTLE_AMBIENT_LAND                    ENTITY_TURTLE_DEATH
+ ENTITY_TURTLE_DEATH_BABY                      ENTITY_TURTLE_EGG_BREAK                       ENTITY_TURTLE_EGG_CRACK                       ENTITY_TURTLE_EGG_HATCH
+ ENTITY_TURTLE_HURT                            ENTITY_TURTLE_HURT_BABY                       ENTITY_TURTLE_LAY_EGG                         ENTITY_TURTLE_SHAMBLE
+ ENTITY_TURTLE_SHAMBLE_BABY                    ENTITY_TURTLE_SWIM                            ENTITY_VEX_AMBIENT                            ENTITY_VEX_CHARGE
+ ENTITY_VEX_DEATH                              ENTITY_VEX_HURT                               ENTITY_VILLAGER_AMBIENT                       ENTITY_VILLAGER_CELEBRATE
+ ENTITY_VILLAGER_DEATH                         ENTITY_VILLAGER_HURT                          ENTITY_VILLAGER_NO                            ENTITY_VILLAGER_TRADE
+ ENTITY_VILLAGER_WORK_ARMORER                  ENTITY_VILLAGER_WORK_BUTCHER                  ENTITY_VILLAGER_WORK_CARTOGRAPHER             ENTITY_VILLAGER_WORK_CLERIC
+ ENTITY_VILLAGER_WORK_FARMER                   ENTITY_VILLAGER_WORK_FISHERMAN                ENTITY_VILLAGER_WORK_FLETCHER                 ENTITY_VILLAGER_WORK_LEATHERWORKER
+ ENTITY_VILLAGER_WORK_LIBRARIAN                ENTITY_VILLAGER_WORK_MASON                    ENTITY_VILLAGER_WORK_SHEPHERD                 ENTITY_VILLAGER_WORK_TOOLSMITH
+ ENTITY_VILLAGER_WORK_WEAPONSMITH              ENTITY_VILLAGER_YES                           ENTITY_VINDICATOR_AMBIENT                     ENTITY_VINDICATOR_CELEBRATE
+ ENTITY_VINDICATOR_DEATH                       ENTITY_VINDICATOR_HURT                        ENTITY_WANDERING_TRADER_AMBIENT               ENTITY_WANDERING_TRADER_DEATH
+ ENTITY_WANDERING_TRADER_DISAPPEARED           ENTITY_WANDERING_TRADER_DRINK_MILK            ENTITY_WANDERING_TRADER_DRINK_POTION          ENTITY_WANDERING_TRADER_HURT
+ ENTITY_WANDERING_TRADER_NO                    ENTITY_WANDERING_TRADER_REAPPEARED            ENTITY_WANDERING_TRADER_TRADE                 ENTITY_WANDERING_TRADER_YES
+ ENTITY_WITCH_AMBIENT                          ENTITY_WITCH_CELEBRATE                        ENTITY_WITCH_DEATH                            ENTITY_WITCH_DRINK
+ ENTITY_WITCH_HURT                             ENTITY_WITCH_THROW                            ENTITY_WITHER_AMBIENT                         ENTITY_WITHER_BREAK_BLOCK
+ ENTITY_WITHER_DEATH                           ENTITY_WITHER_HURT                            ENTITY_WITHER_SHOOT                           ENTITY_WITHER_SKELETON_AMBIENT
+ ENTITY_WITHER_SKELETON_DEATH                  ENTITY_WITHER_SKELETON_HURT                   ENTITY_WITHER_SKELETON_STEP                   ENTITY_WITHER_SPAWN
+ ENTITY_WOLF_AMBIENT                           ENTITY_WOLF_DEATH                             ENTITY_WOLF_GROWL                             ENTITY_WOLF_HOWL
+ ENTITY_WOLF_HURT                              ENTITY_WOLF_PANT                              ENTITY_WOLF_SHAKE                             ENTITY_WOLF_STEP
+ ENTITY_WOLF_WHINE                             ENTITY_ZOGLIN_AMBIENT                         ENTITY_ZOGLIN_ANGRY                           ENTITY_ZOGLIN_ATTACK
+ ENTITY_ZOGLIN_DEATH                           ENTITY_ZOGLIN_HURT                            ENTITY_ZOGLIN_STEP                            ENTITY_ZOMBIE_AMBIENT
+ ENTITY_ZOMBIE_ATTACK_IRON_DOOR                ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR              ENTITY_ZOMBIE_BREAK_WOODEN_DOOR               ENTITY_ZOMBIE_CONVERTED_TO_DROWNED
+ ENTITY_ZOMBIE_DEATH                           ENTITY_ZOMBIE_DESTROY_EGG                     ENTITY_ZOMBIE_HORSE_AMBIENT                   ENTITY_ZOMBIE_HORSE_DEATH
+ ENTITY_ZOMBIE_HORSE_HURT                      ENTITY_ZOMBIE_HURT                            ENTITY_ZOMBIE_INFECT                          ENTITY_ZOMBIE_STEP
+ ENTITY_ZOMBIE_VILLAGER_AMBIENT                ENTITY_ZOMBIE_VILLAGER_CONVERTED              ENTITY_ZOMBIE_VILLAGER_CURE                   ENTITY_ZOMBIE_VILLAGER_DEATH
+ ENTITY_ZOMBIE_VILLAGER_HURT                   ENTITY_ZOMBIE_VILLAGER_STEP                   ENTITY_ZOMBIFIED_PIGLIN_AMBIENT               ENTITY_ZOMBIFIED_PIGLIN_ANGRY
+ ENTITY_ZOMBIFIED_PIGLIN_DEATH                 ENTITY_ZOMBIFIED_PIGLIN_HURT                  EVENT_RAID_HORN                               ITEM_ARMOR_EQUIP_CHAIN
+ ITEM_ARMOR_EQUIP_DIAMOND                      ITEM_ARMOR_EQUIP_ELYTRA                       ITEM_ARMOR_EQUIP_GENERIC                      ITEM_ARMOR_EQUIP_GOLD
+ ITEM_ARMOR_EQUIP_IRON                         ITEM_ARMOR_EQUIP_LEATHER                      ITEM_ARMOR_EQUIP_NETHERITE                    ITEM_ARMOR_EQUIP_TURTLE
+ ITEM_AXE_SCRAPE                               ITEM_AXE_STRIP                                ITEM_AXE_WAX_OFF                              ITEM_BONE_MEAL_USE
+ ITEM_BOOK_PAGE_TURN                           ITEM_BOOK_PUT                                 ITEM_BOTTLE_EMPTY                             ITEM_BOTTLE_FILL
+ ITEM_BOTTLE_FILL_DRAGONBREATH                 ITEM_BUCKET_EMPTY                             ITEM_BUCKET_EMPTY_AXOLOTL                     ITEM_BUCKET_EMPTY_FISH
+ ITEM_BUCKET_EMPTY_LAVA                        ITEM_BUCKET_EMPTY_POWDER_SNOW                 ITEM_BUCKET_FILL                              ITEM_BUCKET_FILL_AXOLOTL
+ ITEM_BUCKET_FILL_FISH                         ITEM_BUCKET_FILL_LAVA                         ITEM_BUCKET_FILL_POWDER_SNOW                  ITEM_BUNDLE_DROP_CONTENTS
+ ITEM_BUNDLE_INSERT                            ITEM_BUNDLE_REMOVE_ONE                        ITEM_CHORUS_FRUIT_TELEPORT                    ITEM_CROP_PLANT
  ITEM_CROSSBOW_HIT                             ITEM_CROSSBOW_LOADING_END                     ITEM_CROSSBOW_LOADING_MIDDLE                  ITEM_CROSSBOW_LOADING_START
  ITEM_CROSSBOW_QUICK_CHARGE_1                  ITEM_CROSSBOW_QUICK_CHARGE_2                  ITEM_CROSSBOW_QUICK_CHARGE_3                  ITEM_CROSSBOW_SHOOT
  ITEM_DYE_USE                                  ITEM_ELYTRA_FLYING                            ITEM_FIRECHARGE_USE                           ITEM_FLINTANDSTEEL_USE
@@ -2060,206 +2041,225 @@ More about potions, effects and custom effects: <a href="https://minecraft.gamep
  ITEM_TRIDENT_RIPTIDE_1                        ITEM_TRIDENT_RIPTIDE_2                        ITEM_TRIDENT_RIPTIDE_3                        ITEM_TRIDENT_THROW
  ITEM_TRIDENT_THUNDER                          MUSIC_CREATIVE                                MUSIC_CREDITS                                 MUSIC_DISC_11
  MUSIC_DISC_13                                 MUSIC_DISC_BLOCKS                             MUSIC_DISC_CAT                                MUSIC_DISC_CHIRP
- MUSIC_DISC_FAR                                MUSIC_DISC_MALL                               MUSIC_DISC_MELLOHI                            MUSIC_DISC_PIGSTEP
- MUSIC_DISC_STAL                               MUSIC_DISC_STRAD                              MUSIC_DISC_WAIT                               MUSIC_DISC_WARD
- MUSIC_DRAGON                                  MUSIC_END                                     MUSIC_GAME                                    MUSIC_MENU
- MUSIC_NETHER_BASALT_DELTAS                    MUSIC_NETHER_CRIMSON_FOREST                   MUSIC_NETHER_NETHER_WASTES                    MUSIC_NETHER_SOUL_SAND_VALLEY
- MUSIC_NETHER_WARPED_FOREST                    MUSIC_UNDER_WATER                             PARTICLE_SOUL_ESCAPE                          UI_BUTTON_CLICK
- UI_CARTOGRAPHY_TABLE_TAKE_RESULT              UI_LOOM_SELECT_PATTERN                        UI_LOOM_TAKE_RESULT                           UI_STONECUTTER_SELECT_RECIPE
- UI_STONECUTTER_TAKE_RESULT                    UI_TOAST_CHALLENGE_COMPLETE                   UI_TOAST_IN                                   UI_TOAST_OUT
- WEATHER_RAIN                                  WEATHER_RAIN_ABOVE
+ MUSIC_DISC_FAR                                MUSIC_DISC_MALL                               MUSIC_DISC_MELLOHI                            MUSIC_DISC_OTHERSIDE
+ MUSIC_DISC_PIGSTEP                            MUSIC_DISC_STAL                               MUSIC_DISC_STRAD                              MUSIC_DISC_WAIT
+ MUSIC_DISC_WARD                               MUSIC_DRAGON                                  MUSIC_END                                     MUSIC_GAME
+ MUSIC_MENU                                    MUSIC_NETHER_BASALT_DELTAS                    MUSIC_NETHER_CRIMSON_FOREST                   MUSIC_NETHER_NETHER_WASTES
+ MUSIC_NETHER_SOUL_SAND_VALLEY                 MUSIC_NETHER_WARPED_FOREST                    MUSIC_OVERWORLD_DRIPSTONE_CAVES               MUSIC_OVERWORLD_FROZEN_PEAKS
+ MUSIC_OVERWORLD_GROVE                         MUSIC_OVERWORLD_JAGGED_PEAKS                  MUSIC_OVERWORLD_LUSH_CAVES                    MUSIC_OVERWORLD_MEADOW
+ MUSIC_OVERWORLD_SNOWY_SLOPES                  MUSIC_OVERWORLD_STONY_PEAKS                   MUSIC_UNDER_WATER                             PARTICLE_SOUL_ESCAPE
+ UI_BUTTON_CLICK                               UI_CARTOGRAPHY_TABLE_TAKE_RESULT              UI_LOOM_SELECT_PATTERN                        UI_LOOM_TAKE_RESULT
+ UI_STONECUTTER_SELECT_RECIPE                  UI_STONECUTTER_TAKE_RESULT                    UI_TOAST_CHALLENGE_COMPLETE                   UI_TOAST_IN
+ UI_TOAST_OUT                                  WEATHER_RAIN                                  WEATHER_RAIN_ABOVE
 </pre></div><div class='doc-section__group'><pre><a id='tag'></a><a href='#contents' class='back-to-top'>^ Contents</a><h3>TAG LIST</h3><a href='https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Tag.html'>BukkitAPI / Tag</a>
 
 <b>Blocks</b>
- minecraft:soul_fire_base_blocks      [SOUL_SAND, SOUL_SOIL]
- minecraft:campfires                  [CAMPFIRE, SOUL_CAMPFIRE]
- minecraft:infiniburn_nether          [NETHERRACK, MAGMA_BLOCK]
- minecraft:wooden_slabs               [OAK_SLAB, SPRUCE_SLAB, BIRCH_SLAB, JUNGLE_SLAB, ACACIA_SLAB, DARK_OAK_SLAB, CRIMSON_SLAB, WARPED_SLAB]
- minecraft:occludes_vibration_signals [WHITE_WOOL, ORANGE_WOOL, MAGENTA_WOOL, LIGHT_BLUE_WOOL, YELLOW_WOOL, LIME_WOOL, PINK_WOOL, GRAY_WOOL, LIGHT_GRAY_WOOL, CYAN_WOOL, PURPLE_WOOL, BLUE_WOOL, BROWN_WOOL, GREEN_WOOL, RED_WOOL, BLACK_WOOL]
- minecraft:coal_ores                  [COAL_ORE, DEEPSLATE_COAL_ORE]
- minecraft:small_flowers              [DANDELION, POPPY, BLUE_ORCHID, ALLIUM, AZURE_BLUET, RED_TULIP, ORANGE_TULIP, WHITE_TULIP, PINK_TULIP, OXEYE_DAISY, CORNFLOWER, LILY_OF_THE_VALLEY, WITHER_ROSE]
- minecraft:wooden_trapdoors           [OAK_TRAPDOOR, SPRUCE_TRAPDOOR, BIRCH_TRAPDOOR, JUNGLE_TRAPDOOR, ACACIA_TRAPDOOR, DARK_OAK_TRAPDOOR, CRIMSON_TRAPDOOR, WARPED_TRAPDOOR]
- minecraft:wool                       [WHITE_WOOL, ORANGE_WOOL, MAGENTA_WOOL, LIGHT_BLUE_WOOL, YELLOW_WOOL, LIME_WOOL, PINK_WOOL, GRAY_WOOL, LIGHT_GRAY_WOOL, CYAN_WOOL, PURPLE_WOOL, BLUE_WOOL, BROWN_WOOL, GREEN_WOOL, RED_WOOL, BLACK_WOOL]
- minecraft:stairs                     [CUT_COPPER_STAIRS, EXPOSED_CUT_COPPER_STAIRS, WEATHERED_CUT_COPPER_STAIRS, OXIDIZED_CUT_COPPER_STAIRS, WAXED_CUT_COPPER_STAIRS, WAXED_EXPOSED_CUT_COPPER_STAIRS, WAXED_WEATHERED_CUT_COPPER_STAIRS, WAXED_OXIDIZED_CUT_COPPER_STAIRS, PURPUR_STAIRS, OAK_STAIRS, COBBLESTONE_STAIRS, BRICK_STAIRS, STONE_BRICK_STAIRS, NETHER_BRICK_STAIRS, SANDSTONE_STAIRS, SPRUCE_STAIRS, BIRCH_STAIRS, JUNGLE_STAIRS, CRIMSON_STAIRS, WARPED_STAIRS, QUARTZ_STAIRS, ACACIA_STAIRS, DARK_OAK_STAIRS, PRISMARINE_STAIRS, PRISMARINE_BRICK_STAIRS, DARK_PRISMARINE_STAIRS, RED_SANDSTONE_STAIRS, POLISHED_GRANITE_STAIRS, SMOOTH_RED_SANDSTONE_STAIRS, MOSSY_STONE_BRICK_STAIRS, POLISHED_DIORITE_STAIRS, MOSSY_COBBLESTONE_STAIRS, END_STONE_BRICK_STAIRS, STONE_STAIRS, SMOOTH_SANDSTONE_STAIRS, SMOOTH_QUARTZ_STAIRS, GRANITE_STAIRS, ANDESITE_STAIRS, RED_NETHER_BRICK_STAIRS, POLISHED_ANDESITE_STAIRS, DIORITE_STAIRS, COBBLED_DEEPSLATE_STAIRS, POLISHED_DEEPSLATE_STAIRS, DEEPSLATE_BRICK_STAIRS, DEEPSLATE_TILE_STAIRS, BLACKSTONE_STAIRS, POLISHED_BLACKSTONE_STAIRS, POLISHED_BLACKSTONE_BRICK_STAIRS]
- minecraft:logs                       [OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, CRIMSON_STEM, WARPED_STEM, STRIPPED_OAK_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_BIRCH_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_ACACIA_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_CRIMSON_STEM, STRIPPED_WARPED_STEM, STRIPPED_OAK_WOOD, STRIPPED_SPRUCE_WOOD, STRIPPED_BIRCH_WOOD, STRIPPED_JUNGLE_WOOD, STRIPPED_ACACIA_WOOD, STRIPPED_DARK_OAK_WOOD, STRIPPED_CRIMSON_HYPHAE, STRIPPED_WARPED_HYPHAE, OAK_WOOD, SPRUCE_WOOD, BIRCH_WOOD, JUNGLE_WOOD, ACACIA_WOOD, DARK_OAK_WOOD, CRIMSON_HYPHAE, WARPED_HYPHAE]
- minecraft:lava_pool_stone_replaceables [BEDROCK, OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, CRIMSON_STEM, WARPED_STEM, STRIPPED_OAK_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_BIRCH_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_ACACIA_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_CRIMSON_STEM, STRIPPED_WARPED_STEM, STRIPPED_OAK_WOOD, STRIPPED_SPRUCE_WOOD, STRIPPED_BIRCH_WOOD, STRIPPED_JUNGLE_WOOD, STRIPPED_ACACIA_WOOD, STRIPPED_DARK_OAK_WOOD, STRIPPED_CRIMSON_HYPHAE, STRIPPED_WARPED_HYPHAE, OAK_WOOD, SPRUCE_WOOD, BIRCH_WOOD, JUNGLE_WOOD, ACACIA_WOOD, DARK_OAK_WOOD, CRIMSON_HYPHAE, WARPED_HYPHAE, OAK_LEAVES, SPRUCE_LEAVES, BIRCH_LEAVES, JUNGLE_LEAVES, ACACIA_LEAVES, DARK_OAK_LEAVES, AZALEA_LEAVES, FLOWERING_AZALEA_LEAVES, SPAWNER, CHEST, END_PORTAL_FRAME]
- minecraft:beehives                   [BEE_NEST, BEEHIVE]
- minecraft:ice                        [ICE, PACKED_ICE, BLUE_ICE, FROSTED_ICE]
- minecraft:dragon_immune              [BEDROCK, OBSIDIAN, IRON_BARS, END_PORTAL_FRAME, END_STONE, COMMAND_BLOCK, BARRIER, REPEATING_COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, STRUCTURE_BLOCK, JIGSAW, CRYING_OBSIDIAN, RESPAWN_ANCHOR, MOVING_PISTON, END_PORTAL, END_GATEWAY]
  minecraft:crops                      [WHEAT, PUMPKIN_STEM, MELON_STEM, CARROTS, POTATOES, BEETROOTS]
- minecraft:features_cannot_replace    [BEDROCK, SPAWNER, CHEST, END_PORTAL_FRAME]
- minecraft:valid_spawn                [GRASS_BLOCK, PODZOL]
- minecraft:mushroom_grow_block        [PODZOL, CRIMSON_NYLIUM, WARPED_NYLIUM, MYCELIUM]
- minecraft:wooden_doors               [OAK_DOOR, SPRUCE_DOOR, BIRCH_DOOR, JUNGLE_DOOR, ACACIA_DOOR, DARK_OAK_DOOR, CRIMSON_DOOR, WARPED_DOOR]
- minecraft:crystal_sound_blocks       [AMETHYST_BLOCK, BUDDING_AMETHYST]
- minecraft:warped_stems               [WARPED_STEM, STRIPPED_WARPED_STEM, STRIPPED_WARPED_HYPHAE, WARPED_HYPHAE]
- minecraft:standing_signs             [OAK_SIGN, SPRUCE_SIGN, BIRCH_SIGN, JUNGLE_SIGN, ACACIA_SIGN, DARK_OAK_SIGN, CRIMSON_SIGN, WARPED_SIGN]
- minecraft:infiniburn_end             [BEDROCK, NETHERRACK, MAGMA_BLOCK]
- minecraft:emerald_ores               [EMERALD_ORE, DEEPSLATE_EMERALD_ORE]
- minecraft:crimson_stems              [CRIMSON_STEM, STRIPPED_CRIMSON_STEM, STRIPPED_CRIMSON_HYPHAE, CRIMSON_HYPHAE]
- minecraft:needs_stone_tool           [IRON_ORE, DEEPSLATE_IRON_ORE, COPPER_ORE, DEEPSLATE_COPPER_ORE, LAPIS_ORE, DEEPSLATE_LAPIS_ORE, RAW_IRON_BLOCK, RAW_COPPER_BLOCK, IRON_BLOCK, COPPER_BLOCK, EXPOSED_COPPER, WEATHERED_COPPER, OXIDIZED_COPPER, CUT_COPPER, EXPOSED_CUT_COPPER, WEATHERED_CUT_COPPER, OXIDIZED_CUT_COPPER, CUT_COPPER_STAIRS, EXPOSED_CUT_COPPER_STAIRS, WEATHERED_CUT_COPPER_STAIRS, OXIDIZED_CUT_COPPER_STAIRS, CUT_COPPER_SLAB, EXPOSED_CUT_COPPER_SLAB, WEATHERED_CUT_COPPER_SLAB, OXIDIZED_CUT_COPPER_SLAB, WAXED_COPPER_BLOCK, WAXED_EXPOSED_COPPER, WAXED_WEATHERED_COPPER, WAXED_OXIDIZED_COPPER, WAXED_CUT_COPPER, WAXED_EXPOSED_CUT_COPPER, WAXED_WEATHERED_CUT_COPPER, WAXED_OXIDIZED_CUT_COPPER, WAXED_CUT_COPPER_STAIRS, WAXED_EXPOSED_CUT_COPPER_STAIRS, WAXED_WEATHERED_CUT_COPPER_STAIRS, WAXED_OXIDIZED_CUT_COPPER_STAIRS, WAXED_CUT_COPPER_SLAB, WAXED_EXPOSED_CUT_COPPER_SLAB, WAXED_WEATHERED_CUT_COPPER_SLAB, WAXED_OXIDIZED_CUT_COPPER_SLAB, LAPIS_BLOCK, LIGHTNING_ROD]
- minecraft:inside_step_sound_blocks   [SNOW, POWDER_SNOW]
- minecraft:prevent_mob_spawning_inside [POWERED_RAIL, DETECTOR_RAIL, RAIL, ACTIVATOR_RAIL]
  minecraft:wart_blocks                [NETHER_WART_BLOCK, WARPED_WART_BLOCK]
- minecraft:climbable                  [WEEPING_VINES, TWISTING_VINES, LADDER, VINE, SCAFFOLDING, WEEPING_VINES_PLANT, TWISTING_VINES_PLANT, CAVE_VINES, CAVE_VINES_PLANT]
- minecraft:dark_oak_logs              [DARK_OAK_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_DARK_OAK_WOOD, DARK_OAK_WOOD]
- minecraft:coral_plants               [TUBE_CORAL, BRAIN_CORAL, BUBBLE_CORAL, FIRE_CORAL, HORN_CORAL]
+ minecraft:terracotta                 [WHITE_TERRACOTTA, ORANGE_TERRACOTTA, MAGENTA_TERRACOTTA, LIGHT_BLUE_TERRACOTTA, YELLOW_TERRACOTTA, LIME_TERRACOTTA, PINK_TERRACOTTA, GRAY_TERRACOTTA, LIGHT_GRAY_TERRACOTTA, CYAN_TERRACOTTA, PURPLE_TERRACOTTA, BLUE_TERRACOTTA, BROWN_TERRACOTTA, GREEN_TERRACOTTA, RED_TERRACOTTA, BLACK_TERRACOTTA, TERRACOTTA]
  minecraft:non_flammable_wood         [CRIMSON_PLANKS, WARPED_PLANKS, CRIMSON_STEM, WARPED_STEM, STRIPPED_CRIMSON_STEM, STRIPPED_WARPED_STEM, STRIPPED_CRIMSON_HYPHAE, STRIPPED_WARPED_HYPHAE, CRIMSON_HYPHAE, WARPED_HYPHAE, CRIMSON_SLAB, WARPED_SLAB, CRIMSON_FENCE, WARPED_FENCE, CRIMSON_STAIRS, WARPED_STAIRS, CRIMSON_BUTTON, WARPED_BUTTON, CRIMSON_PRESSURE_PLATE, WARPED_PRESSURE_PLATE, CRIMSON_DOOR, WARPED_DOOR, CRIMSON_TRAPDOOR, WARPED_TRAPDOOR, CRIMSON_FENCE_GATE, WARPED_FENCE_GATE, CRIMSON_SIGN, WARPED_SIGN, CRIMSON_WALL_SIGN, WARPED_WALL_SIGN]
- minecraft:beacon_base_blocks         [IRON_BLOCK, GOLD_BLOCK, DIAMOND_BLOCK, NETHERITE_BLOCK, EMERALD_BLOCK]
- minecraft:shulker_boxes              [SHULKER_BOX, WHITE_SHULKER_BOX, ORANGE_SHULKER_BOX, MAGENTA_SHULKER_BOX, LIGHT_BLUE_SHULKER_BOX, YELLOW_SHULKER_BOX, LIME_SHULKER_BOX, PINK_SHULKER_BOX, GRAY_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX, CYAN_SHULKER_BOX, PURPLE_SHULKER_BOX, BLUE_SHULKER_BOX, BROWN_SHULKER_BOX, GREEN_SHULKER_BOX, RED_SHULKER_BOX, BLACK_SHULKER_BOX]
- minecraft:anvil                      [ANVIL, CHIPPED_ANVIL, DAMAGED_ANVIL]
- minecraft:birch_logs                 [BIRCH_LOG, STRIPPED_BIRCH_LOG, STRIPPED_BIRCH_WOOD, BIRCH_WOOD]
- minecraft:moss_replaceable           [STONE, GRANITE, DIORITE, ANDESITE, DEEPSLATE, TUFF, GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, ROOTED_DIRT, MOSS_BLOCK, MYCELIUM, CAVE_VINES, CAVE_VINES_PLANT]
- minecraft:lapis_ores                 [LAPIS_ORE, DEEPSLATE_LAPIS_ORE]
- minecraft:wall_corals                [TUBE_CORAL_WALL_FAN, BRAIN_CORAL_WALL_FAN, BUBBLE_CORAL_WALL_FAN, FIRE_CORAL_WALL_FAN, HORN_CORAL_WALL_FAN]
+ minecraft:ice                        [ICE, PACKED_ICE, BLUE_ICE, FROSTED_ICE]
  minecraft:lush_ground_replaceable    [STONE, GRANITE, DIORITE, ANDESITE, DEEPSLATE, TUFF, GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, ROOTED_DIRT, SAND, GRAVEL, MOSS_BLOCK, CLAY, MYCELIUM, CAVE_VINES, CAVE_VINES_PLANT]
- minecraft:fences                     [OAK_FENCE, SPRUCE_FENCE, BIRCH_FENCE, JUNGLE_FENCE, ACACIA_FENCE, DARK_OAK_FENCE, CRIMSON_FENCE, WARPED_FENCE, NETHER_BRICK_FENCE]
- minecraft:saplings                   [OAK_SAPLING, SPRUCE_SAPLING, BIRCH_SAPLING, JUNGLE_SAPLING, ACACIA_SAPLING, DARK_OAK_SAPLING, AZALEA, FLOWERING_AZALEA]
- minecraft:mineable/pickaxe           [STONE, GRANITE, POLISHED_GRANITE, DIORITE, POLISHED_DIORITE, ANDESITE, POLISHED_ANDESITE, DEEPSLATE, COBBLED_DEEPSLATE, POLISHED_DEEPSLATE, CALCITE, TUFF, DRIPSTONE_BLOCK, CRIMSON_NYLIUM, WARPED_NYLIUM, COBBLESTONE, COAL_ORE, DEEPSLATE_COAL_ORE, IRON_ORE, DEEPSLATE_IRON_ORE, COPPER_ORE, DEEPSLATE_COPPER_ORE, GOLD_ORE, DEEPSLATE_GOLD_ORE, REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE, EMERALD_ORE, DEEPSLATE_EMERALD_ORE, LAPIS_ORE, DEEPSLATE_LAPIS_ORE, DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE, NETHER_GOLD_ORE, NETHER_QUARTZ_ORE, ANCIENT_DEBRIS, COAL_BLOCK, RAW_IRON_BLOCK, RAW_COPPER_BLOCK, RAW_GOLD_BLOCK, AMETHYST_BLOCK, BUDDING_AMETHYST, IRON_BLOCK, COPPER_BLOCK, GOLD_BLOCK, DIAMOND_BLOCK, NETHERITE_BLOCK, EXPOSED_COPPER, WEATHERED_COPPER, OXIDIZED_COPPER, CUT_COPPER, EXPOSED_CUT_COPPER, WEATHERED_CUT_COPPER, OXIDIZED_CUT_COPPER, CUT_COPPER_STAIRS, EXPOSED_CUT_COPPER_STAIRS, WEATHERED_CUT_COPPER_STAIRS, OXIDIZED_CUT_COPPER_STAIRS, CUT_COPPER_SLAB, EXPOSED_CUT_COPPER_SLAB, WEATHERED_CUT_COPPER_SLAB, OXIDIZED_CUT_COPPER_SLAB, WAXED_COPPER_BLOCK, WAXED_EXPOSED_COPPER, WAXED_WEATHERED_COPPER, WAXED_OXIDIZED_COPPER, WAXED_CUT_COPPER, WAXED_EXPOSED_CUT_COPPER, WAXED_WEATHERED_CUT_COPPER, WAXED_OXIDIZED_CUT_COPPER, WAXED_CUT_COPPER_STAIRS, WAXED_EXPOSED_CUT_COPPER_STAIRS, WAXED_WEATHERED_CUT_COPPER_STAIRS, WAXED_OXIDIZED_CUT_COPPER_STAIRS, WAXED_CUT_COPPER_SLAB, WAXED_EXPOSED_CUT_COPPER_SLAB, WAXED_WEATHERED_CUT_COPPER_SLAB, WAXED_OXIDIZED_CUT_COPPER_SLAB, LAPIS_BLOCK, SANDSTONE, CHISELED_SANDSTONE, CUT_SANDSTONE, STONE_SLAB, SMOOTH_STONE_SLAB, SANDSTONE_SLAB, CUT_SANDSTONE_SLAB, PETRIFIED_OAK_SLAB, COBBLESTONE_SLAB, BRICK_SLAB, STONE_BRICK_SLAB, NETHER_BRICK_SLAB, QUARTZ_SLAB, RED_SANDSTONE_SLAB, CUT_RED_SANDSTONE_SLAB, PURPUR_SLAB, PRISMARINE_SLAB, PRISMARINE_BRICK_SLAB, DARK_PRISMARINE_SLAB, SMOOTH_QUARTZ, SMOOTH_RED_SANDSTONE, SMOOTH_SANDSTONE, SMOOTH_STONE, BRICKS, MOSSY_COBBLESTONE, OBSIDIAN, PURPUR_BLOCK, PURPUR_PILLAR, PURPUR_STAIRS, SPAWNER, FURNACE, COBBLESTONE_STAIRS, ICE, NETHERRACK, BASALT, POLISHED_BASALT, SMOOTH_BASALT, INFESTED_STONE, INFESTED_COBBLESTONE, INFESTED_STONE_BRICKS, INFESTED_MOSSY_STONE_BRICKS, INFESTED_CRACKED_STONE_BRICKS, INFESTED_CHISELED_STONE_BRICKS, INFESTED_DEEPSLATE, STONE_BRICKS, MOSSY_STONE_BRICKS, CRACKED_STONE_BRICKS, CHISELED_STONE_BRICKS, DEEPSLATE_BRICKS, CRACKED_DEEPSLATE_BRICKS, DEEPSLATE_TILES, CRACKED_DEEPSLATE_TILES, CHISELED_DEEPSLATE, IRON_BARS, CHAIN, BRICK_STAIRS, STONE_BRICK_STAIRS, NETHER_BRICKS, CRACKED_NETHER_BRICKS, CHISELED_NETHER_BRICKS, NETHER_BRICK_FENCE, NETHER_BRICK_STAIRS, ENCHANTING_TABLE, END_STONE, END_STONE_BRICKS, SANDSTONE_STAIRS, ENDER_CHEST, EMERALD_BLOCK, COBBLESTONE_WALL, MOSSY_COBBLESTONE_WALL, BRICK_WALL, PRISMARINE_WALL, RED_SANDSTONE_WALL, MOSSY_STONE_BRICK_WALL, GRANITE_WALL, STONE_BRICK_WALL, NETHER_BRICK_WALL, ANDESITE_WALL, RED_NETHER_BRICK_WALL, SANDSTONE_WALL, END_STONE_BRICK_WALL, DIORITE_WALL, BLACKSTONE_WALL, POLISHED_BLACKSTONE_WALL, POLISHED_BLACKSTONE_BRICK_WALL, COBBLED_DEEPSLATE_WALL, POLISHED_DEEPSLATE_WALL, DEEPSLATE_BRICK_WALL, DEEPSLATE_TILE_WALL, ANVIL, CHIPPED_ANVIL, DAMAGED_ANVIL, CHISELED_QUARTZ_BLOCK, QUARTZ_BLOCK, QUARTZ_BRICKS, QUARTZ_PILLAR, QUARTZ_STAIRS, WHITE_TERRACOTTA, ORANGE_TERRACOTTA, MAGENTA_TERRACOTTA, LIGHT_BLUE_TERRACOTTA, YELLOW_TERRACOTTA, LIME_TERRACOTTA, PINK_TERRACOTTA, GRAY_TERRACOTTA, LIGHT_GRAY_TERRACOTTA, CYAN_TERRACOTTA, PURPLE_TERRACOTTA, BLUE_TERRACOTTA, BROWN_TERRACOTTA, GREEN_TERRACOTTA, RED_TERRACOTTA, BLACK_TERRACOTTA, TERRACOTTA, PACKED_ICE, PRISMARINE, PRISMARINE_BRICKS, DARK_PRISMARINE, PRISMARINE_STAIRS, PRISMARINE_BRICK_STAIRS, DARK_PRISMARINE_STAIRS, RED_SANDSTONE, CHISELED_RED_SANDSTONE, CUT_RED_SANDSTONE, RED_SANDSTONE_STAIRS, MAGMA_BLOCK, RED_NETHER_BRICKS, BONE_BLOCK, SHULKER_BOX, WHITE_SHULKER_BOX, ORANGE_SHULKER_BOX, MAGENTA_SHULKER_BOX, LIGHT_BLUE_SHULKER_BOX, YELLOW_SHULKER_BOX, LIME_SHULKER_BOX, PINK_SHULKER_BOX, GRAY_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX, CYAN_SHULKER_BOX, PURPLE_SHULKER_BOX, BLUE_SHULKER_BOX, BROWN_SHULKER_BOX, GREEN_SHULKER_BOX, RED_SHULKER_BOX, BLACK_SHULKER_BOX, WHITE_GLAZED_TERRACOTTA, ORANGE_GLAZED_TERRACOTTA, MAGENTA_GLAZED_TERRACOTTA, LIGHT_BLUE_GLAZED_TERRACOTTA, YELLOW_GLAZED_TERRACOTTA, LIME_GLAZED_TERRACOTTA, PINK_GLAZED_TERRACOTTA, GRAY_GLAZED_TERRACOTTA, LIGHT_GRAY_GLAZED_TERRACOTTA, CYAN_GLAZED_TERRACOTTA, PURPLE_GLAZED_TERRACOTTA, BLUE_GLAZED_TERRACOTTA, BROWN_GLAZED_TERRACOTTA, GREEN_GLAZED_TERRACOTTA, RED_GLAZED_TERRACOTTA, BLACK_GLAZED_TERRACOTTA, WHITE_CONCRETE, ORANGE_CONCRETE, MAGENTA_CONCRETE, LIGHT_BLUE_CONCRETE, YELLOW_CONCRETE, LIME_CONCRETE, PINK_CONCRETE, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE, CYAN_CONCRETE, PURPLE_CONCRETE, BLUE_CONCRETE, BROWN_CONCRETE, GREEN_CONCRETE, RED_CONCRETE, BLACK_CONCRETE, DEAD_TUBE_CORAL_BLOCK, DEAD_BRAIN_CORAL_BLOCK, DEAD_BUBBLE_CORAL_BLOCK, DEAD_FIRE_CORAL_BLOCK, DEAD_HORN_CORAL_BLOCK, TUBE_CORAL_BLOCK, BRAIN_CORAL_BLOCK, BUBBLE_CORAL_BLOCK, FIRE_CORAL_BLOCK, HORN_CORAL_BLOCK, DEAD_BRAIN_CORAL, DEAD_BUBBLE_CORAL, DEAD_FIRE_CORAL, DEAD_HORN_CORAL, DEAD_TUBE_CORAL, DEAD_TUBE_CORAL_FAN, DEAD_BRAIN_CORAL_FAN, DEAD_BUBBLE_CORAL_FAN, DEAD_FIRE_CORAL_FAN, DEAD_HORN_CORAL_FAN, BLUE_ICE, POLISHED_GRANITE_STAIRS, SMOOTH_RED_SANDSTONE_STAIRS, MOSSY_STONE_BRICK_STAIRS, POLISHED_DIORITE_STAIRS, MOSSY_COBBLESTONE_STAIRS, END_STONE_BRICK_STAIRS, STONE_STAIRS, SMOOTH_SANDSTONE_STAIRS, SMOOTH_QUARTZ_STAIRS, GRANITE_STAIRS, ANDESITE_STAIRS, RED_NETHER_BRICK_STAIRS, POLISHED_ANDESITE_STAIRS, DIORITE_STAIRS, COBBLED_DEEPSLATE_STAIRS, POLISHED_DEEPSLATE_STAIRS, DEEPSLATE_BRICK_STAIRS, DEEPSLATE_TILE_STAIRS, POLISHED_GRANITE_SLAB, SMOOTH_RED_SANDSTONE_SLAB, MOSSY_STONE_BRICK_SLAB, POLISHED_DIORITE_SLAB, MOSSY_COBBLESTONE_SLAB, END_STONE_BRICK_SLAB, SMOOTH_SANDSTONE_SLAB, SMOOTH_QUARTZ_SLAB, GRANITE_SLAB, ANDESITE_SLAB, RED_NETHER_BRICK_SLAB, POLISHED_ANDESITE_SLAB, DIORITE_SLAB, COBBLED_DEEPSLATE_SLAB, POLISHED_DEEPSLATE_SLAB, DEEPSLATE_BRICK_SLAB, DEEPSLATE_TILE_SLAB, REDSTONE_BLOCK, PISTON, STICKY_PISTON, OBSERVER, HOPPER, DISPENSER, DROPPER, LIGHTNING_ROD, STONE_BUTTON, STONE_PRESSURE_PLATE, POLISHED_BLACKSTONE_PRESSURE_PLATE, LIGHT_WEIGHTED_PRESSURE_PLATE, HEAVY_WEIGHTED_PRESSURE_PLATE, IRON_DOOR, IRON_TRAPDOOR, POWERED_RAIL, DETECTOR_RAIL, RAIL, ACTIVATOR_RAIL, BREWING_STAND, CAULDRON, SMOKER, BLAST_FURNACE, GRINDSTONE, STONECUTTER, BELL, LANTERN, SOUL_LANTERN, LODESTONE, CRYING_OBSIDIAN, BLACKSTONE, BLACKSTONE_SLAB, BLACKSTONE_STAIRS, GILDED_BLACKSTONE, POLISHED_BLACKSTONE, POLISHED_BLACKSTONE_SLAB, POLISHED_BLACKSTONE_STAIRS, CHISELED_POLISHED_BLACKSTONE, POLISHED_BLACKSTONE_BRICKS, POLISHED_BLACKSTONE_BRICK_SLAB, POLISHED_BLACKSTONE_BRICK_STAIRS, CRACKED_POLISHED_BLACKSTONE_BRICKS, RESPAWN_ANCHOR, SMALL_AMETHYST_BUD, MEDIUM_AMETHYST_BUD, LARGE_AMETHYST_BUD, AMETHYST_CLUSTER, POINTED_DRIPSTONE, PISTON_HEAD, WATER_CAULDRON, LAVA_CAULDRON, POWDER_SNOW_CAULDRON, DEAD_TUBE_CORAL_WALL_FAN, DEAD_BRAIN_CORAL_WALL_FAN, DEAD_BUBBLE_CORAL_WALL_FAN, DEAD_FIRE_CORAL_WALL_FAN, DEAD_HORN_CORAL_WALL_FAN]
- minecraft:beds                       [WHITE_BED, ORANGE_BED, MAGENTA_BED, LIGHT_BLUE_BED, YELLOW_BED, LIME_BED, PINK_BED, GRAY_BED, LIGHT_GRAY_BED, CYAN_BED, PURPLE_BED, BLUE_BED, BROWN_BED, GREEN_BED, RED_BED, BLACK_BED]
- minecraft:iron_ores                  [IRON_ORE, DEEPSLATE_IRON_ORE]
- minecraft:oak_logs                   [OAK_LOG, STRIPPED_OAK_LOG, STRIPPED_OAK_WOOD, OAK_WOOD]
- minecraft:unstable_bottom_center     [OAK_FENCE_GATE, SPRUCE_FENCE_GATE, BIRCH_FENCE_GATE, JUNGLE_FENCE_GATE, ACACIA_FENCE_GATE, DARK_OAK_FENCE_GATE, CRIMSON_FENCE_GATE, WARPED_FENCE_GATE]
- minecraft:doors                      [IRON_DOOR, OAK_DOOR, SPRUCE_DOOR, BIRCH_DOOR, JUNGLE_DOOR, ACACIA_DOOR, DARK_OAK_DOOR, CRIMSON_DOOR, WARPED_DOOR]
- minecraft:enderman_holdable          [GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, ROOTED_DIRT, CRIMSON_NYLIUM, WARPED_NYLIUM, SAND, RED_SAND, GRAVEL, DANDELION, POPPY, BLUE_ORCHID, ALLIUM, AZURE_BLUET, RED_TULIP, ORANGE_TULIP, WHITE_TULIP, PINK_TULIP, OXEYE_DAISY, CORNFLOWER, LILY_OF_THE_VALLEY, WITHER_ROSE, BROWN_MUSHROOM, RED_MUSHROOM, CRIMSON_FUNGUS, WARPED_FUNGUS, CRIMSON_ROOTS, WARPED_ROOTS, MOSS_BLOCK, CACTUS, CLAY, PUMPKIN, CARVED_PUMPKIN, MELON, MYCELIUM, TNT]
- minecraft:banners                    [WHITE_BANNER, ORANGE_BANNER, MAGENTA_BANNER, LIGHT_BLUE_BANNER, YELLOW_BANNER, LIME_BANNER, PINK_BANNER, GRAY_BANNER, LIGHT_GRAY_BANNER, CYAN_BANNER, PURPLE_BANNER, BLUE_BANNER, BROWN_BANNER, GREEN_BANNER, RED_BANNER, BLACK_BANNER, WHITE_WALL_BANNER, ORANGE_WALL_BANNER, MAGENTA_WALL_BANNER, LIGHT_BLUE_WALL_BANNER, YELLOW_WALL_BANNER, LIME_WALL_BANNER, PINK_WALL_BANNER, GRAY_WALL_BANNER, LIGHT_GRAY_WALL_BANNER, CYAN_WALL_BANNER, PURPLE_WALL_BANNER, BLUE_WALL_BANNER, BROWN_WALL_BANNER, GREEN_WALL_BANNER, RED_WALL_BANNER, BLACK_WALL_BANNER]
- minecraft:infiniburn_overworld       [NETHERRACK, MAGMA_BLOCK]
- minecraft:flower_pots                [FLOWER_POT, POTTED_OAK_SAPLING, POTTED_SPRUCE_SAPLING, POTTED_BIRCH_SAPLING, POTTED_JUNGLE_SAPLING, POTTED_ACACIA_SAPLING, POTTED_DARK_OAK_SAPLING, POTTED_FERN, POTTED_DANDELION, POTTED_POPPY, POTTED_BLUE_ORCHID, POTTED_ALLIUM, POTTED_AZURE_BLUET, POTTED_RED_TULIP, POTTED_ORANGE_TULIP, POTTED_WHITE_TULIP, POTTED_PINK_TULIP, POTTED_OXEYE_DAISY, POTTED_CORNFLOWER, POTTED_LILY_OF_THE_VALLEY, POTTED_WITHER_ROSE, POTTED_RED_MUSHROOM, POTTED_BROWN_MUSHROOM, POTTED_DEAD_BUSH, POTTED_CACTUS, POTTED_BAMBOO, POTTED_CRIMSON_FUNGUS, POTTED_WARPED_FUNGUS, POTTED_CRIMSON_ROOTS, POTTED_WARPED_ROOTS, POTTED_AZALEA_BUSH, POTTED_FLOWERING_AZALEA_BUSH]
- minecraft:wooden_fences              [OAK_FENCE, SPRUCE_FENCE, BIRCH_FENCE, JUNGLE_FENCE, ACACIA_FENCE, DARK_OAK_FENCE, CRIMSON_FENCE, WARPED_FENCE]
- minecraft:piglin_repellents          [SOUL_TORCH, SOUL_LANTERN, SOUL_CAMPFIRE, SOUL_FIRE, SOUL_WALL_TORCH]
- minecraft:wall_post_override         [TORCH, SOUL_TORCH, REDSTONE_TORCH, STONE_PRESSURE_PLATE, POLISHED_BLACKSTONE_PRESSURE_PLATE, LIGHT_WEIGHTED_PRESSURE_PLATE, HEAVY_WEIGHTED_PRESSURE_PLATE, OAK_PRESSURE_PLATE, SPRUCE_PRESSURE_PLATE, BIRCH_PRESSURE_PLATE, JUNGLE_PRESSURE_PLATE, ACACIA_PRESSURE_PLATE, DARK_OAK_PRESSURE_PLATE, CRIMSON_PRESSURE_PLATE, WARPED_PRESSURE_PLATE, OAK_SIGN, SPRUCE_SIGN, BIRCH_SIGN, JUNGLE_SIGN, ACACIA_SIGN, DARK_OAK_SIGN, CRIMSON_SIGN, WARPED_SIGN, WHITE_BANNER, ORANGE_BANNER, MAGENTA_BANNER, LIGHT_BLUE_BANNER, YELLOW_BANNER, LIME_BANNER, PINK_BANNER, GRAY_BANNER, LIGHT_GRAY_BANNER, CYAN_BANNER, PURPLE_BANNER, BLUE_BANNER, BROWN_BANNER, GREEN_BANNER, RED_BANNER, BLACK_BANNER, OAK_WALL_SIGN, SPRUCE_WALL_SIGN, BIRCH_WALL_SIGN, ACACIA_WALL_SIGN, JUNGLE_WALL_SIGN, DARK_OAK_WALL_SIGN, TRIPWIRE, WHITE_WALL_BANNER, ORANGE_WALL_BANNER, MAGENTA_WALL_BANNER, LIGHT_BLUE_WALL_BANNER, YELLOW_WALL_BANNER, LIME_WALL_BANNER, PINK_WALL_BANNER, GRAY_WALL_BANNER, LIGHT_GRAY_WALL_BANNER, CYAN_WALL_BANNER, PURPLE_WALL_BANNER, BLUE_WALL_BANNER, BROWN_WALL_BANNER, GREEN_WALL_BANNER, RED_WALL_BANNER, BLACK_WALL_BANNER, CRIMSON_WALL_SIGN, WARPED_WALL_SIGN]
- minecraft:portals                    [NETHER_PORTAL, END_PORTAL, END_GATEWAY]
- minecraft:bamboo_plantable_on        [GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, ROOTED_DIRT, SAND, RED_SAND, GRAVEL, MOSS_BLOCK, BAMBOO, MYCELIUM, BAMBOO_SAPLING]
- minecraft:cauldrons                  [CAULDRON, WATER_CAULDRON, LAVA_CAULDRON, POWDER_SNOW_CAULDRON]
- minecraft:pressure_plates            [STONE_PRESSURE_PLATE, POLISHED_BLACKSTONE_PRESSURE_PLATE, LIGHT_WEIGHTED_PRESSURE_PLATE, HEAVY_WEIGHTED_PRESSURE_PLATE, OAK_PRESSURE_PLATE, SPRUCE_PRESSURE_PLATE, BIRCH_PRESSURE_PLATE, JUNGLE_PRESSURE_PLATE, ACACIA_PRESSURE_PLATE, DARK_OAK_PRESSURE_PLATE, CRIMSON_PRESSURE_PLATE, WARPED_PRESSURE_PLATE]
- minecraft:jungle_logs                [JUNGLE_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_JUNGLE_WOOD, JUNGLE_WOOD]
- minecraft:wooden_stairs              [OAK_STAIRS, SPRUCE_STAIRS, BIRCH_STAIRS, JUNGLE_STAIRS, CRIMSON_STAIRS, WARPED_STAIRS, ACACIA_STAIRS, DARK_OAK_STAIRS]
- minecraft:spruce_logs                [SPRUCE_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_SPRUCE_WOOD, SPRUCE_WOOD]
- minecraft:signs                      [OAK_SIGN, SPRUCE_SIGN, BIRCH_SIGN, JUNGLE_SIGN, ACACIA_SIGN, DARK_OAK_SIGN, CRIMSON_SIGN, WARPED_SIGN, OAK_WALL_SIGN, SPRUCE_WALL_SIGN, BIRCH_WALL_SIGN, ACACIA_WALL_SIGN, JUNGLE_WALL_SIGN, DARK_OAK_WALL_SIGN, CRIMSON_WALL_SIGN, WARPED_WALL_SIGN]
- minecraft:base_stone_overworld       [STONE, GRANITE, DIORITE, ANDESITE, DEEPSLATE, TUFF]
- minecraft:carpets                    [WHITE_CARPET, ORANGE_CARPET, MAGENTA_CARPET, LIGHT_BLUE_CARPET, YELLOW_CARPET, LIME_CARPET, PINK_CARPET, GRAY_CARPET, LIGHT_GRAY_CARPET, CYAN_CARPET, PURPLE_CARPET, BLUE_CARPET, BROWN_CARPET, GREEN_CARPET, RED_CARPET, BLACK_CARPET]
- minecraft:wooden_buttons             [OAK_BUTTON, SPRUCE_BUTTON, BIRCH_BUTTON, JUNGLE_BUTTON, ACACIA_BUTTON, DARK_OAK_BUTTON, CRIMSON_BUTTON, WARPED_BUTTON]
- minecraft:wither_summon_base_blocks  [SOUL_SAND, SOUL_SOIL]
- minecraft:dripstone_replaceable_blocks [STONE, GRANITE, DIORITE, ANDESITE, DEEPSLATE, TUFF, DIRT]
- minecraft:stone_bricks               [STONE_BRICKS, MOSSY_STONE_BRICKS, CRACKED_STONE_BRICKS, CHISELED_STONE_BRICKS]
- minecraft:hoglin_repellents          [WARPED_FUNGUS, RESPAWN_ANCHOR, NETHER_PORTAL, POTTED_WARPED_FUNGUS]
- minecraft:fire                       [FIRE, SOUL_FIRE]
- minecraft:mineable/axe               [OAK_PLANKS, SPRUCE_PLANKS, BIRCH_PLANKS, JUNGLE_PLANKS, ACACIA_PLANKS, DARK_OAK_PLANKS, CRIMSON_PLANKS, WARPED_PLANKS, OAK_SAPLING, SPRUCE_SAPLING, BIRCH_SAPLING, JUNGLE_SAPLING, ACACIA_SAPLING, DARK_OAK_SAPLING, OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, CRIMSON_STEM, WARPED_STEM, STRIPPED_OAK_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_BIRCH_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_ACACIA_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_CRIMSON_STEM, STRIPPED_WARPED_STEM, STRIPPED_OAK_WOOD, STRIPPED_SPRUCE_WOOD, STRIPPED_BIRCH_WOOD, STRIPPED_JUNGLE_WOOD, STRIPPED_ACACIA_WOOD, STRIPPED_DARK_OAK_WOOD, STRIPPED_CRIMSON_HYPHAE, STRIPPED_WARPED_HYPHAE, OAK_WOOD, SPRUCE_WOOD, BIRCH_WOOD, JUNGLE_WOOD, ACACIA_WOOD, DARK_OAK_WOOD, CRIMSON_HYPHAE, WARPED_HYPHAE, FLOWERING_AZALEA_LEAVES, GRASS, FERN, AZALEA, FLOWERING_AZALEA, DEAD_BUSH, DANDELION, POPPY, BLUE_ORCHID, ALLIUM, AZURE_BLUET, RED_TULIP, ORANGE_TULIP, WHITE_TULIP, PINK_TULIP, OXEYE_DAISY, CORNFLOWER, LILY_OF_THE_VALLEY, WITHER_ROSE, SPORE_BLOSSOM, BROWN_MUSHROOM, RED_MUSHROOM, CRIMSON_FUNGUS, WARPED_FUNGUS, WEEPING_VINES, TWISTING_VINES, SUGAR_CANE, HANGING_ROOTS, BIG_DRIPLEAF, SMALL_DRIPLEAF, BAMBOO, OAK_SLAB, SPRUCE_SLAB, BIRCH_SLAB, JUNGLE_SLAB, ACACIA_SLAB, DARK_OAK_SLAB, CRIMSON_SLAB, WARPED_SLAB, BOOKSHELF, CHORUS_PLANT, CHORUS_FLOWER, OAK_STAIRS, CHEST, CRAFTING_TABLE, LADDER, JUKEBOX, OAK_FENCE, SPRUCE_FENCE, BIRCH_FENCE, JUNGLE_FENCE, ACACIA_FENCE, DARK_OAK_FENCE, CRIMSON_FENCE, WARPED_FENCE, PUMPKIN, CARVED_PUMPKIN, JACK_O_LANTERN, BROWN_MUSHROOM_BLOCK, RED_MUSHROOM_BLOCK, MUSHROOM_STEM, MELON, VINE, GLOW_LICHEN, LILY_PAD, SPRUCE_STAIRS, BIRCH_STAIRS, JUNGLE_STAIRS, CRIMSON_STAIRS, WARPED_STAIRS, ACACIA_STAIRS, DARK_OAK_STAIRS, SUNFLOWER, LILAC, ROSE_BUSH, PEONY, TALL_GRASS, LARGE_FERN, SCAFFOLDING, LECTERN, DAYLIGHT_DETECTOR, TRAPPED_CHEST, NOTE_BLOCK, OAK_BUTTON, SPRUCE_BUTTON, BIRCH_BUTTON, JUNGLE_BUTTON, ACACIA_BUTTON, DARK_OAK_BUTTON, CRIMSON_BUTTON, WARPED_BUTTON, OAK_PRESSURE_PLATE, SPRUCE_PRESSURE_PLATE, BIRCH_PRESSURE_PLATE, JUNGLE_PRESSURE_PLATE, ACACIA_PRESSURE_PLATE, DARK_OAK_PRESSURE_PLATE, CRIMSON_PRESSURE_PLATE, WARPED_PRESSURE_PLATE, OAK_DOOR, SPRUCE_DOOR, BIRCH_DOOR, JUNGLE_DOOR, ACACIA_DOOR, DARK_OAK_DOOR, CRIMSON_DOOR, WARPED_DOOR, OAK_TRAPDOOR, SPRUCE_TRAPDOOR, BIRCH_TRAPDOOR, JUNGLE_TRAPDOOR, ACACIA_TRAPDOOR, DARK_OAK_TRAPDOOR, CRIMSON_TRAPDOOR, WARPED_TRAPDOOR, OAK_FENCE_GATE, SPRUCE_FENCE_GATE, BIRCH_FENCE_GATE, JUNGLE_FENCE_GATE, ACACIA_FENCE_GATE, DARK_OAK_FENCE_GATE, CRIMSON_FENCE_GATE, WARPED_FENCE_GATE, WHEAT, OAK_SIGN, SPRUCE_SIGN, BIRCH_SIGN, JUNGLE_SIGN, ACACIA_SIGN, DARK_OAK_SIGN, CRIMSON_SIGN, WARPED_SIGN, NETHER_WART, WHITE_BANNER, ORANGE_BANNER, MAGENTA_BANNER, LIGHT_BLUE_BANNER, YELLOW_BANNER, LIME_BANNER, PINK_BANNER, GRAY_BANNER, LIGHT_GRAY_BANNER, CYAN_BANNER, PURPLE_BANNER, BLUE_BANNER, BROWN_BANNER, GREEN_BANNER, RED_BANNER, BLACK_BANNER, LOOM, COMPOSTER, BARREL, CARTOGRAPHY_TABLE, FLETCHING_TABLE, SMITHING_TABLE, CAMPFIRE, SOUL_CAMPFIRE, BEE_NEST, BEEHIVE, OAK_WALL_SIGN, SPRUCE_WALL_SIGN, BIRCH_WALL_SIGN, ACACIA_WALL_SIGN, JUNGLE_WALL_SIGN, DARK_OAK_WALL_SIGN, ATTACHED_PUMPKIN_STEM, ATTACHED_MELON_STEM, PUMPKIN_STEM, MELON_STEM, COCOA, CARROTS, POTATOES, WHITE_WALL_BANNER, ORANGE_WALL_BANNER, MAGENTA_WALL_BANNER, LIGHT_BLUE_WALL_BANNER, YELLOW_WALL_BANNER, LIME_WALL_BANNER, PINK_WALL_BANNER, GRAY_WALL_BANNER, LIGHT_GRAY_WALL_BANNER, CYAN_WALL_BANNER, PURPLE_WALL_BANNER, BLUE_WALL_BANNER, BROWN_WALL_BANNER, GREEN_WALL_BANNER, RED_WALL_BANNER, BLACK_WALL_BANNER, BEETROOTS, SWEET_BERRY_BUSH, WEEPING_VINES_PLANT, TWISTING_VINES_PLANT, CRIMSON_WALL_SIGN, WARPED_WALL_SIGN, CAVE_VINES, CAVE_VINES_PLANT, BIG_DRIPLEAF_STEM]
- minecraft:needs_diamond_tool         [ANCIENT_DEBRIS, NETHERITE_BLOCK, OBSIDIAN, CRYING_OBSIDIAN, RESPAWN_ANCHOR]
- minecraft:base_stone_nether          [NETHERRACK, BASALT, BLACKSTONE]
- minecraft:wall_signs                 [OAK_WALL_SIGN, SPRUCE_WALL_SIGN, BIRCH_WALL_SIGN, ACACIA_WALL_SIGN, JUNGLE_WALL_SIGN, DARK_OAK_WALL_SIGN, CRIMSON_WALL_SIGN, WARPED_WALL_SIGN]
- minecraft:slabs                      [CUT_COPPER_SLAB, EXPOSED_CUT_COPPER_SLAB, WEATHERED_CUT_COPPER_SLAB, OXIDIZED_CUT_COPPER_SLAB, WAXED_CUT_COPPER_SLAB, WAXED_EXPOSED_CUT_COPPER_SLAB, WAXED_WEATHERED_CUT_COPPER_SLAB, WAXED_OXIDIZED_CUT_COPPER_SLAB, OAK_SLAB, SPRUCE_SLAB, BIRCH_SLAB, JUNGLE_SLAB, ACACIA_SLAB, DARK_OAK_SLAB, CRIMSON_SLAB, WARPED_SLAB, STONE_SLAB, SMOOTH_STONE_SLAB, SANDSTONE_SLAB, CUT_SANDSTONE_SLAB, PETRIFIED_OAK_SLAB, COBBLESTONE_SLAB, BRICK_SLAB, STONE_BRICK_SLAB, NETHER_BRICK_SLAB, QUARTZ_SLAB, RED_SANDSTONE_SLAB, CUT_RED_SANDSTONE_SLAB, PURPUR_SLAB, PRISMARINE_SLAB, PRISMARINE_BRICK_SLAB, DARK_PRISMARINE_SLAB, POLISHED_GRANITE_SLAB, SMOOTH_RED_SANDSTONE_SLAB, MOSSY_STONE_BRICK_SLAB, POLISHED_DIORITE_SLAB, MOSSY_COBBLESTONE_SLAB, END_STONE_BRICK_SLAB, SMOOTH_SANDSTONE_SLAB, SMOOTH_QUARTZ_SLAB, GRANITE_SLAB, ANDESITE_SLAB, RED_NETHER_BRICK_SLAB, POLISHED_ANDESITE_SLAB, DIORITE_SLAB, COBBLED_DEEPSLATE_SLAB, POLISHED_DEEPSLATE_SLAB, DEEPSLATE_BRICK_SLAB, DEEPSLATE_TILE_SLAB, BLACKSTONE_SLAB, POLISHED_BLACKSTONE_SLAB, POLISHED_BLACKSTONE_BRICK_SLAB]
- minecraft:guarded_by_piglins         [GOLD_ORE, DEEPSLATE_GOLD_ORE, NETHER_GOLD_ORE, RAW_GOLD_BLOCK, GOLD_BLOCK, CHEST, ENDER_CHEST, SHULKER_BOX, WHITE_SHULKER_BOX, ORANGE_SHULKER_BOX, MAGENTA_SHULKER_BOX, LIGHT_BLUE_SHULKER_BOX, YELLOW_SHULKER_BOX, LIME_SHULKER_BOX, PINK_SHULKER_BOX, GRAY_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX, CYAN_SHULKER_BOX, PURPLE_SHULKER_BOX, BLUE_SHULKER_BOX, BROWN_SHULKER_BOX, GREEN_SHULKER_BOX, RED_SHULKER_BOX, BLACK_SHULKER_BOX, TRAPPED_CHEST, BARREL, GILDED_BLACKSTONE]
- minecraft:mineable/shovel            [GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, ROOTED_DIRT, SAND, RED_SAND, GRAVEL, FARMLAND, SNOW, SNOW_BLOCK, CLAY, SOUL_SAND, SOUL_SOIL, MYCELIUM, DIRT_PATH, WHITE_CONCRETE_POWDER, ORANGE_CONCRETE_POWDER, MAGENTA_CONCRETE_POWDER, LIGHT_BLUE_CONCRETE_POWDER, YELLOW_CONCRETE_POWDER, LIME_CONCRETE_POWDER, PINK_CONCRETE_POWDER, GRAY_CONCRETE_POWDER, LIGHT_GRAY_CONCRETE_POWDER, CYAN_CONCRETE_POWDER, PURPLE_CONCRETE_POWDER, BLUE_CONCRETE_POWDER, BROWN_CONCRETE_POWDER, GREEN_CONCRETE_POWDER, RED_CONCRETE_POWDER, BLACK_CONCRETE_POWDER]
- minecraft:stone_ore_replaceables     [STONE, GRANITE, DIORITE, ANDESITE]
- minecraft:trapdoors                  [IRON_TRAPDOOR, OAK_TRAPDOOR, SPRUCE_TRAPDOOR, BIRCH_TRAPDOOR, JUNGLE_TRAPDOOR, ACACIA_TRAPDOOR, DARK_OAK_TRAPDOOR, CRIMSON_TRAPDOOR, WARPED_TRAPDOOR]
- minecraft:redstone_ores              [REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE]
- minecraft:flowers                    [FLOWERING_AZALEA_LEAVES, FLOWERING_AZALEA, DANDELION, POPPY, BLUE_ORCHID, ALLIUM, AZURE_BLUET, RED_TULIP, ORANGE_TULIP, WHITE_TULIP, PINK_TULIP, OXEYE_DAISY, CORNFLOWER, LILY_OF_THE_VALLEY, WITHER_ROSE, SUNFLOWER, LILAC, ROSE_BUSH, PEONY]
- minecraft:corals                     [TUBE_CORAL, BRAIN_CORAL, BUBBLE_CORAL, FIRE_CORAL, HORN_CORAL, TUBE_CORAL_FAN, BRAIN_CORAL_FAN, BUBBLE_CORAL_FAN, FIRE_CORAL_FAN, HORN_CORAL_FAN]
- minecraft:buttons                    [STONE_BUTTON, POLISHED_BLACKSTONE_BUTTON, OAK_BUTTON, SPRUCE_BUTTON, BIRCH_BUTTON, JUNGLE_BUTTON, ACACIA_BUTTON, DARK_OAK_BUTTON, CRIMSON_BUTTON, WARPED_BUTTON]
- minecraft:planks                     [OAK_PLANKS, SPRUCE_PLANKS, BIRCH_PLANKS, JUNGLE_PLANKS, ACACIA_PLANKS, DARK_OAK_PLANKS, CRIMSON_PLANKS, WARPED_PLANKS]
- minecraft:soul_speed_blocks          [SOUL_SAND, SOUL_SOIL]
- minecraft:rails                      [POWERED_RAIL, DETECTOR_RAIL, RAIL, ACTIVATOR_RAIL]
- minecraft:diamond_ores               [DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE]
- minecraft:geode_invalid_blocks       [BEDROCK, ICE, PACKED_ICE, BLUE_ICE, WATER, LAVA]
- minecraft:leaves                     [OAK_LEAVES, SPRUCE_LEAVES, BIRCH_LEAVES, JUNGLE_LEAVES, ACACIA_LEAVES, DARK_OAK_LEAVES, AZALEA_LEAVES, FLOWERING_AZALEA_LEAVES]
- minecraft:deepslate_ore_replaceables [DEEPSLATE, TUFF]
- minecraft:walls                      [COBBLESTONE_WALL, MOSSY_COBBLESTONE_WALL, BRICK_WALL, PRISMARINE_WALL, RED_SANDSTONE_WALL, MOSSY_STONE_BRICK_WALL, GRANITE_WALL, STONE_BRICK_WALL, NETHER_BRICK_WALL, ANDESITE_WALL, RED_NETHER_BRICK_WALL, SANDSTONE_WALL, END_STONE_BRICK_WALL, DIORITE_WALL, BLACKSTONE_WALL, POLISHED_BLACKSTONE_WALL, POLISHED_BLACKSTONE_BRICK_WALL, COBBLED_DEEPSLATE_WALL, POLISHED_DEEPSLATE_WALL, DEEPSLATE_BRICK_WALL, DEEPSLATE_TILE_WALL]
- minecraft:cave_vines                 [CAVE_VINES, CAVE_VINES_PLANT]
- minecraft:coral_blocks               [TUBE_CORAL_BLOCK, BRAIN_CORAL_BLOCK, BUBBLE_CORAL_BLOCK, FIRE_CORAL_BLOCK, HORN_CORAL_BLOCK]
+ minecraft:wooden_doors               [OAK_DOOR, SPRUCE_DOOR, BIRCH_DOOR, JUNGLE_DOOR, ACACIA_DOOR, DARK_OAK_DOOR, CRIMSON_DOOR, WARPED_DOOR]
  minecraft:strider_warm_blocks        [LAVA]
- minecraft:fence_gates                [OAK_FENCE_GATE, SPRUCE_FENCE_GATE, BIRCH_FENCE_GATE, JUNGLE_FENCE_GATE, ACACIA_FENCE_GATE, DARK_OAK_FENCE_GATE, CRIMSON_FENCE_GATE, WARPED_FENCE_GATE]
- minecraft:bee_growables              [WHEAT, PUMPKIN_STEM, MELON_STEM, CARROTS, POTATOES, BEETROOTS, SWEET_BERRY_BUSH, CAVE_VINES, CAVE_VINES_PLANT]
- minecraft:wooden_pressure_plates     [OAK_PRESSURE_PLATE, SPRUCE_PRESSURE_PLATE, BIRCH_PRESSURE_PLATE, JUNGLE_PRESSURE_PLATE, ACACIA_PRESSURE_PLATE, DARK_OAK_PRESSURE_PLATE, CRIMSON_PRESSURE_PLATE, WARPED_PRESSURE_PLATE]
- minecraft:wither_immune              [BEDROCK, END_PORTAL_FRAME, COMMAND_BLOCK, BARRIER, REPEATING_COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, STRUCTURE_BLOCK, JIGSAW, MOVING_PISTON, END_PORTAL, END_GATEWAY]
- minecraft:acacia_logs                [ACACIA_LOG, STRIPPED_ACACIA_LOG, STRIPPED_ACACIA_WOOD, ACACIA_WOOD]
- minecraft:candles                    [CANDLE, WHITE_CANDLE, ORANGE_CANDLE, MAGENTA_CANDLE, LIGHT_BLUE_CANDLE, YELLOW_CANDLE, LIME_CANDLE, PINK_CANDLE, GRAY_CANDLE, LIGHT_GRAY_CANDLE, CYAN_CANDLE, PURPLE_CANDLE, BLUE_CANDLE, BROWN_CANDLE, GREEN_CANDLE, RED_CANDLE, BLACK_CANDLE]
- minecraft:tall_flowers               [SUNFLOWER, LILAC, ROSE_BUSH, PEONY]
- minecraft:underwater_bonemeals       [SEAGRASS, TUBE_CORAL, BRAIN_CORAL, BUBBLE_CORAL, FIRE_CORAL, HORN_CORAL, TUBE_CORAL_FAN, BRAIN_CORAL_FAN, BUBBLE_CORAL_FAN, FIRE_CORAL_FAN, HORN_CORAL_FAN, TUBE_CORAL_WALL_FAN, BRAIN_CORAL_WALL_FAN, BUBBLE_CORAL_WALL_FAN, FIRE_CORAL_WALL_FAN, HORN_CORAL_WALL_FAN]
- minecraft:stone_pressure_plates      [STONE_PRESSURE_PLATE, POLISHED_BLACKSTONE_PRESSURE_PLATE]
- minecraft:impermeable                [GLASS, TINTED_GLASS, WHITE_STAINED_GLASS, ORANGE_STAINED_GLASS, MAGENTA_STAINED_GLASS, LIGHT_BLUE_STAINED_GLASS, YELLOW_STAINED_GLASS, LIME_STAINED_GLASS, PINK_STAINED_GLASS, GRAY_STAINED_GLASS, LIGHT_GRAY_STAINED_GLASS, CYAN_STAINED_GLASS, PURPLE_STAINED_GLASS, BLUE_STAINED_GLASS, BROWN_STAINED_GLASS, GREEN_STAINED_GLASS, RED_STAINED_GLASS, BLACK_STAINED_GLASS]
+ minecraft:redstone_ores              [REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE]
+ minecraft:animals_spawnable_on       [GRASS_BLOCK]
+ minecraft:trapdoors                  [IRON_TRAPDOOR, OAK_TRAPDOOR, SPRUCE_TRAPDOOR, BIRCH_TRAPDOOR, JUNGLE_TRAPDOOR, ACACIA_TRAPDOOR, DARK_OAK_TRAPDOOR, CRIMSON_TRAPDOOR, WARPED_TRAPDOOR]
+ minecraft:needs_diamond_tool         [ANCIENT_DEBRIS, NETHERITE_BLOCK, OBSIDIAN, CRYING_OBSIDIAN, RESPAWN_ANCHOR]
+ minecraft:leaves                     [OAK_LEAVES, SPRUCE_LEAVES, BIRCH_LEAVES, JUNGLE_LEAVES, ACACIA_LEAVES, DARK_OAK_LEAVES, AZALEA_LEAVES, FLOWERING_AZALEA_LEAVES]
+ minecraft:moss_replaceable           [STONE, GRANITE, DIORITE, ANDESITE, DEEPSLATE, TUFF, GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, ROOTED_DIRT, MOSS_BLOCK, MYCELIUM, CAVE_VINES, CAVE_VINES_PLANT]
+ minecraft:cave_vines                 [CAVE_VINES, CAVE_VINES_PLANT]
+ minecraft:campfires                  [CAMPFIRE, SOUL_CAMPFIRE]
+ minecraft:mineable/axe               [OAK_PLANKS, SPRUCE_PLANKS, BIRCH_PLANKS, JUNGLE_PLANKS, ACACIA_PLANKS, DARK_OAK_PLANKS, CRIMSON_PLANKS, WARPED_PLANKS, OAK_SAPLING, SPRUCE_SAPLING, BIRCH_SAPLING, JUNGLE_SAPLING, ACACIA_SAPLING, DARK_OAK_SAPLING, OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, CRIMSON_STEM, WARPED_STEM, STRIPPED_OAK_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_BIRCH_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_ACACIA_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_CRIMSON_STEM, STRIPPED_WARPED_STEM, STRIPPED_OAK_WOOD, STRIPPED_SPRUCE_WOOD, STRIPPED_BIRCH_WOOD, STRIPPED_JUNGLE_WOOD, STRIPPED_ACACIA_WOOD, STRIPPED_DARK_OAK_WOOD, STRIPPED_CRIMSON_HYPHAE, STRIPPED_WARPED_HYPHAE, OAK_WOOD, SPRUCE_WOOD, BIRCH_WOOD, JUNGLE_WOOD, ACACIA_WOOD, DARK_OAK_WOOD, CRIMSON_HYPHAE, WARPED_HYPHAE, GRASS, FERN, AZALEA, FLOWERING_AZALEA, DEAD_BUSH, SPORE_BLOSSOM, BROWN_MUSHROOM, RED_MUSHROOM, CRIMSON_FUNGUS, WARPED_FUNGUS, WEEPING_VINES, TWISTING_VINES, SUGAR_CANE, HANGING_ROOTS, BIG_DRIPLEAF, SMALL_DRIPLEAF, BAMBOO, OAK_SLAB, SPRUCE_SLAB, BIRCH_SLAB, JUNGLE_SLAB, ACACIA_SLAB, DARK_OAK_SLAB, CRIMSON_SLAB, WARPED_SLAB, BOOKSHELF, CHORUS_PLANT, CHORUS_FLOWER, OAK_STAIRS, CHEST, CRAFTING_TABLE, LADDER, JUKEBOX, OAK_FENCE, SPRUCE_FENCE, BIRCH_FENCE, JUNGLE_FENCE, ACACIA_FENCE, DARK_OAK_FENCE, CRIMSON_FENCE, WARPED_FENCE, PUMPKIN, CARVED_PUMPKIN, JACK_O_LANTERN, BROWN_MUSHROOM_BLOCK, RED_MUSHROOM_BLOCK, MUSHROOM_STEM, MELON, VINE, GLOW_LICHEN, LILY_PAD, SPRUCE_STAIRS, BIRCH_STAIRS, JUNGLE_STAIRS, CRIMSON_STAIRS, WARPED_STAIRS, ACACIA_STAIRS, DARK_OAK_STAIRS, TALL_GRASS, LARGE_FERN, SCAFFOLDING, LECTERN, DAYLIGHT_DETECTOR, TRAPPED_CHEST, NOTE_BLOCK, OAK_BUTTON, SPRUCE_BUTTON, BIRCH_BUTTON, JUNGLE_BUTTON, ACACIA_BUTTON, DARK_OAK_BUTTON, CRIMSON_BUTTON, WARPED_BUTTON, OAK_PRESSURE_PLATE, SPRUCE_PRESSURE_PLATE, BIRCH_PRESSURE_PLATE, JUNGLE_PRESSURE_PLATE, ACACIA_PRESSURE_PLATE, DARK_OAK_PRESSURE_PLATE, CRIMSON_PRESSURE_PLATE, WARPED_PRESSURE_PLATE, OAK_DOOR, SPRUCE_DOOR, BIRCH_DOOR, JUNGLE_DOOR, ACACIA_DOOR, DARK_OAK_DOOR, CRIMSON_DOOR, WARPED_DOOR, OAK_TRAPDOOR, SPRUCE_TRAPDOOR, BIRCH_TRAPDOOR, JUNGLE_TRAPDOOR, ACACIA_TRAPDOOR, DARK_OAK_TRAPDOOR, CRIMSON_TRAPDOOR, WARPED_TRAPDOOR, OAK_FENCE_GATE, SPRUCE_FENCE_GATE, BIRCH_FENCE_GATE, JUNGLE_FENCE_GATE, ACACIA_FENCE_GATE, DARK_OAK_FENCE_GATE, CRIMSON_FENCE_GATE, WARPED_FENCE_GATE, WHEAT, OAK_SIGN, SPRUCE_SIGN, BIRCH_SIGN, JUNGLE_SIGN, ACACIA_SIGN, DARK_OAK_SIGN, CRIMSON_SIGN, WARPED_SIGN, NETHER_WART, WHITE_BANNER, ORANGE_BANNER, MAGENTA_BANNER, LIGHT_BLUE_BANNER, YELLOW_BANNER, LIME_BANNER, PINK_BANNER, GRAY_BANNER, LIGHT_GRAY_BANNER, CYAN_BANNER, PURPLE_BANNER, BLUE_BANNER, BROWN_BANNER, GREEN_BANNER, RED_BANNER, BLACK_BANNER, LOOM, COMPOSTER, BARREL, CARTOGRAPHY_TABLE, FLETCHING_TABLE, SMITHING_TABLE, CAMPFIRE, SOUL_CAMPFIRE, BEE_NEST, BEEHIVE, OAK_WALL_SIGN, SPRUCE_WALL_SIGN, BIRCH_WALL_SIGN, ACACIA_WALL_SIGN, JUNGLE_WALL_SIGN, DARK_OAK_WALL_SIGN, ATTACHED_PUMPKIN_STEM, ATTACHED_MELON_STEM, PUMPKIN_STEM, MELON_STEM, COCOA, CARROTS, POTATOES, WHITE_WALL_BANNER, ORANGE_WALL_BANNER, MAGENTA_WALL_BANNER, LIGHT_BLUE_WALL_BANNER, YELLOW_WALL_BANNER, LIME_WALL_BANNER, PINK_WALL_BANNER, GRAY_WALL_BANNER, LIGHT_GRAY_WALL_BANNER, CYAN_WALL_BANNER, PURPLE_WALL_BANNER, BLUE_WALL_BANNER, BROWN_WALL_BANNER, GREEN_WALL_BANNER, RED_WALL_BANNER, BLACK_WALL_BANNER, BEETROOTS, SWEET_BERRY_BUSH, WEEPING_VINES_PLANT, TWISTING_VINES_PLANT, CRIMSON_WALL_SIGN, WARPED_WALL_SIGN, CAVE_VINES, CAVE_VINES_PLANT, BIG_DRIPLEAF_STEM]
+ minecraft:corals                     [TUBE_CORAL, BRAIN_CORAL, BUBBLE_CORAL, FIRE_CORAL, HORN_CORAL, TUBE_CORAL_FAN, BRAIN_CORAL_FAN, BUBBLE_CORAL_FAN, FIRE_CORAL_FAN, HORN_CORAL_FAN]
+ minecraft:infiniburn_end             [BEDROCK, NETHERRACK, MAGMA_BLOCK]
+ minecraft:goats_spawnable_on         [STONE, GRAVEL, SNOW, SNOW_BLOCK, PACKED_ICE]
+ minecraft:enderman_holdable          [GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, ROOTED_DIRT, CRIMSON_NYLIUM, WARPED_NYLIUM, SAND, RED_SAND, GRAVEL, DANDELION, POPPY, BLUE_ORCHID, ALLIUM, AZURE_BLUET, RED_TULIP, ORANGE_TULIP, WHITE_TULIP, PINK_TULIP, OXEYE_DAISY, CORNFLOWER, LILY_OF_THE_VALLEY, WITHER_ROSE, BROWN_MUSHROOM, RED_MUSHROOM, CRIMSON_FUNGUS, WARPED_FUNGUS, CRIMSON_ROOTS, WARPED_ROOTS, MOSS_BLOCK, CACTUS, CLAY, PUMPKIN, CARVED_PUMPKIN, MELON, MYCELIUM, TNT]
+ minecraft:bamboo_plantable_on        [GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, ROOTED_DIRT, SAND, RED_SAND, GRAVEL, MOSS_BLOCK, BAMBOO, MYCELIUM, BAMBOO_SAPLING]
+ minecraft:replaceable_plants         [GRASS, FERN, DEAD_BUSH, HANGING_ROOTS, VINE, GLOW_LICHEN, SUNFLOWER, LILAC, ROSE_BUSH, PEONY, TALL_GRASS, LARGE_FERN]
+ minecraft:anvil                      [ANVIL, CHIPPED_ANVIL, DAMAGED_ANVIL]
+ minecraft:coal_ores                  [COAL_ORE, DEEPSLATE_COAL_ORE]
+ minecraft:saplings                   [OAK_SAPLING, SPRUCE_SAPLING, BIRCH_SAPLING, JUNGLE_SAPLING, ACACIA_SAPLING, DARK_OAK_SAPLING, AZALEA, FLOWERING_AZALEA]
+ minecraft:axolotls_spawnable_on      [CLAY]
+ minecraft:buttons                    [STONE_BUTTON, POLISHED_BLACKSTONE_BUTTON, OAK_BUTTON, SPRUCE_BUTTON, BIRCH_BUTTON, JUNGLE_BUTTON, ACACIA_BUTTON, DARK_OAK_BUTTON, CRIMSON_BUTTON, WARPED_BUTTON]
+ minecraft:wall_signs                 [OAK_WALL_SIGN, SPRUCE_WALL_SIGN, BIRCH_WALL_SIGN, ACACIA_WALL_SIGN, JUNGLE_WALL_SIGN, DARK_OAK_WALL_SIGN, CRIMSON_WALL_SIGN, WARPED_WALL_SIGN]
+ minecraft:hoglin_repellents          [WARPED_FUNGUS, RESPAWN_ANCHOR, NETHER_PORTAL, POTTED_WARPED_FUNGUS]
  minecraft:sand                       [SAND, RED_SAND]
- minecraft:snow                       [SNOW, SNOW_BLOCK, POWDER_SNOW]
- minecraft:nylium                     [CRIMSON_NYLIUM, WARPED_NYLIUM]
- minecraft:copper_ores                [COPPER_ORE, DEEPSLATE_COPPER_ORE]
+ minecraft:slabs                      [CUT_COPPER_SLAB, EXPOSED_CUT_COPPER_SLAB, WEATHERED_CUT_COPPER_SLAB, OXIDIZED_CUT_COPPER_SLAB, WAXED_CUT_COPPER_SLAB, WAXED_EXPOSED_CUT_COPPER_SLAB, WAXED_WEATHERED_CUT_COPPER_SLAB, WAXED_OXIDIZED_CUT_COPPER_SLAB, OAK_SLAB, SPRUCE_SLAB, BIRCH_SLAB, JUNGLE_SLAB, ACACIA_SLAB, DARK_OAK_SLAB, CRIMSON_SLAB, WARPED_SLAB, STONE_SLAB, SMOOTH_STONE_SLAB, SANDSTONE_SLAB, CUT_SANDSTONE_SLAB, PETRIFIED_OAK_SLAB, COBBLESTONE_SLAB, BRICK_SLAB, STONE_BRICK_SLAB, NETHER_BRICK_SLAB, QUARTZ_SLAB, RED_SANDSTONE_SLAB, CUT_RED_SANDSTONE_SLAB, PURPUR_SLAB, PRISMARINE_SLAB, PRISMARINE_BRICK_SLAB, DARK_PRISMARINE_SLAB, POLISHED_GRANITE_SLAB, SMOOTH_RED_SANDSTONE_SLAB, MOSSY_STONE_BRICK_SLAB, POLISHED_DIORITE_SLAB, MOSSY_COBBLESTONE_SLAB, END_STONE_BRICK_SLAB, SMOOTH_SANDSTONE_SLAB, SMOOTH_QUARTZ_SLAB, GRANITE_SLAB, ANDESITE_SLAB, RED_NETHER_BRICK_SLAB, POLISHED_ANDESITE_SLAB, DIORITE_SLAB, COBBLED_DEEPSLATE_SLAB, POLISHED_DEEPSLATE_SLAB, DEEPSLATE_BRICK_SLAB, DEEPSLATE_TILE_SLAB, BLACKSTONE_SLAB, POLISHED_BLACKSTONE_SLAB, POLISHED_BLACKSTONE_BRICK_SLAB]
+ minecraft:wooden_slabs               [OAK_SLAB, SPRUCE_SLAB, BIRCH_SLAB, JUNGLE_SLAB, ACACIA_SLAB, DARK_OAK_SLAB, CRIMSON_SLAB, WARPED_SLAB]
+ minecraft:dripstone_replaceable_blocks [STONE, GRANITE, DIORITE, ANDESITE, DEEPSLATE, TUFF]
+ minecraft:signs                      [OAK_SIGN, SPRUCE_SIGN, BIRCH_SIGN, JUNGLE_SIGN, ACACIA_SIGN, DARK_OAK_SIGN, CRIMSON_SIGN, WARPED_SIGN, OAK_WALL_SIGN, SPRUCE_WALL_SIGN, BIRCH_WALL_SIGN, ACACIA_WALL_SIGN, JUNGLE_WALL_SIGN, DARK_OAK_WALL_SIGN, CRIMSON_WALL_SIGN, WARPED_WALL_SIGN]
+ minecraft:dragon_immune              [BEDROCK, OBSIDIAN, IRON_BARS, END_PORTAL_FRAME, END_STONE, COMMAND_BLOCK, BARRIER, REPEATING_COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, STRUCTURE_BLOCK, JIGSAW, CRYING_OBSIDIAN, RESPAWN_ANCHOR, MOVING_PISTON, END_PORTAL, END_GATEWAY]
+ minecraft:occludes_vibration_signals [WHITE_WOOL, ORANGE_WOOL, MAGENTA_WOOL, LIGHT_BLUE_WOOL, YELLOW_WOOL, LIME_WOOL, PINK_WOOL, GRAY_WOOL, LIGHT_GRAY_WOOL, CYAN_WOOL, PURPLE_WOOL, BLUE_WOOL, BROWN_WOOL, GREEN_WOOL, RED_WOOL, BLACK_WOOL]
+ minecraft:carpets                    [WHITE_CARPET, ORANGE_CARPET, MAGENTA_CARPET, LIGHT_BLUE_CARPET, YELLOW_CARPET, LIME_CARPET, PINK_CARPET, GRAY_CARPET, LIGHT_GRAY_CARPET, CYAN_CARPET, PURPLE_CARPET, BLUE_CARPET, BROWN_CARPET, GREEN_CARPET, RED_CARPET, BLACK_CARPET]
+ minecraft:cauldrons                  [CAULDRON, WATER_CAULDRON, LAVA_CAULDRON, POWDER_SNOW_CAULDRON]
+ minecraft:wool                       [WHITE_WOOL, ORANGE_WOOL, MAGENTA_WOOL, LIGHT_BLUE_WOOL, YELLOW_WOOL, LIME_WOOL, PINK_WOOL, GRAY_WOOL, LIGHT_GRAY_WOOL, CYAN_WOOL, PURPLE_WOOL, BLUE_WOOL, BROWN_WOOL, GREEN_WOOL, RED_WOOL, BLACK_WOOL]
+ minecraft:wooden_buttons             [OAK_BUTTON, SPRUCE_BUTTON, BIRCH_BUTTON, JUNGLE_BUTTON, ACACIA_BUTTON, DARK_OAK_BUTTON, CRIMSON_BUTTON, WARPED_BUTTON]
+ minecraft:rails                      [POWERED_RAIL, DETECTOR_RAIL, RAIL, ACTIVATOR_RAIL]
+ minecraft:piglin_repellents          [SOUL_TORCH, SOUL_LANTERN, SOUL_CAMPFIRE, SOUL_FIRE, SOUL_WALL_TORCH]
  minecraft:gold_ores                  [GOLD_ORE, DEEPSLATE_GOLD_ORE, NETHER_GOLD_ORE]
+ minecraft:jungle_logs                [JUNGLE_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_JUNGLE_WOOD, JUNGLE_WOOD]
+ minecraft:iron_ores                  [IRON_ORE, DEEPSLATE_IRON_ORE]
+ minecraft:soul_speed_blocks          [SOUL_SAND, SOUL_SOIL]
+ minecraft:bee_growables              [WHEAT, PUMPKIN_STEM, MELON_STEM, CARROTS, POTATOES, BEETROOTS, SWEET_BERRY_BUSH, CAVE_VINES, CAVE_VINES_PLANT]
+ minecraft:flowers                    [FLOWERING_AZALEA_LEAVES, FLOWERING_AZALEA, DANDELION, POPPY, BLUE_ORCHID, ALLIUM, AZURE_BLUET, RED_TULIP, ORANGE_TULIP, WHITE_TULIP, PINK_TULIP, OXEYE_DAISY, CORNFLOWER, LILY_OF_THE_VALLEY, WITHER_ROSE, SUNFLOWER, LILAC, ROSE_BUSH, PEONY]
+ minecraft:tall_flowers               [SUNFLOWER, LILAC, ROSE_BUSH, PEONY]
+ minecraft:birch_logs                 [BIRCH_LOG, STRIPPED_BIRCH_LOG, STRIPPED_BIRCH_WOOD, BIRCH_WOOD]
+ minecraft:beacon_base_blocks         [IRON_BLOCK, GOLD_BLOCK, DIAMOND_BLOCK, NETHERITE_BLOCK, EMERALD_BLOCK]
  minecraft:small_dripleaf_placeable   [MOSS_BLOCK, CLAY]
- minecraft:logs_that_burn             [OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, STRIPPED_OAK_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_BIRCH_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_ACACIA_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_OAK_WOOD, STRIPPED_SPRUCE_WOOD, STRIPPED_BIRCH_WOOD, STRIPPED_JUNGLE_WOOD, STRIPPED_ACACIA_WOOD, STRIPPED_DARK_OAK_WOOD, OAK_WOOD, SPRUCE_WOOD, BIRCH_WOOD, JUNGLE_WOOD, ACACIA_WOOD, DARK_OAK_WOOD]
- minecraft:mineable/hoe               [OAK_LEAVES, SPRUCE_LEAVES, BIRCH_LEAVES, JUNGLE_LEAVES, ACACIA_LEAVES, DARK_OAK_LEAVES, AZALEA_LEAVES, FLOWERING_AZALEA_LEAVES, SPONGE, WET_SPONGE, MOSS_CARPET, MOSS_BLOCK, HAY_BLOCK, NETHER_WART_BLOCK, WARPED_WART_BLOCK, TARGET, SCULK_SENSOR, DRIED_KELP_BLOCK, SHROOMLIGHT]
+ minecraft:doors                      [IRON_DOOR, OAK_DOOR, SPRUCE_DOOR, BIRCH_DOOR, JUNGLE_DOOR, ACACIA_DOOR, DARK_OAK_DOOR, CRIMSON_DOOR, WARPED_DOOR]
+ minecraft:wall_post_override         [TORCH, SOUL_TORCH, REDSTONE_TORCH, STONE_PRESSURE_PLATE, POLISHED_BLACKSTONE_PRESSURE_PLATE, LIGHT_WEIGHTED_PRESSURE_PLATE, HEAVY_WEIGHTED_PRESSURE_PLATE, OAK_PRESSURE_PLATE, SPRUCE_PRESSURE_PLATE, BIRCH_PRESSURE_PLATE, JUNGLE_PRESSURE_PLATE, ACACIA_PRESSURE_PLATE, DARK_OAK_PRESSURE_PLATE, CRIMSON_PRESSURE_PLATE, WARPED_PRESSURE_PLATE, OAK_SIGN, SPRUCE_SIGN, BIRCH_SIGN, JUNGLE_SIGN, ACACIA_SIGN, DARK_OAK_SIGN, CRIMSON_SIGN, WARPED_SIGN, WHITE_BANNER, ORANGE_BANNER, MAGENTA_BANNER, LIGHT_BLUE_BANNER, YELLOW_BANNER, LIME_BANNER, PINK_BANNER, GRAY_BANNER, LIGHT_GRAY_BANNER, CYAN_BANNER, PURPLE_BANNER, BLUE_BANNER, BROWN_BANNER, GREEN_BANNER, RED_BANNER, BLACK_BANNER, OAK_WALL_SIGN, SPRUCE_WALL_SIGN, BIRCH_WALL_SIGN, ACACIA_WALL_SIGN, JUNGLE_WALL_SIGN, DARK_OAK_WALL_SIGN, TRIPWIRE, WHITE_WALL_BANNER, ORANGE_WALL_BANNER, MAGENTA_WALL_BANNER, LIGHT_BLUE_WALL_BANNER, YELLOW_WALL_BANNER, LIME_WALL_BANNER, PINK_WALL_BANNER, GRAY_WALL_BANNER, LIGHT_GRAY_WALL_BANNER, CYAN_WALL_BANNER, PURPLE_WALL_BANNER, BLUE_WALL_BANNER, BROWN_WALL_BANNER, GREEN_WALL_BANNER, RED_WALL_BANNER, BLACK_WALL_BANNER, CRIMSON_WALL_SIGN, WARPED_WALL_SIGN]
+ minecraft:diamond_ores               [DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE]
  minecraft:dirt                       [GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, ROOTED_DIRT, MOSS_BLOCK, MYCELIUM]
- minecraft:candle_cakes               [CANDLE_CAKE, WHITE_CANDLE_CAKE, ORANGE_CANDLE_CAKE, MAGENTA_CANDLE_CAKE, LIGHT_BLUE_CANDLE_CAKE, YELLOW_CANDLE_CAKE, LIME_CANDLE_CAKE, PINK_CANDLE_CAKE, GRAY_CANDLE_CAKE, LIGHT_GRAY_CANDLE_CAKE, CYAN_CANDLE_CAKE, PURPLE_CANDLE_CAKE, BLUE_CANDLE_CAKE, BROWN_CANDLE_CAKE, GREEN_CANDLE_CAKE, RED_CANDLE_CAKE, BLACK_CANDLE_CAKE]
+ minecraft:mineable/hoe               [OAK_LEAVES, SPRUCE_LEAVES, BIRCH_LEAVES, JUNGLE_LEAVES, ACACIA_LEAVES, DARK_OAK_LEAVES, AZALEA_LEAVES, FLOWERING_AZALEA_LEAVES, SPONGE, WET_SPONGE, MOSS_CARPET, MOSS_BLOCK, HAY_BLOCK, NETHER_WART_BLOCK, WARPED_WART_BLOCK, TARGET, SCULK_SENSOR, DRIED_KELP_BLOCK, SHROOMLIGHT]
+ minecraft:portals                    [NETHER_PORTAL, END_PORTAL, END_GATEWAY]
+ minecraft:mooshrooms_spawnable_on    [MYCELIUM]
+ minecraft:dark_oak_logs              [DARK_OAK_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_DARK_OAK_WOOD, DARK_OAK_WOOD]
+ minecraft:copper_ores                [COPPER_ORE, DEEPSLATE_COPPER_ORE]
+ minecraft:parrots_spawnable_on       [AIR, GRASS_BLOCK, OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, CRIMSON_STEM, WARPED_STEM, STRIPPED_OAK_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_BIRCH_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_ACACIA_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_CRIMSON_STEM, STRIPPED_WARPED_STEM, STRIPPED_OAK_WOOD, STRIPPED_SPRUCE_WOOD, STRIPPED_BIRCH_WOOD, STRIPPED_JUNGLE_WOOD, STRIPPED_ACACIA_WOOD, STRIPPED_DARK_OAK_WOOD, STRIPPED_CRIMSON_HYPHAE, STRIPPED_WARPED_HYPHAE, OAK_WOOD, SPRUCE_WOOD, BIRCH_WOOD, JUNGLE_WOOD, ACACIA_WOOD, DARK_OAK_WOOD, CRIMSON_HYPHAE, WARPED_HYPHAE, OAK_LEAVES, SPRUCE_LEAVES, BIRCH_LEAVES, JUNGLE_LEAVES, ACACIA_LEAVES, DARK_OAK_LEAVES, AZALEA_LEAVES, FLOWERING_AZALEA_LEAVES]
+ minecraft:underwater_bonemeals       [SEAGRASS, TUBE_CORAL, BRAIN_CORAL, BUBBLE_CORAL, FIRE_CORAL, HORN_CORAL, TUBE_CORAL_FAN, BRAIN_CORAL_FAN, BUBBLE_CORAL_FAN, FIRE_CORAL_FAN, HORN_CORAL_FAN, TUBE_CORAL_WALL_FAN, BRAIN_CORAL_WALL_FAN, BUBBLE_CORAL_WALL_FAN, FIRE_CORAL_WALL_FAN, HORN_CORAL_WALL_FAN]
+ minecraft:logs_that_burn             [OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, STRIPPED_OAK_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_BIRCH_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_ACACIA_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_OAK_WOOD, STRIPPED_SPRUCE_WOOD, STRIPPED_BIRCH_WOOD, STRIPPED_JUNGLE_WOOD, STRIPPED_ACACIA_WOOD, STRIPPED_DARK_OAK_WOOD, OAK_WOOD, SPRUCE_WOOD, BIRCH_WOOD, JUNGLE_WOOD, ACACIA_WOOD, DARK_OAK_WOOD]
+ minecraft:base_stone_nether          [NETHERRACK, BASALT, BLACKSTONE]
+ minecraft:coral_blocks               [TUBE_CORAL_BLOCK, BRAIN_CORAL_BLOCK, BUBBLE_CORAL_BLOCK, FIRE_CORAL_BLOCK, HORN_CORAL_BLOCK]
  minecraft:needs_iron_tool            [GOLD_ORE, DEEPSLATE_GOLD_ORE, REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE, EMERALD_ORE, DEEPSLATE_EMERALD_ORE, DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE, RAW_GOLD_BLOCK, GOLD_BLOCK, DIAMOND_BLOCK, EMERALD_BLOCK]
+ minecraft:candles                    [CANDLE, WHITE_CANDLE, ORANGE_CANDLE, MAGENTA_CANDLE, LIGHT_BLUE_CANDLE, YELLOW_CANDLE, LIME_CANDLE, PINK_CANDLE, GRAY_CANDLE, LIGHT_GRAY_CANDLE, CYAN_CANDLE, PURPLE_CANDLE, BLUE_CANDLE, BROWN_CANDLE, GREEN_CANDLE, RED_CANDLE, BLACK_CANDLE]
+ minecraft:azalea_root_replaceable    [STONE, GRANITE, DIORITE, ANDESITE, DEEPSLATE, TUFF, GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, ROOTED_DIRT, SAND, RED_SAND, GRAVEL, MOSS_BLOCK, SNOW_BLOCK, CLAY, MYCELIUM, WHITE_TERRACOTTA, ORANGE_TERRACOTTA, MAGENTA_TERRACOTTA, LIGHT_BLUE_TERRACOTTA, YELLOW_TERRACOTTA, LIME_TERRACOTTA, PINK_TERRACOTTA, GRAY_TERRACOTTA, LIGHT_GRAY_TERRACOTTA, CYAN_TERRACOTTA, PURPLE_TERRACOTTA, BLUE_TERRACOTTA, BROWN_TERRACOTTA, GREEN_TERRACOTTA, RED_TERRACOTTA, BLACK_TERRACOTTA, TERRACOTTA, POWDER_SNOW]
+ minecraft:crimson_stems              [CRIMSON_STEM, STRIPPED_CRIMSON_STEM, STRIPPED_CRIMSON_HYPHAE, CRIMSON_HYPHAE]
+ minecraft:crystal_sound_blocks       [AMETHYST_BLOCK, BUDDING_AMETHYST]
+ minecraft:stairs                     [CUT_COPPER_STAIRS, EXPOSED_CUT_COPPER_STAIRS, WEATHERED_CUT_COPPER_STAIRS, OXIDIZED_CUT_COPPER_STAIRS, WAXED_CUT_COPPER_STAIRS, WAXED_EXPOSED_CUT_COPPER_STAIRS, WAXED_WEATHERED_CUT_COPPER_STAIRS, WAXED_OXIDIZED_CUT_COPPER_STAIRS, PURPUR_STAIRS, OAK_STAIRS, COBBLESTONE_STAIRS, BRICK_STAIRS, STONE_BRICK_STAIRS, NETHER_BRICK_STAIRS, SANDSTONE_STAIRS, SPRUCE_STAIRS, BIRCH_STAIRS, JUNGLE_STAIRS, CRIMSON_STAIRS, WARPED_STAIRS, QUARTZ_STAIRS, ACACIA_STAIRS, DARK_OAK_STAIRS, PRISMARINE_STAIRS, PRISMARINE_BRICK_STAIRS, DARK_PRISMARINE_STAIRS, RED_SANDSTONE_STAIRS, POLISHED_GRANITE_STAIRS, SMOOTH_RED_SANDSTONE_STAIRS, MOSSY_STONE_BRICK_STAIRS, POLISHED_DIORITE_STAIRS, MOSSY_COBBLESTONE_STAIRS, END_STONE_BRICK_STAIRS, STONE_STAIRS, SMOOTH_SANDSTONE_STAIRS, SMOOTH_QUARTZ_STAIRS, GRANITE_STAIRS, ANDESITE_STAIRS, RED_NETHER_BRICK_STAIRS, POLISHED_ANDESITE_STAIRS, DIORITE_STAIRS, COBBLED_DEEPSLATE_STAIRS, POLISHED_DEEPSLATE_STAIRS, DEEPSLATE_BRICK_STAIRS, DEEPSLATE_TILE_STAIRS, BLACKSTONE_STAIRS, POLISHED_BLACKSTONE_STAIRS, POLISHED_BLACKSTONE_BRICK_STAIRS]
+ minecraft:stone_ore_replaceables     [STONE, GRANITE, DIORITE, ANDESITE]
+ minecraft:stone_bricks               [STONE_BRICKS, MOSSY_STONE_BRICKS, CRACKED_STONE_BRICKS, CHISELED_STONE_BRICKS]
+ minecraft:small_flowers              [DANDELION, POPPY, BLUE_ORCHID, ALLIUM, AZURE_BLUET, RED_TULIP, ORANGE_TULIP, WHITE_TULIP, PINK_TULIP, OXEYE_DAISY, CORNFLOWER, LILY_OF_THE_VALLEY, WITHER_ROSE]
+ minecraft:nylium                     [CRIMSON_NYLIUM, WARPED_NYLIUM]
+ minecraft:unstable_bottom_center     [OAK_FENCE_GATE, SPRUCE_FENCE_GATE, BIRCH_FENCE_GATE, JUNGLE_FENCE_GATE, ACACIA_FENCE_GATE, DARK_OAK_FENCE_GATE, CRIMSON_FENCE_GATE, WARPED_FENCE_GATE]
+ minecraft:emerald_ores               [EMERALD_ORE, DEEPSLATE_EMERALD_ORE]
+ minecraft:azalea_grows_on            [GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, ROOTED_DIRT, SAND, RED_SAND, MOSS_BLOCK, SNOW_BLOCK, MYCELIUM, WHITE_TERRACOTTA, ORANGE_TERRACOTTA, MAGENTA_TERRACOTTA, LIGHT_BLUE_TERRACOTTA, YELLOW_TERRACOTTA, LIME_TERRACOTTA, PINK_TERRACOTTA, GRAY_TERRACOTTA, LIGHT_GRAY_TERRACOTTA, CYAN_TERRACOTTA, PURPLE_TERRACOTTA, BLUE_TERRACOTTA, BROWN_TERRACOTTA, GREEN_TERRACOTTA, RED_TERRACOTTA, BLACK_TERRACOTTA, TERRACOTTA, POWDER_SNOW]
+ minecraft:wooden_fences              [OAK_FENCE, SPRUCE_FENCE, BIRCH_FENCE, JUNGLE_FENCE, ACACIA_FENCE, DARK_OAK_FENCE, CRIMSON_FENCE, WARPED_FENCE]
+ minecraft:rabbits_spawnable_on       [GRASS_BLOCK, SAND, SNOW, SNOW_BLOCK]
+ minecraft:beds                       [WHITE_BED, ORANGE_BED, MAGENTA_BED, LIGHT_BLUE_BED, YELLOW_BED, LIME_BED, PINK_BED, GRAY_BED, LIGHT_GRAY_BED, CYAN_BED, PURPLE_BED, BLUE_BED, BROWN_BED, GREEN_BED, RED_BED, BLACK_BED]
+ minecraft:features_cannot_replace    [BEDROCK, SPAWNER, CHEST, END_PORTAL_FRAME]
+ minecraft:fence_gates                [OAK_FENCE_GATE, SPRUCE_FENCE_GATE, BIRCH_FENCE_GATE, JUNGLE_FENCE_GATE, ACACIA_FENCE_GATE, DARK_OAK_FENCE_GATE, CRIMSON_FENCE_GATE, WARPED_FENCE_GATE]
+ minecraft:wooden_trapdoors           [OAK_TRAPDOOR, SPRUCE_TRAPDOOR, BIRCH_TRAPDOOR, JUNGLE_TRAPDOOR, ACACIA_TRAPDOOR, DARK_OAK_TRAPDOOR, CRIMSON_TRAPDOOR, WARPED_TRAPDOOR]
+ minecraft:prevent_mob_spawning_inside [POWERED_RAIL, DETECTOR_RAIL, RAIL, ACTIVATOR_RAIL]
+ minecraft:candle_cakes               [CANDLE_CAKE, WHITE_CANDLE_CAKE, ORANGE_CANDLE_CAKE, MAGENTA_CANDLE_CAKE, LIGHT_BLUE_CANDLE_CAKE, YELLOW_CANDLE_CAKE, LIME_CANDLE_CAKE, PINK_CANDLE_CAKE, GRAY_CANDLE_CAKE, LIGHT_GRAY_CANDLE_CAKE, CYAN_CANDLE_CAKE, PURPLE_CANDLE_CAKE, BLUE_CANDLE_CAKE, BROWN_CANDLE_CAKE, GREEN_CANDLE_CAKE, RED_CANDLE_CAKE, BLACK_CANDLE_CAKE]
+ minecraft:impermeable                [GLASS, TINTED_GLASS, WHITE_STAINED_GLASS, ORANGE_STAINED_GLASS, MAGENTA_STAINED_GLASS, LIGHT_BLUE_STAINED_GLASS, YELLOW_STAINED_GLASS, LIME_STAINED_GLASS, PINK_STAINED_GLASS, GRAY_STAINED_GLASS, LIGHT_GRAY_STAINED_GLASS, CYAN_STAINED_GLASS, PURPLE_STAINED_GLASS, BLUE_STAINED_GLASS, BROWN_STAINED_GLASS, GREEN_STAINED_GLASS, RED_STAINED_GLASS, BLACK_STAINED_GLASS]
+ minecraft:fall_damage_resetting      [COBWEB, WEEPING_VINES, TWISTING_VINES, LADDER, VINE, SCAFFOLDING, SWEET_BERRY_BUSH, WEEPING_VINES_PLANT, TWISTING_VINES_PLANT, CAVE_VINES, CAVE_VINES_PLANT]
+ minecraft:infiniburn_nether          [NETHERRACK, MAGMA_BLOCK]
+ minecraft:beehives                   [BEE_NEST, BEEHIVE]
+ minecraft:lapis_ores                 [LAPIS_ORE, DEEPSLATE_LAPIS_ORE]
+ minecraft:valid_spawn                [GRASS_BLOCK, PODZOL]
+ minecraft:spruce_logs                [SPRUCE_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_SPRUCE_WOOD, SPRUCE_WOOD]
+ minecraft:base_stone_overworld       [STONE, GRANITE, DIORITE, ANDESITE, DEEPSLATE, TUFF]
+ minecraft:guarded_by_piglins         [GOLD_ORE, DEEPSLATE_GOLD_ORE, NETHER_GOLD_ORE, RAW_GOLD_BLOCK, GOLD_BLOCK, CHEST, ENDER_CHEST, SHULKER_BOX, WHITE_SHULKER_BOX, ORANGE_SHULKER_BOX, MAGENTA_SHULKER_BOX, LIGHT_BLUE_SHULKER_BOX, YELLOW_SHULKER_BOX, LIME_SHULKER_BOX, PINK_SHULKER_BOX, GRAY_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX, CYAN_SHULKER_BOX, PURPLE_SHULKER_BOX, BLUE_SHULKER_BOX, BROWN_SHULKER_BOX, GREEN_SHULKER_BOX, RED_SHULKER_BOX, BLACK_SHULKER_BOX, TRAPPED_CHEST, BARREL, GILDED_BLACKSTONE]
+ minecraft:coral_plants               [TUBE_CORAL, BRAIN_CORAL, BUBBLE_CORAL, FIRE_CORAL, HORN_CORAL]
+ minecraft:walls                      [COBBLESTONE_WALL, MOSSY_COBBLESTONE_WALL, BRICK_WALL, PRISMARINE_WALL, RED_SANDSTONE_WALL, MOSSY_STONE_BRICK_WALL, GRANITE_WALL, STONE_BRICK_WALL, NETHER_BRICK_WALL, ANDESITE_WALL, RED_NETHER_BRICK_WALL, SANDSTONE_WALL, END_STONE_BRICK_WALL, DIORITE_WALL, BLACKSTONE_WALL, POLISHED_BLACKSTONE_WALL, POLISHED_BLACKSTONE_BRICK_WALL, COBBLED_DEEPSLATE_WALL, POLISHED_DEEPSLATE_WALL, DEEPSLATE_BRICK_WALL, DEEPSLATE_TILE_WALL]
+ minecraft:stone_pressure_plates      [STONE_PRESSURE_PLATE, POLISHED_BLACKSTONE_PRESSURE_PLATE]
+ minecraft:lava_pool_stone_cannot_replace [BEDROCK, OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, CRIMSON_STEM, WARPED_STEM, STRIPPED_OAK_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_BIRCH_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_ACACIA_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_CRIMSON_STEM, STRIPPED_WARPED_STEM, STRIPPED_OAK_WOOD, STRIPPED_SPRUCE_WOOD, STRIPPED_BIRCH_WOOD, STRIPPED_JUNGLE_WOOD, STRIPPED_ACACIA_WOOD, STRIPPED_DARK_OAK_WOOD, STRIPPED_CRIMSON_HYPHAE, STRIPPED_WARPED_HYPHAE, OAK_WOOD, SPRUCE_WOOD, BIRCH_WOOD, JUNGLE_WOOD, ACACIA_WOOD, DARK_OAK_WOOD, CRIMSON_HYPHAE, WARPED_HYPHAE, OAK_LEAVES, SPRUCE_LEAVES, BIRCH_LEAVES, JUNGLE_LEAVES, ACACIA_LEAVES, DARK_OAK_LEAVES, AZALEA_LEAVES, FLOWERING_AZALEA_LEAVES, SPAWNER, CHEST, END_PORTAL_FRAME]
+ minecraft:wooden_stairs              [OAK_STAIRS, SPRUCE_STAIRS, BIRCH_STAIRS, JUNGLE_STAIRS, CRIMSON_STAIRS, WARPED_STAIRS, ACACIA_STAIRS, DARK_OAK_STAIRS]
+ minecraft:mushroom_grow_block        [PODZOL, CRIMSON_NYLIUM, WARPED_NYLIUM, MYCELIUM]
+ minecraft:shulker_boxes              [SHULKER_BOX, WHITE_SHULKER_BOX, ORANGE_SHULKER_BOX, MAGENTA_SHULKER_BOX, LIGHT_BLUE_SHULKER_BOX, YELLOW_SHULKER_BOX, LIME_SHULKER_BOX, PINK_SHULKER_BOX, GRAY_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX, CYAN_SHULKER_BOX, PURPLE_SHULKER_BOX, BLUE_SHULKER_BOX, BROWN_SHULKER_BOX, GREEN_SHULKER_BOX, RED_SHULKER_BOX, BLACK_SHULKER_BOX]
+ minecraft:mineable/shovel            [GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, ROOTED_DIRT, SAND, RED_SAND, GRAVEL, FARMLAND, SNOW, SNOW_BLOCK, CLAY, SOUL_SAND, SOUL_SOIL, MYCELIUM, DIRT_PATH, WHITE_CONCRETE_POWDER, ORANGE_CONCRETE_POWDER, MAGENTA_CONCRETE_POWDER, LIGHT_BLUE_CONCRETE_POWDER, YELLOW_CONCRETE_POWDER, LIME_CONCRETE_POWDER, PINK_CONCRETE_POWDER, GRAY_CONCRETE_POWDER, LIGHT_GRAY_CONCRETE_POWDER, CYAN_CONCRETE_POWDER, PURPLE_CONCRETE_POWDER, BLUE_CONCRETE_POWDER, BROWN_CONCRETE_POWDER, GREEN_CONCRETE_POWDER, RED_CONCRETE_POWDER, BLACK_CONCRETE_POWDER]
+ minecraft:wolves_spawnable_on        [GRASS_BLOCK, SNOW, SNOW_BLOCK]
+ minecraft:wooden_pressure_plates     [OAK_PRESSURE_PLATE, SPRUCE_PRESSURE_PLATE, BIRCH_PRESSURE_PLATE, JUNGLE_PRESSURE_PLATE, ACACIA_PRESSURE_PLATE, DARK_OAK_PRESSURE_PLATE, CRIMSON_PRESSURE_PLATE, WARPED_PRESSURE_PLATE]
+ minecraft:planks                     [OAK_PLANKS, SPRUCE_PLANKS, BIRCH_PLANKS, JUNGLE_PLANKS, ACACIA_PLANKS, DARK_OAK_PLANKS, CRIMSON_PLANKS, WARPED_PLANKS]
+ minecraft:logs                       [OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, CRIMSON_STEM, WARPED_STEM, STRIPPED_OAK_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_BIRCH_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_ACACIA_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_CRIMSON_STEM, STRIPPED_WARPED_STEM, STRIPPED_OAK_WOOD, STRIPPED_SPRUCE_WOOD, STRIPPED_BIRCH_WOOD, STRIPPED_JUNGLE_WOOD, STRIPPED_ACACIA_WOOD, STRIPPED_DARK_OAK_WOOD, STRIPPED_CRIMSON_HYPHAE, STRIPPED_WARPED_HYPHAE, OAK_WOOD, SPRUCE_WOOD, BIRCH_WOOD, JUNGLE_WOOD, ACACIA_WOOD, DARK_OAK_WOOD, CRIMSON_HYPHAE, WARPED_HYPHAE]
+ minecraft:fences                     [OAK_FENCE, SPRUCE_FENCE, BIRCH_FENCE, JUNGLE_FENCE, ACACIA_FENCE, DARK_OAK_FENCE, CRIMSON_FENCE, WARPED_FENCE, NETHER_BRICK_FENCE]
+ minecraft:fire                       [FIRE, SOUL_FIRE]
+ minecraft:flower_pots                [FLOWER_POT, POTTED_OAK_SAPLING, POTTED_SPRUCE_SAPLING, POTTED_BIRCH_SAPLING, POTTED_JUNGLE_SAPLING, POTTED_ACACIA_SAPLING, POTTED_DARK_OAK_SAPLING, POTTED_FERN, POTTED_DANDELION, POTTED_POPPY, POTTED_BLUE_ORCHID, POTTED_ALLIUM, POTTED_AZURE_BLUET, POTTED_RED_TULIP, POTTED_ORANGE_TULIP, POTTED_WHITE_TULIP, POTTED_PINK_TULIP, POTTED_OXEYE_DAISY, POTTED_CORNFLOWER, POTTED_LILY_OF_THE_VALLEY, POTTED_WITHER_ROSE, POTTED_RED_MUSHROOM, POTTED_BROWN_MUSHROOM, POTTED_DEAD_BUSH, POTTED_CACTUS, POTTED_BAMBOO, POTTED_CRIMSON_FUNGUS, POTTED_WARPED_FUNGUS, POTTED_CRIMSON_ROOTS, POTTED_WARPED_ROOTS, POTTED_AZALEA_BUSH, POTTED_FLOWERING_AZALEA_BUSH]
+ minecraft:warped_stems               [WARPED_STEM, STRIPPED_WARPED_STEM, STRIPPED_WARPED_HYPHAE, WARPED_HYPHAE]
+ minecraft:mineable/pickaxe           [STONE, GRANITE, POLISHED_GRANITE, DIORITE, POLISHED_DIORITE, ANDESITE, POLISHED_ANDESITE, DEEPSLATE, COBBLED_DEEPSLATE, POLISHED_DEEPSLATE, CALCITE, TUFF, DRIPSTONE_BLOCK, CRIMSON_NYLIUM, WARPED_NYLIUM, COBBLESTONE, COAL_ORE, DEEPSLATE_COAL_ORE, IRON_ORE, DEEPSLATE_IRON_ORE, COPPER_ORE, DEEPSLATE_COPPER_ORE, GOLD_ORE, DEEPSLATE_GOLD_ORE, REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE, EMERALD_ORE, DEEPSLATE_EMERALD_ORE, LAPIS_ORE, DEEPSLATE_LAPIS_ORE, DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE, NETHER_GOLD_ORE, NETHER_QUARTZ_ORE, ANCIENT_DEBRIS, COAL_BLOCK, RAW_IRON_BLOCK, RAW_COPPER_BLOCK, RAW_GOLD_BLOCK, AMETHYST_BLOCK, BUDDING_AMETHYST, IRON_BLOCK, COPPER_BLOCK, GOLD_BLOCK, DIAMOND_BLOCK, NETHERITE_BLOCK, EXPOSED_COPPER, WEATHERED_COPPER, OXIDIZED_COPPER, CUT_COPPER, EXPOSED_CUT_COPPER, WEATHERED_CUT_COPPER, OXIDIZED_CUT_COPPER, CUT_COPPER_STAIRS, EXPOSED_CUT_COPPER_STAIRS, WEATHERED_CUT_COPPER_STAIRS, OXIDIZED_CUT_COPPER_STAIRS, CUT_COPPER_SLAB, EXPOSED_CUT_COPPER_SLAB, WEATHERED_CUT_COPPER_SLAB, OXIDIZED_CUT_COPPER_SLAB, WAXED_COPPER_BLOCK, WAXED_EXPOSED_COPPER, WAXED_WEATHERED_COPPER, WAXED_OXIDIZED_COPPER, WAXED_CUT_COPPER, WAXED_EXPOSED_CUT_COPPER, WAXED_WEATHERED_CUT_COPPER, WAXED_OXIDIZED_CUT_COPPER, WAXED_CUT_COPPER_STAIRS, WAXED_EXPOSED_CUT_COPPER_STAIRS, WAXED_WEATHERED_CUT_COPPER_STAIRS, WAXED_OXIDIZED_CUT_COPPER_STAIRS, WAXED_CUT_COPPER_SLAB, WAXED_EXPOSED_CUT_COPPER_SLAB, WAXED_WEATHERED_CUT_COPPER_SLAB, WAXED_OXIDIZED_CUT_COPPER_SLAB, LAPIS_BLOCK, SANDSTONE, CHISELED_SANDSTONE, CUT_SANDSTONE, STONE_SLAB, SMOOTH_STONE_SLAB, SANDSTONE_SLAB, CUT_SANDSTONE_SLAB, PETRIFIED_OAK_SLAB, COBBLESTONE_SLAB, BRICK_SLAB, STONE_BRICK_SLAB, NETHER_BRICK_SLAB, QUARTZ_SLAB, RED_SANDSTONE_SLAB, CUT_RED_SANDSTONE_SLAB, PURPUR_SLAB, PRISMARINE_SLAB, PRISMARINE_BRICK_SLAB, DARK_PRISMARINE_SLAB, SMOOTH_QUARTZ, SMOOTH_RED_SANDSTONE, SMOOTH_SANDSTONE, SMOOTH_STONE, BRICKS, MOSSY_COBBLESTONE, OBSIDIAN, PURPUR_BLOCK, PURPUR_PILLAR, PURPUR_STAIRS, SPAWNER, FURNACE, COBBLESTONE_STAIRS, ICE, NETHERRACK, BASALT, POLISHED_BASALT, SMOOTH_BASALT, INFESTED_STONE, INFESTED_COBBLESTONE, INFESTED_STONE_BRICKS, INFESTED_MOSSY_STONE_BRICKS, INFESTED_CRACKED_STONE_BRICKS, INFESTED_CHISELED_STONE_BRICKS, INFESTED_DEEPSLATE, STONE_BRICKS, MOSSY_STONE_BRICKS, CRACKED_STONE_BRICKS, CHISELED_STONE_BRICKS, DEEPSLATE_BRICKS, CRACKED_DEEPSLATE_BRICKS, DEEPSLATE_TILES, CRACKED_DEEPSLATE_TILES, CHISELED_DEEPSLATE, IRON_BARS, CHAIN, BRICK_STAIRS, STONE_BRICK_STAIRS, NETHER_BRICKS, CRACKED_NETHER_BRICKS, CHISELED_NETHER_BRICKS, NETHER_BRICK_FENCE, NETHER_BRICK_STAIRS, ENCHANTING_TABLE, END_STONE, END_STONE_BRICKS, SANDSTONE_STAIRS, ENDER_CHEST, EMERALD_BLOCK, COBBLESTONE_WALL, MOSSY_COBBLESTONE_WALL, BRICK_WALL, PRISMARINE_WALL, RED_SANDSTONE_WALL, MOSSY_STONE_BRICK_WALL, GRANITE_WALL, STONE_BRICK_WALL, NETHER_BRICK_WALL, ANDESITE_WALL, RED_NETHER_BRICK_WALL, SANDSTONE_WALL, END_STONE_BRICK_WALL, DIORITE_WALL, BLACKSTONE_WALL, POLISHED_BLACKSTONE_WALL, POLISHED_BLACKSTONE_BRICK_WALL, COBBLED_DEEPSLATE_WALL, POLISHED_DEEPSLATE_WALL, DEEPSLATE_BRICK_WALL, DEEPSLATE_TILE_WALL, ANVIL, CHIPPED_ANVIL, DAMAGED_ANVIL, CHISELED_QUARTZ_BLOCK, QUARTZ_BLOCK, QUARTZ_BRICKS, QUARTZ_PILLAR, QUARTZ_STAIRS, WHITE_TERRACOTTA, ORANGE_TERRACOTTA, MAGENTA_TERRACOTTA, LIGHT_BLUE_TERRACOTTA, YELLOW_TERRACOTTA, LIME_TERRACOTTA, PINK_TERRACOTTA, GRAY_TERRACOTTA, LIGHT_GRAY_TERRACOTTA, CYAN_TERRACOTTA, PURPLE_TERRACOTTA, BLUE_TERRACOTTA, BROWN_TERRACOTTA, GREEN_TERRACOTTA, RED_TERRACOTTA, BLACK_TERRACOTTA, TERRACOTTA, PACKED_ICE, PRISMARINE, PRISMARINE_BRICKS, DARK_PRISMARINE, PRISMARINE_STAIRS, PRISMARINE_BRICK_STAIRS, DARK_PRISMARINE_STAIRS, RED_SANDSTONE, CHISELED_RED_SANDSTONE, CUT_RED_SANDSTONE, RED_SANDSTONE_STAIRS, MAGMA_BLOCK, RED_NETHER_BRICKS, BONE_BLOCK, SHULKER_BOX, WHITE_SHULKER_BOX, ORANGE_SHULKER_BOX, MAGENTA_SHULKER_BOX, LIGHT_BLUE_SHULKER_BOX, YELLOW_SHULKER_BOX, LIME_SHULKER_BOX, PINK_SHULKER_BOX, GRAY_SHULKER_BOX, LIGHT_GRAY_SHULKER_BOX, CYAN_SHULKER_BOX, PURPLE_SHULKER_BOX, BLUE_SHULKER_BOX, BROWN_SHULKER_BOX, GREEN_SHULKER_BOX, RED_SHULKER_BOX, BLACK_SHULKER_BOX, WHITE_GLAZED_TERRACOTTA, ORANGE_GLAZED_TERRACOTTA, MAGENTA_GLAZED_TERRACOTTA, LIGHT_BLUE_GLAZED_TERRACOTTA, YELLOW_GLAZED_TERRACOTTA, LIME_GLAZED_TERRACOTTA, PINK_GLAZED_TERRACOTTA, GRAY_GLAZED_TERRACOTTA, LIGHT_GRAY_GLAZED_TERRACOTTA, CYAN_GLAZED_TERRACOTTA, PURPLE_GLAZED_TERRACOTTA, BLUE_GLAZED_TERRACOTTA, BROWN_GLAZED_TERRACOTTA, GREEN_GLAZED_TERRACOTTA, RED_GLAZED_TERRACOTTA, BLACK_GLAZED_TERRACOTTA, WHITE_CONCRETE, ORANGE_CONCRETE, MAGENTA_CONCRETE, LIGHT_BLUE_CONCRETE, YELLOW_CONCRETE, LIME_CONCRETE, PINK_CONCRETE, GRAY_CONCRETE, LIGHT_GRAY_CONCRETE, CYAN_CONCRETE, PURPLE_CONCRETE, BLUE_CONCRETE, BROWN_CONCRETE, GREEN_CONCRETE, RED_CONCRETE, BLACK_CONCRETE, DEAD_TUBE_CORAL_BLOCK, DEAD_BRAIN_CORAL_BLOCK, DEAD_BUBBLE_CORAL_BLOCK, DEAD_FIRE_CORAL_BLOCK, DEAD_HORN_CORAL_BLOCK, TUBE_CORAL_BLOCK, BRAIN_CORAL_BLOCK, BUBBLE_CORAL_BLOCK, FIRE_CORAL_BLOCK, HORN_CORAL_BLOCK, DEAD_BRAIN_CORAL, DEAD_BUBBLE_CORAL, DEAD_FIRE_CORAL, DEAD_HORN_CORAL, DEAD_TUBE_CORAL, DEAD_TUBE_CORAL_FAN, DEAD_BRAIN_CORAL_FAN, DEAD_BUBBLE_CORAL_FAN, DEAD_FIRE_CORAL_FAN, DEAD_HORN_CORAL_FAN, BLUE_ICE, CONDUIT, POLISHED_GRANITE_STAIRS, SMOOTH_RED_SANDSTONE_STAIRS, MOSSY_STONE_BRICK_STAIRS, POLISHED_DIORITE_STAIRS, MOSSY_COBBLESTONE_STAIRS, END_STONE_BRICK_STAIRS, STONE_STAIRS, SMOOTH_SANDSTONE_STAIRS, SMOOTH_QUARTZ_STAIRS, GRANITE_STAIRS, ANDESITE_STAIRS, RED_NETHER_BRICK_STAIRS, POLISHED_ANDESITE_STAIRS, DIORITE_STAIRS, COBBLED_DEEPSLATE_STAIRS, POLISHED_DEEPSLATE_STAIRS, DEEPSLATE_BRICK_STAIRS, DEEPSLATE_TILE_STAIRS, POLISHED_GRANITE_SLAB, SMOOTH_RED_SANDSTONE_SLAB, MOSSY_STONE_BRICK_SLAB, POLISHED_DIORITE_SLAB, MOSSY_COBBLESTONE_SLAB, END_STONE_BRICK_SLAB, SMOOTH_SANDSTONE_SLAB, SMOOTH_QUARTZ_SLAB, GRANITE_SLAB, ANDESITE_SLAB, RED_NETHER_BRICK_SLAB, POLISHED_ANDESITE_SLAB, DIORITE_SLAB, COBBLED_DEEPSLATE_SLAB, POLISHED_DEEPSLATE_SLAB, DEEPSLATE_BRICK_SLAB, DEEPSLATE_TILE_SLAB, REDSTONE_BLOCK, PISTON, STICKY_PISTON, OBSERVER, HOPPER, DISPENSER, DROPPER, LIGHTNING_ROD, STONE_BUTTON, STONE_PRESSURE_PLATE, POLISHED_BLACKSTONE_PRESSURE_PLATE, LIGHT_WEIGHTED_PRESSURE_PLATE, HEAVY_WEIGHTED_PRESSURE_PLATE, IRON_DOOR, IRON_TRAPDOOR, POWERED_RAIL, DETECTOR_RAIL, RAIL, ACTIVATOR_RAIL, BREWING_STAND, CAULDRON, SMOKER, BLAST_FURNACE, GRINDSTONE, STONECUTTER, BELL, LANTERN, SOUL_LANTERN, LODESTONE, CRYING_OBSIDIAN, BLACKSTONE, BLACKSTONE_SLAB, BLACKSTONE_STAIRS, GILDED_BLACKSTONE, POLISHED_BLACKSTONE, POLISHED_BLACKSTONE_SLAB, POLISHED_BLACKSTONE_STAIRS, CHISELED_POLISHED_BLACKSTONE, POLISHED_BLACKSTONE_BRICKS, POLISHED_BLACKSTONE_BRICK_SLAB, POLISHED_BLACKSTONE_BRICK_STAIRS, CRACKED_POLISHED_BLACKSTONE_BRICKS, RESPAWN_ANCHOR, SMALL_AMETHYST_BUD, MEDIUM_AMETHYST_BUD, LARGE_AMETHYST_BUD, AMETHYST_CLUSTER, POINTED_DRIPSTONE, PISTON_HEAD, WATER_CAULDRON, LAVA_CAULDRON, POWDER_SNOW_CAULDRON, DEAD_TUBE_CORAL_WALL_FAN, DEAD_BRAIN_CORAL_WALL_FAN, DEAD_BUBBLE_CORAL_WALL_FAN, DEAD_FIRE_CORAL_WALL_FAN, DEAD_HORN_CORAL_WALL_FAN]
+ minecraft:pressure_plates            [STONE_PRESSURE_PLATE, POLISHED_BLACKSTONE_PRESSURE_PLATE, LIGHT_WEIGHTED_PRESSURE_PLATE, HEAVY_WEIGHTED_PRESSURE_PLATE, OAK_PRESSURE_PLATE, SPRUCE_PRESSURE_PLATE, BIRCH_PRESSURE_PLATE, JUNGLE_PRESSURE_PLATE, ACACIA_PRESSURE_PLATE, DARK_OAK_PRESSURE_PLATE, CRIMSON_PRESSURE_PLATE, WARPED_PRESSURE_PLATE]
+ minecraft:wither_immune              [BEDROCK, END_PORTAL_FRAME, COMMAND_BLOCK, BARRIER, REPEATING_COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, STRUCTURE_BLOCK, JIGSAW, MOVING_PISTON, END_PORTAL, END_GATEWAY]
+ minecraft:big_dripleaf_placeable     [GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, ROOTED_DIRT, MOSS_BLOCK, FARMLAND, CLAY, MYCELIUM]
+ minecraft:inside_step_sound_blocks   [SNOW, POWDER_SNOW]
+ minecraft:standing_signs             [OAK_SIGN, SPRUCE_SIGN, BIRCH_SIGN, JUNGLE_SIGN, ACACIA_SIGN, DARK_OAK_SIGN, CRIMSON_SIGN, WARPED_SIGN]
+ minecraft:needs_stone_tool           [IRON_ORE, DEEPSLATE_IRON_ORE, COPPER_ORE, DEEPSLATE_COPPER_ORE, LAPIS_ORE, DEEPSLATE_LAPIS_ORE, RAW_IRON_BLOCK, RAW_COPPER_BLOCK, IRON_BLOCK, COPPER_BLOCK, EXPOSED_COPPER, WEATHERED_COPPER, OXIDIZED_COPPER, CUT_COPPER, EXPOSED_CUT_COPPER, WEATHERED_CUT_COPPER, OXIDIZED_CUT_COPPER, CUT_COPPER_STAIRS, EXPOSED_CUT_COPPER_STAIRS, WEATHERED_CUT_COPPER_STAIRS, OXIDIZED_CUT_COPPER_STAIRS, CUT_COPPER_SLAB, EXPOSED_CUT_COPPER_SLAB, WEATHERED_CUT_COPPER_SLAB, OXIDIZED_CUT_COPPER_SLAB, WAXED_COPPER_BLOCK, WAXED_EXPOSED_COPPER, WAXED_WEATHERED_COPPER, WAXED_OXIDIZED_COPPER, WAXED_CUT_COPPER, WAXED_EXPOSED_CUT_COPPER, WAXED_WEATHERED_CUT_COPPER, WAXED_OXIDIZED_CUT_COPPER, WAXED_CUT_COPPER_STAIRS, WAXED_EXPOSED_CUT_COPPER_STAIRS, WAXED_WEATHERED_CUT_COPPER_STAIRS, WAXED_OXIDIZED_CUT_COPPER_STAIRS, WAXED_CUT_COPPER_SLAB, WAXED_EXPOSED_CUT_COPPER_SLAB, WAXED_WEATHERED_CUT_COPPER_SLAB, WAXED_OXIDIZED_CUT_COPPER_SLAB, LAPIS_BLOCK, LIGHTNING_ROD]
+ minecraft:wither_summon_base_blocks  [SOUL_SAND, SOUL_SOIL]
+ minecraft:geode_invalid_blocks       [BEDROCK, ICE, PACKED_ICE, BLUE_ICE, WATER, LAVA]
+ minecraft:foxes_spawnable_on         [GRASS_BLOCK, COARSE_DIRT, PODZOL, SNOW, SNOW_BLOCK]
+ minecraft:soul_fire_base_blocks      [SOUL_SAND, SOUL_SOIL]
+ minecraft:oak_logs                   [OAK_LOG, STRIPPED_OAK_LOG, STRIPPED_OAK_WOOD, OAK_WOOD]
+ minecraft:banners                    [WHITE_BANNER, ORANGE_BANNER, MAGENTA_BANNER, LIGHT_BLUE_BANNER, YELLOW_BANNER, LIME_BANNER, PINK_BANNER, GRAY_BANNER, LIGHT_GRAY_BANNER, CYAN_BANNER, PURPLE_BANNER, BLUE_BANNER, BROWN_BANNER, GREEN_BANNER, RED_BANNER, BLACK_BANNER, WHITE_WALL_BANNER, ORANGE_WALL_BANNER, MAGENTA_WALL_BANNER, LIGHT_BLUE_WALL_BANNER, YELLOW_WALL_BANNER, LIME_WALL_BANNER, PINK_WALL_BANNER, GRAY_WALL_BANNER, LIGHT_GRAY_WALL_BANNER, CYAN_WALL_BANNER, PURPLE_WALL_BANNER, BLUE_WALL_BANNER, BROWN_WALL_BANNER, GREEN_WALL_BANNER, RED_WALL_BANNER, BLACK_WALL_BANNER]
+ minecraft:snow                       [SNOW, SNOW_BLOCK, POWDER_SNOW]
+ minecraft:polar_bears_spawnable_on_in_frozen_ocean [ICE]
+ minecraft:acacia_logs                [ACACIA_LOG, STRIPPED_ACACIA_LOG, STRIPPED_ACACIA_WOOD, ACACIA_WOOD]
+ minecraft:deepslate_ore_replaceables [DEEPSLATE, TUFF]
+ minecraft:infiniburn_overworld       [NETHERRACK, MAGMA_BLOCK]
+ minecraft:wall_corals                [TUBE_CORAL_WALL_FAN, BRAIN_CORAL_WALL_FAN, BUBBLE_CORAL_WALL_FAN, FIRE_CORAL_WALL_FAN, HORN_CORAL_WALL_FAN]
+ minecraft:climbable                  [WEEPING_VINES, TWISTING_VINES, LADDER, VINE, SCAFFOLDING, WEEPING_VINES_PLANT, TWISTING_VINES_PLANT, CAVE_VINES, CAVE_VINES_PLANT]
 
 <b>Items</b>
- minecraft:soul_fire_base_blocks      [SOUL_SAND, SOUL_SOIL]
- minecraft:banners                    [WHITE_BANNER, ORANGE_BANNER, MAGENTA_BANNER, LIGHT_BLUE_BANNER, YELLOW_BANNER, LIME_BANNER, PINK_BANNER, GRAY_BANNER, LIGHT_GRAY_BANNER, CYAN_BANNER, PURPLE_BANNER, BLUE_BANNER, BROWN_BANNER, GREEN_BANNER, RED_BANNER, BLACK_BANNER]
- minecraft:stone_crafting_materials   [COBBLED_DEEPSLATE, COBBLESTONE, BLACKSTONE]
- minecraft:wooden_fences              [OAK_FENCE, SPRUCE_FENCE, BIRCH_FENCE, JUNGLE_FENCE, ACACIA_FENCE, DARK_OAK_FENCE, CRIMSON_FENCE, WARPED_FENCE]
- minecraft:piglin_repellents          [SOUL_TORCH, SOUL_LANTERN, SOUL_CAMPFIRE]
- minecraft:beacon_payment_items       [DIAMOND, EMERALD, IRON_INGOT, GOLD_INGOT, NETHERITE_INGOT]
- minecraft:wooden_slabs               [OAK_SLAB, SPRUCE_SLAB, BIRCH_SLAB, JUNGLE_SLAB, ACACIA_SLAB, DARK_OAK_SLAB, CRIMSON_SLAB, WARPED_SLAB]
- minecraft:occludes_vibration_signals [WHITE_WOOL, ORANGE_WOOL, MAGENTA_WOOL, LIGHT_BLUE_WOOL, YELLOW_WOOL, LIME_WOOL, PINK_WOOL, GRAY_WOOL, LIGHT_GRAY_WOOL, CYAN_WOOL, PURPLE_WOOL, BLUE_WOOL, BROWN_WOOL, GREEN_WOOL, RED_WOOL, BLACK_WOOL]
- minecraft:coal_ores                  [COAL_ORE, DEEPSLATE_COAL_ORE]
- minecraft:small_flowers              [DANDELION, POPPY, BLUE_ORCHID, ALLIUM, AZURE_BLUET, RED_TULIP, ORANGE_TULIP, WHITE_TULIP, PINK_TULIP, OXEYE_DAISY, CORNFLOWER, LILY_OF_THE_VALLEY, WITHER_ROSE]
- minecraft:wooden_trapdoors           [OAK_TRAPDOOR, SPRUCE_TRAPDOOR, BIRCH_TRAPDOOR, JUNGLE_TRAPDOOR, ACACIA_TRAPDOOR, DARK_OAK_TRAPDOOR, CRIMSON_TRAPDOOR, WARPED_TRAPDOOR]
- minecraft:jungle_logs                [JUNGLE_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_JUNGLE_WOOD, JUNGLE_WOOD]
- minecraft:lectern_books              [WRITABLE_BOOK, WRITTEN_BOOK]
- main:dirt_like                       [GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, MYCELIUM]
  minecraft:wooden_stairs              [OAK_STAIRS, SPRUCE_STAIRS, BIRCH_STAIRS, JUNGLE_STAIRS, CRIMSON_STAIRS, WARPED_STAIRS, ACACIA_STAIRS, DARK_OAK_STAIRS]
- minecraft:spruce_logs                [SPRUCE_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_SPRUCE_WOOD, SPRUCE_WOOD]
+ minecraft:dirt                       [GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, ROOTED_DIRT, MOSS_BLOCK, MYCELIUM]
+ minecraft:dark_oak_logs              [DARK_OAK_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_DARK_OAK_WOOD, DARK_OAK_WOOD]
+ minecraft:wooden_slabs               [OAK_SLAB, SPRUCE_SLAB, BIRCH_SLAB, JUNGLE_SLAB, ACACIA_SLAB, DARK_OAK_SLAB, CRIMSON_SLAB, WARPED_SLAB]
+ minecraft:doors                      [IRON_DOOR, OAK_DOOR, SPRUCE_DOOR, BIRCH_DOOR, JUNGLE_DOOR, ACACIA_DOOR, DARK_OAK_DOOR, CRIMSON_DOOR, WARPED_DOOR]
+ minecraft:stone_tool_materials       [COBBLED_DEEPSLATE, COBBLESTONE, BLACKSTONE]
+ minecraft:small_flowers              [DANDELION, POPPY, BLUE_ORCHID, ALLIUM, AZURE_BLUET, RED_TULIP, ORANGE_TULIP, WHITE_TULIP, PINK_TULIP, OXEYE_DAISY, CORNFLOWER, LILY_OF_THE_VALLEY, WITHER_ROSE]
+ minecraft:cluster_max_harvestables   [WOODEN_PICKAXE, STONE_PICKAXE, GOLDEN_PICKAXE, IRON_PICKAXE, DIAMOND_PICKAXE, NETHERITE_PICKAXE]
+ minecraft:sand                       [SAND, RED_SAND]
+ minecraft:buttons                    [STONE_BUTTON, POLISHED_BLACKSTONE_BUTTON, OAK_BUTTON, SPRUCE_BUTTON, BIRCH_BUTTON, JUNGLE_BUTTON, ACACIA_BUTTON, DARK_OAK_BUTTON, CRIMSON_BUTTON, WARPED_BUTTON]
+ minecraft:trapdoors                  [IRON_TRAPDOOR, OAK_TRAPDOOR, SPRUCE_TRAPDOOR, BIRCH_TRAPDOOR, JUNGLE_TRAPDOOR, ACACIA_TRAPDOOR, DARK_OAK_TRAPDOOR, CRIMSON_TRAPDOOR, WARPED_TRAPDOOR]
  minecraft:signs                      [OAK_SIGN, SPRUCE_SIGN, BIRCH_SIGN, JUNGLE_SIGN, ACACIA_SIGN, DARK_OAK_SIGN, CRIMSON_SIGN, WARPED_SIGN]
+ minecraft:fences                     [OAK_FENCE, SPRUCE_FENCE, BIRCH_FENCE, JUNGLE_FENCE, ACACIA_FENCE, DARK_OAK_FENCE, CRIMSON_FENCE, WARPED_FENCE, NETHER_BRICK_FENCE]
+ minecraft:coals                      [COAL, CHARCOAL]
+ minecraft:warped_stems               [WARPED_STEM, STRIPPED_WARPED_STEM, STRIPPED_WARPED_HYPHAE, WARPED_HYPHAE]
+ minecraft:slabs                      [CUT_COPPER_SLAB, EXPOSED_CUT_COPPER_SLAB, WEATHERED_CUT_COPPER_SLAB, OXIDIZED_CUT_COPPER_SLAB, WAXED_CUT_COPPER_SLAB, WAXED_EXPOSED_CUT_COPPER_SLAB, WAXED_WEATHERED_CUT_COPPER_SLAB, WAXED_OXIDIZED_CUT_COPPER_SLAB, OAK_SLAB, SPRUCE_SLAB, BIRCH_SLAB, JUNGLE_SLAB, ACACIA_SLAB, DARK_OAK_SLAB, CRIMSON_SLAB, WARPED_SLAB, STONE_SLAB, SMOOTH_STONE_SLAB, SANDSTONE_SLAB, CUT_SANDSTONE_SLAB, PETRIFIED_OAK_SLAB, COBBLESTONE_SLAB, BRICK_SLAB, STONE_BRICK_SLAB, NETHER_BRICK_SLAB, QUARTZ_SLAB, RED_SANDSTONE_SLAB, CUT_RED_SANDSTONE_SLAB, PURPUR_SLAB, PRISMARINE_SLAB, PRISMARINE_BRICK_SLAB, DARK_PRISMARINE_SLAB, POLISHED_GRANITE_SLAB, SMOOTH_RED_SANDSTONE_SLAB, MOSSY_STONE_BRICK_SLAB, POLISHED_DIORITE_SLAB, MOSSY_COBBLESTONE_SLAB, END_STONE_BRICK_SLAB, SMOOTH_SANDSTONE_SLAB, SMOOTH_QUARTZ_SLAB, GRANITE_SLAB, ANDESITE_SLAB, RED_NETHER_BRICK_SLAB, POLISHED_ANDESITE_SLAB, DIORITE_SLAB, COBBLED_DEEPSLATE_SLAB, POLISHED_DEEPSLATE_SLAB, DEEPSLATE_BRICK_SLAB, DEEPSLATE_TILE_SLAB, BLACKSTONE_SLAB, POLISHED_BLACKSTONE_SLAB, POLISHED_BLACKSTONE_BRICK_SLAB]
+ minecraft:terracotta                 [WHITE_TERRACOTTA, ORANGE_TERRACOTTA, MAGENTA_TERRACOTTA, LIGHT_BLUE_TERRACOTTA, YELLOW_TERRACOTTA, LIME_TERRACOTTA, PINK_TERRACOTTA, GRAY_TERRACOTTA, LIGHT_GRAY_TERRACOTTA, CYAN_TERRACOTTA, PURPLE_TERRACOTTA, BLUE_TERRACOTTA, BROWN_TERRACOTTA, GREEN_TERRACOTTA, RED_TERRACOTTA, BLACK_TERRACOTTA, TERRACOTTA]
+ minecraft:wooden_doors               [OAK_DOOR, SPRUCE_DOOR, BIRCH_DOOR, JUNGLE_DOOR, ACACIA_DOOR, DARK_OAK_DOOR, CRIMSON_DOOR, WARPED_DOOR]
+ minecraft:wooden_trapdoors           [OAK_TRAPDOOR, SPRUCE_TRAPDOOR, BIRCH_TRAPDOOR, JUNGLE_TRAPDOOR, ACACIA_TRAPDOOR, DARK_OAK_TRAPDOOR, CRIMSON_TRAPDOOR, WARPED_TRAPDOOR]
+ minecraft:beds                       [WHITE_BED, ORANGE_BED, MAGENTA_BED, LIGHT_BLUE_BED, YELLOW_BED, LIME_BED, PINK_BED, GRAY_BED, LIGHT_GRAY_BED, CYAN_BED, PURPLE_BED, BLUE_BED, BROWN_BED, GREEN_BED, RED_BED, BLACK_BED]
+ minecraft:arrows                     [ARROW, SPECTRAL_ARROW, TIPPED_ARROW]
+ main:dirt_like                       [GRASS_BLOCK, DIRT, COARSE_DIRT, PODZOL, MYCELIUM]
+ minecraft:soul_fire_base_blocks      [SOUL_SAND, SOUL_SOIL]
+ minecraft:wooden_fences              [OAK_FENCE, SPRUCE_FENCE, BIRCH_FENCE, JUNGLE_FENCE, ACACIA_FENCE, DARK_OAK_FENCE, CRIMSON_FENCE, WARPED_FENCE]
+ minecraft:music_discs                [MUSIC_DISC_13, MUSIC_DISC_CAT, MUSIC_DISC_BLOCKS, MUSIC_DISC_CHIRP, MUSIC_DISC_FAR, MUSIC_DISC_MALL, MUSIC_DISC_MELLOHI, MUSIC_DISC_STAL, MUSIC_DISC_STRAD, MUSIC_DISC_WARD, MUSIC_DISC_11, MUSIC_DISC_WAIT, MUSIC_DISC_OTHERSIDE, MUSIC_DISC_PIGSTEP]
+ minecraft:anvil                      [ANVIL, CHIPPED_ANVIL, DAMAGED_ANVIL]
+ minecraft:fishes                     [COD, SALMON, TROPICAL_FISH, PUFFERFISH, COOKED_COD, COOKED_SALMON]
+ minecraft:candles                    [CANDLE, WHITE_CANDLE, ORANGE_CANDLE, MAGENTA_CANDLE, LIGHT_BLUE_CANDLE, YELLOW_CANDLE, LIME_CANDLE, PINK_CANDLE, GRAY_CANDLE, LIGHT_GRAY_CANDLE, CYAN_CANDLE, PURPLE_CANDLE, BLUE_CANDLE, BROWN_CANDLE, GREEN_CANDLE, RED_CANDLE, BLACK_CANDLE]
+ minecraft:iron_ores                  [IRON_ORE, DEEPSLATE_IRON_ORE]
+ minecraft:lectern_books              [WRITABLE_BOOK, WRITTEN_BOOK]
  minecraft:axolotl_tempt_items        [TROPICAL_FISH_BUCKET]
+ minecraft:wooden_pressure_plates     [OAK_PRESSURE_PLATE, SPRUCE_PRESSURE_PLATE, BIRCH_PRESSURE_PLATE, JUNGLE_PRESSURE_PLATE, ACACIA_PRESSURE_PLATE, DARK_OAK_PRESSURE_PLATE, CRIMSON_PRESSURE_PLATE, WARPED_PRESSURE_PLATE]
+ minecraft:planks                     [OAK_PLANKS, SPRUCE_PLANKS, BIRCH_PLANKS, JUNGLE_PLANKS, ACACIA_PLANKS, DARK_OAK_PLANKS, CRIMSON_PLANKS, WARPED_PLANKS]
+ minecraft:saplings                   [OAK_SAPLING, SPRUCE_SAPLING, BIRCH_SAPLING, JUNGLE_SAPLING, ACACIA_SAPLING, DARK_OAK_SAPLING, AZALEA, FLOWERING_AZALEA]
+ minecraft:crimson_stems              [CRIMSON_STEM, STRIPPED_CRIMSON_STEM, STRIPPED_CRIMSON_HYPHAE, CRIMSON_HYPHAE]
+ minecraft:stairs                     [CUT_COPPER_STAIRS, EXPOSED_CUT_COPPER_STAIRS, WEATHERED_CUT_COPPER_STAIRS, OXIDIZED_CUT_COPPER_STAIRS, WAXED_CUT_COPPER_STAIRS, WAXED_EXPOSED_CUT_COPPER_STAIRS, WAXED_WEATHERED_CUT_COPPER_STAIRS, WAXED_OXIDIZED_CUT_COPPER_STAIRS, PURPUR_STAIRS, OAK_STAIRS, COBBLESTONE_STAIRS, BRICK_STAIRS, STONE_BRICK_STAIRS, NETHER_BRICK_STAIRS, SANDSTONE_STAIRS, SPRUCE_STAIRS, BIRCH_STAIRS, JUNGLE_STAIRS, CRIMSON_STAIRS, WARPED_STAIRS, QUARTZ_STAIRS, ACACIA_STAIRS, DARK_OAK_STAIRS, PRISMARINE_STAIRS, PRISMARINE_BRICK_STAIRS, DARK_PRISMARINE_STAIRS, RED_SANDSTONE_STAIRS, POLISHED_GRANITE_STAIRS, SMOOTH_RED_SANDSTONE_STAIRS, MOSSY_STONE_BRICK_STAIRS, POLISHED_DIORITE_STAIRS, MOSSY_COBBLESTONE_STAIRS, END_STONE_BRICK_STAIRS, STONE_STAIRS, SMOOTH_SANDSTONE_STAIRS, SMOOTH_QUARTZ_STAIRS, GRANITE_STAIRS, ANDESITE_STAIRS, RED_NETHER_BRICK_STAIRS, POLISHED_ANDESITE_STAIRS, DIORITE_STAIRS, COBBLED_DEEPSLATE_STAIRS, POLISHED_DEEPSLATE_STAIRS, DEEPSLATE_BRICK_STAIRS, DEEPSLATE_TILE_STAIRS, BLACKSTONE_STAIRS, POLISHED_BLACKSTONE_STAIRS, POLISHED_BLACKSTONE_BRICK_STAIRS]
+ minecraft:logs                       [OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, CRIMSON_STEM, WARPED_STEM, STRIPPED_OAK_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_BIRCH_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_ACACIA_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_CRIMSON_STEM, STRIPPED_WARPED_STEM, STRIPPED_OAK_WOOD, STRIPPED_SPRUCE_WOOD, STRIPPED_BIRCH_WOOD, STRIPPED_JUNGLE_WOOD, STRIPPED_ACACIA_WOOD, STRIPPED_DARK_OAK_WOOD, STRIPPED_CRIMSON_HYPHAE, STRIPPED_WARPED_HYPHAE, OAK_WOOD, SPRUCE_WOOD, BIRCH_WOOD, JUNGLE_WOOD, ACACIA_WOOD, DARK_OAK_WOOD, CRIMSON_HYPHAE, WARPED_HYPHAE]
+ minecraft:non_flammable_wood         [CRIMSON_PLANKS, WARPED_PLANKS, CRIMSON_STEM, WARPED_STEM, STRIPPED_CRIMSON_STEM, STRIPPED_WARPED_STEM, STRIPPED_CRIMSON_HYPHAE, STRIPPED_WARPED_HYPHAE, CRIMSON_HYPHAE, WARPED_HYPHAE, CRIMSON_SLAB, WARPED_SLAB, CRIMSON_FENCE, WARPED_FENCE, CRIMSON_STAIRS, WARPED_STAIRS, CRIMSON_BUTTON, WARPED_BUTTON, CRIMSON_PRESSURE_PLATE, WARPED_PRESSURE_PLATE, CRIMSON_DOOR, WARPED_DOOR, CRIMSON_TRAPDOOR, WARPED_TRAPDOOR, CRIMSON_FENCE_GATE, WARPED_FENCE_GATE, CRIMSON_SIGN, WARPED_SIGN]
+ minecraft:spruce_logs                [SPRUCE_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_SPRUCE_WOOD, SPRUCE_WOOD]
+ minecraft:leaves                     [OAK_LEAVES, SPRUCE_LEAVES, BIRCH_LEAVES, JUNGLE_LEAVES, ACACIA_LEAVES, DARK_OAK_LEAVES, AZALEA_LEAVES, FLOWERING_AZALEA_LEAVES]
+ minecraft:birch_logs                 [BIRCH_LOG, STRIPPED_BIRCH_LOG, STRIPPED_BIRCH_WOOD, BIRCH_WOOD]
+ minecraft:rails                      [POWERED_RAIL, DETECTOR_RAIL, RAIL, ACTIVATOR_RAIL]
+ minecraft:piglin_repellents          [SOUL_TORCH, SOUL_LANTERN, SOUL_CAMPFIRE]
+ minecraft:flowers                    [FLOWERING_AZALEA_LEAVES, FLOWERING_AZALEA, DANDELION, POPPY, BLUE_ORCHID, ALLIUM, AZURE_BLUET, RED_TULIP, ORANGE_TULIP, WHITE_TULIP, PINK_TULIP, OXEYE_DAISY, CORNFLOWER, LILY_OF_THE_VALLEY, WITHER_ROSE, SUNFLOWER, LILAC, ROSE_BUSH, PEONY]
+ minecraft:oak_logs                   [OAK_LOG, STRIPPED_OAK_LOG, STRIPPED_OAK_WOOD, OAK_WOOD]
+ minecraft:banners                    [WHITE_BANNER, ORANGE_BANNER, MAGENTA_BANNER, LIGHT_BLUE_BANNER, YELLOW_BANNER, LIME_BANNER, PINK_BANNER, GRAY_BANNER, LIGHT_GRAY_BANNER, CYAN_BANNER, PURPLE_BANNER, BLUE_BANNER, BROWN_BANNER, GREEN_BANNER, RED_BANNER, BLACK_BANNER]
+ minecraft:emerald_ores               [EMERALD_ORE, DEEPSLATE_EMERALD_ORE]
+ minecraft:freeze_immune_wearables    [LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS, LEATHER_HORSE_ARMOR]
+ minecraft:jungle_logs                [JUNGLE_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_JUNGLE_WOOD, JUNGLE_WOOD]
+ minecraft:creeper_drop_music_discs   [MUSIC_DISC_13, MUSIC_DISC_CAT, MUSIC_DISC_BLOCKS, MUSIC_DISC_CHIRP, MUSIC_DISC_FAR, MUSIC_DISC_MALL, MUSIC_DISC_MELLOHI, MUSIC_DISC_STAL, MUSIC_DISC_STRAD, MUSIC_DISC_WARD, MUSIC_DISC_11, MUSIC_DISC_WAIT]
+ minecraft:copper_ores                [COPPER_ORE, DEEPSLATE_COPPER_ORE]
+ minecraft:logs_that_burn             [OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, STRIPPED_OAK_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_BIRCH_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_ACACIA_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_OAK_WOOD, STRIPPED_SPRUCE_WOOD, STRIPPED_BIRCH_WOOD, STRIPPED_JUNGLE_WOOD, STRIPPED_ACACIA_WOOD, STRIPPED_DARK_OAK_WOOD, OAK_WOOD, SPRUCE_WOOD, BIRCH_WOOD, JUNGLE_WOOD, ACACIA_WOOD, DARK_OAK_WOOD]
+ minecraft:ignored_by_piglin_babies   [LEATHER]
+ minecraft:acacia_logs                [ACACIA_LOG, STRIPPED_ACACIA_LOG, STRIPPED_ACACIA_WOOD, ACACIA_WOOD]
+ minecraft:occludes_vibration_signals [WHITE_WOOL, ORANGE_WOOL, MAGENTA_WOOL, LIGHT_BLUE_WOOL, YELLOW_WOOL, LIME_WOOL, PINK_WOOL, GRAY_WOOL, LIGHT_GRAY_WOOL, CYAN_WOOL, PURPLE_WOOL, BLUE_WOOL, BROWN_WOOL, GREEN_WOOL, RED_WOOL, BLACK_WOOL]
+ minecraft:piglin_loved               [GOLD_ORE, DEEPSLATE_GOLD_ORE, NETHER_GOLD_ORE, RAW_GOLD_BLOCK, GOLD_BLOCK, LIGHT_WEIGHTED_PRESSURE_PLATE, RAW_GOLD, GOLD_INGOT, GOLDEN_SWORD, GOLDEN_SHOVEL, GOLDEN_PICKAXE, GOLDEN_AXE, GOLDEN_HOE, GOLDEN_HELMET, GOLDEN_CHESTPLATE, GOLDEN_LEGGINGS, GOLDEN_BOOTS, GOLDEN_APPLE, ENCHANTED_GOLDEN_APPLE, CLOCK, GLISTERING_MELON_SLICE, GOLDEN_CARROT, GOLDEN_HORSE_ARMOR, BELL, GILDED_BLACKSTONE]
+ minecraft:stone_bricks               [STONE_BRICKS, MOSSY_STONE_BRICKS, CRACKED_STONE_BRICKS, CHISELED_STONE_BRICKS]
+ minecraft:diamond_ores               [DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE]
+ minecraft:beacon_payment_items       [DIAMOND, EMERALD, IRON_INGOT, GOLD_INGOT, NETHERITE_INGOT]
+ minecraft:fox_food                   [SWEET_BERRIES, GLOW_BERRIES]
+ minecraft:redstone_ores              [REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE]
  minecraft:carpets                    [WHITE_CARPET, ORANGE_CARPET, MAGENTA_CARPET, LIGHT_BLUE_CARPET, YELLOW_CARPET, LIME_CARPET, PINK_CARPET, GRAY_CARPET, LIGHT_GRAY_CARPET, CYAN_CARPET, PURPLE_CARPET, BLUE_CARPET, BROWN_CARPET, GREEN_CARPET, RED_CARPET, BLACK_CARPET]
+ minecraft:walls                      [COBBLESTONE_WALL, MOSSY_COBBLESTONE_WALL, BRICK_WALL, PRISMARINE_WALL, RED_SANDSTONE_WALL, MOSSY_STONE_BRICK_WALL, GRANITE_WALL, STONE_BRICK_WALL, NETHER_BRICK_WALL, ANDESITE_WALL, RED_NETHER_BRICK_WALL, SANDSTONE_WALL, END_STONE_BRICK_WALL, DIORITE_WALL, BLACKSTONE_WALL, POLISHED_BLACKSTONE_WALL, POLISHED_BLACKSTONE_BRICK_WALL, COBBLED_DEEPSLATE_WALL, POLISHED_DEEPSLATE_WALL, DEEPSLATE_BRICK_WALL, DEEPSLATE_TILE_WALL]
  minecraft:wool                       [WHITE_WOOL, ORANGE_WOOL, MAGENTA_WOOL, LIGHT_BLUE_WOOL, YELLOW_WOOL, LIME_WOOL, PINK_WOOL, GRAY_WOOL, LIGHT_GRAY_WOOL, CYAN_WOOL, PURPLE_WOOL, BLUE_WOOL, BROWN_WOOL, GREEN_WOOL, RED_WOOL, BLACK_WOOL]
  minecraft:wooden_buttons             [OAK_BUTTON, SPRUCE_BUTTON, BIRCH_BUTTON, JUNGLE_BUTTON, ACACIA_BUTTON, DARK_OAK_BUTTON, CRIMSON_BUTTON, WARPED_BUTTON]
- minecraft:stairs                     [CUT_COPPER_STAIRS, EXPOSED_CUT_COPPER_STAIRS, WEATHERED_CUT_COPPER_STAIRS, OXIDIZED_CUT_COPPER_STAIRS, WAXED_CUT_COPPER_STAIRS, WAXED_EXPOSED_CUT_COPPER_STAIRS, WAXED_WEATHERED_CUT_COPPER_STAIRS, WAXED_OXIDIZED_CUT_COPPER_STAIRS, PURPUR_STAIRS, OAK_STAIRS, COBBLESTONE_STAIRS, BRICK_STAIRS, STONE_BRICK_STAIRS, NETHER_BRICK_STAIRS, SANDSTONE_STAIRS, SPRUCE_STAIRS, BIRCH_STAIRS, JUNGLE_STAIRS, CRIMSON_STAIRS, WARPED_STAIRS, QUARTZ_STAIRS, ACACIA_STAIRS, DARK_OAK_STAIRS, PRISMARINE_STAIRS, PRISMARINE_BRICK_STAIRS, DARK_PRISMARINE_STAIRS, RED_SANDSTONE_STAIRS, POLISHED_GRANITE_STAIRS, SMOOTH_RED_SANDSTONE_STAIRS, MOSSY_STONE_BRICK_STAIRS, POLISHED_DIORITE_STAIRS, MOSSY_COBBLESTONE_STAIRS, END_STONE_BRICK_STAIRS, STONE_STAIRS, SMOOTH_SANDSTONE_STAIRS, SMOOTH_QUARTZ_STAIRS, GRANITE_STAIRS, ANDESITE_STAIRS, RED_NETHER_BRICK_STAIRS, POLISHED_ANDESITE_STAIRS, DIORITE_STAIRS, COBBLED_DEEPSLATE_STAIRS, POLISHED_DEEPSLATE_STAIRS, DEEPSLATE_BRICK_STAIRS, DEEPSLATE_TILE_STAIRS, BLACKSTONE_STAIRS, POLISHED_BLACKSTONE_STAIRS, POLISHED_BLACKSTONE_BRICK_STAIRS]
- minecraft:fishes                     [COD, SALMON, TROPICAL_FISH, PUFFERFISH, COOKED_COD, COOKED_SALMON]
- minecraft:logs                       [OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, CRIMSON_STEM, WARPED_STEM, STRIPPED_OAK_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_BIRCH_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_ACACIA_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_CRIMSON_STEM, STRIPPED_WARPED_STEM, STRIPPED_OAK_WOOD, STRIPPED_SPRUCE_WOOD, STRIPPED_BIRCH_WOOD, STRIPPED_JUNGLE_WOOD, STRIPPED_ACACIA_WOOD, STRIPPED_DARK_OAK_WOOD, STRIPPED_CRIMSON_HYPHAE, STRIPPED_WARPED_HYPHAE, OAK_WOOD, SPRUCE_WOOD, BIRCH_WOOD, JUNGLE_WOOD, ACACIA_WOOD, DARK_OAK_WOOD, CRIMSON_HYPHAE, WARPED_HYPHAE]
- minecraft:stone_bricks               [STONE_BRICKS, MOSSY_STONE_BRICKS, CRACKED_STONE_BRICKS, CHISELED_STONE_BRICKS]
- minecraft:creeper_drop_music_discs   [MUSIC_DISC_13, MUSIC_DISC_CAT, MUSIC_DISC_BLOCKS, MUSIC_DISC_CHIRP, MUSIC_DISC_FAR, MUSIC_DISC_MALL, MUSIC_DISC_MELLOHI, MUSIC_DISC_STAL, MUSIC_DISC_STRAD, MUSIC_DISC_WARD, MUSIC_DISC_11, MUSIC_DISC_WAIT]
- minecraft:arrows                     [ARROW, SPECTRAL_ARROW, TIPPED_ARROW]
- minecraft:slabs                      [CUT_COPPER_SLAB, EXPOSED_CUT_COPPER_SLAB, WEATHERED_CUT_COPPER_SLAB, OXIDIZED_CUT_COPPER_SLAB, WAXED_CUT_COPPER_SLAB, WAXED_EXPOSED_CUT_COPPER_SLAB, WAXED_WEATHERED_CUT_COPPER_SLAB, WAXED_OXIDIZED_CUT_COPPER_SLAB, OAK_SLAB, SPRUCE_SLAB, BIRCH_SLAB, JUNGLE_SLAB, ACACIA_SLAB, DARK_OAK_SLAB, CRIMSON_SLAB, WARPED_SLAB, STONE_SLAB, SMOOTH_STONE_SLAB, SANDSTONE_SLAB, CUT_SANDSTONE_SLAB, PETRIFIED_OAK_SLAB, COBBLESTONE_SLAB, BRICK_SLAB, STONE_BRICK_SLAB, NETHER_BRICK_SLAB, QUARTZ_SLAB, RED_SANDSTONE_SLAB, CUT_RED_SANDSTONE_SLAB, PURPUR_SLAB, PRISMARINE_SLAB, PRISMARINE_BRICK_SLAB, DARK_PRISMARINE_SLAB, POLISHED_GRANITE_SLAB, SMOOTH_RED_SANDSTONE_SLAB, MOSSY_STONE_BRICK_SLAB, POLISHED_DIORITE_SLAB, MOSSY_COBBLESTONE_SLAB, END_STONE_BRICK_SLAB, SMOOTH_SANDSTONE_SLAB, SMOOTH_QUARTZ_SLAB, GRANITE_SLAB, ANDESITE_SLAB, RED_NETHER_BRICK_SLAB, POLISHED_ANDESITE_SLAB, DIORITE_SLAB, COBBLED_DEEPSLATE_SLAB, POLISHED_DEEPSLATE_SLAB, DEEPSLATE_BRICK_SLAB, DEEPSLATE_TILE_SLAB, BLACKSTONE_SLAB, POLISHED_BLACKSTONE_SLAB, POLISHED_BLACKSTONE_BRICK_SLAB]
- minecraft:wooden_doors               [OAK_DOOR, SPRUCE_DOOR, BIRCH_DOOR, JUNGLE_DOOR, ACACIA_DOOR, DARK_OAK_DOOR, CRIMSON_DOOR, WARPED_DOOR]
- minecraft:warped_stems               [WARPED_STEM, STRIPPED_WARPED_STEM, STRIPPED_WARPED_HYPHAE, WARPED_HYPHAE]
- minecraft:emerald_ores               [EMERALD_ORE, DEEPSLATE_EMERALD_ORE]
- minecraft:trapdoors                  [IRON_TRAPDOOR, OAK_TRAPDOOR, SPRUCE_TRAPDOOR, BIRCH_TRAPDOOR, JUNGLE_TRAPDOOR, ACACIA_TRAPDOOR, DARK_OAK_TRAPDOOR, CRIMSON_TRAPDOOR, WARPED_TRAPDOOR]
- minecraft:redstone_ores              [REDSTONE_ORE, DEEPSLATE_REDSTONE_ORE]
- minecraft:crimson_stems              [CRIMSON_STEM, STRIPPED_CRIMSON_STEM, STRIPPED_CRIMSON_HYPHAE, CRIMSON_HYPHAE]
- minecraft:ignored_by_piglin_babies   [LEATHER]
- minecraft:flowers                    [FLOWERING_AZALEA_LEAVES, FLOWERING_AZALEA, DANDELION, POPPY, BLUE_ORCHID, ALLIUM, AZURE_BLUET, RED_TULIP, ORANGE_TULIP, WHITE_TULIP, PINK_TULIP, OXEYE_DAISY, CORNFLOWER, LILY_OF_THE_VALLEY, WITHER_ROSE, SUNFLOWER, LILAC, ROSE_BUSH, PEONY]
- minecraft:buttons                    [STONE_BUTTON, POLISHED_BLACKSTONE_BUTTON, OAK_BUTTON, SPRUCE_BUTTON, BIRCH_BUTTON, JUNGLE_BUTTON, ACACIA_BUTTON, DARK_OAK_BUTTON, CRIMSON_BUTTON, WARPED_BUTTON]
- minecraft:stone_tool_materials       [COBBLED_DEEPSLATE, COBBLESTONE, BLACKSTONE]
- minecraft:planks                     [OAK_PLANKS, SPRUCE_PLANKS, BIRCH_PLANKS, JUNGLE_PLANKS, ACACIA_PLANKS, DARK_OAK_PLANKS, CRIMSON_PLANKS, WARPED_PLANKS]
- minecraft:fox_food                   [SWEET_BERRIES, GLOW_BERRIES]
- minecraft:boats                      [OAK_BOAT, SPRUCE_BOAT, BIRCH_BOAT, JUNGLE_BOAT, ACACIA_BOAT, DARK_OAK_BOAT]
- minecraft:dark_oak_logs              [DARK_OAK_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_DARK_OAK_WOOD, DARK_OAK_WOOD]
- minecraft:rails                      [POWERED_RAIL, DETECTOR_RAIL, RAIL, ACTIVATOR_RAIL]
- minecraft:diamond_ores               [DIAMOND_ORE, DEEPSLATE_DIAMOND_ORE]
- minecraft:non_flammable_wood         [CRIMSON_PLANKS, WARPED_PLANKS, CRIMSON_STEM, WARPED_STEM, STRIPPED_CRIMSON_STEM, STRIPPED_WARPED_STEM, STRIPPED_CRIMSON_HYPHAE, STRIPPED_WARPED_HYPHAE, CRIMSON_HYPHAE, WARPED_HYPHAE, CRIMSON_SLAB, WARPED_SLAB, CRIMSON_FENCE, WARPED_FENCE, CRIMSON_STAIRS, WARPED_STAIRS, CRIMSON_BUTTON, WARPED_BUTTON, CRIMSON_PRESSURE_PLATE, WARPED_PRESSURE_PLATE, CRIMSON_DOOR, WARPED_DOOR, CRIMSON_TRAPDOOR, WARPED_TRAPDOOR, CRIMSON_FENCE_GATE, WARPED_FENCE_GATE, CRIMSON_SIGN, WARPED_SIGN]
- minecraft:leaves                     [OAK_LEAVES, SPRUCE_LEAVES, BIRCH_LEAVES, JUNGLE_LEAVES, ACACIA_LEAVES, DARK_OAK_LEAVES, AZALEA_LEAVES, FLOWERING_AZALEA_LEAVES]
- minecraft:walls                      [COBBLESTONE_WALL, MOSSY_COBBLESTONE_WALL, BRICK_WALL, PRISMARINE_WALL, RED_SANDSTONE_WALL, MOSSY_STONE_BRICK_WALL, GRANITE_WALL, STONE_BRICK_WALL, NETHER_BRICK_WALL, ANDESITE_WALL, RED_NETHER_BRICK_WALL, SANDSTONE_WALL, END_STONE_BRICK_WALL, DIORITE_WALL, BLACKSTONE_WALL, POLISHED_BLACKSTONE_WALL, POLISHED_BLACKSTONE_BRICK_WALL, COBBLED_DEEPSLATE_WALL, POLISHED_DEEPSLATE_WALL, DEEPSLATE_BRICK_WALL, DEEPSLATE_TILE_WALL]
- minecraft:coals                      [COAL, CHARCOAL]
- minecraft:piglin_food                [PORKCHOP, COOKED_PORKCHOP]
- minecraft:wooden_pressure_plates     [OAK_PRESSURE_PLATE, SPRUCE_PRESSURE_PLATE, BIRCH_PRESSURE_PLATE, JUNGLE_PRESSURE_PLATE, ACACIA_PRESSURE_PLATE, DARK_OAK_PRESSURE_PLATE, CRIMSON_PRESSURE_PLATE, WARPED_PRESSURE_PLATE]
- minecraft:acacia_logs                [ACACIA_LOG, STRIPPED_ACACIA_LOG, STRIPPED_ACACIA_WOOD, ACACIA_WOOD]
- minecraft:piglin_loved               [GOLD_ORE, DEEPSLATE_GOLD_ORE, NETHER_GOLD_ORE, RAW_GOLD_BLOCK, GOLD_BLOCK, LIGHT_WEIGHTED_PRESSURE_PLATE, RAW_GOLD, GOLD_INGOT, GOLDEN_SWORD, GOLDEN_SHOVEL, GOLDEN_PICKAXE, GOLDEN_AXE, GOLDEN_HOE, GOLDEN_HELMET, GOLDEN_CHESTPLATE, GOLDEN_LEGGINGS, GOLDEN_BOOTS, GOLDEN_APPLE, ENCHANTED_GOLDEN_APPLE, CLOCK, GLISTERING_MELON_SLICE, GOLDEN_CARROT, GOLDEN_HORSE_ARMOR, BELL, GILDED_BLACKSTONE]
- minecraft:music_discs                [MUSIC_DISC_13, MUSIC_DISC_CAT, MUSIC_DISC_BLOCKS, MUSIC_DISC_CHIRP, MUSIC_DISC_FAR, MUSIC_DISC_MALL, MUSIC_DISC_MELLOHI, MUSIC_DISC_STAL, MUSIC_DISC_STRAD, MUSIC_DISC_WARD, MUSIC_DISC_11, MUSIC_DISC_WAIT, MUSIC_DISC_PIGSTEP]
- minecraft:candles                    [CANDLE, WHITE_CANDLE, ORANGE_CANDLE, MAGENTA_CANDLE, LIGHT_BLUE_CANDLE, YELLOW_CANDLE, LIME_CANDLE, PINK_CANDLE, GRAY_CANDLE, LIGHT_GRAY_CANDLE, CYAN_CANDLE, PURPLE_CANDLE, BLUE_CANDLE, BROWN_CANDLE, GREEN_CANDLE, RED_CANDLE, BLACK_CANDLE]
- minecraft:anvil                      [ANVIL, CHIPPED_ANVIL, DAMAGED_ANVIL]
- minecraft:birch_logs                 [BIRCH_LOG, STRIPPED_BIRCH_LOG, STRIPPED_BIRCH_WOOD, BIRCH_WOOD]
- minecraft:tall_flowers               [SUNFLOWER, LILAC, ROSE_BUSH, PEONY]
- minecraft:lapis_ores                 [LAPIS_ORE, DEEPSLATE_LAPIS_ORE]
- minecraft:sand                       [SAND, RED_SAND]
- minecraft:copper_ores                [COPPER_ORE, DEEPSLATE_COPPER_ORE]
+ minecraft:coal_ores                  [COAL_ORE, DEEPSLATE_COAL_ORE]
  minecraft:gold_ores                  [GOLD_ORE, DEEPSLATE_GOLD_ORE, NETHER_GOLD_ORE]
- minecraft:freeze_immune_wearables    [LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS, LEATHER_HORSE_ARMOR]
- minecraft:logs_that_burn             [OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, STRIPPED_OAK_LOG, STRIPPED_SPRUCE_LOG, STRIPPED_BIRCH_LOG, STRIPPED_JUNGLE_LOG, STRIPPED_ACACIA_LOG, STRIPPED_DARK_OAK_LOG, STRIPPED_OAK_WOOD, STRIPPED_SPRUCE_WOOD, STRIPPED_BIRCH_WOOD, STRIPPED_JUNGLE_WOOD, STRIPPED_ACACIA_WOOD, STRIPPED_DARK_OAK_WOOD, OAK_WOOD, SPRUCE_WOOD, BIRCH_WOOD, JUNGLE_WOOD, ACACIA_WOOD, DARK_OAK_WOOD]
- minecraft:fences                     [OAK_FENCE, SPRUCE_FENCE, BIRCH_FENCE, JUNGLE_FENCE, ACACIA_FENCE, DARK_OAK_FENCE, CRIMSON_FENCE, WARPED_FENCE, NETHER_BRICK_FENCE]
- minecraft:saplings                   [OAK_SAPLING, SPRUCE_SAPLING, BIRCH_SAPLING, JUNGLE_SAPLING, ACACIA_SAPLING, DARK_OAK_SAPLING, AZALEA, FLOWERING_AZALEA]
- minecraft:beds                       [WHITE_BED, ORANGE_BED, MAGENTA_BED, LIGHT_BLUE_BED, YELLOW_BED, LIME_BED, PINK_BED, GRAY_BED, LIGHT_GRAY_BED, CYAN_BED, PURPLE_BED, BLUE_BED, BROWN_BED, GREEN_BED, RED_BED, BLACK_BED]
- minecraft:iron_ores                  [IRON_ORE, DEEPSLATE_IRON_ORE]
- minecraft:oak_logs                   [OAK_LOG, STRIPPED_OAK_LOG, STRIPPED_OAK_WOOD, OAK_WOOD]
- minecraft:doors                      [IRON_DOOR, OAK_DOOR, SPRUCE_DOOR, BIRCH_DOOR, JUNGLE_DOOR, ACACIA_DOOR, DARK_OAK_DOOR, CRIMSON_DOOR, WARPED_DOOR]
- minecraft:cluster_max_harvestables   [WOODEN_PICKAXE, STONE_PICKAXE, GOLDEN_PICKAXE, IRON_PICKAXE, DIAMOND_PICKAXE, NETHERITE_PICKAXE]
+ minecraft:lapis_ores                 [LAPIS_ORE, DEEPSLATE_LAPIS_ORE]
+ minecraft:stone_crafting_materials   [COBBLED_DEEPSLATE, COBBLESTONE, BLACKSTONE]
+ minecraft:piglin_food                [PORKCHOP, COOKED_PORKCHOP]
+ minecraft:boats                      [OAK_BOAT, SPRUCE_BOAT, BIRCH_BOAT, JUNGLE_BOAT, ACACIA_BOAT, DARK_OAK_BOAT]
+ minecraft:tall_flowers               [SUNFLOWER, LILAC, ROSE_BUSH, PEONY]
 </pre>
 </div></div>
