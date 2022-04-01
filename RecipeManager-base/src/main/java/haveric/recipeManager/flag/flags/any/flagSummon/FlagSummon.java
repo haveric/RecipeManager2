@@ -213,6 +213,13 @@ public class FlagSummon extends Flag {
                 String.format(argFormat, "skeleton <type>", "set the skeleton type, values: " + RMCUtil.collectionToString(Arrays.asList(SkeletonType.values())).toLowerCase()) }, String.class);
         }
 
+        if (Version.has1_18Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "skeletonhorsetrapped", "sets if the skeleton horse is trapped. When a player goes near the trapped horse, lightning will strike and convert it into a skeleton horseman."),
+                    String.format(argFormat, "skeletonhorsetrappedtime <ticks>", "sets the trapped time (in ticks) of the skeleton horse. Trap time is increased every tick if skeletonhorsetrapped is also set. The horse will despawn when ticks is greater than 18000.")
+            }, String.class);
+        }
+
         description = ObjectArrays.concat(description, new String[] {
             String.format(argFormat, "spread <range>", "spawns entities spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)"),
             String.format(argFormat, "target", "entity targets crafter, that means monsters attack and animals follow and the rest do nothing"),
@@ -233,6 +240,11 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "villager <type>", "set the villager profession"),
             String.format(argFormatExtra, "", "Values: " + RMCUtil.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()),
         }, String.class);
+
+        if (Version.has1_18Support()) {
+            ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "vindicatorjohnny", "sets the johnny state of a vindicator.") }, String.class);
+        }
 
         if (Version.has1_17Support()) {
             description = ObjectArrays.concat(description, new String[]{

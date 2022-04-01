@@ -97,12 +97,15 @@ public class Customization implements Cloneable {
     private boolean shearedSheep = false;
     @SuppressWarnings("deprecation")
     private Skeleton.SkeletonType skeleton = null;
+    private boolean skeletonHorseTrapped = false;
+    private int skeletonHorseTrappedTicks = 0;
     private int spread = 0;
     private boolean target = false;
     private DyeColor tropicalFishColor = null;
     private TropicalFish.Pattern tropicalFishPattern = null;
     private DyeColor tropicalFishPatternColor = null;
     private Villager.Profession villager = null;
+    private boolean vindicatorJohnny = false;
     private boolean visualFire = false;
     private Integer wanderingTraderDespawnDelay = null;
     private boolean zombieVillager = false;
@@ -216,6 +219,12 @@ public class Customization implements Cloneable {
             glowSquidDarkTicksRemaining = c.glowSquidDarkTicksRemaining;
             goatScreaming = c.goatScreaming;
             visualFire = c.visualFire;
+        }
+
+        if (Version.has1_18Support()) {
+            skeletonHorseTrapped = c.skeletonHorseTrapped;
+            skeletonHorseTrappedTicks = c.skeletonHorseTrappedTicks;
+            vindicatorJohnny = c.vindicatorJohnny;
         }
     }
 
@@ -642,6 +651,19 @@ public class Customization implements Cloneable {
                 }
 
                 ent.setVisualFire(visualFire);
+            }
+
+            if (Version.has1_18Support()) {
+                if (ent instanceof SkeletonHorse) {
+                    SkeletonHorse skeletonHorse = (SkeletonHorse) ent;
+                    skeletonHorse.setTrapped(skeletonHorseTrapped);
+                    skeletonHorse.setTrapTime(skeletonHorseTrappedTicks);
+                }
+
+                if (ent instanceof Vindicator) {
+                    Vindicator vindicator = (Vindicator) ent;
+                    vindicator.setJohnny(vindicatorJohnny);
+                }
             }
 
             EntityEquipment eq = ent.getEquipment();
@@ -1471,6 +1493,24 @@ public class Customization implements Cloneable {
             goatScreaming = true;
         } else if (Version.has1_17Support() && lower.equals("visualfire")) {
             visualFire = true;
+        } else if (Version.has1_18Support() && lower.equals("skeletonhorsetrapped")) {
+            skeletonHorseTrapped = true;
+        } else if (Version.has1_18Support() && lower.equals("skeletonhorsetrappedticks")) {
+            lower = lower.substring("skeletonhorsetrappedticks".length()).trim();
+
+            try {
+                int ticksRemaining = Integer.parseInt(lower);
+
+                if (ticksRemaining >= 0) {
+                    skeletonHorseTrappedTicks = ticksRemaining;
+                } else {
+                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'skeletonhorsetrappedticks' argument with negative value: " + lower);
+                }
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'skeletonhorsetrappedticks' argument with invalid value number: " + lower);
+            }
+        } else if (Version.has1_18Support() && lower.equals("vindicatorjohnny")) {
+            vindicatorJohnny = true;
         } else {
             ErrorReporter.getInstance().warning("Flag " + flagType + " has unknown argument: " + lower);
         }
@@ -1596,6 +1636,12 @@ public class Customization implements Cloneable {
             toHash += "glowSquidDarkTicksRemaining: " + glowSquidDarkTicksRemaining;
             toHash += "goatScreaming: " + goatScreaming;
             toHash += "visualFire: " + visualFire;
+        }
+
+        if (Version.has1_18Support()) {
+            toHash += "skeletonHorseTrapped: " + skeletonHorseTrapped;
+            toHash += "skeletonHorseTrappedTicks: " + skeletonHorseTrappedTicks;
+            toHash += "vindicatorJohnny: " + vindicatorJohnny;
         }
 
         return toHash.hashCode();
