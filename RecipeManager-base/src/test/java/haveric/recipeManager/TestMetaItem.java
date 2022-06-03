@@ -327,6 +327,11 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     }
 
     @Override
+    public String getAsString() {
+        return null;
+    }
+
+    @Override
     public CustomItemTagContainer getCustomTagContainer() {
         return null;
     }
