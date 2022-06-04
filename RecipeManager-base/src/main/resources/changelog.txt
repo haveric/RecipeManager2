@@ -5,6 +5,7 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: `@Summon`: Added support for setting johnny state for vindicators with `vindicatorjohnny`
 * NEW: `@Summon`: Added `skeletonhorsetrapped` and `skeletonhorsetrappedticks <ticks>`
 * FIX: HTML Docs: Correct sorting of tags in name index
+* FIX: HTML Docs: Fix sorting of permissions in commands & permissions
 
 ### v2.28.0
 * NEW FLAG: `@AxolotlBucketItem <variant>`

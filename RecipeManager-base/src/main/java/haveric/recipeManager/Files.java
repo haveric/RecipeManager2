@@ -463,27 +463,54 @@ public class Files {
         s.append("</tr>");
 
         List<Permission> permissions = desc.getPermissions();
-        List<Permission> perms = new ArrayList<>(permissions.size() + FlagFactory.getInstance().getFlags().size());
+        List<Permission> perms = new ArrayList<>(permissions.size());
 
         perms.addAll(permissions);
+        printPermissions(s, perms, null, ".command.");
+        printPermissions(s, perms, ".command.", null);
 
-        perms.add(Bukkit.getPluginManager().getPermission(Perms.FLAG_PREFIX + "*"));
-
+        List<Permission> flagPerms = new ArrayList<>(FlagFactory.getInstance().getFlags().size() + 1);
+        flagPerms.add(Bukkit.getPluginManager().getPermission(Perms.FLAG_PREFIX + "*"));
         for (FlagDescriptor type : FlagFactory.getInstance().getFlags().values()) {
             if (type.hasBit(FlagBit.NO_SKIP_PERMISSION)) {
                 continue;
             }
 
-            perms.add(Bukkit.getPluginManager().getPermission(Perms.FLAG_PREFIX + type.getName()));
+            flagPerms.add(Bukkit.getPluginManager().getPermission(Perms.FLAG_PREFIX + type.getName()));
         }
+        printPermissions(s, flagPerms, null, null);
 
+        s.append(NL).append("</table>");
+        s.append(NL);
+        s.append(NL).append("For the flag permissions you can use the flag's aliases as well, I filtered them from this list because it would've become too long, but the permissions are there.");
+        s.append(NL).append("For example, <i>recipemanager.flag.modexp</i> and <i>recipemanager.flag.xp</i> both affect the same flag, the @modexp flag, since 'xp' is an alias for 'modexp'.");
+        s.append(NL);
+        s.append(NL);
+        s.append("</pre>");
+        s.append("</div>");
+        addNav(s, TITLE_COMMANDS_PERMISSIONS);
+        appendFooter(s);
+        saveAndLog(s, FILE_INFO_COMMANDS);
+    }
+
+    private void printPermissions(StringBuilder s, List<Permission> perms, String filter, String exclude) {
+        perms.sort(Comparator.comparing(Permission::getName));
         for (Permission p : perms) {
-            if (!p.getName().startsWith("recipemanager.")) {
+            String name = p.getName();
+            if (!name.startsWith("recipemanager.")) {
+                continue;
+            }
+
+            if (filter != null && !name.contains(filter)) {
+                continue;
+            }
+
+            if (exclude != null && name.contains(exclude)) {
                 continue;
             }
 
             s.append(NL).append("<tr>");
-            s.append("<td>").append(p.getName()).append("</td>");
+            s.append("<td>").append(name).append("</td>");
             s.append("<td>");
 
             switch (p.getDefault()) {
@@ -504,18 +531,6 @@ public class Files {
             s.append("<td>").append(p.getDescription()).append("</td>");
             s.append("</tr>");
         }
-
-        s.append(NL).append("</table>");
-        s.append(NL);
-        s.append(NL).append("For the flag permissions you can use the flag's aliases as well, I filtered them from this list because it would've become too long, but the permissions are there.");
-        s.append(NL).append("For example, <i>recipemanager.flag.modexp</i> and <i>recipemanager.flag.xp</i> both affect the same flag, the @modexp flag, since 'xp' is an alias for 'modexp'.");
-        s.append(NL);
-        s.append(NL);
-        s.append("</pre>");
-        s.append("</div>");
-        addNav(s, TITLE_COMMANDS_PERMISSIONS);
-        appendFooter(s);
-        saveAndLog(s, FILE_INFO_COMMANDS);
     }
 
     private void createNameIndex(boolean overwrite) {
