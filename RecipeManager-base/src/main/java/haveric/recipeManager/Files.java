@@ -809,7 +809,7 @@ public class Files {
         s.append(NL).append("<a class='footer__link' href='https://discordapp.com/invite/3JY9JC3'><img class='logo-discord' src='https://www.recipemanager.dev/img/logos/discord.png?v=1' alt='Discord'/></a>");
         s.append(NL).append("<a class='footer__link' href='https://github.com/haveric/RecipeManager2'><img class='logo-github' src='https://www.recipemanager.dev/img/logos/github-white.png?v=1' alt='Github'/></a>");
         s.append(NL).append("</div></div></footer>");
-        s.append(NL).append("</body>").append(NL).append("</html");
+        s.append(NL).append("</body>").append(NL).append("</html>");
     }
 
     private void saveAndLog(StringBuilder s, String file) {
