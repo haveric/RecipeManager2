@@ -786,10 +786,20 @@ public class Files {
     private void displayTags(StringBuilder s, String name, String tagType) {
         s.append(NL).append("<b>").append(name).append("</b>");
         Iterable<Tag<Material>> blockTags = Bukkit.getTags(tagType, Material.class);
+        Map<String, String> sortedTags = new TreeMap<>();
         for (Tag<Material> tag : blockTags) {
-            List<Material> materials = new ArrayList<>(tag.getValues());
+            Set<Material> tags = tag.getValues();
+            List<String> materials = new ArrayList<>();
+            for (Material material : tags) {
+                materials.add(material.getKey().getKey().toUpperCase());
+            }
+
             Collections.sort(materials);
-            s.append(NL).append(String.format(" %-36s %s", tag.getKey(), materials));
+            sortedTags.put(tag.getKey().toString(), materials.toString());
+        }
+
+        for (Map.Entry<String, String> entry : sortedTags.entrySet()) {
+            s.append(NL).append(String.format(" %-36s %s", entry.getKey(), entry.getValue()));
         }
     }
 
