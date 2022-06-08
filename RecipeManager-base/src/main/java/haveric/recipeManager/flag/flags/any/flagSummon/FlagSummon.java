@@ -256,6 +256,11 @@ public class FlagSummon extends Flag {
                 String.format(argFormat, "wanderingtraderdespawndelay <ticks>", "sets if the despawn delay (in ticks) of a wandering trader. If ticks is less than or equal to zero, the trader will not be despawned.") }, String.class);
         }
 
+        if (Version.has1_19Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "wardenanger <level>", "Sets the wardens anger level towards the player. Anger is an integer from 0 to 150. Once a Warden reaches 80 anger at a target it will actively pursue it.") }, String.class);
+        }
+
         if (!Version.has1_12Support()) {
             description = ObjectArrays.concat(description, new String[]{
                 String.format(argFormat, "zombievillager", "makes zombie a zombie villager, only works on zombies.") }, String.class);

@@ -109,6 +109,7 @@ public class Customization implements Cloneable {
     private boolean visualFire = false;
     private Integer wanderingTraderDespawnDelay = null;
     private boolean zombieVillager = false;
+    private Integer wardenAnger = null;
 
     public Customization(String newFlagType, EntityType newType) {
         flagType = newFlagType;
@@ -225,6 +226,10 @@ public class Customization implements Cloneable {
             skeletonHorseTrapped = c.skeletonHorseTrapped;
             skeletonHorseTrappedTicks = c.skeletonHorseTrappedTicks;
             vindicatorJohnny = c.vindicatorJohnny;
+        }
+
+        if (Version.has1_19Support()) {
+            wardenAnger = c.wardenAnger;
         }
     }
 
@@ -663,6 +668,13 @@ public class Customization implements Cloneable {
                 if (ent instanceof Vindicator) {
                     Vindicator vindicator = (Vindicator) ent;
                     vindicator.setJohnny(vindicatorJohnny);
+                }
+            }
+
+            if (Version.has1_19Support()) {
+                if (ent instanceof Warden && wardenAnger != null) {
+                    Warden warden = (Warden) ent;
+                    warden.setAnger(player, wardenAnger);
                 }
             }
 
@@ -1511,6 +1523,14 @@ public class Customization implements Cloneable {
             }
         } else if (Version.has1_18Support() && lower.equals("vindicatorjohnny")) {
             vindicatorJohnny = true;
+        } else if (Version.has1_19Support() && lower.equals("wardenanger")) {
+            lower = lower.substring("wardenanger".length()).trim();
+
+            try {
+                wardenAnger = Integer.parseInt(lower);
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'wardenanger' argument with invalid value number: " + lower);
+            }
         } else {
             ErrorReporter.getInstance().warning("Flag " + flagType + " has unknown argument: " + lower);
         }
@@ -1642,6 +1662,10 @@ public class Customization implements Cloneable {
             toHash += "skeletonHorseTrapped: " + skeletonHorseTrapped;
             toHash += "skeletonHorseTrappedTicks: " + skeletonHorseTrappedTicks;
             toHash += "vindicatorJohnny: " + vindicatorJohnny;
+        }
+
+        if (Version.has1_19Support()) {
+            toHash += "wardenAnger: " + wardenAnger;
         }
 
         return toHash.hashCode();

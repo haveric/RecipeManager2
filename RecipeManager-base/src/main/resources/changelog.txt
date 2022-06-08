@@ -4,6 +4,7 @@ This file will be automatically overwritten when a new version is installed.
 ### Coming Soon
 * NEW: Added 1.19 fuels and compost items
 * FIX: 1.13+ planks as fuel
+* NEW: `@Summon`: Added support for setting warden anger towards the player with `wardenanger <level>`
 * NEW: `@Summon`: Added support for setting johnny state for vindicators with `vindicatorjohnny`
 * NEW: `@Summon`: Added `skeletonhorsetrapped` and `skeletonhorsetrappedticks <ticks>`
 * FIX: HTML Docs: Correct sorting of tags in name index
