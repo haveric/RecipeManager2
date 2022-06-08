@@ -57,6 +57,8 @@ public class Customization implements Cloneable {
     private Integer freezeTicks = null;
     private Frog.Variant frogVariant = null;
     private Integer glowSquidDarkTicksRemaining = null;
+    private Boolean goatHasLeftHorn = null;
+    private Boolean goatHasRightHorn = null;
     private boolean goatScreaming = false;
     private boolean hasChest = false;
     private boolean hit = false;
@@ -231,6 +233,8 @@ public class Customization implements Cloneable {
 
         if (Version.has1_19Support()) {
             frogVariant = c.frogVariant;
+            goatHasLeftHorn = c.goatHasLeftHorn;
+            goatHasRightHorn = c.goatHasRightHorn;
             wardenAnger = c.wardenAnger;
         }
     }
@@ -677,6 +681,18 @@ public class Customization implements Cloneable {
                 if (ent instanceof Frog && frogVariant != null) {
                     Frog frog = (Frog) ent;
                     frog.setVariant(frogVariant);
+                }
+
+                if (ent instanceof Goat) {
+                    Goat goat = (Goat) ent;
+
+                    if (goatHasLeftHorn != null) {
+                        goat.setLeftHorn(goatHasLeftHorn);
+                    }
+
+                    if (goatHasRightHorn != null) {
+                        goat.setRightHorn(goatHasRightHorn);
+                    }
                 }
 
                 if (ent instanceof Warden && wardenAnger != null) {
@@ -1530,7 +1546,7 @@ public class Customization implements Cloneable {
             }
         } else if (Version.has1_18Support() && lower.equals("vindicatorjohnny")) {
             vindicatorJohnny = true;
-        } else if (Version.has1_19Support() && lower.equals("frog")) {
+        } else if (Version.has1_19Support() && lower.startsWith("frog")) {
             if (entityType != EntityType.FROG) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'frog' argument on non-frog entity!");
                 return false;
@@ -1543,7 +1559,15 @@ public class Customization implements Cloneable {
             if (frogVariant == null) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'frog' argument with invalid entityType: " + lower);
             }
-        } else if (Version.has1_19Support() && lower.equals("wardenanger")) {
+        } else if (Version.has1_19Support() && lower.startsWith("goathornleft")) {
+            lower = lower.substring("goathornleft".length()).trim();
+
+            goatHasLeftHorn = Boolean.parseBoolean(lower);
+        } else if (Version.has1_19Support() && lower.startsWith("goathornright")) {
+            lower = lower.substring("goathornright".length()).trim();
+
+            goatHasRightHorn = Boolean.parseBoolean(lower);
+        } else if (Version.has1_19Support() && lower.startsWith("wardenanger")) {
             lower = lower.substring("wardenanger".length()).trim();
 
             try {
@@ -1686,6 +1710,8 @@ public class Customization implements Cloneable {
 
         if (Version.has1_19Support()) {
             toHash += "frogVariant: " + frogVariant;
+            toHash += "goatHasLeftHorn: " + goatHasLeftHorn;
+            toHash += "goatHasRightHorn: " + goatHasRightHorn;
             toHash += "wardenAnger: " + wardenAnger;
         }
 

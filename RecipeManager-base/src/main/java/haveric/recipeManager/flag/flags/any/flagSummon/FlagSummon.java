@@ -128,6 +128,18 @@ public class FlagSummon extends Flag {
         if (Version.has1_17Support()) {
             description = ObjectArrays.concat(description, new String[]{
                     String.format(argFormat, "glowsquiddarkticksremaining <ticks>", "sets the number of dark ticks that a glow squid has remaining."),
+            }, String.class);
+        }
+
+        if (Version.has1_19Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "goathornleft <true or false>", "sets if the goat has a left horn or not."),
+                    String.format(argFormat, "goathornright <true or false>", "set if the goat has a right horn or not."),
+            }, String.class);
+        }
+
+        if (Version.has1_17Support()) {
+            description = ObjectArrays.concat(description, new String[]{
                     String.format(argFormat, "goatscreaming", "set the goat to be a screaming goat."),
             }, String.class);
         }
