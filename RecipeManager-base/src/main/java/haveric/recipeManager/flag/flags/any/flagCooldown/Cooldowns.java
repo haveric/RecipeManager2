@@ -3,7 +3,7 @@ package haveric.recipeManager.flag.flags.any.flagCooldown;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.settings.BaseSettings;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

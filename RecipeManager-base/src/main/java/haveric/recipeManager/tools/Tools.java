@@ -13,7 +13,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.item.ItemRecipe;
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.text.WordUtils;
 import org.bukkit.*;
 import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.enchantments.Enchantment;

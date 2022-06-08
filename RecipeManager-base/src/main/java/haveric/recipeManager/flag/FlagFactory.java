@@ -1,7 +1,7 @@
 package haveric.recipeManager.flag;
 
 import haveric.recipeManager.Perms;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;

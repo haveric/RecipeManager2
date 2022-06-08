@@ -10,7 +10,7 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.cooking.furnace.RMBaseFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.tools.Tools;
-import org.apache.commons.lang.WordUtils;
+import org.apache.commons.text.WordUtils;
 import org.bukkit.Material;
 
 import java.util.ArrayList;

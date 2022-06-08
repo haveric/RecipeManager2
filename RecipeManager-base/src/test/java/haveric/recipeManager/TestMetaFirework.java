@@ -1,7 +1,7 @@
 package haveric.recipeManager;
 
 import com.google.common.collect.ImmutableList;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Material;

@@ -9,7 +9,7 @@ import haveric.recipeManager.tools.Version;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.common.util.RMCUtil;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;

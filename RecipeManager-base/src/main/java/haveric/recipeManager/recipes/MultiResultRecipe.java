@@ -1,5 +1,7 @@
 package haveric.recipeManager.recipes;
 
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
@@ -7,9 +9,7 @@ import haveric.recipeManager.flag.flags.any.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.util.RMCUtil;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;

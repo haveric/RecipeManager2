@@ -11,7 +11,7 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.cooking.RMBaseCookingRecipe;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.bukkit.inventory.CookingRecipe;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;

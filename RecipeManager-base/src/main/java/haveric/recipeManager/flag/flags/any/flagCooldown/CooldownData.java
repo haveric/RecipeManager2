@@ -1,7 +1,7 @@
 package haveric.recipeManager.flag.flags.any.flagCooldown;
 
 import haveric.recipeManager.messages.MessageSender;
-import org.apache.commons.lang.mutable.MutableLong;
+import org.apache.commons.lang3.mutable.MutableLong;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.configuration.serialization.SerializableAs;
