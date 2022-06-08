@@ -326,6 +326,13 @@ public class Vanilla {
             addFuelRecipe(Material.OAK_DOOR, 10);
             addFuelRecipe(Material.SPRUCE_DOOR, 10);
 
+            addFuelRecipe(Material.ACACIA_PLANKS, 15);
+            addFuelRecipe(Material.BIRCH_PLANKS, 15);
+            addFuelRecipe(Material.DARK_OAK_PLANKS, 15);
+            addFuelRecipe(Material.JUNGLE_PLANKS, 15);
+            addFuelRecipe(Material.OAK_PLANKS, 15);
+            addFuelRecipe(Material.SPRUCE_PLANKS, 15);
+
             if (!Version.has1_15Support()) {
                 addFuelRecipe(Material.ACACIA_BOAT, 20);
                 addFuelRecipe(Material.BIRCH_BOAT, 20);
@@ -362,8 +369,9 @@ public class Vanilla {
         }
 
         if (Version.has1_15Support()) {
-            addFuelRecipe(Material.SCAFFOLDING, 20);
-
+            if (!Version.has1_19Support()) {
+                addFuelRecipe(Material.SCAFFOLDING, 20);
+            }
             addFuelRecipe(Material.ACACIA_BOAT, 60);
             addFuelRecipe(Material.BIRCH_BOAT, 60);
             addFuelRecipe(Material.DARK_OAK_BOAT, 60);
@@ -375,6 +383,38 @@ public class Vanilla {
         if (Version.has1_17Support()) {
             addFuelRecipe(Material.AZALEA, 5);
             addFuelRecipe(Material.FLOWERING_AZALEA, 5);
+        }
+
+        if (Version.has1_19Support()) {
+            addFuelRecipe(Material.MANGROVE_ROOTS, 15);
+            addFuelRecipe(Material.SCAFFOLDING, 50);
+
+            addFuelRecipe(Material.MANGROVE_BOAT, 60);
+            addFuelRecipe(Material.MANGROVE_BUTTON, 5);
+            addFuelRecipe(Material.MANGROVE_DOOR, 10);
+            addFuelRecipe(Material.MANGROVE_FENCE, 15);
+            addFuelRecipe(Material.MANGROVE_FENCE_GATE, 15);
+            addFuelRecipe(Material.MANGROVE_LOG, 15);
+            addFuelRecipe(Material.MANGROVE_PLANKS, 15);
+            addFuelRecipe(Material.MANGROVE_PRESSURE_PLATE, 15);
+            addFuelRecipe(Material.MANGROVE_SIGN, 10);
+            addFuelRecipe(Material.MANGROVE_SLAB, 7.5f);
+            addFuelRecipe(Material.MANGROVE_STAIRS, 15);
+            addFuelRecipe(Material.MANGROVE_TRAPDOOR, 15);
+            addFuelRecipe(Material.MANGROVE_WOOD, 15);
+
+            addFuelRecipe(Material.MANGROVE_PROPAGULE, 5); // sapling
+
+            addFuelRecipe(Material.STRIPPED_MANGROVE_LOG, 15);
+            addFuelRecipe(Material.STRIPPED_MANGROVE_WOOD, 15);
+
+            addFuelRecipe(Material.ACACIA_CHEST_BOAT, 60);
+            addFuelRecipe(Material.BIRCH_CHEST_BOAT, 60);
+            addFuelRecipe(Material.DARK_OAK_CHEST_BOAT, 60);
+            addFuelRecipe(Material.JUNGLE_CHEST_BOAT, 60);
+            addFuelRecipe(Material.MANGROVE_CHEST_BOAT, 60);
+            addFuelRecipe(Material.OAK_CHEST_BOAT, 60);
+            addFuelRecipe(Material.SPRUCE_CHEST_BOAT, 60);
         }
 
         // Index fuel recipes
@@ -506,6 +546,12 @@ public class Vanilla {
             addCompostRecipe(Material.SPORE_BLOSSOM, 65);
 
             addCompostRecipe(Material.FLOWERING_AZALEA, 85);
+        }
+
+        if (Version.has1_19Support()) {
+            addCompostRecipe(Material.MANGROVE_LEAVES, 30);
+            addCompostRecipe(Material.MANGROVE_PROPAGULE, 30);
+            addCompostRecipe(Material.MANGROVE_ROOTS, 30);
         }
     }
 

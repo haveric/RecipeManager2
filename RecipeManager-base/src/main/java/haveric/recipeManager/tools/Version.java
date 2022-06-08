@@ -15,7 +15,9 @@ public class Version {
     private static boolean spigotSupport = false;
 
     public static void init() {
-        if (supports1_18()) {
+        if (supports1_19()) {
+            supportVersion = "1.19";
+        } else if (supports1_18()) {
             supportVersion = "1.18";
         } else if (supports1_17()) {
             supportVersion = "1.17";
@@ -64,6 +66,20 @@ public class Version {
         return spigotSupport;
     }
 
+    private static boolean supports1_19() {
+        boolean supports;
+
+        try {
+            @SuppressWarnings("unused")
+            Material mangroveBoat = Material.MANGROVE_BOAT;
+            supports = true;
+        } catch (NoSuchFieldError e) {
+            supports = false;
+        }
+
+        return supports;
+    }
+
     private static boolean supports1_18() {
         boolean supports;
 
@@ -77,6 +93,7 @@ public class Version {
 
         return supports;
     }
+
     private static boolean supports1_17() {
         boolean supports;
 
@@ -225,11 +242,22 @@ public class Version {
         return supportVersion;
     }
 
+    public static boolean has1_19Support() {
+        boolean hasSupport = false;
+        String version = getVersion();
+
+        if (version.equals("1.19")) {
+            hasSupport = true;
+        }
+
+        return hasSupport;
+    }
+
     public static boolean has1_18Support() {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.18")) {
+        if (version.equals("1.19") || version.equals("1.18")) {
             hasSupport = true;
         }
 
@@ -240,7 +268,7 @@ public class Version {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.18") || version.equals("1.17")) {
+        if (version.equals("1.19") || version.equals("1.18") || version.equals("1.17")) {
             hasSupport = true;
         }
 
@@ -251,7 +279,7 @@ public class Version {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.18") || version.equals("1.17") || version.equals("1.16")) {
+        if (version.equals("1.19") || version.equals("1.18") || version.equals("1.17") || version.equals("1.16")) {
             hasSupport = true;
         }
 
@@ -262,7 +290,7 @@ public class Version {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.18") || version.equals("1.17") || version.equals("1.16") || version.equals("1.15")) {
+        if (version.equals("1.19") || version.equals("1.18") || version.equals("1.17") || version.equals("1.16") || version.equals("1.15")) {
             hasSupport = true;
         }
 
@@ -273,7 +301,7 @@ public class Version {
         boolean hasSupport = false;
         String version = getVersion();
 
-        if (version.equals("1.18") || version.equals("1.17") || version.equals("1.16") || version.equals("1.15") || version.equals("1.14")) {
+        if (version.equals("1.19") || version.equals("1.18") || version.equals("1.17") || version.equals("1.16") || version.equals("1.15") || version.equals("1.14")) {
             hasSupport = true;
         }
 
