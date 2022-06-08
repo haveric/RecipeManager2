@@ -116,9 +116,19 @@ public class FlagSummon extends Flag {
         if (Version.has1_17Support()) {
             description = ObjectArrays.concat(description, new String[]{
                     String.format(argFormat, "freezeticks <ticks>", "sets the entity's current freeze ticks (amount of ticks the entity has been in powdered snow)."),
+            }, String.class);
+        }
+
+        if (Version.has1_19Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "frog <variant>", "sets the frog variant, values: " + RMCUtil.collectionToString(Arrays.asList(Frog.Variant.values())).toLowerCase()),
+            }, String.class);
+        }
+
+        if (Version.has1_17Support()) {
+            description = ObjectArrays.concat(description, new String[]{
                     String.format(argFormat, "glowsquiddarkticksremaining <ticks>", "sets the number of dark ticks that a glow squid has remaining."),
                     String.format(argFormat, "goatscreaming", "set the goat to be a screaming goat."),
-
             }, String.class);
         }
 

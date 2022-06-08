@@ -55,6 +55,7 @@ public class Customization implements Cloneable {
     private UUID foxSecondTrustedPlayerUUID = null;
     private boolean foxSleeping = false;
     private Integer freezeTicks = null;
+    private Frog.Variant frogVariant = null;
     private Integer glowSquidDarkTicksRemaining = null;
     private boolean goatScreaming = false;
     private boolean hasChest = false;
@@ -108,8 +109,8 @@ public class Customization implements Cloneable {
     private boolean vindicatorJohnny = false;
     private boolean visualFire = false;
     private Integer wanderingTraderDespawnDelay = null;
-    private boolean zombieVillager = false;
     private Integer wardenAnger = null;
+    private boolean zombieVillager = false;
 
     public Customization(String newFlagType, EntityType newType) {
         flagType = newFlagType;
@@ -229,6 +230,7 @@ public class Customization implements Cloneable {
         }
 
         if (Version.has1_19Support()) {
+            frogVariant = c.frogVariant;
             wardenAnger = c.wardenAnger;
         }
     }
@@ -672,6 +674,11 @@ public class Customization implements Cloneable {
             }
 
             if (Version.has1_19Support()) {
+                if (ent instanceof Frog && frogVariant != null) {
+                    Frog frog = (Frog) ent;
+                    frog.setVariant(frogVariant);
+                }
+
                 if (ent instanceof Warden && wardenAnger != null) {
                     Warden warden = (Warden) ent;
                     warden.setAnger(player, wardenAnger);
@@ -1523,6 +1530,19 @@ public class Customization implements Cloneable {
             }
         } else if (Version.has1_18Support() && lower.equals("vindicatorjohnny")) {
             vindicatorJohnny = true;
+        } else if (Version.has1_19Support() && lower.equals("frog")) {
+            if (entityType != EntityType.FROG) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'frog' argument on non-frog entity!");
+                return false;
+            }
+
+            lower = lower.substring("frog".length()).trim();
+
+            frogVariant = RMCUtil.parseEnum(lower, Frog.Variant.values());
+
+            if (frogVariant == null) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'frog' argument with invalid entityType: " + lower);
+            }
         } else if (Version.has1_19Support() && lower.equals("wardenanger")) {
             lower = lower.substring("wardenanger".length()).trim();
 
@@ -1665,6 +1685,7 @@ public class Customization implements Cloneable {
         }
 
         if (Version.has1_19Support()) {
+            toHash += "frogVariant: " + frogVariant;
             toHash += "wardenAnger: " + wardenAnger;
         }
 
