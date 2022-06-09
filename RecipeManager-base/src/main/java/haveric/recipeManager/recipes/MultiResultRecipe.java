@@ -1,5 +1,6 @@
 package haveric.recipeManager.recipes;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
@@ -9,7 +10,6 @@ import haveric.recipeManager.flag.flags.any.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
@@ -86,7 +86,7 @@ public abstract class MultiResultRecipe extends BaseRecipe {
      *            result item, must not be null.
      */
     public void addResult(ItemStack result) {
-        Validate.notNull(result, "The 'result' argument must not be null!");
+        Preconditions.checkNotNull(result, "The 'result' argument must not be null!");
 
         if (result instanceof ItemResult) {
             results.add(((ItemResult) result).setRecipe(this));

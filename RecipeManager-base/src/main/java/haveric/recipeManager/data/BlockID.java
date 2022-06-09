@@ -1,7 +1,7 @@
 package haveric.recipeManager.data;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.common.data.AbstractBlockID;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -29,7 +29,7 @@ public class BlockID extends AbstractBlockID {
     }
 
     private void parseLocation(Location location) {
-        Validate.notNull(location, "location argument must not be null!");
+        Preconditions.checkNotNull(location, "location argument must not be null!");
 
         wid = location.getWorld().getUID();
         x = location.getBlockX();

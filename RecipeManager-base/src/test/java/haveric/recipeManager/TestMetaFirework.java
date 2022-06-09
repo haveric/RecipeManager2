@@ -1,7 +1,7 @@
 package haveric.recipeManager;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Material;
@@ -139,7 +139,7 @@ public class TestMetaFirework extends TestMetaItem implements FireworkMeta {
     }
 
     public void addEffect(FireworkEffect effect) {
-        Validate.notNull(effect, "Effect cannot be null");
+        Preconditions.checkNotNull(effect, "Effect cannot be null");
         if (this.effects == null) {
             this.effects = new ArrayList<>();
         }
@@ -147,7 +147,7 @@ public class TestMetaFirework extends TestMetaItem implements FireworkMeta {
     }
 
     public void addEffects(FireworkEffect...effects) {
-        Validate.notNull(effects, "Effects cannot be null");
+        Preconditions.checkNotNull(effects, "Effects cannot be null");
         if (effects.length == 0) {
             return;
         }
@@ -158,13 +158,13 @@ public class TestMetaFirework extends TestMetaItem implements FireworkMeta {
         }
 
         for (FireworkEffect effect : effects) {
-            Validate.notNull(effect, "Effect cannot be null");
+            Preconditions.checkNotNull(effect, "Effect cannot be null");
             list.add(effect);
         }
     }
 
     public void addEffects(Iterable<FireworkEffect> effects) {
-        Validate.notNull(effects, "Effects cannot be null");
+        Preconditions.checkNotNull(effects, "Effects cannot be null");
         safelyAddEffects(effects);
     }
 
@@ -193,8 +193,8 @@ public class TestMetaFirework extends TestMetaItem implements FireworkMeta {
     }
 
     public void setPower(int power) {
-        Validate.isTrue(power >= 0, "Power cannot be less than zero: ", power);
-        Validate.isTrue(power < 0x80, "Power cannot be more than 127: ", power);
+        Preconditions.checkArgument(power >= 0, "Power cannot be less than zero: ", power);
+        Preconditions.checkArgument(power < 0x80, "Power cannot be more than 127: ", power);
         this.power = power;
     }
 }

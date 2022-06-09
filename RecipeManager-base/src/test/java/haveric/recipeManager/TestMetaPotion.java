@@ -1,7 +1,7 @@
 package haveric.recipeManager;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -66,7 +66,7 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
 
     @Override
     public void setBasePotionData(PotionData data) {
-        Validate.notNull(data, "PotionData cannot be null");
+        Preconditions.checkNotNull(data, "PotionData cannot be null");
         this.type = data;
     }
 
@@ -87,7 +87,7 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
     }
 
     public boolean addCustomEffect(PotionEffect effect, boolean overwrite) {
-        Validate.notNull(effect, "Potion effect must not be null");
+        Preconditions.checkNotNull(effect, "Potion effect must not be null");
 
         int index = indexOfEffect(effect.getType());
         if (index != -1) {
@@ -111,7 +111,7 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
     }
 
     public boolean removeCustomEffect(PotionEffectType type) {
-        Validate.notNull(type, "Potion effect type must not be null");
+        Preconditions.checkNotNull(type, "Potion effect type must not be null");
 
         if (!hasCustomEffects()) {
             return false;
@@ -133,12 +133,12 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
     }
 
     public boolean hasCustomEffect(PotionEffectType type) {
-        Validate.notNull(type, "Potion effect type must not be null");
+        Preconditions.checkNotNull(type, "Potion effect type must not be null");
         return indexOfEffect(type) != -1;
     }
 
     public boolean setMainEffect(PotionEffectType type) {
-        Validate.notNull(type, "Potion effect type must not be null");
+        Preconditions.checkNotNull(type, "Potion effect type must not be null");
         int index = indexOfEffect(type);
         if (index == -1 || index == 0) {
             return false;

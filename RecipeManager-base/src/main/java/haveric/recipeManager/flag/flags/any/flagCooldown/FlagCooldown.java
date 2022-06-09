@@ -6,7 +6,6 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipe;
-import org.apache.commons.lang3.mutable.MutableLong;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -59,7 +58,7 @@ public class FlagCooldown extends Flag {
 
 
     private final UUID globalUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
-    private Map<UUID, MutableLong> cooldownTime;
+    private Map<UUID, Long> cooldownTime;
     public static Map<String, Integer> cooldownFlagCounter;
     private String cooldownFlagId = "";
 
@@ -133,7 +132,7 @@ public class FlagCooldown extends Flag {
             return -1;
         }
 
-        MutableLong get = cooldownTime.get(playerUUID);
+        Long get = cooldownTime.get(playerUUID);
         long time = (int) (System.currentTimeMillis() / 1000);
 
         if (get == null || time >= get.intValue()) {
@@ -200,7 +199,7 @@ public class FlagCooldown extends Flag {
             return true;
         }
 
-        MutableLong get = cooldownTime.get(playerUUID);
+        Long get = cooldownTime.get(playerUUID);
         if (get == null) {
             return false;
         }
@@ -338,14 +337,14 @@ public class FlagCooldown extends Flag {
             playerUUID = a.playerUUID();
         }
 
-        MutableLong get = cooldownTime.get(playerUUID);
+        Long get = cooldownTime.get(playerUUID);
         long diff = (System.currentTimeMillis() / 1000) + cooldown;
 
         if (get == null) {
-            get = new MutableLong(diff);
+            get = diff;
             cooldownTime.put(playerUUID, get);
         } else {
-            get.setValue(diff);
+            cooldownTime.put(playerUUID, diff);
         }
 
         CooldownData cooldownData = Cooldowns.get(cooldownFlagId);

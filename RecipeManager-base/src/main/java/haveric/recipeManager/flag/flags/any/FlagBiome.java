@@ -1,5 +1,6 @@
 package haveric.recipeManager.flag.flags.any;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
@@ -8,7 +9,6 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.tools.Version;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 
@@ -91,7 +91,7 @@ public class FlagBiome extends Flag {
     }
 
     public void setBiomes(EnumMap<Biome, Boolean> newBiomes) {
-        Validate.notNull(newBiomes, "The 'biomes' argument must not be null!");
+        Preconditions.checkNotNull(newBiomes, "The 'biomes' argument must not be null!");
 
         biomes = newBiomes;
     }

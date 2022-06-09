@@ -1,5 +1,6 @@
 package haveric.recipeManager.flag.flags.any;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
@@ -12,7 +13,6 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.tools.*;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.DyeColor;
 import org.bukkit.inventory.*;
 
@@ -271,8 +271,8 @@ public class FlagIngredientCondition extends Flag {
     }
     // TODO: Better handle conditions to allow multiple recipes per item:dur
     public void setIngredientConditions(ItemStack item, ConditionsIngredient cond) {
-        Validate.notNull(item, "item argument must not be null!");
-        Validate.notNull(cond, "cond argument must not be null!");
+        Preconditions.checkNotNull(item, "item argument must not be null!");
+        Preconditions.checkNotNull(cond, "cond argument must not be null!");
 
         conditions.add(cond);
     }

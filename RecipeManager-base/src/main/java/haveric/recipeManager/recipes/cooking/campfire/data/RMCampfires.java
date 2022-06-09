@@ -1,9 +1,9 @@
 package haveric.recipeManager.recipes.cooking.campfire.data;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.data.BlockID;
 import haveric.recipeManager.messages.MessageSender;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -43,7 +43,7 @@ public class RMCampfires {
     }
 
     public static boolean exists(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         return campfires.containsKey(id);
     }
@@ -53,7 +53,7 @@ public class RMCampfires {
     }
 
     public static void set(BlockID id, Campfire campfire) {
-        Validate.notNull(campfire, "campfire argument must not be null!");
+        Preconditions.checkNotNull(campfire, "campfire argument must not be null!");
 
         if (id == null) {
             id = BlockID.fromLocation(campfire.getLocation());
@@ -68,7 +68,7 @@ public class RMCampfires {
     }
 
     public static void add(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         campfires.put(id, new RMCampfireData());
     }
@@ -78,7 +78,7 @@ public class RMCampfires {
     }
 
     public static RMCampfireData get(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         RMCampfireData data = campfires.get(id);
 
@@ -91,18 +91,18 @@ public class RMCampfires {
     }
 
     public static RMCampfireData get(Location location) {
-        Validate.notNull(location, "location argument must not be null!");
+        Preconditions.checkNotNull(location, "location argument must not be null!");
 
         return get(BlockID.fromLocation(location));
     }
 
     public static void remove(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         campfires.remove(id);
     }
     public static void remove(Location location) {
-        Validate.notNull(location, "location argument must not be null!");
+        Preconditions.checkNotNull(location, "location argument must not be null!");
 
         remove(BlockID.fromLocation(location));
     }

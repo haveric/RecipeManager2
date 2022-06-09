@@ -1,7 +1,7 @@
 package haveric.recipeManager.flag;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.Perms;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -94,7 +94,7 @@ public class FlagFactory {
     }
 
     public FlagDescriptor getFlagByName(String name) {
-        Validate.notNull(name);
+        Preconditions.checkNotNull(name);
 
         if (name.startsWith("@")) {
             name = name.split("@")[1];

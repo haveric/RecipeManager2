@@ -13,7 +13,6 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.item.ItemRecipe;
-import org.apache.commons.text.WordUtils;
 import org.bukkit.*;
 import org.bukkit.FireworkEffect.Builder;
 import org.bukkit.enchantments.Enchantment;
@@ -99,7 +98,7 @@ public class Tools {
     }
 
     public static String parseAliasPrint(String name) {
-        return WordUtils.capitalize(name.toLowerCase().replace('_', ' ').trim());
+        return WordUtil.capitalize(name.toLowerCase().replace('_', ' ').trim());
     }
 
     public static String printLocation(Location l) {

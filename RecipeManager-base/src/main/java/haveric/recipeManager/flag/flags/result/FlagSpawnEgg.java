@@ -1,5 +1,6 @@
 package haveric.recipeManager.flag.flags.result;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
@@ -9,7 +10,6 @@ import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import haveric.recipeManager.tools.Version;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SpawnEggMeta;
@@ -62,7 +62,7 @@ public class FlagSpawnEgg extends Flag {
     }
 
     public void setEntityType(EntityType newEntityType) {
-        Validate.notNull(newEntityType, "The entity type argument can not be null!");
+        Preconditions.checkNotNull(newEntityType, "The entity type argument can not be null!");
 
         entityType = newEntityType;
     }

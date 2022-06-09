@@ -10,7 +10,7 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.cooking.furnace.RMBaseFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.tools.Tools;
-import org.apache.commons.text.WordUtils;
+import haveric.recipeManager.tools.WordUtil;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -206,6 +206,6 @@ public abstract class BaseRecipeParser {
     }
 
     private void setParseError(RMCRecipeType recipeType, String error) {
-        ErrorReporter.getInstance().error(WordUtils.capitalize(recipeType.name()) + " recipe " + error);
+        ErrorReporter.getInstance().error(WordUtil.capitalize(recipeType.name()) + " recipe " + error);
     }
 }

@@ -1,15 +1,15 @@
 package haveric.recipeManager.flag.conditions;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.common.RMCVanilla;
+import haveric.recipeManager.common.util.ParseBit;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
-import haveric.recipeManager.common.RMCVanilla;
-import haveric.recipeManager.common.util.ParseBit;
-import haveric.recipeManager.common.util.RMCUtil;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -778,9 +778,9 @@ public class Conditions implements Cloneable {
      *            minG to 255
      */
     public void setColor(int minR, int maxR, int minG, int maxG, int minB, int maxB) {
-        Validate.isTrue(maxR >= minR, "minR is bigger than maxR!");
-        Validate.isTrue(maxG >= minG, "minG is bigger than maxG!");
-        Validate.isTrue(maxB >= minB, "minB is bigger than maxB!");
+        Preconditions.checkArgument(maxR >= minR, "minR is bigger than maxR!");
+        Preconditions.checkArgument(maxG >= minG, "minG is bigger than maxG!");
+        Preconditions.checkArgument(maxB >= minB, "minB is bigger than maxB!");
 
         minColor = Color.fromRGB(minR, minG, minB);
         maxColor = Color.fromRGB(maxR, maxG, maxB);

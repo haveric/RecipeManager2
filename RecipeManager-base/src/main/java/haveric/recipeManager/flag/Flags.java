@@ -1,9 +1,9 @@
 package haveric.recipeManager.flag;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.args.Args;
-import org.apache.commons.lang3.Validate;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -97,7 +97,7 @@ public class Flags implements Cloneable {
      *            flag expression string like the ones in recipe files
      */
     public void parseFlag(String value, String fileName, int lineNum, int restrictedBit) {
-        Validate.notNull(value, "Input value must not be null!");
+        Preconditions.checkNotNull(value, "Input value must not be null!");
         value = value.trim();
 
         // check if it's really a flag because this is a public method

@@ -1,5 +1,6 @@
 package haveric.recipeManager.flag.flags.any;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeManager;
@@ -8,7 +9,6 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
@@ -83,7 +83,7 @@ public class FlagLaunchFirework extends Flag {
     }
 
     public void setFirework(FireworkMeta newFirework) {
-        Validate.notNull(newFirework);
+        Preconditions.checkNotNull(newFirework);
 
         firework = newFirework;
     }
@@ -157,7 +157,7 @@ public class FlagLaunchFirework extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        Validate.notNull(firework);
+        Preconditions.checkNotNull(firework);
 
         if (!a.hasLocation()) {
             return;

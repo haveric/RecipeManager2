@@ -1,9 +1,9 @@
 package haveric.recipeManager.recipes.cooking.furnace.data;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.data.BlockID;
 import haveric.recipeManager.messages.MessageSender;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -45,7 +45,7 @@ public class Furnaces {
     }
 
     public static boolean exists(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         return furnaces.containsKey(id);
     }
@@ -60,7 +60,7 @@ public class Furnaces {
     }
 
     public static void set(BlockID id, Furnace furnace) {
-        Validate.notNull(furnace, "furnace argument must not be null!");
+        Preconditions.checkNotNull(furnace, "furnace argument must not be null!");
 
         if (id == null) {
             id = BlockID.fromLocation(furnace.getLocation());
@@ -89,7 +89,7 @@ public class Furnaces {
      * @param id
      */
     public static void add(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         furnaces.put(id, new FurnaceData());
     }
@@ -104,7 +104,7 @@ public class Furnaces {
     }
 
     public static FurnaceData get(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         FurnaceData data = furnaces.get(id);
 
@@ -117,19 +117,19 @@ public class Furnaces {
     }
 
     public static FurnaceData get(Location location) {
-        Validate.notNull(location, "location argument must not be null!");
+        Preconditions.checkNotNull(location, "location argument must not be null!");
 
         return get(BlockID.fromLocation(location));
     }
 
     public static void remove(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         furnaces.remove(id);
     }
 
     public static void remove(Location location) {
-        Validate.notNull(location, "location argument must not be null!");
+        Preconditions.checkNotNull(location, "location argument must not be null!");
 
         remove(BlockID.fromLocation(location));
     }

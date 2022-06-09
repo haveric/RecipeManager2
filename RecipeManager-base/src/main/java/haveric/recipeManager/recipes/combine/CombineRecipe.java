@@ -15,7 +15,6 @@ import haveric.recipeManager.tools.RMBukkitTools;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
-import org.apache.commons.lang3.mutable.MutableInt;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -252,22 +251,23 @@ public class CombineRecipe extends BaseCombineRecipe {
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        Map<ItemStack, MutableInt> items = new HashMap<>();
+        Map<ItemStack, Integer> items = new HashMap<>();
 
         for (ItemStack item : ingredients) {
-            MutableInt i = items.get(item);
+            Integer i = items.get(item);
 
             if (i == null) {
-                i = new MutableInt();
+                i = 0;
                 items.put(item.clone(), i);
             }
 
-            i.add(item.getAmount());
+            i += item.getAmount();
+            items.put(item.clone(), i);
         }
 
-        for (Entry<ItemStack, MutableInt> e : items.entrySet()) {
+        for (Entry<ItemStack, Integer> e : items.entrySet()) {
             ItemStack item = e.getKey();
-            item.setAmount(e.getValue().intValue());
+            item.setAmount(e.getValue());
 
             String print = "";
             // TODO: Recipes can have ingredientcondition as well

@@ -1,11 +1,11 @@
 package haveric.recipeManager.flag.flags.any;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.common.util.RMCUtil;
-import org.apache.commons.lang3.Validate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,7 +100,7 @@ public class FlagItemLore extends Flag {
     }
 
     public void setDisplayLores(List<String> newLores) {
-        Validate.notNull(newLores, "The 'lore' argument must not be null!");
+        Preconditions.checkNotNull(newLores, "The 'lore' argument must not be null!");
 
         displayLores.clear();
 
@@ -118,7 +118,7 @@ public class FlagItemLore extends Flag {
     }
 
     public void setResultLores(List<String> newLores) {
-        Validate.notNull(newLores, "The 'lore' argument must not be null!");
+        Preconditions.checkNotNull(newLores, "The 'lore' argument must not be null!");
 
         resultLores.clear();
 

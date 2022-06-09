@@ -1,5 +1,6 @@
 package haveric.recipeManager.flag.flags.result;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
@@ -8,7 +9,6 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Version;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
@@ -104,7 +104,7 @@ public class FlagMonsterSpawner extends Flag {
     }
 
     public void setEntityType(EntityType newEntityType) {
-        Validate.notNull(newEntityType, "The entity type argument can not be null!");
+        Preconditions.checkNotNull(newEntityType, "The entity type argument can not be null!");
 
         entityType = newEntityType;
     }

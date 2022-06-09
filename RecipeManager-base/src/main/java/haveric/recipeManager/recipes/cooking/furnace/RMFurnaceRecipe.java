@@ -1,9 +1,11 @@
 package haveric.recipeManager.recipes.cooking.furnace;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.RMCVanilla;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
@@ -13,11 +15,9 @@ import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.tools.ToolsItem;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.FurnaceRecipe;
@@ -91,7 +91,7 @@ public class RMFurnaceRecipe extends SingleResultRecipe {
     }
 
     public void setFuel(ItemStack newFuel) {
-        Validate.notNull(newFuel);
+        Preconditions.checkNotNull(newFuel);
 
         if (newFuel instanceof ItemResult) {
             fuel = ((ItemResult) newFuel).setRecipe(this);

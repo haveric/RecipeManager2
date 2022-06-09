@@ -1,9 +1,9 @@
 package haveric.recipeManager.flag.flags.any.flagCooldown;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.settings.BaseSettings;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -38,7 +38,7 @@ public class Cooldowns {
     }
 
     public static CooldownData get(String cooldownFlagId) {
-        Validate.notNull(cooldownFlagId, "cooldownFlagId argument must not be null!");
+        Preconditions.checkNotNull(cooldownFlagId, "cooldownFlagId argument must not be null!");
 
         CooldownData data = cooldowns.get(cooldownFlagId);
 
@@ -51,7 +51,7 @@ public class Cooldowns {
     }
 
     public static void remove(String cooldownFlagId) {
-        Validate.notNull(cooldownFlagId, "cooldownFlagId argument must not be null!");
+        Preconditions.checkNotNull(cooldownFlagId, "cooldownFlagId argument must not be null!");
 
         cooldowns.remove(cooldownFlagId);
     }

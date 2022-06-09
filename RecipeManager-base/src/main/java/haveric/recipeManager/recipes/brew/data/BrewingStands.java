@@ -1,9 +1,9 @@
 package haveric.recipeManager.recipes.brew.data;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.data.BlockID;
 import haveric.recipeManager.messages.MessageSender;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
@@ -58,7 +58,7 @@ public class BrewingStands {
     }
 
     public static boolean exists(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         return brewingStands.containsKey(id);
     }
@@ -68,7 +68,7 @@ public class BrewingStands {
     }
 
     public static void set(BlockID id, BrewingStand brewingStand) {
-        Validate.notNull(brewingStand, "brewing stand argument must not be null!");
+        Preconditions.checkNotNull(brewingStand, "brewing stand argument must not be null!");
 
         if (id == null) {
             id = BlockID.fromLocation(brewingStand.getLocation());
@@ -89,7 +89,7 @@ public class BrewingStands {
     }
 
     public static void add(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         brewingStands.put(id, new BrewingStandData());
     }
@@ -99,7 +99,7 @@ public class BrewingStands {
     }
 
     public static BrewingStandData get(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         BrewingStandData data = brewingStands.get(id);
 
@@ -112,19 +112,19 @@ public class BrewingStands {
     }
 
     public static BrewingStandData get(Location location) {
-        Validate.notNull(location, "location argument must not be null!");
+        Preconditions.checkNotNull(location, "location argument must not be null!");
 
         return get(BlockID.fromLocation(location));
     }
 
     public static void remove(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         brewingStands.remove(id);
     }
 
     public static void remove(Location location) {
-        Validate.notNull(location, "location argument must not be null!");
+        Preconditions.checkNotNull(location, "location argument must not be null!");
 
         remove(BlockID.fromLocation(location));
     }

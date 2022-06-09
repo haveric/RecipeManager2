@@ -1,7 +1,7 @@
 package haveric.recipeManager;
 
+import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -85,7 +85,7 @@ public class TestMetaBook extends TestMetaItem implements BookMeta {
     }
 
     public String getPage(final int page) {
-        Validate.isTrue(isValidPage(page), "Invalid page number");
+        Preconditions.checkArgument(isValidPage(page), "Invalid page number");
         return pages.get(page - 1);
     }
 

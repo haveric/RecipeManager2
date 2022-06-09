@@ -1,8 +1,8 @@
 package haveric.recipeManager;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.data.BlockID;
 import haveric.recipeManager.tools.Version;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -29,7 +29,7 @@ public class Workbenches {
 
     public static void add(HumanEntity human, Location location) {
         if (human != null) {
-            Validate.notNull(location, "location argument must not be null!");
+            Preconditions.checkNotNull(location, "location argument must not be null!");
 
             workbenches.put(human.getName(), new BlockID(location));
         }

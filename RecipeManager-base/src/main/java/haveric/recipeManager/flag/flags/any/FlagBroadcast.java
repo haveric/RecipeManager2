@@ -1,10 +1,10 @@
 package haveric.recipeManager.flag.flags.any;
 
+import com.google.common.base.Preconditions;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.common.util.RMCUtil;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 
 public class FlagBroadcast extends Flag {
@@ -106,7 +106,7 @@ public class FlagBroadcast extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        Validate.notNull(message);
+        Preconditions.checkNotNull(message);
 
         String parsedMessage = RMCUtil.parseColors(a.parseVariables(message), false);
 

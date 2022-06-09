@@ -1,5 +1,6 @@
 package haveric.recipeManager.flag.flags.any.flagSummon;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
@@ -9,7 +10,6 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.tools.Version;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
 import org.bukkit.entity.Skeleton.SkeletonType;
@@ -339,7 +339,7 @@ public class FlagSummon extends Flag {
     }
 
     public void addSpawn(Customization newSpawn) {
-        Validate.notNull(newSpawn, "'spawn' can not be null!");
+        Preconditions.checkNotNull(newSpawn, "'spawn' can not be null!");
 
         spawn.add(newSpawn);
     }

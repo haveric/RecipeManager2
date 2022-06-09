@@ -1,5 +1,6 @@
 package haveric.recipeManager.recipes;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.util.RMCUtil;
@@ -12,7 +13,6 @@ import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.flag.flags.any.FlagItemName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -81,7 +81,7 @@ public abstract class SingleResultRecipe extends BaseRecipe {
     }
 
     public void setResult(ItemStack newResult) {
-        Validate.notNull(newResult);
+        Preconditions.checkNotNull(newResult);
 
         if (newResult instanceof ItemResult) {
             result = ((ItemResult) newResult).setRecipe(this);

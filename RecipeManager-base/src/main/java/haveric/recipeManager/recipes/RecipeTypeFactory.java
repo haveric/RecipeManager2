@@ -1,8 +1,8 @@
 package haveric.recipeManager.recipes;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeManager;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 
@@ -83,7 +83,7 @@ public class RecipeTypeFactory {
     }
 
     public BaseRecipe getRecipeType(String name) {
-        Validate.notNull(name);
+        Preconditions.checkNotNull(name);
 
         return recipes.get(name.toLowerCase().trim());
     }

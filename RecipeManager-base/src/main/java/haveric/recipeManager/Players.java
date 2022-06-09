@@ -1,7 +1,7 @@
 package haveric.recipeManager;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.commands.recipe.RecipePagination;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -27,13 +27,13 @@ public class Players {
     }
 
     public static void addJoined(Player player) {
-        Validate.notNull(player, "player can not be null");
+        Preconditions.checkNotNull(player, "player can not be null");
 
         joined.put(player.getName(), (int) System.currentTimeMillis() / 1000);
     }
 
     public static void removeJoined(Player player) {
-        Validate.notNull(player, "player can not be null");
+        Preconditions.checkNotNull(player, "player can not be null");
 
         joined.remove(player.getName());
     }

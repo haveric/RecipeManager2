@@ -1,10 +1,10 @@
 package haveric.recipeManager.flag.flags.any;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.*;
 import haveric.recipeManager.flag.args.Args;
-import org.apache.commons.lang3.Validate;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -111,7 +111,7 @@ public class FlagForPermission extends Flag {
      * @param flag
      */
     public void addFlag(String permission, Flag flag, int restrictedBit) {
-        Validate.notNull(flag, "Argument flag must not be null!");
+        Preconditions.checkNotNull(flag, "Argument flag must not be null!");
 
         if (canAdd(flag, restrictedBit)) {
             Map<String, Flag> flags = flagMap.computeIfAbsent(permission, k -> new LinkedHashMap<>());

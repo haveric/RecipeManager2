@@ -1,7 +1,6 @@
 package haveric.recipeManager.flag.flags.any.flagCooldown;
 
 import haveric.recipeManager.messages.MessageSender;
-import org.apache.commons.lang3.mutable.MutableLong;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.configuration.serialization.SerializableAs;
@@ -16,7 +15,7 @@ public class CooldownData implements ConfigurationSerializable {
         ConfigurationSerialization.registerClass(CooldownData.class, "RM_CooldownData");
     }
 
-    Map<UUID, MutableLong> cooldowns = new HashMap<>();
+    Map<UUID, Long> cooldowns = new HashMap<>();
 
     public static void init() { }
 
@@ -46,7 +45,7 @@ public class CooldownData implements ConfigurationSerializable {
                 if (cooldownTimestampInSeconds != null) {
                     try {
                         if (currentTimestampInSeconds < cooldownTimestampInSeconds) {
-                            cooldowns.put(uuid, new MutableLong(cooldownTimestampInSeconds));
+                            cooldowns.put(uuid, cooldownTimestampInSeconds);
                         }
                     } catch (NumberFormatException e) {
                         MessageSender.getInstance().error(null, e, null);
@@ -61,8 +60,8 @@ public class CooldownData implements ConfigurationSerializable {
         Map<String, Object> map = new HashMap<>(1);
 
         if (!cooldowns.isEmpty()) {
-            for (Map.Entry<UUID, MutableLong> entry : cooldowns.entrySet()) {
-                long cooldownTimestampInSeconds = entry.getValue().longValue();
+            for (Map.Entry<UUID, Long> entry : cooldowns.entrySet()) {
+                long cooldownTimestampInSeconds = entry.getValue();
 
                 if (currentTimestampInSeconds < cooldownTimestampInSeconds) {
                     map.put(entry.getKey().toString(), cooldownTimestampInSeconds);
@@ -85,16 +84,16 @@ public class CooldownData implements ConfigurationSerializable {
         return cooldowns.size() > 0;
     }
 
-    public Map<UUID, MutableLong> getCooldowns() {
+    public Map<UUID, Long> getCooldowns() {
         return cooldowns;
     }
 
-    public void setCooldowns(Map<UUID, MutableLong> cooldowns) {
+    public void setCooldowns(Map<UUID, Long> cooldowns) {
         this.cooldowns = cooldowns;
     }
 
     public void setCooldown(UUID uuid, long cooldownTimestamp) {
-        cooldowns.put(uuid, new MutableLong(cooldownTimestamp));
+        cooldowns.put(uuid, cooldownTimestamp);
         Cooldowns.update();
     }
 }

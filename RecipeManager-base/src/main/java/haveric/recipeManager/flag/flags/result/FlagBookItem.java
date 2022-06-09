@@ -1,5 +1,6 @@
 package haveric.recipeManager.flag.flags.result;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
@@ -9,7 +10,6 @@ import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import haveric.recipeManager.tools.Version;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -128,7 +128,7 @@ public class FlagBookItem extends Flag {
     }
 
     public void setPages(List<String> newPages) {
-        Validate.notNull(newPages, "The 'pages' argument must not be null!");
+        Preconditions.checkNotNull(newPages, "The 'pages' argument must not be null!");
 
         pages.clear();
 

@@ -1,9 +1,9 @@
 package haveric.recipeManager.recipes.compost.data;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.data.BlockID;
 import haveric.recipeManager.messages.MessageSender;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -45,7 +45,7 @@ public class Composters {
     }
 
     public static boolean exists(BlockID id) {
-        Validate.notNull(id, "id argument must not be null");
+        Preconditions.checkNotNull(id, "id argument must not be null");
 
         return composters.containsKey(id);
     }
@@ -55,8 +55,8 @@ public class Composters {
     }
 
     public static void set(BlockID id, Block composter) {
-        Validate.notNull(composter, "composter argument must not be null!");
-        Validate.isTrue(composter.getType() == Material.COMPOSTER, "composter argument must be a composter!");
+        Preconditions.checkNotNull(composter, "composter argument must not be null!");
+        Preconditions.checkArgument(composter.getType() == Material.COMPOSTER, "composter argument must be a composter!");
 
         if (id == null) {
             id = BlockID.fromLocation(composter.getLocation());
@@ -70,7 +70,7 @@ public class Composters {
     }
 
     public static void add(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         composters.put(id, new ComposterData());
     }
@@ -80,7 +80,7 @@ public class Composters {
     }
 
     public static ComposterData get(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         ComposterData data = composters.get(id);
 
@@ -93,19 +93,19 @@ public class Composters {
     }
 
     public static ComposterData get(Location location) {
-        Validate.notNull(location, "location argument must not be null!");
+        Preconditions.checkNotNull(location, "location argument must not be null!");
 
         return get(BlockID.fromLocation(location));
     }
 
     public static void remove(BlockID id) {
-        Validate.notNull(id, "id argument must not be null!");
+        Preconditions.checkNotNull(id, "id argument must not be null!");
 
         composters.remove(id);
     }
 
     public static void remove(Location location) {
-        Validate.notNull(location, "location argument must not be null!");
+        Preconditions.checkNotNull(location, "location argument must not be null!");
 
         remove(BlockID.fromLocation(location));
     }

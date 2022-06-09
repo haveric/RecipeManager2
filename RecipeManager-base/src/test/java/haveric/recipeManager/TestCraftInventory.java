@@ -1,6 +1,6 @@
 package haveric.recipeManager;
 
-import org.apache.commons.lang3.Validate;
+import com.google.common.base.Preconditions;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -52,7 +52,10 @@ public class TestCraftInventory implements Inventory {
 
     @Override
     public HashMap<Integer, ItemStack> addItem(ItemStack... items) throws IllegalArgumentException {
-        Validate.noNullElements(items, "Item cannot be null");
+        for (ItemStack item : items) {
+            Preconditions.checkNotNull(item, "Item cannot be null");
+        }
+
         HashMap<Integer, ItemStack> leftover = new HashMap<>();
 
         for (int i = 0; i < items.length; i++) {
@@ -113,7 +116,7 @@ public class TestCraftInventory implements Inventory {
 
     @Override
     public HashMap<Integer, ItemStack> removeItem(ItemStack... items) throws IllegalArgumentException {
-        Validate.notNull(items, "Items cannot be null");
+        Preconditions.checkNotNull(items, "Items cannot be null");
         HashMap<Integer, ItemStack> leftover = new HashMap<>();
 
         // TODO: optimization
@@ -176,7 +179,7 @@ public class TestCraftInventory implements Inventory {
     }
 
     public boolean contains(Material material) {
-        Validate.notNull(material, "Material cannot be null");
+        Preconditions.checkNotNull(material, "Material cannot be null");
         for (ItemStack item : getStorageContents()) {
             if (item != null && item.getType() == material) {
                 return true;
@@ -198,7 +201,7 @@ public class TestCraftInventory implements Inventory {
     }
 
     public boolean contains(Material material, int amount) {
-        Validate.notNull(material, "Material cannot be null");
+        Preconditions.checkNotNull(material, "Material cannot be null");
         if (amount <= 0) {
             return true;
         }
@@ -243,7 +246,7 @@ public class TestCraftInventory implements Inventory {
     }
 
     public HashMap<Integer, ItemStack> all(Material material) {
-        Validate.notNull(material, "Material cannot be null");
+        Preconditions.checkNotNull(material, "Material cannot be null");
         HashMap<Integer, ItemStack> slots = new HashMap<>();
 
         ItemStack[] inventory = getStorageContents();
@@ -270,7 +273,7 @@ public class TestCraftInventory implements Inventory {
     }
 
     public int first(Material material) {
-        Validate.notNull(material, "Material cannot be null");
+        Preconditions.checkNotNull(material, "Material cannot be null");
         ItemStack[] inventory = getStorageContents();
         for (int i = 0; i < inventory.length; i++) {
             ItemStack item = inventory[i];
@@ -316,7 +319,7 @@ public class TestCraftInventory implements Inventory {
     }
 
     public int firstPartial(Material material) {
-        Validate.notNull(material, "Material cannot be null");
+        Preconditions.checkNotNull(material, "Material cannot be null");
         ItemStack[] inventory = getStorageContents();
         for (int i = 0; i < inventory.length; i++) {
             ItemStack item = inventory[i];
@@ -343,7 +346,7 @@ public class TestCraftInventory implements Inventory {
     }
 
     public void remove(Material material) {
-        Validate.notNull(material, "Material cannot be null");
+        Preconditions.checkNotNull(material, "Material cannot be null");
         ItemStack[] items = getStorageContents();
         for (int i = 0; i < items.length; i++) {
             if (items[i] != null && items[i].getType()== material) {

@@ -1,5 +1,6 @@
 package haveric.recipeManager.flag.flags.result;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
@@ -10,7 +11,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import haveric.recipeManager.tools.Version;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.FireworkEffect;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -99,7 +99,7 @@ public class FlagFireworkItem extends Flag {
     }
 
     public void setEffects(List<FireworkEffect> newEffects) {
-        Validate.notNull(newEffects, "The 'effects' argument must not be null!");
+        Preconditions.checkNotNull(newEffects, "The 'effects' argument must not be null!");
 
         effects = newEffects;
     }

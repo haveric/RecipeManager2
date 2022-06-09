@@ -1,6 +1,6 @@
 package haveric.recipeManager;
 
-import org.apache.commons.lang3.Validate;
+import com.google.common.base.Preconditions;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFactory;
@@ -14,7 +14,7 @@ public class TestItemFactory implements ItemFactory {
 
     @Override
     public ItemMeta getItemMeta(Material material) {
-        Validate.notNull(material, "Material cannot be null");
+        Preconditions.checkNotNull(material, "Material cannot be null");
         return getItemMeta(material, null);
     }
 
@@ -265,13 +265,13 @@ public class TestItemFactory implements ItemFactory {
 
     @Override
     public ItemMeta asMetaFor(ItemMeta meta, ItemStack stack) throws IllegalArgumentException {
-        Validate.notNull(stack, "Stack cannot be null");
+        Preconditions.checkNotNull(stack, "Stack cannot be null");
         return asMetaFor(meta, stack.getType());
     }
 
     @Override
     public ItemMeta asMetaFor(ItemMeta meta, Material material) throws IllegalArgumentException {
-        Validate.notNull(material, "Material cannot be null");
+        Preconditions.checkNotNull(material, "Material cannot be null");
         if (!(meta instanceof TestMetaItem)) {
             throw new IllegalArgumentException("Meta of " + (meta != null ? meta.getClass().toString() : "null") + " not created by " + TestItemFactory.class.getName());
         }

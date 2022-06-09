@@ -1,5 +1,6 @@
 package haveric.recipeManager.flag.flags.result;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeBooks;
 import haveric.recipeManager.data.RecipeBook;
@@ -7,7 +8,6 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Material;
 
 import java.util.List;
@@ -65,7 +65,7 @@ public class FlagGetRecipeBook extends Flag {
     }
 
     public void setBookID(String id) {
-        Validate.notNull(id, "The 'id' argument must not be null!");
+        Preconditions.checkNotNull(id, "The 'id' argument must not be null!");
         bookID = id;
     }
 

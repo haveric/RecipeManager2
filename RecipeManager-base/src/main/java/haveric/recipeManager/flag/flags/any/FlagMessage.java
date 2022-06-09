@@ -1,10 +1,10 @@
 package haveric.recipeManager.flag.flags.any;
 
+import com.google.common.base.Preconditions;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.common.util.RMCUtil;
-import org.apache.commons.lang3.Validate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +119,7 @@ public class FlagMessage extends Flag {
 
     @Override
     public void onCrafted(Args a) {
-        Validate.notNull(messages);
+        Preconditions.checkNotNull(messages);
 
         for (String s : messages) {
             a.addCustomEffect(a.parseVariables(s));

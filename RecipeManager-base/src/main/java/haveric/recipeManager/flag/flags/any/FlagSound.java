@@ -1,14 +1,13 @@
 package haveric.recipeManager.flag.flags.any;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Location;
 import org.bukkit.Sound;
-
-import haveric.recipeManager.Files;
 
 public class FlagSound extends Flag {
 
@@ -73,7 +72,7 @@ public class FlagSound extends Flag {
     }
 
     public void setSound(Sound newSound) {
-        Validate.notNull(newSound, "The sound argument can not be null!");
+        Preconditions.checkNotNull(newSound, "The sound argument can not be null!");
 
         sound = newSound;
     }

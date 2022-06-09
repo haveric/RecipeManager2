@@ -1,12 +1,12 @@
 package haveric.recipeManager.flag;
 
+import com.google.common.base.Preconditions;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Perms;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -267,7 +267,7 @@ public abstract class Flag implements Cloneable {
     }
 
     public final boolean validateParse(String value, int restrictedBit) {
-        Validate.notNull(getFlagType(), "This can't be used on a blank flag!");
+        Preconditions.checkNotNull(getFlagType(), "This can't be used on a blank flag!");
 
         FlagDescriptor desc = FlagFactory.getInstance().getFlagByName(getFlagType());
         if (!desc.hasBit(FlagBit.NO_VALUE_REQUIRED) && value == null) {

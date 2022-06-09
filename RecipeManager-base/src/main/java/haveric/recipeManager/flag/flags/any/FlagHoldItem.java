@@ -1,5 +1,6 @@
 package haveric.recipeManager.flag.flags.any;
 
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
@@ -14,7 +15,6 @@ import haveric.recipeManager.flag.conditions.ConditionsHold.ConditionsSlot;
 import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
-import org.apache.commons.lang3.Validate;
 import org.bukkit.DyeColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -250,8 +250,8 @@ public class FlagHoldItem extends Flag {
     }
 
     public void setConditions(ItemStack item, ConditionsHold cond) {
-        Validate.notNull(item, "item argument must not be null!");
-        Validate.notNull(cond, "cond argument must not be null!");
+        Preconditions.checkNotNull(item, "item argument must not be null!");
+        Preconditions.checkNotNull(cond, "cond argument must not be null!");
 
         String conditionIdentifier = Tools.convertItemToStringId(item) + "-" + cond.hashCode();
         conditions.put(conditionIdentifier, cond);
