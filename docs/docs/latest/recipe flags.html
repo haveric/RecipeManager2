@@ -2703,7 +2703,10 @@ title: Recipe Flags
       foxsecondtrustedplayer &lt;uuid or player&gt; = set the fox's second trusted player. If set to 'player', the crafter will be used.
       foxsleeping                = set the fox to be sleeping
       freezeticks &lt;ticks&gt;        = sets the entity's current freeze ticks (amount of ticks the entity has been in powdered snow).
+      frog &lt;variant&gt;             = sets the frog variant, values: temperate, warm, cold
       glowsquiddarkticksremaining &lt;ticks&gt; = sets the number of dark ticks that a glow squid has remaining.
+      goathornleft &lt;true or false&gt; = sets if the goat has a left horn or not.
+      goathornright &lt;true or false&gt; = set if the goat has a right horn or not.
       goatscreaming              = set the goat to be a screaming goat.
       hand &lt;item&gt; [drop%]        = equip an item on the entity's main hand with optional drop chance; for enderman it only uses material and data from the item.
       head &lt;item&gt; [drop%]        = equip an item on the entity's head with optional drop chance.
@@ -2742,6 +2745,8 @@ title: Recipe Flags
       rabbit &lt;type&gt;              = set the rabbit type, values: brown, white, black, black_and_white, gold, salt_and_pepper, the_killer_bunny
       saddle [mount]             = adds saddle on entity (forces animal to be adult), only works for pig and horse, optionally you can specify 'mount' to make crafter mount entity.
       shearedsheep               = sets the sheep as sheared, only works for sheep.
+      skeletonhorsetrapped       = sets if the skeleton horse is trapped. When a player goes near the trapped horse, lightning will strike and convert it into a skeleton horseman.
+      skeletonhorsetrappedtime &lt;ticks&gt; = sets the trapped time (in ticks) of the skeleton horse. Trap time is increased every tick if skeletonhorsetrapped is also set. The horse will despawn when ticks is greater than 18000.
       spread &lt;range&gt;             = spawns entities spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)
       target                     = entity targets crafter, that means monsters attack and animals follow and the rest do nothing
       tropicalfishcolor &lt;dye&gt;    = sets the tropical fish's body color.
@@ -2754,6 +2759,7 @@ title: Recipe Flags
                                      Values: none, armorer, butcher, cartographer, cleric, farmer, fisherman, fletcher, leatherworker, librarian, mason, nitwit, shepherd, toolsmith, weaponsmith
       visualfire                 = sets if the entity has visual fire (it will always appear to be on fire).
       wanderingtraderdespawndelay &lt;ticks&gt; = sets if the despawn delay (in ticks) of a wandering trader. If ticks is less than or equal to zero, the trader will not be despawned.
+      wardenanger &lt;level&gt;        = Sets the wardens anger level towards the player. Anger is an integer from 0 to 150. Once a Warden reaches 80 anger at a target it will actively pursue it.
 
     These arguments can be used in any order and they're all optional.
 </span>

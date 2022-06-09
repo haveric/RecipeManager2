@@ -1,5 +1,19 @@
 ## Change log
 
+### v2.29.0
+* REMOVED Enchantment alias support. These have been outdated for a while and no longer are valid
+  * If you're using any aliases, you will need to update them to match the enchantment names in `name index.html#enchantment`
+  * You can safely delete `enchant aliases.yml` within your RecipeManager folder after updating any references in your recipes
+* NEW: Added 1.19 fuels and compost items
+* FIX: 1.13+ planks as fuel
+* NEW: `@Summon`: Added `wardenanger <level>` for setting warden's anger towards the player
+* NEW: `@Summon`: Added `frog <variant>` to set the frog's variant type
+* NEW: `@Summon`: Added `goathornleft <true or false>` and `goathornright <true or false>` to set the goat's horns
+* NEW: `@Summon`: Added `vindicatorjohnny` for setting johnny state of vindicators
+* NEW: `@Summon`: Added `skeletonhorsetrapped` and `skeletonhorsetrappedticks <ticks>`
+* FIX: HTML Docs: Correct sorting of tags in name index
+* FIX: HTML Docs: Fix sorting of permissions in commands & permissions
+
 ### v2.28.0
 * NEW FLAG: `@AxolotlBucketItem <variant>`
 * NEW FLAG: `@StoreEnchantment`: Similar to `@ApplyEnchantment`, but for storing enchantments in enchanted books
