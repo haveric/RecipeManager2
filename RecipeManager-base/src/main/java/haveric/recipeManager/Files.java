@@ -1,13 +1,13 @@
 package haveric.recipeManager;
 
 import com.google.common.collect.Sets;
-import com.google.common.html.HtmlEscapers;
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagDescriptor;
 import haveric.recipeManager.flag.FlagFactory;
 import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.tools.HtmlEscaper;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.*;
@@ -304,7 +304,7 @@ public class Files {
 
             if (args != null) {
                 for (String a : args) {
-                    s.append(NL).append("<h3 class='doc-section__title'>").append(HtmlEscapers.htmlEscaper().escape(a.replace("{flag}", flag.getNameDisplay()))).append("</h3>");
+                    s.append(NL).append("<h3 class='doc-section__title'>").append(HtmlEscaper.htmlEscaper().escape(a.replace("{flag}", flag.getNameDisplay()))).append("</h3>");
                 }
             }
             s.append(NL).append("<pre>");
@@ -335,7 +335,7 @@ public class Files {
                     if (d.contains("<a href")) {
                         s.append(d);
                     } else {
-                        s.append(HtmlEscapers.htmlEscaper().escape(d));
+                        s.append(HtmlEscaper.htmlEscaper().escape(d));
                     }
                 }
             }
@@ -349,7 +349,7 @@ public class Files {
                 s.append(NL).append(NL).append("    <b>Examples:</b>");
 
                 for (String e : ex) {
-                    s.append(NL).append("      ").append(HtmlEscapers.htmlEscaper().escape(e.replace("{flag}", flag.getNameDisplay())));
+                    s.append(NL).append("      ").append(HtmlEscaper.htmlEscaper().escape(e.replace("{flag}", flag.getNameDisplay())));
                 }
             }
 
@@ -441,11 +441,11 @@ public class Files {
 
             s.append(NL).append("<tr>");
             s.append("<td class='command'><b>");
-            s.append(HtmlEscapers.htmlEscaper().escape(usage)).append("</b><span class='command__text'>");
+            s.append(HtmlEscaper.htmlEscaper().escape(usage)).append("</b><span class='command__text'>");
             s.append("<br>Permission: ").append(permission);
             s.append("<br>Aliases: ").append(aliasesString);
             s.append("</span></td>");
-            s.append("<td>").append(HtmlEscapers.htmlEscaper().escape(info)).append("</td>");
+            s.append("<td>").append(HtmlEscaper.htmlEscaper().escape(info)).append("</td>");
             s.append("</tr>");
         }
 
