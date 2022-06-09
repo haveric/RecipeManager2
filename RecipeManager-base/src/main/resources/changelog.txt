@@ -2,6 +2,9 @@
 This file will be automatically overwritten when a new version is installed.
 
 ### Coming Soon
+* REMOVED Enchantment alias support. These have been outdated for a while and no longer are valid
+    * If you're using any aliases, you will need to update them to match the enchantment names in `name index.html#enchantment`
+    * You can safely delete `enchant aliases.yml` within your RecipeManager folder after updating any references in your recipes
 * NEW: Added 1.19 fuels and compost items
 * FIX: 1.13+ planks as fuel
 * NEW: `@Summon`: Added `wardenanger <level>` for setting warden's anger towards the player

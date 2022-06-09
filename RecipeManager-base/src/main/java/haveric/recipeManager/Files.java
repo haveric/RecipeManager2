@@ -42,7 +42,6 @@ public class Files {
     public static final String LASTCHANGED_CHOICE_ALIASES = "2.17.0";
     public static final String LASTCHANGED_ITEM_DATAS = "2.7";
     public static final String LASTCHANGED_ITEM_ALIASES = "2.28.0";
-    public static final String LASTCHANGED_ENCHANT_ALIASES = "2.15.0";
 
     public static final String FILE_CONFIG = "config.yml";
     public static final String FILE_MESSAGES = "messages.yml";
@@ -50,7 +49,6 @@ public class Files {
     public static final String FILE_CHOICE_ALIASES = "choice aliases.yml";
     public static final String FILE_ITEM_DATAS = "item datas.yml";
     public static final String FILE_ITEM_ALIASES = "item aliases.yml";
-    public static final String FILE_ENCHANT_ALIASES = "enchant aliases.yml";
 
     public static final String FILE_USED_VERSION = "used.version";
     public static final String FILE_CHANGELOG = "changelog.txt";
@@ -606,7 +604,7 @@ public class Files {
         s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "enchantment", "ENCHANTMENTS LIST", "enchantments/Enchantment", "Enchantment");
         if (Version.has1_13Support()) {
-            s.append(NL).append(String.format("<b> %-26s %-26s %-24s %-12s %s</b>", "Key", "Name", "Alias", "Item type", "Level range"));
+            s.append(NL).append(String.format("<b> %-26s %-12s %s</b>", "Key", "Item type", "Level range"));
 
             List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
 
@@ -621,10 +619,10 @@ public class Files {
                 } else {
                     targetString = target.toString().toLowerCase();
                 }
-                s.append(NL).append(String.format(" %-26s %-26s %-24s %-14s %s", e.getKey().getKey(), e.getName(), RecipeManager.getSettings().getEnchantPrint(e), targetString, e.getStartLevel() + " to " + e.getMaxLevel()));
+                s.append(NL).append(String.format(" %-26s %-14s %s", e.getKey().getKey(), targetString, e.getStartLevel() + " to " + e.getMaxLevel()));
             }
         } else { // Key didn't exist yet in 1.12
-            s.append(NL).append(String.format(" %-26s %-24s %-14s %s", "Name", "Alias", "Item type", "Level range"));
+            s.append(NL).append(String.format(" %-26s %-14s %s", "Name", "Item type", "Level range"));
 
             List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
 
@@ -640,7 +638,7 @@ public class Files {
                     targetString = target.toString().toLowerCase();
                 }
 
-                s.append(NL).append(String.format(" %-26s %-24s %-12s %s", e.getName(), RecipeManager.getSettings().getEnchantPrint(e), targetString, e.getStartLevel() + " to " + e.getMaxLevel()));
+                s.append(NL).append(String.format(" %-26s %-12s %s", e.getName(), targetString, e.getStartLevel() + " to " + e.getMaxLevel()));
             }
         }
 

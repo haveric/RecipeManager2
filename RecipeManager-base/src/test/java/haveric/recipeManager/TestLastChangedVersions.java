@@ -64,13 +64,4 @@ public class TestLastChangedVersions {
 
         assertEquals(version, Files.LASTCHANGED_ITEM_ALIASES);
     }
-
-    @Test
-    public void testEnchantAliasesVersion() {
-        File pluginFile = new File(originalResourcesPath + "enchant aliases.yml");
-        YamlConfiguration yamlConfig = YamlConfiguration.loadConfiguration(pluginFile);
-        String version = yamlConfig.getString("lastchanged");
-
-        assertEquals(version, Files.LASTCHANGED_ENCHANT_ALIASES);
-    }
 }

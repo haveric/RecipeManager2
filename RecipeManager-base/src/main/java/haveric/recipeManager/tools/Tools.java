@@ -98,7 +98,7 @@ public class Tools {
     }
 
     public static String parseAliasPrint(String name) {
-        return WordUtil.capitalize(name.toLowerCase().replace('_', ' ').trim());
+        return WordUtil.capitalizeFully(name.replace('_', ' ').trim());
     }
 
     public static String printLocation(Location l) {

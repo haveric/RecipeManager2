@@ -64,7 +64,6 @@ public class SettingsYaml extends BaseSettings {
         loadItemAliases(sender, DEFAULT_DATA_FOLDER, Files.FILE_ITEM_ALIASES);
         loadChoiceAliases(sender, DEFAULT_DATA_FOLDER, Files.FILE_CHOICE_ALIASES);
         loadItemDatas(sender, DEFAULT_DATA_FOLDER, Files.FILE_ITEM_DATAS);
-        loadEnchantAliases(sender, DEFAULT_DATA_FOLDER, Files.FILE_ENCHANT_ALIASES);
 
         anvilCombineItem.clear();
         String combineItemMaterials = fileConfig.getString("special-recipes.anvil.combine-item.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
@@ -426,46 +425,6 @@ public class SettingsYaml extends BaseSettings {
                 itemDatas.put(material, Short.parseShort(value));
             } catch (NumberFormatException e) {
                 MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + fileName + "' has invalid data value number: " + value + " for material: " + material);
-            }
-        }
-    }
-
-    public void loadEnchantAliases(CommandSender sender, File dataFolder, String fileName) {
-        FileConfiguration enchantAliasesConfig = loadYML(dataFolder, fileName);
-
-        if (!Files.LASTCHANGED_ENCHANT_ALIASES.equals(enchantAliasesConfig.getString("lastchanged"))) {
-            MessageSender.getInstance().sendAndLog(sender, "<yellow>NOTE: <reset>'" + fileName + "' file is outdated, please delete it to allow it to be generated again.");
-        }
-
-        for (String arg : enchantAliasesConfig.getKeys(false)) {
-            if (arg.equals("lastchanged")) {
-                continue;
-            }
-
-            Enchantment enchant = Enchantment.getByName(arg.toUpperCase());
-
-            if (enchant == null) {
-                MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + fileName + "' has invalid enchant definition: " + arg);
-                continue;
-            }
-
-            String names = enchantAliasesConfig.getString(arg);
-            String[] split = names.split(",");
-
-            for (String str : split) {
-                str = str.trim();
-                String parsed = RMCUtil.parseAliasName(str);
-
-                if (enchantNames.containsKey(parsed)) {
-                    MessageSender.getInstance().sendAndLog(sender, "<yellow>WARNING: <reset>'" + fileName + "' has duplicate enchant alias '" + str + "' for enchant " + enchant);
-                    continue;
-                }
-
-                addEnchantName(parsed, enchant);
-
-                if (!enchantPrint.containsKey(enchant)) {
-                    enchantPrint.put(enchant, Tools.parseAliasPrint(str));
-                }
             }
         }
     }
