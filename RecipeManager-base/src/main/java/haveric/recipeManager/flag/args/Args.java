@@ -1,5 +1,6 @@
 package haveric.recipeManager.flag.args;
 
+import com.google.common.base.Joiner;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.common.RMCChatColor;
@@ -8,7 +9,6 @@ import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.StringUtil;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -555,7 +555,7 @@ public class Args {
 
             if (meta != null) {
                 if (meta.hasLore() && string.contains("{lore}")) {
-                    string = string.replace("{lore}", "\"" + StringUtil.join(meta.getLore(), "\",\"") + "\"");
+                    string = string.replace("{lore}", "\"" + Joiner.on("\",\"").join(meta.getLore()) + "\"");
                 }
                 if (meta instanceof BookMeta) {
                     BookMeta book = (BookMeta) meta;

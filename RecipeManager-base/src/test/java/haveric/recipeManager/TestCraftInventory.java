@@ -9,9 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.ListIterator;
+import java.util.*;
 
 public class TestCraftInventory implements Inventory {
     ItemStack[] inventory;
@@ -52,9 +50,7 @@ public class TestCraftInventory implements Inventory {
 
     @Override
     public HashMap<Integer, ItemStack> addItem(ItemStack... items) throws IllegalArgumentException {
-        for (ItemStack item : items) {
-            Preconditions.checkNotNull(item, "Item cannot be null");
-        }
+        Preconditions.checkArgument(Arrays.stream(items).allMatch(Objects::nonNull), "Item cannot be null");
 
         HashMap<Integer, ItemStack> leftover = new HashMap<>();
 
