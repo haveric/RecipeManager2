@@ -167,6 +167,11 @@ public class TestOfflinePlayer implements OfflinePlayer {
     }
 
     @Override
+    public Location getLastDeathLocation() {
+        return null;
+    }
+
+    @Override
     public Map<String, Object> serialize() {
         return null;
     }
