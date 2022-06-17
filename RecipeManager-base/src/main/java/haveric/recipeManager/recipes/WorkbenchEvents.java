@@ -73,7 +73,8 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 location = null;
             }
 
-            if (event.isRepair()) {
+            // 1.15 and 1.16 do not handle repair recipes well, so check for repair recipe manually
+            if (event.isRepair() || (!Version.has1_17Support() && Version.has1_15Support() && ToolsItem.isRepairable115_116(inv))) {
                 prepareRepairRecipe(player, inv, location);
                 return; // if it's a repair recipe we don't need to move on
             }
@@ -273,7 +274,13 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             return;
         }
 
-        ItemStack result = inv.getRecipe().getResult();
+        ItemStack result;
+        // 1.15 and 1.16 do not handle repair recipes well, so use the inventory instead of the recipe
+        if (!Version.has1_17Support() && Version.has1_15Support()) {
+            result = inv.getResult();
+        } else {
+            result = inv.getRecipe().getResult();
+        }
 
         if (RecipeManager.getSettings().getSpecialRepairMetadata()) {
             ItemStack[] matrix = inv.getMatrix();
