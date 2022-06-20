@@ -1,5 +1,9 @@
 ## Change log
 
+### v2.29.1
+* FIX 1.18+ `@height` values below zero
+* FIX 1.15-1.16 `special-recipes.repair:false` wasn't disabling recipes
+
 ### v2.29.0
 * REMOVED Enchantment alias support. These have been outdated for a while and no longer are valid
   * If you're using any aliases, you will need to update them to match the enchantment names in `name index.html#enchantment`
