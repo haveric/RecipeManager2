@@ -1,13 +1,16 @@
 package haveric.recipeManager.flag.flags.any;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 
 public class FlagLightLevel extends Flag {
+
+    public static final int LIGHT_LEVEL_MAX = 15;
 
     @Override
     public String getFlagType() {
@@ -28,7 +31,7 @@ public class FlagLightLevel extends Flag {
             "",
             "The first argument must be a number from 0 to 15 to set a minimum light level, or you can specify a number range separated - character.",
             "",
-            "Optionally you can set the  [type] argument to specify light type:",
+            "Optionally you can set the [type] argument to specify light type:",
             "  any    = (default) any kind of light.",
             "  sun    = sun light only.",
             "  blocks = light from blocks (torches, furnaces, etc) only.",
@@ -227,7 +230,7 @@ public class FlagLightLevel extends Flag {
             }
         }
 
-        if (minLight > 15 || maxLight > 15 || (maxLight > 0 && (minLight > maxLight || minLight < 0))) {
+        if (minLight > LIGHT_LEVEL_MAX || maxLight > LIGHT_LEVEL_MAX || (maxLight > 0 && (minLight > maxLight || minLight < 0))) {
             return ErrorReporter.getInstance().error("The " + getFlagType() + " flag has invalid ranges: " + minLight + " to " + maxLight + "; they must be from 0 to 15 and min must be smaller than max.");
         }
 
@@ -242,24 +245,69 @@ public class FlagLightLevel extends Flag {
         }
 
         Block block = a.location().getBlock();
-        int light;
-
-        switch (lightType) {
-            case 's':
-                light = block.getLightFromSky();
-                break;
-
-            case 'b':
-                light = block.getLightFromBlocks();
-                break;
-
-            default:
-                light = block.getLightLevel();
+        int light = getLightFromBlock(block, false);
+        if (light == 0) {
+            light = getLightFromSurroundingBlocks(block);
         }
 
         if (light < minLight || (maxLight > minLight && light > maxLight)) {
             a.addReason("flag.lightlevel", failMessage, "{light}", getLightString(), "{type}", getLightTypeString());
         }
+    }
+
+    private int getLightFromBlock(Block block, boolean above) {
+        int light;
+        switch (lightType) {
+            case 's':
+                light = block.getLightFromSky();
+
+                if (above && light < LIGHT_LEVEL_MAX) {
+                    light -= 1;
+                }
+                break;
+
+            case 'b':
+                light = block.getLightFromBlocks();
+                if (above) {
+                    light -= 1;
+                }
+                break;
+
+            default:
+                int skyLight = block.getLightFromSky();
+                if (above && skyLight < LIGHT_LEVEL_MAX) {
+                    skyLight -= 1;
+                }
+                int blockLight = block.getLightFromBlocks();
+                if (above) {
+                    blockLight -= 1;
+                }
+                light = Math.max(skyLight, blockLight);
+        }
+
+        return light;
+    }
+
+    private int getLightFromSurroundingBlocks(Block block) {
+        int light = 0;
+        light = Math.max(light, getLightFromBlock(block.getRelative(BlockFace.UP), true));
+        if (light < LIGHT_LEVEL_MAX) {
+            light = Math.max(light, getLightFromBlock(block.getRelative(BlockFace.DOWN), false) - 1);
+        }
+        if (light < LIGHT_LEVEL_MAX) {
+            light = Math.max(light, getLightFromBlock(block.getRelative(BlockFace.NORTH), false) - 1);
+        }
+        if (light < LIGHT_LEVEL_MAX) {
+            light = Math.max(light, getLightFromBlock(block.getRelative(BlockFace.EAST), false) - 1);
+        }
+        if (light < LIGHT_LEVEL_MAX) {
+            light = Math.max(light, getLightFromBlock(block.getRelative(BlockFace.SOUTH), false) - 1);
+        }
+        if (light < LIGHT_LEVEL_MAX) {
+            light = Math.max(light, getLightFromBlock(block.getRelative(BlockFace.WEST), false) - 1);
+        }
+
+        return light;
     }
 
     @Override
