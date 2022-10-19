@@ -6,23 +6,24 @@ import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.nms.NMSVersionHandler;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.cooking.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
 import haveric.recipeManager.recipes.compost.CompostRecipe;
+import haveric.recipeManager.recipes.cooking.campfire.RMCampfireRecipe;
+import haveric.recipeManager.recipes.cooking.furnace.RMBlastingRecipe;
+import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe1_13;
+import haveric.recipeManager.recipes.cooking.furnace.RMSmokingRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
-import haveric.recipeManager.recipes.cooking.furnace.RMBlastingRecipe;
-import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe;
-import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe1_13;
-import haveric.recipeManager.recipes.cooking.furnace.RMSmokingRecipe;
 import haveric.recipeManager.recipes.smithing.RMSmithingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.*;
 import org.bukkit.Bukkit;
+import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.*;
@@ -1433,24 +1434,21 @@ public class Vanilla {
 
     public static boolean recipeMatchesArmorDye(Recipe recipe, ItemStack result) {
         boolean matches = false;
-        if (recipe instanceof ShapelessRecipe) {
-            ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
+        if (Version.has1_12Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
 
-            if (Version.has1_12Support()) {
-                NamespacedKey key = shapeless.getKey();
+            switch (key.getKey()) {
+                case "armordye": // 1.12 only
+                case "armor_dye": // 1.13+
+                    matches = true;
+                    break;
 
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    switch (key.getKey()) {
-                        case "armordye": // 1.12 only
-                        case "armor_dye": // 1.13+
-                            matches = true;
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            } else if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.LEATHER_HELMET) {
+                default:
+                    break;
+            }
+        } else if (recipe instanceof ShapelessRecipe) {
+            if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.LEATHER_HELMET) {
                 matches = true;
             } else if (recipe.getResult().equals(RECIPE_LEATHERDYE)) {
                 matches = true;
