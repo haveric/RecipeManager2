@@ -73,8 +73,8 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 location = null;
             }
 
-            // 1.15 and 1.16 do not handle repair recipes well, so check for repair recipe manually
-            if (event.isRepair() || (!Version.has1_17Support() && Version.has1_15Support() && ToolsItem.isRepairable115_116(inv))) {
+            // Handle repair recipes from 1.11 and before keyed recipes were implemented
+            if (!Version.has1_12Support() && event.isRepair()) {
                 prepareRepairRecipe(player, inv, location);
                 return; // if it's a repair recipe we don't need to move on
             }
@@ -91,7 +91,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 result = new ItemResult(inv.getResult());
             }
 
-            if (prepareSpecialRecipe(player, inv, result, bukkitRecipe)) {
+            if (prepareSpecialRecipe(player, inv, result, bukkitRecipe, location)) {
                 return; // stop here if it's a special recipe
             }
 
@@ -154,10 +154,15 @@ public class WorkbenchEvents extends BaseRecipeEvents {
         }
     }
 
-    private boolean prepareSpecialRecipe(Player player, CraftingInventory inv, ItemStack result, Recipe recipe) {
+    private boolean prepareSpecialRecipe(Player player, CraftingInventory inv, ItemStack result, Recipe recipe, Location location) {
         ItemStack recipeResult = recipe.getResult();
 
-        if (!result.equals(recipeResult)) { // result was processed by the game and it doesn't match the original recipe
+        if (!result.equals(recipeResult)) { // result was processed by the game, and it doesn't match the original recipe
+            if (Vanilla.recipeMatchesRepair(recipe)) {
+                prepareRepairRecipe(player, inv, location);
+                return true;
+            }
+
             if (!RecipeManager.getSettings().getSpecialLeatherDye()) {
                 if (Vanilla.recipeMatchesArmorDye(recipe, result)) {
                     Messages.getInstance().sendOnce(player, "craft.special.leatherdye");

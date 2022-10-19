@@ -11,10 +11,8 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Furnace;
-import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
@@ -466,39 +464,5 @@ public class ToolsItem {
         }
 
         return returnedMaterial;
-    }
-
-    public static boolean isRepairable115_116(CraftingInventory inv) {
-        ItemStack[] matrix = inv.getMatrix();
-
-        int numItems = 0;
-        ItemStack toMatch = null;
-        for (ItemStack item : matrix) {
-            if (item != null) {
-                if (!isRepairableTool(item)) {
-                    return false;
-                }
-
-                if (toMatch == null) {
-                    toMatch = item;
-                } else {
-                    if (toMatch.getType() != item.getType()) {
-                        return false;
-                    }
-                }
-
-                numItems ++;
-
-                if (numItems > 2) {
-                    return false;
-                }
-            }
-        }
-
-        return numItems == 2;
-    }
-
-    private static boolean isRepairableTool(ItemStack item) {
-        return item.getItemMeta() instanceof Damageable;
     }
 }

@@ -1336,69 +1336,55 @@ public class Vanilla {
     public static boolean isSpecialRecipe(Recipe recipe) {
         boolean isSpecial = false;
 
-        if (Version.has1_12Support()) {
-            if (recipe instanceof ShapedRecipe) {
-                ShapedRecipe shaped = (ShapedRecipe) recipe;
+        if (Version.has1_12Support() && recipe instanceof Keyed) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
 
-                NamespacedKey key = shaped.getKey();
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    switch (key.getKey()) {
-                        case "mapextending": // 1.12 only
-                        case "map_extending": // 1.13+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                switch (key.getKey()) {
+                    case "mapextending": // 1.12 only
+                    case "map_extending": // 1.13+
 
-                        case "tippedarrow": // 1.12 only
-                        case "tipped_arrow": // 1.13+
-                            isSpecial = true;
-                            break;
+                    case "tippedarrow": // 1.12 only
+                    case "tipped_arrow": // 1.13+
 
-                        default:
-                            break;
-                    }
-                }
-            } else if (recipe instanceof ShapelessRecipe) {
-                ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
+                    case "armordye": // 1.12 only
+                    case "armor_dye": // 1.13+
 
-                NamespacedKey key = shapeless.getKey();
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    switch (key.getKey()) {
-                        case "armordye": // 1.12 only
-                        case "armor_dye": // 1.13+
+                    case "bannerduplicate": // 1.12 only
+                    case "banner_duplicate": // 1.13+
 
-                        case "bannerduplicate": // 1.12 only
-                        case "banner_duplicate": // 1.13+
+                    case "bookcloning": // 1.12 only
+                    case "book_cloning": // 1.13+
 
-                        case "bookcloning": // 1.12 only
-                        case "book_cloning": // 1.13+
+                    case "firework_star": // 1.13+
 
-                        case "firework_star": // 1.13+
+                    case "firework_star_fade": // 1.13+
 
-                        case "firework_star_fade": // 1.13+
+                    case "fireworks": // 1.12 only
+                    case "firework_rocket": // 1.13+
 
-                        case "fireworks": // 1.12 only
-                        case "firework_rocket": // 1.13+
+                    case "mapcloning": // 1.12 only
+                    case "map_cloning": // 1.13+
 
-                        case "mapcloning": // 1.12 only
-                        case "map_cloning": // 1.13+
+                    case "repairitem": // 1.12 only
+                    case "repair_item": // 1.13+
 
-                        case "repairitem": // 1.12 only
-                        case "repair_item": // 1.13+
+                    case "shulkerboxcoloring": // 1.12 only
+                    case "shulker_box_coloring": // 1.13+
 
-                        case "shulkerboxcoloring": // 1.12 only
-                        case "shulker_box_coloring": // 1.13+
+                    case "shielddecoration": // 1.12 only
+                    case "shield_decoration": // 1.13+
 
-                        case "shielddecoration": // 1.12 only
-                        case "shield_decoration": // 1.13+
+                    case "banneraddpattern": // 1.12 only
+                    case "banner_add_pattern": // 1.13 only
 
-                        case "banneraddpattern": // 1.12 only
-                        case "banner_add_pattern": // 1.13 only
+                    case "suspicious_stew": // 1.14
+                        isSpecial = true;
+                        break;
 
-                        case "suspicious_stew": // 1.14
-                            isSpecial = true;
-                            break;
-
-                        default:
-                            break;
-                    }
+                    default:
+                        break;
                 }
             }
         } else if (recipe != null) {
@@ -1432,8 +1418,30 @@ public class Vanilla {
         return isSpecial;
     }
 
+    public static boolean recipeMatchesRepair(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_12Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            switch (key.getKey()) {
+                case "repairitem": // 1.12 only
+                case "repair_item": // 1.13+
+                    matches = true;
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        return matches;
+    }
+
     public static boolean recipeMatchesArmorDye(Recipe recipe, ItemStack result) {
         boolean matches = false;
+
         if (Version.has1_12Support()) {
             Keyed keyedRecipe = (Keyed) recipe;
             NamespacedKey key = keyedRecipe.getKey();
@@ -1460,24 +1468,24 @@ public class Vanilla {
 
     public static boolean recipeMatchesMapCloning(Recipe recipe, ItemStack result) {
         boolean matches = false;
-        if (recipe instanceof ShapelessRecipe) {
-            ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
 
-            if (Version.has1_12Support()) {
-                NamespacedKey key = shapeless.getKey();
+        if (Version.has1_12Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
 
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    switch (key.getKey()) {
-                        case "mapcloning": // 1.12 only
-                        case "map_cloning": // 1.13+
-                            matches = true;
-                            break;
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                switch (key.getKey()) {
+                    case "mapcloning": // 1.12 only
+                    case "map_cloning": // 1.13+
+                        matches = true;
+                        break;
 
-                        default:
-                            break;
-                    }
+                    default:
+                        break;
                 }
-            } else if (Version.has1_11Support()) {
+            }
+        } else if (recipe instanceof ShapelessRecipe) {
+            if (Version.has1_11Support()) {
                 if (recipe.getResult().getType() == Material.AIR && result.getType().equals(Material.MAP) && result.getAmount() > 1) {
                     matches = true;
                 }
@@ -1491,6 +1499,7 @@ public class Vanilla {
 
     public static boolean recipeMatchesMapExtending(Recipe recipe) {
         boolean matches = false;
+
         if (recipe instanceof ShapedRecipe) {
             ShapedRecipe shaped = (ShapedRecipe) recipe;
 
@@ -1522,24 +1531,24 @@ public class Vanilla {
 
     public static boolean recipeMatchesFireworkRocket(Recipe recipe, ItemStack result) {
         boolean matches = false;
-        if (recipe instanceof ShapelessRecipe) {
-            ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
 
-            if (Version.has1_12Support()) {
-                NamespacedKey key = shapeless.getKey();
+        if (Version.has1_12Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
 
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    switch (key.getKey()) {
-                        case "fireworks": // 1.12 only
-                        case "firework_rocket": // 1.13+
-                            matches = true;
-                            break;
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                switch (key.getKey()) {
+                    case "fireworks": // 1.12 only
+                    case "firework_rocket": // 1.13+
+                        matches = true;
+                        break;
 
-                        default:
-                            break;
-                    }
+                    default:
+                        break;
                 }
-            } else if (Version.has1_11Support()) {
+            }
+        } else if (recipe instanceof ShapelessRecipe) {
+            if (Version.has1_11Support()) {
                 if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("FIREWORK")) {
                     matches = true;
                 }
@@ -1553,40 +1562,38 @@ public class Vanilla {
 
     public static boolean recipeMatchesFireworkStar(Recipe recipe, ItemStack result, ItemStack[] matrix) {
         boolean matches = false;
-        if (recipe instanceof ShapelessRecipe) {
-            ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
 
-            if (Version.has1_13BasicSupport()) {
-                NamespacedKey key = shapeless.getKey();
+        if (Version.has1_13BasicSupport()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
 
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    if (key.getKey().equals("firework_star")) {
-                        matches = true;
-                    }
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("firework_star")) {
+                    matches = true;
                 }
-            } else {
-                if (result.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
-                    if (recipe.getResult().getType() == Material.AIR) {
-                        matches = true;
-                    }
-
-                    if (recipe.getResult().equals(Vanilla.RECIPE_FIREWORKS)) {
-                        matches = true;
-                    }
+            }
+        } else if (recipe instanceof ShapelessRecipe) {
+            if (result.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
+                if (recipe.getResult().getType() == Material.AIR) {
+                    matches = true;
                 }
 
-                if (matches) {
-                    // Unmatch on firework star fade recipe
-                    boolean hasFireworkStar = false;
-                    for (ItemStack item : matrix) {
-                        if (item != null && item.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
-                            hasFireworkStar = true;
-                            break;
-                        }
+                if (recipe.getResult().equals(Vanilla.RECIPE_FIREWORKS)) {
+                    matches = true;
+                }
+            }
+
+            if (matches) {
+                // Unmatch on firework star fade recipe
+                boolean hasFireworkStar = false;
+                for (ItemStack item : matrix) {
+                    if (item != null && item.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
+                        hasFireworkStar = true;
+                        break;
                     }
-                    if (hasFireworkStar) {
-                        matches = false;
-                    }
+                }
+                if (hasFireworkStar) {
+                    matches = false;
                 }
             }
         }
@@ -1596,40 +1603,38 @@ public class Vanilla {
 
     public static boolean recipeMatchesFireworkStarFade(Recipe recipe, ItemStack result, ItemStack[] matrix) {
         boolean matches = false;
-        if (recipe instanceof ShapelessRecipe) {
-            ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
 
-            if (Version.has1_13BasicSupport()) {
-                NamespacedKey key = shapeless.getKey();
+        if (Version.has1_13BasicSupport()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
 
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    if ("firework_star_fade".equals(key.getKey())) { // 1.13+
-                        matches = true;
-                    }
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if ("firework_star_fade".equals(key.getKey())) { // 1.13+
+                    matches = true;
                 }
-            } else {
-                if (result.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
-                    if (recipe.getResult().getType() == Material.AIR) {
-                        matches = true;
-                    }
-
-                    if (recipe.getResult().equals(Vanilla.RECIPE_FIREWORKS)) {
-                        matches = true;
-                    }
+            }
+        } else if (recipe instanceof ShapelessRecipe) {
+            if (result.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
+                if (recipe.getResult().getType() == Material.AIR) {
+                    matches = true;
                 }
 
-                if (matches) {
-                    // Unmatch on firework star recipe
-                    boolean hasFireworkStar = false;
-                    for (ItemStack item : matrix) {
-                        if (item != null && item.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
-                            hasFireworkStar = true;
-                            break;
-                        }
+                if (recipe.getResult().equals(Vanilla.RECIPE_FIREWORKS)) {
+                    matches = true;
+                }
+            }
+
+            if (matches) {
+                // Unmatch on firework star recipe
+                boolean hasFireworkStar = false;
+                for (ItemStack item : matrix) {
+                    if (item != null && item.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
+                        hasFireworkStar = true;
+                        break;
                     }
-                    if (!hasFireworkStar) {
-                        matches = false;
-                    }
+                }
+                if (!hasFireworkStar) {
+                    matches = false;
                 }
             }
         }
@@ -1639,24 +1644,24 @@ public class Vanilla {
 
     public static boolean recipeMatchesBookCloning(Recipe recipe, ItemStack result) {
         boolean matches = false;
-        if (recipe instanceof ShapelessRecipe) {
-            ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
 
-            if (Version.has1_12Support()) {
-                NamespacedKey key = shapeless.getKey();
+        if (Version.has1_12Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
 
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    switch (key.getKey()) {
-                        case "bookcloning": // 1.12 only
-                        case "book_cloning": // 1.13+
-                            matches = true;
-                            break;
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                switch (key.getKey()) {
+                    case "bookcloning": // 1.12 only
+                    case "book_cloning": // 1.13+
+                        matches = true;
+                        break;
 
-                        default:
-                            break;
-                    }
+                    default:
+                        break;
                 }
-            } else if (Version.has1_11Support()) {
+            }
+        } else if (recipe instanceof ShapelessRecipe) {
+             if (Version.has1_11Support()) {
                 if (result.getType().equals(Material.WRITTEN_BOOK)) {
                     matches = true;
                 }
@@ -1674,6 +1679,7 @@ public class Vanilla {
     // Replaced by loom recipes in 1.14
     public static boolean recipeMatchesBannerAddPattern(Recipe recipe, ItemStack result) {
         boolean matches = false;
+
         if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
 
@@ -1704,24 +1710,26 @@ public class Vanilla {
 
     public static boolean recipeMatchesBannerDuplicate(Recipe recipe, ItemStack result) {
         boolean matches = false;
-        if (recipe instanceof ShapelessRecipe) {
+
+        if (Version.has1_12Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                switch (key.getKey()) {
+                    case "bannerduplicate": // 1.12 only
+                    case "banner_duplicate": // 1.13+
+                        matches = true;
+                        break;
+
+                    default:
+                        break;
+                }
+            }
+        } else if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
 
-            if (Version.has1_12Support()) {
-                NamespacedKey key = shapeless.getKey();
-
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    switch (key.getKey()) {
-                        case "bannerduplicate": // 1.12 only
-                        case "banner_duplicate": // 1.13+
-                            matches = true;
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            } else if ((recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("BANNER")) || recipe.getResult().equals(Vanilla.RECIPE_BANNER)) {
+             if ((recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("BANNER")) || recipe.getResult().equals(Vanilla.RECIPE_BANNER)) {
                 List<ItemStack> ingredients = shapeless.getIngredientList();
 
                 if (ingredients.size() == 1) {
@@ -1741,24 +1749,24 @@ public class Vanilla {
     // 1.9+
     public static boolean recipeMatchesShieldDecoration(Recipe recipe, ItemStack result) {
         boolean matches = false;
-        if (recipe instanceof ShapelessRecipe) {
-            ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
 
-            if (Version.has1_12Support()) {
-                NamespacedKey key = shapeless.getKey();
+        if (Version.has1_12Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
 
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    switch (key.getKey()) {
-                        case "shielddecoration": // 1.12 only
-                        case "shield_decoration": // 1.13+
-                            matches = true;
-                            break;
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                switch (key.getKey()) {
+                    case "shielddecoration": // 1.12 only
+                    case "shield_decoration": // 1.13+
+                        matches = true;
+                        break;
 
-                        default:
-                            break;
-                    }
+                    default:
+                        break;
                 }
-            } else if (Version.has1_11Support()) {
+            }
+        } else if (recipe instanceof ShapelessRecipe) {
+            if (Version.has1_11Support()) {
                 if (result.getType().equals(Material.SHIELD)) {
                     matches = true;
                 }
@@ -1773,24 +1781,24 @@ public class Vanilla {
     // 1.9+
     public static boolean recipeMatchesTippedArrow(Recipe recipe) {
         boolean matches = false;
-        if (recipe instanceof ShapedRecipe) {
-            ShapedRecipe shaped = (ShapedRecipe) recipe;
 
-            if (Version.has1_12Support()) {
-                NamespacedKey key = shaped.getKey();
+        if (Version.has1_12Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
 
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    switch (key.getKey()) {
-                        case "tippedarrow": // 1.12 only
-                        case "tipped_arrow": // 1.13+
-                            matches = true;
-                            break;
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                switch (key.getKey()) {
+                    case "tippedarrow": // 1.12 only
+                    case "tipped_arrow": // 1.13+
+                        matches = true;
+                        break;
 
-                        default:
-                            break;
-                    }
+                    default:
+                        break;
                 }
-            } else if (recipe.getResult().equals(Vanilla.RECIPE_TIPPED_ARROW)) {
+            }
+        } else if (recipe instanceof ShapedRecipe) {
+            if (recipe.getResult().equals(Vanilla.RECIPE_TIPPED_ARROW)) {
                 matches = true;
             // 1.10
             } else if (Version.has1_9Support() && recipe.getResult().getType() == Material.TIPPED_ARROW && recipe.getResult().getAmount() == 8) {
@@ -1804,24 +1812,24 @@ public class Vanilla {
     // 1.11+
     public static boolean recipeMatchesShulkerDye(Recipe recipe, ItemStack result) {
         boolean matches = false;
-        if (recipe instanceof ShapelessRecipe) {
-            ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
 
-            if (Version.has1_12Support()) {
-                NamespacedKey key = shapeless.getKey();
+        if (Version.has1_12Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
 
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    switch (key.getKey()) {
-                        case "shulkerboxcoloring": // 1.12 only
-                        case "shulker_box_coloring": // 1.13+
-                            matches = true;
-                            break;
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                switch (key.getKey()) {
+                    case "shulkerboxcoloring": // 1.12 only
+                    case "shulker_box_coloring": // 1.13+
+                        matches = true;
+                        break;
 
-                        default:
-                            break;
-                    }
+                    default:
+                        break;
                 }
-            } else if (Version.has1_11Support() && ToolsItem.isShulkerBox(result.getType())) {
+            }
+        } else if (recipe instanceof ShapelessRecipe) {
+            if (Version.has1_11Support() && ToolsItem.isShulkerBox(result.getType())) {
                 matches = true;
             }
         }
@@ -1832,16 +1840,14 @@ public class Vanilla {
     // 1.14+
     public static boolean recipeMatchesSuspiciousStew(Recipe recipe) {
         boolean matches = false;
-        if (recipe instanceof ShapelessRecipe) {
-            ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
 
-            if (Version.has1_14Support()) {
-                NamespacedKey key = shapeless.getKey();
+        if (Version.has1_14Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
 
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    if (key.getKey().equals("suspicious_stew")) {
-                        matches = true;
-                    }
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("suspicious_stew")) {
+                    matches = true;
                 }
             }
         }
