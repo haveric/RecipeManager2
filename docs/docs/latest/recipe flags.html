@@ -1874,17 +1874,17 @@ title: Recipe Flags
     </div>
     <div class='doc-section__group'>
         <a href='#contents' class='back-to-top'>^ Contents</a><a id='lightlevel'></a>
-        <h3 class='doc-section__title'>@lightlevel &lt;min or min-max&gt; [type] | [fail message]</h3>
+        <h3 class='doc-section__title'>@lightlevel &lt;min or min-max&gt; [type], [...] | [fail message]</h3>
         <pre>
     <span class='flagtype flagtype-recipe'>Recipe</span><span class='flagtype flagtype-result'>Result</span>
 
 <span>
     Checks for the light level.
-    Using this flag more than once will overwrite the previous one.
+    Using this flag more than once will add more options.
 
-    The first argument must be a number from 0 to 15 to set a minimum light level, or you can specify a number range separated - character.
+    The first argument must be a number from 0 to 15 to set a minimum light level, or you can specify a number range separated by a '-' character.
 
-    Optionally you can set the  [type] argument to specify light type:
+    Optionally you can set the [type] argument to specify light type:
       any    = (default) any kind of light.
       sun    = sun light only.
       blocks = light from blocks (torches, furnaces, etc) only.
@@ -1899,6 +1899,7 @@ title: Recipe Flags
     <b>Examples:</b>
       @lightlevel 14 sun
       @lightlevel 0-4 blocks | &lt;red&gt;Kill the lights!
+      @lightlevel 0-3 blocks, 12-15 sun | &lt;red&gt;Must be away from torches or in the sun!
 
     <b>Aliases:</b> @blocklight, @sunlight, @light
 </pre>

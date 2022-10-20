@@ -1,5 +1,10 @@
 ## Change log
 
+### v2.29.2
+* FIX: `@LightLevel`: Fixed light level check for solid blocks, such as crafting tables
+* NEW: `@LightLevel`: Allow multiple conditions where either passing is valid: `0-3 blocks, 12-15 sun`
+* FIX: 1.15+ Fixed disabling special recipes
+
 ### v2.29.1
 * FIX 1.18+ `@height` values below zero
 * FIX 1.15-1.16 `special-recipes.repair:false` wasn't disabling recipes
