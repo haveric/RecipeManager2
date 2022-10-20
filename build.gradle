@@ -31,10 +31,6 @@ subprojects {
         }
         maven {
             name 'Alt source for Spigot'
-            url 'https://maven.notfab.net/SpigotMC/'
-        }
-        maven {
-            name 'Alt source for Spigot 2'
             url 'https://repo.aikar.co/nexus/content/repositories/aikar/'
         }
         // For 1.12-1.14, adding NMS package; Spigot's BuildTools will do a local Maven install. Let's look there.

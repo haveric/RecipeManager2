@@ -172,7 +172,7 @@ public class Tools {
         }
 
         String[] split = value.split(",");
-        if (split.length <= 0 || split[0].isEmpty()) {
+        if (split.length == 0 || split[0].isEmpty()) {
             return null;
         }
 
@@ -264,7 +264,7 @@ public class Tools {
         }
 
         String[] split = args[0].split(",");
-        if (split.length <= 0 || split[0].isEmpty()) {
+        if (split.length == 0 || split[0].isEmpty()) {
             return null;
         }
 
@@ -415,7 +415,7 @@ public class Tools {
             if (dataMap == null) {
                 try {
                     damageable.setDamage(Integer.parseInt(dataString));
-                    item.setItemMeta((ItemMeta) damageable);
+                    item.setItemMeta(damageable);
                 } catch (NumberFormatException e) {
                     if ((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
                         ErrorReporter.getInstance().warning("Item '" + material + " has unknown data number/alias: '" + dataString + "', defaulting to 0");
@@ -423,7 +423,7 @@ public class Tools {
                 }
             } else {
                 damageable.setDamage(dataMap.get(RMCUtil.parseAliasName(dataString)));
-                item.setItemMeta((ItemMeta) damageable);
+                item.setItemMeta(damageable);
             }
 
             return ToolsRecipeChoice.mergeRecipeChoiceWithItems(choice, item);
@@ -447,7 +447,7 @@ public class Tools {
         }
 
         String[] split = args[0].split(",");
-        if (split.length <= 0 || split[0].isEmpty()) {
+        if (split.length == 0 || split[0].isEmpty()) {
             return null;
         }
 
@@ -519,7 +519,7 @@ public class Tools {
         String[] args = value.split(";");
         String[] split = args[0].trim().split(":");
 
-        if (split.length <= 0 || split[0].isEmpty()) {
+        if (split.length == 0 || split[0].isEmpty()) {
             return new ItemStack(Material.AIR);
         }
 

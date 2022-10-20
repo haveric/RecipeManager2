@@ -21,7 +21,7 @@ public class GetBookCommand implements TabExecutor {
         }
 
         int argsLength = args.length;
-        if (argsLength <= 0) {
+        if (argsLength == 0) {
             Messages.getInstance().send(sender, "cmd.getbook.usage", "{command}", label);
             return true;
         }

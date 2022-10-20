@@ -13,7 +13,7 @@ import java.util.List;
 
 public class FindItemCommand implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (args.length <= 0) {
+        if (args.length == 0) {
             Messages.getInstance().send(sender, "cmd.finditem.usage", "{command}", label);
             return true;
         }
