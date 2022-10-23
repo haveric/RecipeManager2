@@ -1,6 +1,9 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
+### v2.29.3
+* FIX: Fixed repair and repair-metadata special recipes
+
 ### v2.29.2
 * FIX: `@LightLevel`: Fixed light level check for solid blocks, such as crafting tables
 * NEW: `@LightLevel`: Allow multiple conditions where either passing is valid: `0-3 blocks, 12-15 sun`

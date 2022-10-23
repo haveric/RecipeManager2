@@ -75,8 +75,9 @@ public class WorkbenchEvents extends BaseRecipeEvents {
 
             // Handle repair recipes from 1.11 and before keyed recipes were implemented
             if (!Version.has1_12Support() && event.isRepair()) {
-                prepareRepairRecipe(player, inv, location);
-                return; // if it's a repair recipe we don't need to move on
+                if (prepareRepairRecipe(player, inv, location)) {
+                    return; // if it's a repair recipe we don't need to move on
+                }
             }
 
             Recipe bukkitRecipe = event.getRecipe();
@@ -159,8 +160,9 @@ public class WorkbenchEvents extends BaseRecipeEvents {
 
         if (!result.equals(recipeResult)) { // result was processed by the game, and it doesn't match the original recipe
             if (Vanilla.recipeMatchesRepair(recipe)) {
-                prepareRepairRecipe(player, inv, location);
-                return true;
+                if (prepareRepairRecipe(player, inv, location)) {
+                    return true;
+                }
             }
 
             if (!RecipeManager.getSettings().getSpecialLeatherDye()) {
@@ -271,12 +273,12 @@ public class WorkbenchEvents extends BaseRecipeEvents {
         return false;
     }
 
-    private void prepareRepairRecipe(Player player, CraftingInventory inv, Location location) {
+    private boolean prepareRepairRecipe(Player player, CraftingInventory inv, Location location) {
         if (!RecipeManager.getSettings().getSpecialRepair()) {
             SoundNotifier.sendDenySound(player, location);
             Messages.getInstance().sendOnce(player, "craft.repair.disabled");
             inv.setResult(null);
-            return;
+            return true;
         }
 
         ItemStack result;
@@ -314,7 +316,9 @@ public class WorkbenchEvents extends BaseRecipeEvents {
 
                 if (meta != null) {
                     result = inv.getResult();
+                    short actualDurability = result.getDurability();
                     result.setItemMeta(meta);
+                    result.setDurability(actualDurability);
                 }
             }
         }
@@ -324,11 +328,13 @@ public class WorkbenchEvents extends BaseRecipeEvents {
 
         result = callEvent.getResult();
 
-        if (result != null) {
+        if (result != null && result.getType() != Material.AIR) {
             SoundNotifier.sendRepairSound(player, location);
+            inv.setResult(result);
+            return true;
         }
 
-        inv.setResult(result);
+        return false;
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
