@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FuelRecipeParser extends BaseRecipeParser {
+    private static final double singleTickInSeconds = 0.05;
+
     public FuelRecipeParser() {
         super();
     }
@@ -61,7 +63,7 @@ public class FuelRecipeParser extends BaseRecipeParser {
                 float maxTime = -1;
 
                 try {
-                    minTime = Math.max(Float.parseFloat(timeSplit[0]), 1);
+                    minTime = (float) Math.max(Float.parseFloat(timeSplit[0]), singleTickInSeconds);
 
                     if (timeSplit.length >= 2) {
                         maxTime = (float) Math.max(Float.parseFloat(timeSplit[1]), 0.0);
