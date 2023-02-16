@@ -172,4 +172,9 @@ public abstract class RMBaseCookingRecipe extends SingleRecipeChoiceSingleResult
     public boolean hasCustomTime() {
         return false;
     }
+
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return hasRandomTime();
+    }
 }

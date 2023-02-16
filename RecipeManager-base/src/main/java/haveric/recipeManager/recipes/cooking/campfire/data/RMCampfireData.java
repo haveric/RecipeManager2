@@ -25,6 +25,8 @@ public class RMCampfireData implements ConfigurationSerializable {
     private static final String ID_ITEM2_UUID = "item2UUID";
     private static final String ID_ITEM3_UUID = "item3UUID";
 
+    private int lastUsedSlot = -1;
+    private static final String ID_LAST_USED_SLOT = "lastUsedSlot";
 
     public static void init() { }
 
@@ -53,6 +55,11 @@ public class RMCampfireData implements ConfigurationSerializable {
             if (obj instanceof String) {
                 item3UUID = UUID.fromString((String) obj);
             }
+
+            obj = map.get(ID_LAST_USED_SLOT);
+            if (obj instanceof Integer) {
+                lastUsedSlot = (int) obj;
+            }
         } catch (Throwable e) {
             MessageSender.getInstance().error(null, e, null);
         }
@@ -76,6 +83,10 @@ public class RMCampfireData implements ConfigurationSerializable {
 
         if (item3UUID != null) {
             map.put(ID_ITEM3_UUID, item3UUID.toString());
+        }
+
+        if (lastUsedSlot != -1) {
+            map.put(ID_LAST_USED_SLOT, lastUsedSlot);
         }
 
         return map;
@@ -114,6 +125,8 @@ public class RMCampfireData implements ConfigurationSerializable {
         } else if (slot == 3) {
             item3UUID = itemUUID;
         }
+
+        lastUsedSlot = slot;
 
         RMCampfires.update();
     }
@@ -159,4 +172,11 @@ public class RMCampfireData implements ConfigurationSerializable {
         RMCampfires.update();
     }
 
+    public void setLastUsedSlot(int lastUsedSlot) {
+        this.lastUsedSlot = lastUsedSlot;
+    }
+
+    public int getLastUsedSlot() {
+        return lastUsedSlot;
+    }
 }
