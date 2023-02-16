@@ -8,6 +8,7 @@ import org.bukkit.advancement.Advancement;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.CreativeCategory;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -95,4 +96,16 @@ public class TestUnsafeValues implements UnsafeValues {
     public CreativeCategory getCreativeCategory(Material material) {
         return null;
     }
+
+    @Override
+    public String getBlockTranslationKey(Material material) { return null; }
+
+    @Override
+    public String getItemTranslationKey(Material material) { return null; }
+
+    @Override
+    public String getTranslationKey(EntityType entityType) { return null; }
+
+    @Override
+    public String getTranslationKey(ItemStack itemStack) { return null; }
 }
