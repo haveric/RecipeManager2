@@ -30,7 +30,7 @@ public class RecipeTypeFactory {
         initialized = false;
     }
 
-    protected void initializeRecipeType(String name, BaseRecipe recipe, BaseRecipeParser parser, BaseRecipeEvents events) {
+    protected void initializeRecipeType(String name, BaseRecipe recipe, BaseRecipeParser parser, BaseRecipeEvents... events) {
         name = name.toLowerCase().trim();
 
         if (!initialized) {
@@ -44,12 +44,14 @@ public class RecipeTypeFactory {
                         recipeParsers.put(name, parser);
                     }
 
-                    if (events != null) {
-                        String eventsClassName = events.getClass().getName();
+                    for (BaseRecipeEvents event : events) {
+                        if (event != null) {
+                            String eventsClassName = event.getClass().getName();
 
-                        // Make sure the events class is unique before we add it, allowing multiple recipe types to share events
-                        if (!recipeEvents.containsKey(eventsClassName)) {
-                            recipeEvents.put(eventsClassName, events);
+                            // Make sure the events class is unique before we add it, allowing multiple recipe types to share events
+                            if (!recipeEvents.containsKey(eventsClassName)) {
+                                recipeEvents.put(eventsClassName, event);
+                            }
                         }
                     }
                 }

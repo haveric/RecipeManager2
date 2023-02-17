@@ -20,7 +20,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockCookEvent;
-import org.bukkit.event.block.CampfireStartEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -57,25 +56,6 @@ public class RMCampfireEvents extends BaseRecipeEvents {
                         data.setItemId(slot, player.getUniqueId());
                     }
                 }
-            }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOW)
-    public void rmCampfireStartEvent(CampfireStartEvent event) {
-        Block block = event.getBlock();
-        Campfire campfire = (Campfire) block.getState();
-        RMCampfireData data = RMCampfires.get(campfire.getLocation());
-
-        int slot = data.getLastUsedSlot();
-        if (slot != -1) {
-            ItemStack ingredient = event.getSource();
-            BaseRecipe baseRecipe = RecipeManager.getRecipes().getRecipe(RMCRecipeType.CAMPFIRE, ingredient);
-            if (baseRecipe instanceof RMCampfireRecipe) {
-                RMCampfireRecipe recipe = (RMCampfireRecipe) baseRecipe;
-
-                int cookTicks = recipe.getCookTicks();
-                event.setTotalCookTime(cookTicks);
             }
         }
     }

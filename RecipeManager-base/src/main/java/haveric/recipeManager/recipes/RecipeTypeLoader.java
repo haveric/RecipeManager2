@@ -16,6 +16,7 @@ import haveric.recipeManager.recipes.compost.CompostRecipeParser;
 import haveric.recipeManager.recipes.cooking.campfire.RMCampfireEvents;
 import haveric.recipeManager.recipes.cooking.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.cooking.campfire.RMCampfireRecipeParser;
+import haveric.recipeManager.recipes.cooking.campfire.RMCampfireStartEvent;
 import haveric.recipeManager.recipes.cooking.furnace.*;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
@@ -33,6 +34,7 @@ import haveric.recipeManager.recipes.smithing.RMSmithingRecipe;
 import haveric.recipeManager.recipes.smithing.RMSmithingRecipeParser;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipeParser;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.ChatColor;
 
@@ -65,7 +67,13 @@ public class RecipeTypeLoader {
 
         if (Version.has1_14Support()) {
             loadRecipeType(RMCRecipeType.BLASTING.getDirective(), new RMBlastingRecipe(), new RMBaseFurnaceRecipeParser(RMCRecipeType.BLASTING), new RMBaseFurnaceEvents());
-            loadRecipeType(RMCRecipeType.CAMPFIRE.getDirective(), new RMCampfireRecipe(), new RMCampfireRecipeParser(), new RMCampfireEvents());
+
+            if (Supports.campfireStartEvent()) {
+                loadRecipeType(RMCRecipeType.CAMPFIRE.getDirective(), new RMCampfireRecipe(), new RMCampfireRecipeParser(), new RMCampfireEvents(), new RMCampfireStartEvent());
+            } else {
+                loadRecipeType(RMCRecipeType.CAMPFIRE.getDirective(), new RMCampfireRecipe(), new RMCampfireRecipeParser(), new RMCampfireEvents());
+            }
+
             loadRecipeType(RMCRecipeType.CARTOGRAPHY.getDirective(), new CartographyRecipe(), new CartographyRecipeParser(), new CartographyEvents());
             loadRecipeType(RMCRecipeType.GRINDSTONE.getDirective(), new GrindstoneRecipe(), new GrindstoneRecipeParser(), new GrindstoneEvents());
             loadRecipeType(RMCRecipeType.COMPOST.getDirective(), new CompostRecipe(), new CompostRecipeParser(), new CompostEvents());
@@ -79,10 +87,10 @@ public class RecipeTypeLoader {
     }
 
     public void loadRecipeType(String recipeTypeName, BaseRecipe recipe, BaseRecipeParser parser) {
-        loadRecipeType(recipeTypeName, recipe, parser, null);
+        loadRecipeType(recipeTypeName, recipe, parser, (BaseRecipeEvents) null);
     }
 
-    public void loadRecipeType(String recipeTypeName, BaseRecipe recipe, BaseRecipeParser parser, BaseRecipeEvents events) {
+    public void loadRecipeType(String recipeTypeName, BaseRecipe recipe, BaseRecipeParser parser, BaseRecipeEvents... events) {
         if (RecipeTypeFactory.getInstance().isInitialized()) {
             MessageSender.getInstance().info(ChatColor.RED + "Custom recipe types must be added in your onEnable() method.");
         } else {
