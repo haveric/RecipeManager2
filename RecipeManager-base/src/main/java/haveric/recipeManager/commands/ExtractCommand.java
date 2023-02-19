@@ -12,6 +12,7 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.compost.CompostRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.ToolsFlag;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Bukkit;
@@ -98,6 +99,11 @@ public class ExtractCommand implements TabExecutor {
                         if (!recipe.getGroup().isEmpty()) {
                             recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                         }
+
+                        if (Supports.categories()) {
+                            recipeString.append("category ").append(recipe.getCategory().name());
+                        }
+
                         Map<Character, RecipeChoice> choices = recipe.getChoiceMap();
                         char[] cols;
                         RecipeChoice choice;
@@ -154,6 +160,11 @@ public class ExtractCommand implements TabExecutor {
                         if (!recipe.getGroup().isEmpty()) {
                             recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                         }
+
+                        if (Supports.categories()) {
+                            recipeString.append("category ").append(recipe.getCategory().name());
+                        }
+
                         List<RecipeChoice> ingredientChoices = recipe.getChoiceList();
 
                         int size = ingredientChoices.size();
@@ -191,6 +202,11 @@ public class ExtractCommand implements TabExecutor {
                         if (!recipe.getGroup().isEmpty()) {
                             recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                         }
+
+                        if (Supports.categories()) {
+                            recipeString.append("category ").append(recipe.getCategory().name());
+                        }
+
                         recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
 
                         parseChoice(recipe.getInputChoice(), recipeString);
@@ -214,6 +230,11 @@ public class ExtractCommand implements TabExecutor {
                         if (!recipe.getGroup().isEmpty()) {
                             recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                         }
+
+                        if (Supports.categories()) {
+                            recipeString.append("category ").append(recipe.getCategory().name());
+                        }
+
                         recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
 
                         parseChoice(recipe.getInputChoice(), recipeString);
@@ -231,6 +252,11 @@ public class ExtractCommand implements TabExecutor {
                         if (!recipe.getGroup().isEmpty()) {
                             recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                         }
+
+                        if (Supports.categories()) {
+                            recipeString.append("category ").append(recipe.getCategory().name());
+                        }
+
                         recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
 
                         parseChoice(recipe.getInputChoice(), recipeString);
@@ -248,6 +274,11 @@ public class ExtractCommand implements TabExecutor {
                         if (!recipe.getGroup().isEmpty()) {
                             recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                         }
+
+                        if (Supports.categories()) {
+                            recipeString.append("category ").append(recipe.getCategory().name());
+                        }
+
                         recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
 
                         parseChoice(recipe.getInputChoice(), recipeString);

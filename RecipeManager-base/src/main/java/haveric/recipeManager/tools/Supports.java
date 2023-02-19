@@ -1,11 +1,11 @@
 package haveric.recipeManager.tools;
 
-import haveric.recipeManager.messages.MessageSender;
 import org.bukkit.Material;
 import org.bukkit.event.block.CampfireStartEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
+import org.bukkit.inventory.recipe.CraftingBookCategory;
 
 public class Supports {
     static boolean axolotlBucketMeta = false;
@@ -14,6 +14,7 @@ public class Supports {
     static boolean suspiciousStewMeta = false;
     static boolean compassMeta = false;
     static boolean itemFlagHideDye = false;
+    static boolean categories = false;
     static boolean campfireStartEvent = false;
 
     public static void init() {
@@ -23,6 +24,7 @@ public class Supports {
         checkSuspiciousStewMeta();
         checkCompassMetaSupport();
         checkItemFlagHideDyeSupport();
+        checkCategories();
         checkCampfireStartEvent();
     }
 
@@ -97,6 +99,18 @@ public class Supports {
         }
     }
 
+    // 1.19.3
+    private static void checkCategories() {
+        try {
+            @SuppressWarnings("unused")
+            String categoryName = CraftingBookCategory.class.getName();
+            categories = true;
+        } catch (NoClassDefFoundError e) {
+            categories = false;
+        }
+    }
+
+    // 1.19.3+
     private static void checkCampfireStartEvent() {
         try {
             @SuppressWarnings("unused")
@@ -129,6 +143,10 @@ public class Supports {
 
     public static boolean itemFlagHideDye() {
         return itemFlagHideDye;
+    }
+
+    public static boolean categories() {
+        return categories;
     }
 
     public static boolean campfireStartEvent() {

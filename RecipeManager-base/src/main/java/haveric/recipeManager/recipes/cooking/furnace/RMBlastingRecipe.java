@@ -6,7 +6,9 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.tools.Supports;
 import org.bukkit.inventory.BlastingRecipe;
+import org.bukkit.inventory.recipe.CookingBookCategory;
 
 public class RMBlastingRecipe extends RMBaseFurnaceRecipe1_13 {
     public RMBlastingRecipe() {
@@ -50,6 +52,10 @@ public class RMBlastingRecipe extends RMBaseFurnaceRecipe1_13 {
         BlastingRecipe bukkitRecipe = new BlastingRecipe(getNamespacedKey(), a.result(), getIngredientChoice(), experience, getCookTicks());
         if (hasGroup()) {
             bukkitRecipe.setGroup(getGroup());
+        }
+
+        if (Supports.categories() && hasCategory()) {
+            bukkitRecipe.setCategory(CookingBookCategory.valueOf(getCategory()));
         }
 
         return bukkitRecipe;

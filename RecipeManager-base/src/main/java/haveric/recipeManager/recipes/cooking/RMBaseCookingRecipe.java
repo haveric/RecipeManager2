@@ -9,6 +9,7 @@ import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleRecipeChoiceSingleResultRecipe;
+import haveric.recipeManager.tools.Supports;
 import org.bukkit.inventory.CookingRecipe;
 import org.bukkit.inventory.FurnaceInventory;
 import org.bukkit.inventory.ItemStack;
@@ -19,6 +20,7 @@ public abstract class RMBaseCookingRecipe extends SingleRecipeChoiceSingleResult
     protected float minTime = -1;
     protected float maxTime = -1;
     protected String group;
+    protected String category;
     protected float experience = 0;
 
     public RMBaseCookingRecipe() {
@@ -38,6 +40,7 @@ public abstract class RMBaseCookingRecipe extends SingleRecipeChoiceSingleResult
             maxTime = r.maxTime;
 
             group = r.group;
+            category = r.category;
             experience = r.experience;
 
             hash = r.hash;
@@ -54,6 +57,9 @@ public abstract class RMBaseCookingRecipe extends SingleRecipeChoiceSingleResult
         setResult(recipe.getResult());
 
         group = recipe.getGroup();
+        if (Supports.categories()) {
+            category = recipe.getCategory().name();
+        }
         minTime = recipe.getCookingTime();
     }
 
@@ -120,6 +126,18 @@ public abstract class RMBaseCookingRecipe extends SingleRecipeChoiceSingleResult
 
     public String getGroup() {
         return group;
+    }
+
+    public boolean hasCategory() {
+        return category != null;
+    }
+
+    public void setCategory(String newCategory) {
+        category = newCategory;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     public float getExperience() { return experience; }

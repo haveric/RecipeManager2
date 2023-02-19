@@ -6,7 +6,9 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.tools.Supports;
 import org.bukkit.inventory.SmokingRecipe;
+import org.bukkit.inventory.recipe.CookingBookCategory;
 
 public class RMSmokingRecipe extends RMBaseFurnaceRecipe1_13 {
     public RMSmokingRecipe() {
@@ -50,6 +52,10 @@ public class RMSmokingRecipe extends RMBaseFurnaceRecipe1_13 {
         SmokingRecipe bukkitRecipe = new SmokingRecipe(getNamespacedKey(), a.result(), getIngredientChoice(), experience, getCookTicks());
         if (hasGroup()) {
             bukkitRecipe.setGroup(getGroup());
+        }
+
+        if (Supports.categories() && hasCategory()) {
+            bukkitRecipe.setCategory(CookingBookCategory.valueOf(getCategory()));
         }
 
         return bukkitRecipe;

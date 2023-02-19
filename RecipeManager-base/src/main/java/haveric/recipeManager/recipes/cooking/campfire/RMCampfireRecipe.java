@@ -11,8 +11,10 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.cooking.RMBaseCookingRecipe;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.inventory.CampfireRecipe;
+import org.bukkit.inventory.recipe.CookingBookCategory;
 
 public class RMCampfireRecipe extends RMBaseCookingRecipe {
     public RMCampfireRecipe() {
@@ -59,7 +61,16 @@ public class RMCampfireRecipe extends RMBaseCookingRecipe {
         getFlags().sendPrepare(a, true);
         getResult().getFlags().sendPrepare(a, true);
 
-        return new CampfireRecipe(getNamespacedKey(), a.result(), ingredientChoice, experience, getCookTicks());
+        CampfireRecipe bukkitRecipe = new CampfireRecipe(getNamespacedKey(), a.result(), ingredientChoice, experience, getCookTicks());
+        if (hasGroup()) {
+            bukkitRecipe.setGroup(getGroup());
+        }
+
+        if (Supports.categories() && hasCategory()) {
+            bukkitRecipe.setCategory(CookingBookCategory.valueOf(getCategory()));
+        }
+
+        return bukkitRecipe;
     }
 
     @Override

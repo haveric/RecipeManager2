@@ -11,13 +11,16 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.recipe.CookingBookCategory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class RMCampfireRecipeParser extends BaseRecipeParser {
@@ -130,11 +133,24 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
         String argLine = reader.getLine();
 
         String argLower = argLine.toLowerCase();
-        if (argLower.startsWith("group ") || argLower.startsWith("xp ")) {
+        if (argLower.startsWith("group ") || argLower.startsWith("category ") || argLower.startsWith("xp ")) {
             if (argLower.startsWith("group ")) {
                 argLine = argLine.substring("group ".length()).trim();
 
                 recipe.setGroup(argLine);
+            } else if (argLower.startsWith("category ")) {
+                argLine = argLine.substring("category ".length()).trim();
+
+                if (Supports.categories()) {
+                    try {
+                        CookingBookCategory category = CookingBookCategory.valueOf(argLine);
+                        recipe.setCategory(category.name());
+                    } catch (IllegalArgumentException e) {
+                        ErrorReporter.getInstance().warning("Category is invalid. Category: " + argLine + " ignored. Valid values: " + Arrays.toString(CookingBookCategory.values()));
+                    }
+                } else {
+                    ErrorReporter.getInstance().warning("Category is supported on 1.19.3 or newer only. Category: " + argLine + " ignored.");
+                }
             } else if (argLower.startsWith("xp ")) {
                 argLine = argLine.substring("xp ".length()).trim();
 

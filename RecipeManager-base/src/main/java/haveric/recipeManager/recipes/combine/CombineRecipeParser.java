@@ -12,17 +12,16 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.recipe.CraftingBookCategory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CombineRecipeParser extends BaseRecipeParser {
     public CombineRecipeParser() {
@@ -48,6 +47,24 @@ public class CombineRecipeParser extends BaseRecipeParser {
                 ((CombineRecipe1_13) recipe).setGroup(groupLine);
             } else {
                 ErrorReporter.getInstance().warning("Group is supported on 1.13 or newer only. Group: " + groupLine + " ignored.");
+            }
+
+            reader.nextLine();
+        }
+
+        String categoryLine = reader.getLine();
+        if (categoryLine.toLowerCase().startsWith("category ")) {
+            categoryLine = categoryLine.substring("category ".length()).trim();
+
+            if (recipe instanceof CombineRecipe1_13 && Supports.categories()) {
+                try {
+                    CraftingBookCategory category = CraftingBookCategory.valueOf(categoryLine);
+                    ((CombineRecipe1_13) recipe).setCategory(category.name());
+                } catch (IllegalArgumentException e) {
+                    ErrorReporter.getInstance().warning("Category is invalid. Category: " + categoryLine + " ignored. Valid values: " + Arrays.toString(CraftingBookCategory.values()));
+                }
+            } else {
+                ErrorReporter.getInstance().warning("Category is supported on 1.19.3 or newer only. Category: " + categoryLine + " ignored.");
             }
 
             reader.nextLine();

@@ -8,6 +8,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
@@ -15,6 +16,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
+import org.bukkit.inventory.recipe.CraftingBookCategory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +28,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
     private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
 
     private String group;
+    private String category;
 
     public CombineRecipe1_13() {
     }
@@ -49,6 +52,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
             }
 
             group = r.group;
+            category = r.category;
         }
     }
 
@@ -135,6 +139,18 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         return group;
     }
 
+    public boolean hasCategory() {
+        return category != null;
+    }
+
+    public void setCategory(String newCategory) {
+        category = newCategory;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
     private void updateHash() {
         StringBuilder str = new StringBuilder("combine");
 
@@ -196,6 +212,10 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
 
         if (hasGroup()) {
             bukkitRecipe.setGroup(group);
+        }
+
+        if (Supports.categories() && hasCategory()) {
+            bukkitRecipe.setCategory(CraftingBookCategory.valueOf(category));
         }
 
         for (RecipeChoice choice : getIngredientChoiceList()) {

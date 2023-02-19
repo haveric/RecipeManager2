@@ -8,12 +8,14 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.recipe.CraftingBookCategory;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +27,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
     private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
     private String[] choicePattern;
     private String group;
+    private String category;
 
     private int width;
     private int height;
@@ -51,6 +54,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
 
             choicePattern = r.choicePattern;
             group = r.group;
+            category = r.category;
 
             width = r.width;
             height = r.height;
@@ -117,6 +121,18 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
 
     public String getGroup() {
         return group;
+    }
+
+    public boolean hasCategory() {
+        return category != null;
+    }
+
+    public void setCategory(String newCategory) {
+        category = newCategory;
+    }
+
+    public String getCategory() {
+        return category;
     }
 
     private void updateHash() {
@@ -219,6 +235,10 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         bukkitRecipe.shape(choicePattern);
         if (hasGroup()) {
             bukkitRecipe.setGroup(group);
+        }
+
+        if (Supports.categories() && hasCategory()) {
+            bukkitRecipe.setCategory(CraftingBookCategory.valueOf(category));
         }
 
         for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {

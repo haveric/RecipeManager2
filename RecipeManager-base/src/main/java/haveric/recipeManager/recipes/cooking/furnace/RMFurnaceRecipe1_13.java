@@ -6,7 +6,9 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.tools.Supports;
 import org.bukkit.inventory.FurnaceRecipe;
+import org.bukkit.inventory.recipe.CookingBookCategory;
 
 public class RMFurnaceRecipe1_13 extends RMBaseFurnaceRecipe1_13 {
     public RMFurnaceRecipe1_13() {
@@ -50,6 +52,10 @@ public class RMFurnaceRecipe1_13 extends RMBaseFurnaceRecipe1_13 {
         FurnaceRecipe bukkitRecipe = new FurnaceRecipe(getNamespacedKey(), a.result(), getIngredientChoice(), experience, getCookTicks());
         if (hasGroup()) {
             bukkitRecipe.setGroup(getGroup());
+        }
+
+        if (Supports.categories() && hasCategory()) {
+            bukkitRecipe.setCategory(CookingBookCategory.valueOf(getCategory()));
         }
 
         return bukkitRecipe;

@@ -663,6 +663,7 @@
                                 CRAFT [recipe name]
                                 [@ recipe flags]
                                 [group name]
+                                [category name]
                                 pattern abc | def | ghi
                                 &lt;letter&gt; &lt;material:[data][, ...]&gt;
                                 [@ ingredient flags]
@@ -672,6 +673,7 @@
                                 [... more results]
                             </div>
                             <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
+                            <p>The [category name] defines the category this recipe belongs to in the crafting recipe book.</p>
                             <p>The pattern line defines the shape of the recipe grid.
                                 <ul>
                                     <li>Each row is separated by a pipe character: |</li>
@@ -880,6 +882,7 @@
                             <div class="code">
                                 CRAFT [recipe name]
                                 [group name]
+                                [category name]
                                 &lt;material[, ...]&gt; + [material[, ...]] + [material[, ...]]
                                 [material[, ...]] + [material[, ...]] + [material[, ...]]
                                 [material[, ...]] + [material[, ...]] + [material[, ...]]
@@ -887,6 +890,7 @@
                                 [...]
                             </div>
                             <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
+                            <p>The [category name] defines the category this recipe belongs to in the crafting recipe book.</p>
                             <p>The ingredients are in the shape of the recipe grid, it will also work if horizontally mirrored.</p>
                             <p><b>NOTE:</b> The recipe is exactly the same if you place the ingredients reversed horizontally, it's how the game works.</p>
                             <p>Number of ingredients is optional, you can specify only 1 or all 9 of them if you want.</p>
@@ -1087,6 +1091,7 @@
                             COMBINE [recipe name]
                             [@ recipe flags]
                             [group name]
+                            [category name]
                             pattern abcdefghi
                             &lt;letter&gt; &lt;material:[data][, ...]&gt;
                             [@ ingredient flags]
@@ -1097,6 +1102,7 @@
                         </div>
                         <p>Unlike shaped recipe, this recipe's ingredients can be placed in any order anywhere on the grid.</p>
                         <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
+                        <p>The [category name] defines the category this recipe belongs to in the crafting recipe book.</p>
                         <p>The pattern line defines the pattern of the recipe grid, where similar characters means an item is used more than once.
                         <ul>
                             <li>Each letter represent one or more ingredients that are defined in the ingredients section.</li>
@@ -1250,12 +1256,14 @@
                         <div class="code">
                             COMBINE [recipe name]
                             [group name]
+                            [category name]
                             &lt;material[, ...]:[amount]&gt; + [...]
                             = [chance]% &lt;material:[data]:[amount]&gt;
                             [...]
                         </div>
                         <p>Unlike shaped recipe, this recipe's ingredients can be placed in any order anywhere on the grid.</p>
                         <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
+                        <p>The [category name] defines the category this recipe belongs to in the crafting recipe book.</p>
                         <p>You can specify up to 9 items added up.</p>
                         <p>The optional amount can only be added at the end of a list of materials</p>
                         <p><b>EXAMPLE:</b> cobblestone,stone:5 would be valid and expect the recipe to have 5 ingredients of either cobblestone OR stone</p>
@@ -1400,6 +1408,7 @@
                     SMELT [recipe name]
                     [@ recipe flags]
                     [group name]
+                    [category name]
                     [xp amount]
                     &lt;material:[data][, ...]&gt; % [time]
                     [@ ingredient flags]
@@ -1410,6 +1419,7 @@
                     // one result max!
                 </div>
                 <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
+                <p>The [category name] defines the category this recipe belongs to in the cooking recipe book.</p>
                 <p>The [xp amount] defines the amount of xp given for the furnace recipe. Can be a decimal value. Examples ("xp 2", "xp .5", "xp 1.1"). Defaults to 0.</p>
                 <p>The first '&lt;material[, ...]&gt;' is the ingredient.</p>
                 <p>(optional) '% [time]' can be the time to smelt, 'time' should be a 'instant', a float number or a range of float numbers separated by a dash. Default time: 10</p>
@@ -1611,6 +1621,7 @@
                     CAMPFIRE [recipe name]
                     [@ recipe flags]
                     [group name]
+                    [category name]
                     [xp amount]
                     &lt;material[, ...]&gt;:[data] % [time]
                     [@ ingredient flags]
@@ -1619,6 +1630,7 @@
                     [@ result flags]
                 </div>
                 <p>The [group name] defines the knowledge book group this recipe belongs to.</p>
+                <p>The [category name] defines the category this recipe belongs to in the cooking recipe book.</p>
                 <p>The [xp amount] defines the amount of xp given for the furnace recipe. Can be a decimal value. Examples ("xp 2", "xp .5", "xp 1.1"). Defaults to 0.</p>
                 <p>The first '&lt;material[, ...]&gt;' is the ingredient.</p>
                 <p>(optional) '% [time]' can be the time to cook, 'time' should be a 'instant', a float number or a range of float numbers separated by a dash. Default time: 30</p>
