@@ -102,52 +102,72 @@ public class BrewEvents extends BaseRecipeEvents {
             if (inv instanceof BrewerInventory && holder instanceof BrewingStand) {
                 BrewerInventory brewerInventory = (BrewerInventory) inv;
                 int rawSlot = event.getRawSlot();
-                if (rawSlot >= 0 && rawSlot < brewerInventory.getSize()) {
-                    BrewingStandData data = BrewingStands.get(((BrewingStand) holder).getLocation());
-                    data.setFuelerUUID(ent.getUniqueId());
-
-                    boolean needsCustomStacking;
-                    int stackSize = 1;
-                    if (rawSlot == 3) {
-                        stackSize = 64;
-                    }
-                    
-                    Material material = null;
-
+                if (rawSlot >= 0) {
                     ClickType clickType = event.getClick();
-                    if (clickType == ClickType.NUMBER_KEY) {
-                        Inventory bottomInventory = event.getView().getBottomInventory();
-                        int hotbarButton = event.getHotbarButton();
-                        ItemStack item = bottomInventory.getItem(hotbarButton);
-                        if (item != null) {
-                            material = item.getType();
-                        }
+                    Material material = null;
+                    if (rawSlot < brewerInventory.getSize()) {
+                        BrewingStandData data = BrewingStands.get(((BrewingStand) holder).getLocation());
+                        data.setFuelerUUID(ent.getUniqueId());
 
+                        boolean needsCustomStacking;
+                        int stackSize = 1;
                         if (rawSlot == 3) {
-                            needsCustomStacking = BrewInventoryUtil.isIngredient(material);
-                        } else {
-                            needsCustomStacking = BrewInventoryUtil.isPotionOrResult(material);
+                            stackSize = 64;
                         }
 
-                        if (needsCustomStacking) {
-                            event.setCancelled(true);
-                            ToolsInventory.simulateHotbarSwap(brewerInventory, rawSlot, bottomInventory, hotbarButton, stackSize);
-                        }
-                    } else if (clickType != ClickType.SHIFT_LEFT && clickType != ClickType.SHIFT_RIGHT && clickType != ClickType.DOUBLE_CLICK) {
-                        ItemStack item = event.getCursor();
-                        if (item != null) {
-                            material = item.getType();
-                        }
+                        if (clickType == ClickType.NUMBER_KEY) {
+                            Inventory bottomInventory = event.getView().getBottomInventory();
+                            int hotbarButton = event.getHotbarButton();
+                            ItemStack item = bottomInventory.getItem(hotbarButton);
+                            if (item != null) {
+                                material = item.getType();
+                            }
 
-                        if (rawSlot == 3) {
-                            needsCustomStacking = BrewInventoryUtil.isIngredient(material);
-                        } else {
-                            needsCustomStacking = BrewInventoryUtil.isPotionOrResult(material);
-                        }
+                            if (rawSlot == 3) {
+                                needsCustomStacking = BrewInventoryUtil.isIngredient(material);
+                            } else {
+                                needsCustomStacking = BrewInventoryUtil.isPotionOrResult(material);
+                            }
 
-                        if (needsCustomStacking) {
-                            event.setCancelled(true);
-                            ToolsInventory.simulateDefaultClick(player, brewerInventory, rawSlot, clickType, stackSize);
+                            if (needsCustomStacking) {
+                                event.setCancelled(true);
+                                ToolsInventory.simulateHotbarSwap(brewerInventory, rawSlot, bottomInventory, hotbarButton, stackSize);
+                            }
+                        } else if (clickType != ClickType.SHIFT_LEFT && clickType != ClickType.SHIFT_RIGHT && clickType != ClickType.DOUBLE_CLICK) {
+                            ItemStack item = event.getCursor();
+                            if (item != null) {
+                                material = item.getType();
+                            }
+
+                            if (rawSlot == 3) {
+                                needsCustomStacking = BrewInventoryUtil.isIngredient(material);
+                            } else {
+                                needsCustomStacking = BrewInventoryUtil.isPotionOrResult(material);
+                            }
+
+                            if (needsCustomStacking) {
+                                event.setCancelled(true);
+                                ToolsInventory.simulateDefaultClick(player, brewerInventory, rawSlot, clickType, stackSize);
+                            }
+                        }
+                    } else {
+                        if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
+                            BrewingStandData data = BrewingStands.get(((BrewingStand) holder).getLocation());
+                            data.setFuelerUUID(ent.getUniqueId());
+
+                            ItemStack currentItem = event.getCurrentItem();
+                            if (currentItem != null) {
+                                material = currentItem.getType();
+
+                                Inventory bottomInventory = event.getView().getBottomInventory();
+                                if (BrewInventoryUtil.isIngredient(material)) {
+                                    event.setCancelled(true);
+                                    ToolsInventory.simulateShiftClick(bottomInventory,brewerInventory, event.getSlot(), 64, 3);
+                                } else if (BrewInventoryUtil.isPotionOrResult(material)) {
+                                    event.setCancelled(true);
+                                    ToolsInventory.simulateShiftClick(bottomInventory, brewerInventory, event.getSlot(), 1, 0, 2);
+                                }
+                            }
                         }
                     }
 

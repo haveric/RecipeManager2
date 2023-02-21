@@ -51,6 +51,68 @@ public class ToolsInventory {
         }
     }
 
+    public static void simulateShiftClick(Inventory bottomInventory, Inventory topInventory, int clickedSlot, int maxStackSize, int fromSlot) {
+        simulateShiftClick(bottomInventory, topInventory, clickedSlot, maxStackSize, fromSlot, fromSlot);
+    }
+
+    public static void simulateShiftClick(Inventory bottomInventory, Inventory topInventory, int clickedSlot, int maxStackSize, int fromSlot, int toSlot) {
+        for (int i = fromSlot; i <= toSlot; i++) {
+            ItemStack itemTop = topInventory.getItem(i);
+            ItemStack itemClicked = bottomInventory.getItem(clickedSlot);
+
+            boolean itemTopIsAir = itemTop == null || itemTop.getType() == Material.AIR;
+            boolean itemClickedIsAir = itemClicked == null || itemClicked.getType() == Material.AIR;
+
+            if (!itemClickedIsAir) {
+                if (itemTopIsAir) {
+                    ItemStack newItemTop = itemClicked.clone();
+
+                    if (newItemTop.getAmount() <= maxStackSize) {
+                        topInventory.setItem(i, newItemTop);
+                        bottomInventory.setItem(clickedSlot, null);
+                    } else {
+                        ItemStack newItemClicked = itemClicked.clone();
+
+                        int actualMoved = Math.min(newItemTop.getAmount(), maxStackSize);
+                        newItemTop.setAmount(actualMoved);
+                        topInventory.setItem(i, newItemTop);
+
+                        newItemClicked.setAmount(newItemClicked.getAmount() - actualMoved);
+                        bottomInventory.setItem(clickedSlot, newItemClicked);
+                    }
+                } else {
+                    boolean itemsAreSame = ToolsItem.isSameItemHash(itemTop, itemClicked);
+
+                    if (itemsAreSame) {
+                        int clickedAmount = itemClicked.getAmount();
+                        int topAmount = itemTop.getAmount();
+
+                        int combinedAmount = clickedAmount + topAmount;
+
+                        if (combinedAmount <= maxStackSize) {
+                            // PLACE_ALL
+                            ItemStack newTop = itemTop.clone();
+                            newTop.setAmount(combinedAmount);
+                            topInventory.setItem(i, newTop);
+                            bottomInventory.setItem(clickedSlot, null);
+                        } else {
+                            // PLACE_SOME
+
+                            int remaining = combinedAmount - maxStackSize;
+                            ItemStack newTop = itemTop.clone();
+                            newTop.setAmount(maxStackSize);
+                            topInventory.setItem(i, newTop);
+
+                            ItemStack newClicked = itemClicked.clone();
+                            newClicked.setAmount(remaining);
+                            bottomInventory.setItem(clickedSlot, newClicked);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static void simulateDefaultClick(Player player, Inventory inventory, int slot, ClickType clickType) {
         simulateDefaultClick(player, inventory, slot, clickType, 64);
     }
