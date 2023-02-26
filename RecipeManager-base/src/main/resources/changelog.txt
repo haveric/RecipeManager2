@@ -8,7 +8,7 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: 1.19.3: Campfire recipes support for random cook times
 * NEW: 1.19.3: Add support for recipe book categories
 * NEW: Added recipe book category to crafting and cooking recipe parsers
-* FIX: Fix brewing recipes not starting when shift clicking items into the brewing stand
+* FIX: Fix brewing recipes not starting when shift clicking or dragging items into the brewing stand
 
 ### v2.29.2
 * FIX: `@LightLevel`: Fixed light level check for solid blocks, such as crafting tables

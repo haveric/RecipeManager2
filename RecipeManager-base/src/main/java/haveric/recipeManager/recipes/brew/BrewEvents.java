@@ -71,19 +71,42 @@ public class BrewEvents extends BaseRecipeEvents {
         HumanEntity entity = event.getWhoClicked();
 
         if (entity instanceof Player) {
+            Player player = (Player) entity;
             Inventory inv = event.getInventory();
             InventoryHolder holder = inv.getHolder();
 
             if (inv instanceof BrewerInventory && holder instanceof BrewingStand) {
                 BrewerInventory brewerInventory = (BrewerInventory) inv;
+                Inventory bottomInventory = event.getView().getBottomInventory();
 
                 Set<Integer> rawSlots = event.getRawSlots();
+                ItemStack cursor = event.getOldCursor();
+                Material cursorMaterial = cursor.getType();
                 for (int i = 0; i <= 3; i++) {
                     if (rawSlots.contains(i)) {
-                        BrewingStandData data = BrewingStands.get(((BrewingStand) holder).getLocation());
-                        data.setFuelerUUID(entity.getUniqueId());
-                        prepareCustomBrewEventLater(brewerInventory);
-                        break;
+                        boolean needsCustomStacking;
+                        if (i == 3) {
+                            needsCustomStacking = BrewInventoryUtil.isIngredient(cursorMaterial);
+                        } else {
+                            needsCustomStacking = BrewInventoryUtil.isPotionOrResult(cursorMaterial);
+                        }
+
+                        if (needsCustomStacking) {
+                            event.setCancelled(true);
+
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    ToolsInventory.simulateDrag(player, inv, bottomInventory, event.getNewItems(), event.getCursor());
+                                }
+                            }.runTaskLater(RecipeManager.getPlugin(), 0);
+
+                            BrewingStandData data = BrewingStands.get(((BrewingStand) holder).getLocation());
+                            data.setFuelerUUID(entity.getUniqueId());
+                            prepareCustomBrewEventLater(brewerInventory);
+
+                            break;
+                        }
                     }
                 }
             }

@@ -6,7 +6,33 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Map;
+
 public class ToolsInventory {
+
+    private static final int PLAYER_INVENTORY_SIZE = 36;
+
+    public static void simulateDrag(Player player, Inventory topInventory, Inventory bottomInventory, Map<Integer, ItemStack> newItemsMap, ItemStack cursor) {
+
+        int topInventorySize = topInventory.getSize();
+        for (Map.Entry<Integer, ItemStack> entry : newItemsMap.entrySet()) {
+            int slot = entry.getKey();
+            ItemStack item = entry.getValue();
+
+            if (slot < topInventorySize) {
+                topInventory.setItem(slot, item);
+            } else {
+                int inventoryActualSlot = slot - topInventorySize + 9;
+                if (inventoryActualSlot > PLAYER_INVENTORY_SIZE) {
+                    inventoryActualSlot -= PLAYER_INVENTORY_SIZE;
+                }
+
+                bottomInventory.setItem(inventoryActualSlot, item);
+            }
+
+            player.setItemOnCursor(cursor);
+        }
+    }
 
     public static void simulateHotbarSwap(Inventory inventoryOne, int slotTop, Inventory inventoryTwo, int slotHotbar) {
         simulateHotbarSwap(inventoryOne, slotTop, inventoryTwo, slotHotbar, 64);
