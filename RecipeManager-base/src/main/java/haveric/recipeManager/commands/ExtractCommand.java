@@ -93,9 +93,9 @@ public class ExtractCommand implements TabExecutor {
                     ShapedRecipe recipe = (ShapedRecipe) r;
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.CRAFT.getDirective());
 
-                    appendNamespacedKey(recipeString, recipe.getKey());
-
                     if (Version.has1_13Support()) {
+                        appendNamespacedKey(recipeString, recipe.getKey());
+
                         if (!recipe.getGroup().isEmpty()) {
                             recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                         }
@@ -154,9 +154,9 @@ public class ExtractCommand implements TabExecutor {
                     ShapelessRecipe recipe = (ShapelessRecipe) r;
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.COMBINE.getDirective());
 
-                    appendNamespacedKey(recipeString, recipe.getKey());
-
                     if (Version.has1_13Support()) {
+                        appendNamespacedKey(recipeString, recipe.getKey());
+
                         if (!recipe.getGroup().isEmpty()) {
                             recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                         }
@@ -196,9 +196,9 @@ public class ExtractCommand implements TabExecutor {
                     FurnaceRecipe recipe = (FurnaceRecipe) r;
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMELT.getDirective());
 
-                    appendNamespacedKey(recipeString, recipe.getKey());
-
                     if (Version.has1_13Support()) {
+                        appendNamespacedKey(recipeString, recipe.getKey());
+
                         if (!recipe.getGroup().isEmpty()) {
                             recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                         }
