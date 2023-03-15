@@ -1,7 +1,7 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-### v2.29.3
+### v2.29.3 (Coming Soon)
 * FIX: Fixed repair and repair-metadata special recipes
 * FIX: Fuel recipes can now be set to as low as 1 tick instead of 1 second
 * FIX: Campfire recipe group option is now applied correctly
@@ -10,6 +10,9 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: Added recipe book category to crafting and cooking recipe parsers
 * FIX: Fix brewing recipes not starting when shift clicking or dragging items into the brewing stand
 * FIX: 1.12 and below: Fixed /rmextract
+* FIX: 1.19: Fixed scaffolding fuel amount
+* NEW: 1.20 (experimental): Added new furnace fuels
+* NEW: 1.20 (experimental): Added new composting items
 
 ### v2.29.2
 * FIX: `@LightLevel`: Fixed light level check for solid blocks, such as crafting tables

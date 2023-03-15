@@ -388,7 +388,7 @@ public class Vanilla {
 
         if (Version.has1_19Support()) {
             addFuelRecipe(Material.MANGROVE_ROOTS, 15);
-            addFuelRecipe(Material.SCAFFOLDING, 50);
+            addFuelRecipe(Material.SCAFFOLDING, 2.5f);
 
             addFuelRecipe(Material.MANGROVE_BOAT, 60);
             addFuelRecipe(Material.MANGROVE_BUTTON, 5);
@@ -416,6 +416,57 @@ public class Vanilla {
             addFuelRecipe(Material.MANGROVE_CHEST_BOAT, 60);
             addFuelRecipe(Material.OAK_CHEST_BOAT, 60);
             addFuelRecipe(Material.SPRUCE_CHEST_BOAT, 60);
+        }
+
+        if (Version.has1_19_3Support()) {
+            addFuelRecipe(Material.CHISELED_BOOKSHELF, 15);
+
+            addFuelRecipe(Material.ACACIA_HANGING_SIGN, 40);
+            addFuelRecipe(Material.BAMBOO_HANGING_SIGN, 40);
+            addFuelRecipe(Material.BIRCH_HANGING_SIGN, 40);
+            addFuelRecipe(Material.DARK_OAK_HANGING_SIGN, 40);
+            addFuelRecipe(Material.JUNGLE_HANGING_SIGN, 40);
+            addFuelRecipe(Material.MANGROVE_HANGING_SIGN, 40);
+            addFuelRecipe(Material.OAK_HANGING_SIGN, 40);
+            addFuelRecipe(Material.SPRUCE_HANGING_SIGN, 40);
+
+            addFuelRecipe(Material.BAMBOO_BLOCK, 15);
+            addFuelRecipe(Material.BAMBOO_BUTTON, 5);
+            addFuelRecipe(Material.BAMBOO_CHEST_RAFT, 60);
+            addFuelRecipe(Material.BAMBOO_DOOR, 10);
+            addFuelRecipe(Material.BAMBOO_FENCE, 15);
+            addFuelRecipe(Material.BAMBOO_FENCE_GATE, 15);
+            addFuelRecipe(Material.BAMBOO_MOSAIC, 15);
+            addFuelRecipe(Material.BAMBOO_MOSAIC_SLAB, 15);
+            addFuelRecipe(Material.BAMBOO_MOSAIC_STAIRS, 15);
+            addFuelRecipe(Material.BAMBOO_PLANKS, 15);
+            addFuelRecipe(Material.BAMBOO_PRESSURE_PLATE, 15);
+            addFuelRecipe(Material.BAMBOO_RAFT, 60);
+            addFuelRecipe(Material.BAMBOO_SIGN, 10);
+            addFuelRecipe(Material.BAMBOO_SLAB, 15);
+            addFuelRecipe(Material.BAMBOO_STAIRS, 15);
+            addFuelRecipe(Material.BAMBOO_TRAPDOOR, 15);
+            addFuelRecipe(Material.STRIPPED_BAMBOO_BLOCK, 15);
+        }
+
+        if (Version.has1_19_4Support()) {
+            addFuelRecipe(Material.CHERRY_BOAT, 60);
+            addFuelRecipe(Material.CHERRY_BUTTON, 5);
+            addFuelRecipe(Material.CHERRY_DOOR, 10);
+            addFuelRecipe(Material.CHERRY_FENCE, 15);
+            addFuelRecipe(Material.CHERRY_FENCE_GATE, 15);
+            addFuelRecipe(Material.CHERRY_HANGING_SIGN, 40);
+            addFuelRecipe(Material.CHERRY_LOG, 15);
+            addFuelRecipe(Material.CHERRY_PLANKS, 15);
+            addFuelRecipe(Material.CHERRY_PRESSURE_PLATE, 15);
+            addFuelRecipe(Material.CHERRY_SAPLING, 5);
+            addFuelRecipe(Material.CHERRY_SIGN, 10);
+            addFuelRecipe(Material.CHERRY_SLAB, 15);
+            addFuelRecipe(Material.CHERRY_STAIRS, 15);
+            addFuelRecipe(Material.CHERRY_TRAPDOOR, 15);
+            addFuelRecipe(Material.CHERRY_WOOD, 15);
+            addFuelRecipe(Material.STRIPPED_CHERRY_LOG, 15);
+            addFuelRecipe(Material.STRIPPED_CHERRY_WOOD, 15);
         }
 
         // Index fuel recipes
@@ -553,6 +604,15 @@ public class Vanilla {
             addCompostRecipe(Material.MANGROVE_LEAVES, 30);
             addCompostRecipe(Material.MANGROVE_PROPAGULE, 30);
             addCompostRecipe(Material.MANGROVE_ROOTS, 30);
+        }
+
+        if (Version.has1_19_4Support()) {
+            addCompostRecipe(Material.TORCHFLOWER, 65); // Confirmed
+            addCompostRecipe(Material.TORCHFLOWER_SEEDS, 30); // TODO: Probable due to other seeds being 30%
+            addCompostRecipe(Material.PINK_PETALS, 30); // TODO: Unconfirmed
+
+            addCompostRecipe(Material.CHERRY_LEAVES, 30);
+            addCompostRecipe(Material.CHERRY_SAPLING, 30);
         }
     }
 
@@ -1380,6 +1440,19 @@ public class Vanilla {
                     case "banner_add_pattern": // 1.13 only
 
                     case "suspicious_stew": // 1.14
+
+                    // 1.19.4 (1.20 experimental)
+                    case "sentry_armor_trim_smithing_template_smithing_trim":
+                    case "spire_armor_trim_smithing_template_smithing_trim":
+                    case "wild_armor_trim_smithing_template_smithing_trim":
+                    case "dune_armor_trim_smithing_template_smithing_trim":
+                    case "snout_armor_trim_smithing_template_smithing_trim":
+                    case "ward_armor_trim_smithing_template_smithing_trim":
+                    case "eye_armor_trim_smithing_template_smithing_trim":
+                    case "rib_armor_trim_smithing_template_smithing_trim":
+                    case "tide_armor_trim_smithing_template_smithing_trim":
+                    case "coast_armor_trim_smithing_template_smithing_trim":
+                    case "vex_armor_trim_smithing_template_smithing_trim":
                         isSpecial = true;
                         break;
 
