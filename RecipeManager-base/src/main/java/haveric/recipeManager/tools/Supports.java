@@ -14,6 +14,7 @@ public class Supports {
     static boolean suspiciousStewMeta = false;
     static boolean compassMeta = false;
     static boolean itemFlagHideDye = false;
+    static boolean itemFlagHideArmorTrim = false;
     static boolean categories = false;
     static boolean campfireStartEvent = false;
 
@@ -24,6 +25,7 @@ public class Supports {
         checkSuspiciousStewMeta();
         checkCompassMetaSupport();
         checkItemFlagHideDyeSupport();
+        checkItemFlagHideArmorTrimSupport();
         checkCategories();
         checkCampfireStartEvent();
     }
@@ -121,6 +123,17 @@ public class Supports {
         }
     }
 
+    // 1.19.4
+    private static void checkItemFlagHideArmorTrimSupport() {
+        try {
+            @SuppressWarnings("unused")
+            ItemFlag flag = ItemFlag.HIDE_ARMOR_TRIM;
+            itemFlagHideArmorTrim = true;
+        } catch (NoSuchFieldError e) {
+            itemFlagHideArmorTrim = false;
+        }
+    }
+
     public static boolean axolotlBucketMeta() {
         return axolotlBucketMeta;
     }
@@ -143,6 +156,10 @@ public class Supports {
 
     public static boolean itemFlagHideDye() {
         return itemFlagHideDye;
+    }
+
+    public static boolean itemFlagHideArmorTrim() {
+        return itemFlagHideArmorTrim;
     }
 
     public static boolean categories() {

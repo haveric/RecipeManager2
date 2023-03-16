@@ -44,6 +44,12 @@ public class FlagHide extends Flag {
             }, String.class);
         }
 
+        if (Supports.itemFlagHideArmorTrim()) {
+            description = ObjectArrays.concat(description, new String[] {
+                "  armortrim      = Hides armor trim from leather armor",
+            }, String.class);
+        }
+
         description = ObjectArrays.concat(description, new String[] {
             "  all            = Hides everything",
             "Arguments can be listed in any order.",
@@ -67,6 +73,7 @@ public class FlagHide extends Flag {
     private boolean potioneffects = false;
     private boolean unbreakable = false;
     private boolean dye = false;
+    private boolean armortrim = false;
 
     public FlagHide() { }
 
@@ -79,6 +86,7 @@ public class FlagHide extends Flag {
         potioneffects = flag.potioneffects;
         unbreakable = flag.unbreakable;
         dye = flag.dye;
+        armortrim = flag.armortrim;
     }
 
     @Override
@@ -117,6 +125,8 @@ public class FlagHide extends Flag {
                 unbreakable = true;
             } else if (arg.startsWith("dye")) {
                 dye = true;
+            } else if (arg.startsWith("armortrim")) {
+                armortrim = true;
             } else if (arg.startsWith("all")) {
                 attributes = true;
                 destroys = true;
@@ -125,6 +135,7 @@ public class FlagHide extends Flag {
                 potioneffects = true;
                 unbreakable = true;
                 dye = true;
+                armortrim = true;
             }
         }
 
@@ -169,6 +180,10 @@ public class FlagHide extends Flag {
                     meta.addItemFlags(ItemFlag.HIDE_DYE);
                 }
 
+                if (armortrim && Supports.itemFlagHideArmorTrim()) {
+                    meta.addItemFlags(ItemFlag.HIDE_ARMOR_TRIM);
+                }
+
                 a.result().setItemMeta(meta);
             }
         }
@@ -185,6 +200,7 @@ public class FlagHide extends Flag {
         toHash += "potioneffects: " + potioneffects;
         toHash += "unbreakable: " + unbreakable;
         toHash += "dye: " + dye;
+        toHash += "armortrim: " + armortrim;
 
         return toHash.hashCode();
     }
