@@ -1,4 +1,4 @@
-lastchanged: 2.27.1
+lastchanged: 2.29.3
 # Configurable messages.
 # Parts surrounded by { and } are variables that get replaced in-game, you can move them around or even remove them if you want.
 # To disable messages you can just delete the message or use 'false'.
@@ -134,6 +134,19 @@ craft:
     tippedarrows: <red>Tipped arrows crafting is disabled.
     shulkerdye: <red>Shulker dying is disabled.
     suspiciousstew: <red>Suspicious Stew crafting is disabled.
+    smithing:
+      armortrim:
+        coast: <red>Coast Armor Trim crafting is disabled.
+        dune: <red>Dune Armor Trim crafting is disabled.
+        eye: <red>Eye Armor Trim crafting is disabled.
+        rib: <red>Rib Armor Trim crafting is disabled.
+        sentry: <red>Sentry Armor Trim crafting is disabled.
+        snout: <red>Snout Armor Trim crafting is disabled.
+        spire: <red>Spire Armor Trim crafting is disabled.
+        tide: <red>Tide Armor Trim crafting is disabled.
+        vex: <red>Vex Armor Trim crafting is disabled.
+        ward: <red>Ward Armor Trim crafting is disabled.
+        wild: <red>Wild Armor Trim crafting is disabled.
   result:
     denied:
       title: <yellow><underline>You can't craft this recipe!

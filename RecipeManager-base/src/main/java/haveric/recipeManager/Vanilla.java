@@ -1443,17 +1443,17 @@ public class Vanilla {
 
                     // 1.19.4 (1.20 experimental)
                     case "decorated_pot":
-                    case "sentry_armor_trim_smithing_template_smithing_trim":
-                    case "spire_armor_trim_smithing_template_smithing_trim":
-                    case "wild_armor_trim_smithing_template_smithing_trim":
+                    case "coast_armor_trim_smithing_template_smithing_trim":
                     case "dune_armor_trim_smithing_template_smithing_trim":
-                    case "snout_armor_trim_smithing_template_smithing_trim":
-                    case "ward_armor_trim_smithing_template_smithing_trim":
                     case "eye_armor_trim_smithing_template_smithing_trim":
                     case "rib_armor_trim_smithing_template_smithing_trim":
+                    case "sentry_armor_trim_smithing_template_smithing_trim":
+                    case "snout_armor_trim_smithing_template_smithing_trim":
+                    case "spire_armor_trim_smithing_template_smithing_trim":
                     case "tide_armor_trim_smithing_template_smithing_trim":
-                    case "coast_armor_trim_smithing_template_smithing_trim":
                     case "vex_armor_trim_smithing_template_smithing_trim":
+                    case "ward_armor_trim_smithing_template_smithing_trim":
+                    case "wild_armor_trim_smithing_template_smithing_trim":
                         isSpecial = true;
                         break;
 
@@ -1939,6 +1939,204 @@ public class Vanilla {
 
             if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
                 if (key.getKey().equals("decorated_pot")) {
+                    matches = true;
+                }
+            }
+        }
+
+        return matches;
+    }
+
+    // 1.19.4 (1.20 experimental)
+    public static boolean recipeMatchesSmithingArmorTrimCoast(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_19_4Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("coast_armor_trim_smithing_template_smithing_trim")) {
+                    matches = true;
+                }
+            }
+        }
+
+        return matches;
+    }
+
+    // 1.19.4 (1.20 experimental)
+    public static boolean recipeMatchesSmithingArmorTrimDune(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_19_4Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("dune_armor_trim_smithing_template_smithing_trim")) {
+                    matches = true;
+                }
+            }
+        }
+
+        return matches;
+    }
+
+    // 1.19.4 (1.20 experimental)
+    public static boolean recipeMatchesSmithingArmorTrimEye(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_19_4Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("eye_armor_trim_smithing_template_smithing_trim")) {
+                    matches = true;
+                }
+            }
+        }
+
+        return matches;
+    }
+
+    // 1.19.4 (1.20 experimental)
+    public static boolean recipeMatchesSmithingArmorTrimRib(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_19_4Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("rib_armor_trim_smithing_template_smithing_trim")) {
+                    matches = true;
+                }
+            }
+        }
+
+        return matches;
+    }
+
+    // 1.19.4 (1.20 experimental)
+    public static boolean recipeMatchesSmithingArmorTrimSentry(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_19_4Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("sentry_armor_trim_smithing_template_smithing_trim")) {
+                    matches = true;
+                }
+            }
+        }
+
+        return matches;
+    }
+
+    // 1.19.4 (1.20 experimental)
+    public static boolean recipeMatchesSmithingArmorTrimSnout(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_19_4Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("snout_armor_trim_smithing_template_smithing_trim")) {
+                    matches = true;
+                }
+            }
+        }
+
+        return matches;
+    }
+
+    // 1.19.4 (1.20 experimental)
+    public static boolean recipeMatchesSmithingArmorTrimSpire(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_19_4Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("spire_armor_trim_smithing_template_smithing_trim")) {
+                    matches = true;
+                }
+            }
+        }
+
+        return matches;
+    }
+
+    // 1.19.4 (1.20 experimental)
+    public static boolean recipeMatchesSmithingArmorTrimTide(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_19_4Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("tide_armor_trim_smithing_template_smithing_trim")) {
+                    matches = true;
+                }
+            }
+        }
+
+        return matches;
+    }
+
+    // 1.19.4 (1.20 experimental)
+    public static boolean recipeMatchesSmithingArmorTrimVex(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_19_4Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("vex_armor_trim_smithing_template_smithing_trim")) {
+                    matches = true;
+                }
+            }
+        }
+
+        return matches;
+    }
+
+    // 1.19.4 (1.20 experimental)
+    public static boolean recipeMatchesSmithingArmorTrimWard(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_19_4Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("ward_armor_trim_smithing_template_smithing_trim")) {
+                    matches = true;
+                }
+            }
+        }
+
+        return matches;
+    }
+
+    // 1.19.4 (1.20 experimental)
+    public static boolean recipeMatchesSmithingArmorTrimWild(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_19_4Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("wild_armor_trim_smithing_template_smithing_trim")) {
                     matches = true;
                 }
             }

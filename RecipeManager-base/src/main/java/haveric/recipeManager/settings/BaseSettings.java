@@ -126,6 +126,17 @@ public abstract class BaseSettings {
         MessageSender.getInstance().log("    special-recipes.repair-metadata: " + getSpecialRepairMetadata());
         MessageSender.getInstance().log("    special-recipes.shield-banner: " + getSpecialShieldBanner());
         MessageSender.getInstance().log("    special-recipes.shulker-dye: " + getSpecialShulkerDye());
+        MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.coast: " + getSpecialSmithingArmorTrimCoast());
+        MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.dune: " + getSpecialSmithingArmorTrimDune());
+        MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.eye: " + getSpecialSmithingArmorTrimEye());
+        MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.rib: " + getSpecialSmithingArmorTrimRib());
+        MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.sentry: " + getSpecialSmithingArmorTrimSentry());
+        MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.snout: " + getSpecialSmithingArmorTrimSnout());
+        MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.spire: " + getSpecialSmithingArmorTrimSpire());
+        MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.tide: " + getSpecialSmithingArmorTrimTide());
+        MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.vex: " + getSpecialSmithingArmorTrimVex());
+        MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.ward: " + getSpecialSmithingArmorTrimWard());
+        MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.wild: " + getSpecialSmithingArmorTrimWild());
         MessageSender.getInstance().log("    special-recipes.suspicious-stew: " + getSpecialSuspiciousStew());
         MessageSender.getInstance().log("    special-recipes.tipped-arrows: " + getSpecialTippedArrows());
         MessageSender.getInstance().log("    sounds.failed: " + getSoundsFailed());
@@ -261,6 +272,18 @@ public abstract class BaseSettings {
     public abstract boolean getSpecialSuspiciousStew();
 
     public abstract boolean getSpecialDecoratedPot();
+
+    public abstract boolean getSpecialSmithingArmorTrimCoast();
+    public abstract boolean getSpecialSmithingArmorTrimDune();
+    public abstract boolean getSpecialSmithingArmorTrimEye();
+    public abstract boolean getSpecialSmithingArmorTrimRib();
+    public abstract boolean getSpecialSmithingArmorTrimSentry();
+    public abstract boolean getSpecialSmithingArmorTrimSnout();
+    public abstract boolean getSpecialSmithingArmorTrimSpire();
+    public abstract boolean getSpecialSmithingArmorTrimTide();
+    public abstract boolean getSpecialSmithingArmorTrimVex();
+    public abstract boolean getSpecialSmithingArmorTrimWard();
+    public abstract boolean getSpecialSmithingArmorTrimWild();
 
     public abstract boolean getSoundsRepair();
 

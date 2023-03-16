@@ -2,6 +2,7 @@ package haveric.recipeManager.recipes.smithing;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
+import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
@@ -24,10 +25,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.event.inventory.SmithItemEvent;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.SmithingInventory;
+import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -39,7 +37,21 @@ public class RMSmithingEvents extends BaseRecipeEvents {
 
     @EventHandler(priority = EventPriority.LOW)
     public void smithingPrepare(PrepareSmithingEvent event) {
+        InventoryView view = event.getView();
+        Player player = (Player) view.getPlayer();
+
         SmithingInventory inventory = event.getInventory();
+
+        ItemResult result;
+        if (inventory.getResult() == null) {
+            result = null;
+        } else {
+            result = new ItemResult(inventory.getResult());
+        }
+
+        if (prepareSpecialSmithingRecipe(player, inventory, result)) {
+            return; // stop here if it's a special smithing recipe
+        }
 
         ItemStack primary = inventory.getItem(0);
         ItemStack secondary = inventory.getItem(1);
@@ -54,11 +66,8 @@ public class RMSmithingEvents extends BaseRecipeEvents {
 
             Location location = inventory.getLocation();
             if (location != null) {
-                InventoryView view = event.getView();
-                Player player = (Player) view.getPlayer();
-
                 Args a = Args.create().player(player).inventoryView(view).location(location).recipe(recipe).build();
-                ItemResult result = recipe.getDisplayResult(a);
+                result = recipe.getDisplayResult(a);
                 if (result != null) {
                     a.setResult(result);
 
@@ -82,6 +91,105 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 event.setResult(result);
             }
         }
+    }
+
+    public boolean prepareSpecialSmithingRecipe(Player player, SmithingInventory inv, ItemStack result) {
+        Recipe recipe = inv.getRecipe();
+        if (recipe != null) {
+            ItemStack recipeResult = recipe.getResult();
+
+            if (!result.equals(recipeResult)) {
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimCoast()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimCoast(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.coast");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimDune()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimDune(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.dune");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimEye()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimEye(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.eye");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimRib()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimRib(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.rib");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimSentry()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimSentry(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.sentry");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimSnout()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimSnout(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.snout");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimSpire()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimSpire(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.spire");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimTide()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimTide(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.tide");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimVex()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimVex(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.vex");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimWard()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimWard(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.ward");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimWild()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimWild(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.wild");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     @EventHandler

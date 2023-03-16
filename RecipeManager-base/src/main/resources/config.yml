@@ -1,4 +1,4 @@
-lastchanged: 2.26.0 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.29.3 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager configuration
 # This file is for settings.
@@ -57,6 +57,19 @@ special-recipes:
   repair-metadata: false     # Weapon/tool repairing while preserving metadata (enchantments, name, etc), if both items have metadata, the first item's metadata will be preserved (ordering is from top left to bottom right)
   shield-banner: true        # shield decoration (banner) recipes
   shulker-dye: true          # shulker dying recipes
+  smithing:
+    armor-trim:              # (1.20 experimental)
+      coast: true
+      dune: true
+      eye: true
+      rib: true
+      sentry: true
+      snout: true
+      spire: true
+      tide: true
+      vex: true
+      ward: true
+      wild: true
   suspicious-stew: true      # suspicious stew recipes
   tipped-arrows: true        # tipped/potion arrows recipes
 

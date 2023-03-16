@@ -142,6 +142,61 @@ public class TestSettings extends BaseSettings {
     }
 
     @Override
+    public boolean getSpecialSmithingArmorTrimCoast() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimDune() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimEye() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimRib() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimSentry() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimSnout() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimSpire() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimTide() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimVex() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimWard() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimWild() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
     public boolean getSoundsRepair() {
         return SOUNDS_REPAIR_DEFAULT;
     }

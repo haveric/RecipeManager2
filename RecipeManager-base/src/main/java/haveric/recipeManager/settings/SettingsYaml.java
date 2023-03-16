@@ -546,6 +546,50 @@ public class SettingsYaml extends BaseSettings {
         return fileConfig.getBoolean("special-recipes.decorated-pot", SPECIAL_RECIPE_DEFAULT);
     }
 
+    public boolean getSpecialSmithingArmorTrimCoast() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.coast", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimDune() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.dune", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimEye() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.eye", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimRib() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.rib", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimSentry() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.sentry", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimSnout() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.snout", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimSpire() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.spire", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimTide() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.tide", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimVex() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.vex", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimWard() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.ward", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimWild() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.wild", SPECIAL_RECIPE_DEFAULT);
+    }
+
     public boolean getSoundsRepair() {
         return fileConfig.getBoolean("sounds.repair", SOUNDS_REPAIR_DEFAULT);
     }
