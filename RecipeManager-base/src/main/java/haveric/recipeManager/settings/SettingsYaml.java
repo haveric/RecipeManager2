@@ -542,6 +542,10 @@ public class SettingsYaml extends BaseSettings {
         return fileConfig.getBoolean("special-recipes.suspicious-stew", SPECIAL_RECIPE_DEFAULT);
     }
 
+    public boolean getSpecialDecoratedPot() {
+        return fileConfig.getBoolean("special-recipes.decorated-pot", SPECIAL_RECIPE_DEFAULT);
+    }
+
     public boolean getSoundsRepair() {
         return fileConfig.getBoolean("sounds.repair", SOUNDS_REPAIR_DEFAULT);
     }

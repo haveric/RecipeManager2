@@ -129,6 +129,7 @@ craft:
       cloning: <red>Book cloning is disabled.
     banner: <red>Banner crafting is disabled.
     bannerduplicate: <red>Banner duplicate crafting is disabled.
+    decoratedpot: <red>Decorated Pot crafting is disabled.
     shieldbanner: <red>Shield Banner crafting is disabled.
     tippedarrows: <red>Tipped arrows crafting is disabled.
     shulkerdye: <red>Shulker dying is disabled.

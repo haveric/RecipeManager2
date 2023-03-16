@@ -112,6 +112,7 @@ public abstract class BaseSettings {
         MessageSender.getInstance().log("    special-recipes.cartography.clone: " + getSpecialCartographyClone());
         MessageSender.getInstance().log("    special-recipes.cartography.extend: " + getSpecialCartographyExtend());
         MessageSender.getInstance().log("    special-recipes.cartography.lock: " + getSpecialCartographyLock());
+        MessageSender.getInstance().log("    special-recipes.decorated-pot: " + getSpecialDecoratedPot());
         MessageSender.getInstance().log("    special-recipes.fireworks: " + getSpecialFireworks());
         MessageSender.getInstance().log("    special-recipes.firework-star: " + getSpecialFireworkStar());
         MessageSender.getInstance().log("    special-recipes.firework-star-fade: " + getSpecialFireworkStarFade());
@@ -258,6 +259,8 @@ public abstract class BaseSettings {
     public abstract boolean getSpecialShulkerDye();
 
     public abstract boolean getSpecialSuspiciousStew();
+
+    public abstract boolean getSpecialDecoratedPot();
 
     public abstract boolean getSoundsRepair();
 

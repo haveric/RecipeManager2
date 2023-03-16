@@ -1442,6 +1442,7 @@ public class Vanilla {
                     case "suspicious_stew": // 1.14
 
                     // 1.19.4 (1.20 experimental)
+                    case "decorated_pot":
                     case "sentry_armor_trim_smithing_template_smithing_trim":
                     case "spire_armor_trim_smithing_template_smithing_trim":
                     case "wild_armor_trim_smithing_template_smithing_trim":
@@ -1920,6 +1921,24 @@ public class Vanilla {
 
             if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
                 if (key.getKey().equals("suspicious_stew")) {
+                    matches = true;
+                }
+            }
+        }
+
+        return matches;
+    }
+
+    // 1.19.4 (1.20 experimental)
+    public static boolean recipeMatchesDecoratedPot(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_19_4Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("decorated_pot")) {
                     matches = true;
                 }
             }

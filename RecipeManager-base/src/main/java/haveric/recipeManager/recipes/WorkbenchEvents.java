@@ -268,6 +268,14 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                     return true;
                 }
             }
+
+            if (!RecipeManager.getSettings().getSpecialDecoratedPot()) {
+                if (Vanilla.recipeMatchesDecoratedPot(recipe)) {
+                    Messages.getInstance().sendOnce(player, "craft.special.decoratedpot");
+                    inv.setResult(null);
+                    return true;
+                }
+            }
         }
 
         return false;

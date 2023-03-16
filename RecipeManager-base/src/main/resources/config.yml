@@ -32,6 +32,7 @@ special-recipes:
     clone: true              # clone maps recipe
     extend: true             # extend/zoom maps recipe
     lock: true               # lock maps recipe
+  decorated-pot: true        # (1.20 experimental)
   fireworks: true            # fireworks recipes
   firework-star: true        # firework star recipes
   firework-star-fade: true   # firework star fade recipes

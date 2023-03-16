@@ -137,6 +137,11 @@ public class TestSettings extends BaseSettings {
     }
 
     @Override
+    public boolean getSpecialDecoratedPot() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
     public boolean getSoundsRepair() {
         return SOUNDS_REPAIR_DEFAULT;
     }
