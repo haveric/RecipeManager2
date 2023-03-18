@@ -34,7 +34,7 @@ public class RMSmithingRecipeParser extends BaseRecipeParser {
             String lineChars = line.substring(0, 2).trim();
             char ingredientChar = lineChars.charAt(0);
 
-            if (lineChars.length() == 1 && (ingredientChar == 'a' || ingredientChar == 'b')) {
+            if (lineChars.length() == 1 && (ingredientChar == 'a' || ingredientChar == 'b' || ingredientChar == 't')) {
                 RecipeChoice choice = Tools.parseRecipeChoice(line.substring(2), ParseBit.NONE);
                 if (choice == null) {
                     return false;

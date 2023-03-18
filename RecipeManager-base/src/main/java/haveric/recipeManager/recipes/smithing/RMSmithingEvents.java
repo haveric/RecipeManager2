@@ -53,12 +53,10 @@ public class RMSmithingEvents extends BaseRecipeEvents {
             return; // stop here if it's a special smithing recipe
         }
 
-        ItemStack primary = inventory.getItem(0);
-        ItemStack secondary = inventory.getItem(1);
-
         List<ItemStack> ingredients = new ArrayList<>();
-        ingredients.add(primary);
-        ingredients.add(secondary);
+        for (int i = 0; i < inventory.getSize() - 1; i++) {
+            ingredients.add(inventory.getItem(i));
+        }
 
         BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.SMITHING, ingredients, null);
         if (baseRecipe instanceof RMSmithingRecipe) {
@@ -94,6 +92,10 @@ public class RMSmithingEvents extends BaseRecipeEvents {
     }
 
     public boolean prepareSpecialSmithingRecipe(Player player, SmithingInventory inv, ItemStack result) {
+        if (result == null) {
+            return false;
+        }
+
         Recipe recipe = inv.getRecipe();
         if (recipe != null) {
             ItemStack recipeResult = recipe.getResult();
@@ -436,7 +438,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
 
                     ClickType clickType = event.getClick();
                     int rawSlot = event.getRawSlot();
-                    if (rawSlot == 0 || rawSlot == 1) {
+                    if (rawSlot >= 0 && rawSlot < smithingTableInventory.getSize() - 1) {
                         if (clickType == ClickType.NUMBER_KEY) {
                             event.setCancelled(true);
                             ToolsInventory.simulateHotbarSwap(smithingTableInventory, rawSlot, event.getView().getBottomInventory(), event.getHotbarButton());

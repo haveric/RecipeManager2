@@ -214,7 +214,7 @@ public class RecipeCommand implements TabExecutor {
                 return containsRecipeChoice(((RMCampfireRecipe) recipe).getIngredientChoice(), item.getType());
             } else if (recipe instanceof RMSmithingRecipe) {
                 RMSmithingRecipe rmSmithingRecipe = (RMSmithingRecipe) recipe;
-                return containsRecipeChoice(rmSmithingRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(rmSmithingRecipe.getSecondaryIngredient(), item);
+                return containsRecipeChoice(rmSmithingRecipe.getTemplateIngredient(), item) || containsRecipeChoice(rmSmithingRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(rmSmithingRecipe.getSecondaryIngredient(), item);
             } else if (recipe instanceof RMStonecuttingRecipe) {
                 return containsRecipeChoice(((RMStonecuttingRecipe) recipe).getIngredientChoice(), item.getType());
             }
