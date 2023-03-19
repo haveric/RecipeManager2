@@ -280,7 +280,9 @@ public class FlagSummon extends Flag {
 
         if (Version.has1_19Support()) {
             description = ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "wardenanger <level>", "Sets the wardens anger level towards the player. Anger is an integer from 0 to 150. Once a Warden reaches 80 anger at a target it will actively pursue it.") }, String.class);
+                    String.format(argFormat, "wardenanger <level>", "Sets the wardens anger level towards the player. Anger is an integer from 0 to 150. Once a Warden reaches 80 anger at a target it will actively pursue it."),
+                    String.format(argFormat, "zombiecanbreakdoors [true/false]", "Sets whether the zombie can break doors.")
+            }, String.class);
         }
 
         if (!Version.has1_12Support()) {

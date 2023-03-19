@@ -112,6 +112,7 @@ public class Customization implements Cloneable {
     private boolean visualFire = false;
     private Integer wanderingTraderDespawnDelay = null;
     private Integer wardenAnger = null;
+    private Boolean zombieCanBreakDoors = null;
     private boolean zombieVillager = false;
 
     public Customization(String newFlagType, EntityType newType) {
@@ -236,6 +237,7 @@ public class Customization implements Cloneable {
             goatHasLeftHorn = c.goatHasLeftHorn;
             goatHasRightHorn = c.goatHasRightHorn;
             wardenAnger = c.wardenAnger;
+            zombieCanBreakDoors = c.zombieCanBreakDoors;
         }
     }
 
@@ -698,6 +700,11 @@ public class Customization implements Cloneable {
                 if (ent instanceof Warden && wardenAnger != null) {
                     Warden warden = (Warden) ent;
                     warden.setAnger(player, wardenAnger);
+                }
+
+                if (ent instanceof Zombie && zombieCanBreakDoors != null) {
+                    Zombie zombie = (Zombie) ent;
+                    zombie.setCanBreakDoors(zombieCanBreakDoors);
                 }
             }
 
@@ -1575,6 +1582,14 @@ public class Customization implements Cloneable {
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'wardenanger' argument with invalid value number: " + lower);
             }
+        } else if (Version.has1_19Support() && lower.startsWith("zombiecanbreakdoors")) {
+            lower = lower.substring("zombiecanbreakdoors".length()).trim();
+
+            if (lower.isEmpty()) {
+                zombieCanBreakDoors = true;
+            } else {
+                zombieCanBreakDoors = Boolean.parseBoolean(lower);
+            }
         } else {
             ErrorReporter.getInstance().warning("Flag " + flagType + " has unknown argument: " + lower);
         }
@@ -1713,6 +1728,7 @@ public class Customization implements Cloneable {
             toHash += "goatHasLeftHorn: " + goatHasLeftHorn;
             toHash += "goatHasRightHorn: " + goatHasRightHorn;
             toHash += "wardenAnger: " + wardenAnger;
+            toHash += "zombieCanBreakDoors: " + zombieCanBreakDoors;
         }
 
         return toHash.hashCode();
