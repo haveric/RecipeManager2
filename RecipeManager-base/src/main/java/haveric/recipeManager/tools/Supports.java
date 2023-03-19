@@ -2,6 +2,7 @@ package haveric.recipeManager.tools;
 
 import org.bukkit.Material;
 import org.bukkit.event.block.CampfireStartEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
@@ -15,6 +16,7 @@ public class Supports {
     static boolean compassMeta = false;
     static boolean itemFlagHideDye = false;
     static boolean itemFlagHideArmorTrim = false;
+    static boolean allayDuplication = false;
     static boolean categories = false;
     static boolean campfireStartEvent = false;
 
@@ -26,6 +28,7 @@ public class Supports {
         checkCompassMetaSupport();
         checkItemFlagHideDyeSupport();
         checkItemFlagHideArmorTrimSupport();
+        checkAllayDuplication();
         checkCategories();
         checkCampfireStartEvent();
     }
@@ -101,6 +104,17 @@ public class Supports {
         }
     }
 
+    // 1.19.2
+    private static void checkAllayDuplication() {
+        try {
+            @SuppressWarnings("unused")
+            CreatureSpawnEvent.SpawnReason spawnReason = CreatureSpawnEvent.SpawnReason.DUPLICATION;
+            allayDuplication = true;
+        } catch (NoSuchFieldError e) {
+            allayDuplication = false;
+        }
+    }
+
     // 1.19.3
     private static void checkCategories() {
         try {
@@ -162,6 +176,9 @@ public class Supports {
         return itemFlagHideArmorTrim;
     }
 
+    public static boolean allayDuplication() {
+        return allayDuplication;
+    }
     public static boolean categories() {
         return categories;
     }

@@ -9,6 +9,7 @@ import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
@@ -45,8 +46,18 @@ public class FlagSummon extends Flag {
                 "Optionally you can add some arguments separated by | character, those being:",
                 String.format(argFormat, "adult", "forces entity to spawn as an adult, works with animals and villagers (works opposite of baby)."),
                 String.format(argFormat, "agelock", "prevent the entity from maturing or getting ready for mating, works with animals and villagers."),
-                String.format(argFormat, "angry", "makes entity angry, only works for wolves and pigzombies; you can't use 'pet' with this."),
         };
+
+        if (Supports.allayDuplication()) {
+            description = ObjectArrays.concat(description, new String[]{
+                String.format(argFormat, "allayCanDuplicate [true/false]", "sets whether the allay can duplicate. Default is true."),
+                String.format(argFormat, "allayDuplicateCooldown <ticks>", "sets the cooldown (in ticks) before the allay can duplicate again. Default is 0."),
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[]{
+            String.format(argFormat, "angry", "makes entity angry, only works for wolves and pigzombies; you can't use 'pet' with this.")
+        }, String.class);
 
         if (Version.has1_16Support()) {
             description = ObjectArrays.concat(description, new String[]{

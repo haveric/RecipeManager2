@@ -8,6 +8,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.item.ItemRecipe;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.*;
@@ -31,6 +32,8 @@ public class Customization implements Cloneable {
 
     private boolean adult = false;
     private boolean ageLock = false;
+    private boolean allayCanDuplicate = true;
+    private int allayDuplicateCooldown = 0;
     private boolean angry = false;
     private Integer arrowCooldown = null;
     private int arrowsInBody = 0;
@@ -238,6 +241,11 @@ public class Customization implements Cloneable {
             goatHasRightHorn = c.goatHasRightHorn;
             wardenAnger = c.wardenAnger;
             zombieCanBreakDoors = c.zombieCanBreakDoors;
+        }
+
+        if (Supports.allayDuplication()) {
+            allayCanDuplicate = c.allayCanDuplicate;
+            allayDuplicateCooldown = c.allayDuplicateCooldown;
         }
     }
 
@@ -706,6 +714,12 @@ public class Customization implements Cloneable {
                     Zombie zombie = (Zombie) ent;
                     zombie.setCanBreakDoors(zombieCanBreakDoors);
                 }
+            }
+
+            if (Supports.allayDuplication() && ent instanceof Allay) {
+                Allay allay = (Allay) ent;
+                allay.setCanDuplicate(allayCanDuplicate);
+                allay.setDuplicationCooldown(allayDuplicateCooldown);
             }
 
             EntityEquipment eq = ent.getEquipment();
@@ -1590,6 +1604,23 @@ public class Customization implements Cloneable {
             } else {
                 zombieCanBreakDoors = Boolean.parseBoolean(lower);
             }
+        } else if (Supports.allayDuplication() && lower.startsWith("allaycanduplicate")) {
+            lower = lower.substring("allaycanduplicate".length()).trim();
+
+            if (lower.isEmpty()) {
+                allayCanDuplicate = true;
+            } else {
+                allayCanDuplicate = Boolean.parseBoolean(lower);
+            }
+
+        } else if (Supports.allayDuplication() && lower.startsWith("allayduplicatecooldown")) {
+            lower = lower.substring("allayduplicatecooldown".length()).trim();
+
+            try {
+                allayDuplicateCooldown = Integer.parseInt(lower);
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'allayduplicatecooldown' argument with invalid value number: " + lower);
+            }
         } else {
             ErrorReporter.getInstance().warning("Flag " + flagType + " has unknown argument: " + lower);
         }
@@ -1729,6 +1760,11 @@ public class Customization implements Cloneable {
             toHash += "goatHasRightHorn: " + goatHasRightHorn;
             toHash += "wardenAnger: " + wardenAnger;
             toHash += "zombieCanBreakDoors: " + zombieCanBreakDoors;
+        }
+
+        if (Supports.allayDuplication()) {
+            toHash += "allayCanDuplicate: " + allayCanDuplicate;
+            toHash += "allayDuplicateCooldown: " + allayDuplicateCooldown;
         }
 
         return toHash.hashCode();
