@@ -11,6 +11,7 @@ import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -25,7 +26,12 @@ public class RMSmithingRecipeParser extends BaseRecipeParser {
 
     @Override
     public boolean parseRecipe(int directiveLine) {
-        RMSmithingRecipe recipe = new RMSmithingRecipe(fileFlags); // create recipe and copy flags from file
+        RMSmithingRecipe recipe;
+        if (Version.has1_19_4Support()) {
+            recipe = new RMSmithingTransformRecipe(fileFlags); // create recipe and copy flags from file
+        } else {
+            recipe = new RMSmithingRecipe(fileFlags); // create recipe and copy flags from file
+        }
 
         reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // parse recipe's flags
 

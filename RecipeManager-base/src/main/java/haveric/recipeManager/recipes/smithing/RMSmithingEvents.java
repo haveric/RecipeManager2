@@ -216,8 +216,12 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 return;
             }
 
+            int inventorySize = inventory.getSize();
+            boolean isNewSmithingTable = inventorySize > 3;
+
             ItemStack originalPrimary = inventory.getItem(0);
             ItemStack originalSecondary = inventory.getItem(1);
+            ItemStack originalTertiary = inventory.getItem(2);
 
             List<ItemStack> ingredients = new ArrayList<>();
             ingredients.add(originalPrimary);
@@ -256,9 +260,15 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                         }
                         ItemStack primary = inventory.getItem(0);
                         ItemStack secondary = inventory.getItem(1);
+                        ItemStack tertiary = inventory.getItem(2);
 
                         // Make sure no items have changed or stop crafting
                         if (!ToolsItem.isSameItemHash(primary, originalPrimary) || !ToolsItem.isSameItemHash(secondary, originalSecondary)) {
+                            break;
+                        }
+
+                        // Make sure no items have changed or stop crafting
+                        if (isNewSmithingTable && !ToolsItem.isSameItemHash(tertiary, originalTertiary)) {
                             break;
                         }
 

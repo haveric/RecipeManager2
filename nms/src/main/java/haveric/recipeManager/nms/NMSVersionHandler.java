@@ -36,7 +36,9 @@ public class NMSVersionHandler {
             String serverVersion = getServerVersion();
 
             int minorVersion = getMinorVersion(serverVersion);
-            if (minorVersion >= 16) {
+            if (minorVersion >= 19 && getPatchVersion(serverVersion) >= 4) {
+                toolsRecipe = new ToolsRecipeV1_19_4();
+            } else if (minorVersion >= 16) {
                 toolsRecipe = new ToolsRecipeV1_16_1();
             } else if (minorVersion >= 14) {
                 toolsRecipe = new ToolsRecipeV1_14_R1();
@@ -72,5 +74,18 @@ public class NMSVersionHandler {
         }
 
         return minorVersion;
+    }
+
+    private static int getPatchVersion(String serverVersion) {
+        int patchVersion = 0;
+        String[] versionSplit = serverVersion.split("_");
+
+        if (versionSplit.length == 3) {
+            try {
+                patchVersion = Integer.parseInt(versionSplit[2]);
+            } catch (NumberFormatException ignored) {}
+        }
+
+        return patchVersion;
     }
 }

@@ -48,4 +48,8 @@ public abstract class BaseToolsRecipe {
     public boolean matchesSmithing(Recipe bukkitRecipe, ItemStack mainIngredient, ItemStack addIngredient) {
         return false;
     }
+
+    public boolean matchesSmithingTransform(Recipe bukkitRecipe, ItemStack templateIngredient, ItemStack mainIngredient, ItemStack addIngredient) {
+        return false;
+    }
 }

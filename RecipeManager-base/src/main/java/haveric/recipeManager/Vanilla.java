@@ -20,6 +20,7 @@ import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
 import haveric.recipeManager.recipes.smithing.RMSmithingRecipe;
+import haveric.recipeManager.recipes.smithing.RMSmithingTransformRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.*;
 import org.bukkit.Bukkit;
@@ -681,6 +682,8 @@ public class Vanilla {
                     recipe = new RMStonecuttingRecipe((StonecuttingRecipe) r);
                 } else if (Version.has1_16Support() && r instanceof SmithingRecipe) {
                     recipe = new RMSmithingRecipe((SmithingRecipe) r);
+                } else if (Version.has1_19_4Support() && r instanceof SmithingTransformRecipe) {
+                    recipe = new RMSmithingTransformRecipe((SmithingTransformRecipe) r);
                 }
 
                 if (recipe == null) {
@@ -753,6 +756,10 @@ public class Vanilla {
 
         if (recipe instanceof RMStonecuttingRecipe) {
             return removeStonecuttingRecipe((RMStonecuttingRecipe) recipe);
+        }
+
+        if (recipe instanceof RMSmithingTransformRecipe) {
+            return removeSmithingTransformRecipe((RMSmithingTransformRecipe) recipe);
         }
 
         if (recipe instanceof RMSmithingRecipe) {
@@ -990,6 +997,75 @@ public class Vanilla {
         return null;
     }
 
+    private static Recipe removeSmithingTransformRecipe(RMSmithingTransformRecipe recipe) {
+        ItemStack templateIngredient;
+        ItemStack baseIngredient;
+        ItemStack addIngredient;
+
+        RecipeChoice templateChoice = recipe.getPrimaryIngredient();
+        if (templateChoice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) templateChoice;
+            templateIngredient = new ItemStack(materialChoice.getChoices().get(0));
+        } else if (templateChoice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) templateChoice;
+            templateIngredient = exactChoice.getChoices().get(0);
+        } else {
+            return null;
+        }
+
+        RecipeChoice baseChoice = recipe.getPrimaryIngredient();
+        if (baseChoice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) baseChoice;
+            baseIngredient = new ItemStack(materialChoice.getChoices().get(0));
+        } else if (baseChoice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) baseChoice;
+            baseIngredient = exactChoice.getChoices().get(0);
+        } else {
+            return null;
+        }
+
+        RecipeChoice addChoice = recipe.getSecondaryIngredient();
+        if (addChoice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) addChoice;
+            addIngredient = new ItemStack(materialChoice.getChoices().get(0));
+        } else if (addChoice instanceof RecipeChoice.ExactChoice) {
+            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) addChoice;
+            addIngredient = exactChoice.getChoices().get(0);
+        } else {
+            return null;
+        }
+
+        return removeSmithingTransformRecipe(templateIngredient, baseIngredient, addIngredient);
+    }
+
+    private static Recipe removeSmithingTransformRecipe(ItemStack templateIngredient, ItemStack baseIngredient, ItemStack addIngredient) {
+        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
+        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        Recipe r;
+
+        while (iterator.hasNext()) {
+            try {
+                r = iterator.next();
+
+                if (r instanceof SmithingRecipe) {
+                    if (toolsRecipe.matchesSmithingTransform(r, templateIngredient, baseIngredient, addIngredient)) {
+                        iterator.remove();
+
+                        baseRecipeIterator.finish();
+
+                        return r;
+                    }
+                }
+            } catch (NullPointerException e) {
+                // Catch any invalid Bukkit recipes
+            } catch (NoSuchElementException e) {
+                // Vanilla datapack is disabled
+            }
+        }
+
+        return null;
+    }
     private static Recipe removeSmithingRecipe(RMSmithingRecipe recipe) {
         RecipeChoice baseChoice = recipe.getPrimaryIngredient();
         ItemStack baseIngredient;
