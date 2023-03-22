@@ -4,10 +4,11 @@ import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -113,16 +114,28 @@ public class RMSmithingTransformRecipe extends RMSmithingRecipe {
         SmithingRecipe bukkitRecipe;
 
         if (hasTemplateIngredient()) {
-            if (vanilla || !requiresRecipeManagerModification()) {
+            if (vanilla) {
                 bukkitRecipe = new SmithingTransformRecipe(getNamespacedKey(), getFirstResult(), templateIngredient, getPrimaryIngredient(), getSecondaryIngredient());
             } else {
-                bukkitRecipe = new SmithingTransformRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), hashCode()), templateIngredient, getPrimaryIngredient(), getSecondaryIngredient());
+                ItemResult firstResult = getFirstResult();
+
+                Args a = ArgBuilder.create().result(firstResult).build();
+                getFlags().sendPrepare(a, true);
+                firstResult.getFlags().sendPrepare(a, true);
+
+                bukkitRecipe = new SmithingTransformRecipe(getNamespacedKey(), a.result(), templateIngredient, getPrimaryIngredient(), getSecondaryIngredient());
             }
         } else {
-            if (vanilla || !requiresRecipeManagerModification()) {
+            if (vanilla) {
                 bukkitRecipe = new SmithingRecipe(getNamespacedKey(), getFirstResult(), getPrimaryIngredient(), getSecondaryIngredient());
             } else {
-                bukkitRecipe = new SmithingRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), hashCode()), getPrimaryIngredient(), getSecondaryIngredient());
+                ItemResult firstResult = getFirstResult();
+
+                Args a = ArgBuilder.create().result(firstResult).build();
+                getFlags().sendPrepare(a, true);
+                firstResult.getFlags().sendPrepare(a, true);
+
+                bukkitRecipe = new SmithingRecipe(getNamespacedKey(), a.result(), getPrimaryIngredient(), getSecondaryIngredient());
             }
         }
 

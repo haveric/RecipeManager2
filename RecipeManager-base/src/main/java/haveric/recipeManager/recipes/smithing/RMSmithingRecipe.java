@@ -4,11 +4,12 @@ import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.PreparableResultRecipe;
-import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -113,10 +114,16 @@ public class RMSmithingRecipe extends PreparableResultRecipe {
         }
 
         SmithingRecipe bukkitRecipe;
-        if (vanilla || !requiresRecipeManagerModification()) {
+        if (vanilla) {
             bukkitRecipe = new SmithingRecipe(getNamespacedKey(), getFirstResult(), primaryIngredient, secondaryIngredient);
         } else {
-            bukkitRecipe = new SmithingRecipe(getNamespacedKey(), Tools.createItemRecipeId(getFirstResult(), hashCode()), primaryIngredient, secondaryIngredient);
+            ItemResult firstResult = getFirstResult();
+
+            Args a = ArgBuilder.create().result(firstResult).build();
+            getFlags().sendPrepare(a, true);
+            firstResult.getFlags().sendPrepare(a, true);
+
+            bukkitRecipe = new SmithingRecipe(getNamespacedKey(), a.result(), primaryIngredient, secondaryIngredient);
         }
 
         return bukkitRecipe;
