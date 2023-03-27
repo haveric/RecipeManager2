@@ -1,12 +1,16 @@
 package haveric.recipeManager.tools;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.event.block.CampfireStartEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.inventory.recipe.CraftingBookCategory;
+
+import static org.bukkit.Tag.REGISTRY_BLOCKS;
 
 public class Supports {
     static boolean axolotlBucketMeta = false;
@@ -19,6 +23,7 @@ public class Supports {
     static boolean allayDuplication = false;
     static boolean categories = false;
     static boolean campfireStartEvent = false;
+    static boolean experimental1_20 = false;
 
     public static void init() {
         checkAxolotlBucketMeta();
@@ -31,6 +36,7 @@ public class Supports {
         checkAllayDuplication();
         checkCategories();
         checkCampfireStartEvent();
+        checkExperimental1_20();
     }
 
     // 1.12
@@ -148,6 +154,21 @@ public class Supports {
         }
     }
 
+    // 1.20 experimental
+    private static void checkExperimental1_20() {
+        try {
+            Iterable<Tag<Material>> blockTags = Bukkit.getTags(REGISTRY_BLOCKS, Material.class);
+            for (Tag<Material> tag : blockTags) {
+                if (tag.getKey().getKey().equals("bamboo_blocks")) {
+                    experimental1_20 = true;
+                    break;
+                }
+            }
+        } catch (NoSuchMethodError e) {
+            experimental1_20 = false;
+        }
+    }
+
     public static boolean axolotlBucketMeta() {
         return axolotlBucketMeta;
     }
@@ -185,5 +206,9 @@ public class Supports {
 
     public static boolean campfireStartEvent() {
         return campfireStartEvent;
+    }
+
+    public static boolean experimental1_20() {
+        return experimental1_20;
     }
 }

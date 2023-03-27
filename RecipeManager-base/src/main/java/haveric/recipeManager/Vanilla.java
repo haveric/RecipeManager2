@@ -20,7 +20,7 @@ import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
 import haveric.recipeManager.recipes.smithing.RMSmithingRecipe;
-import haveric.recipeManager.recipes.smithing.RMSmithingTransformRecipe;
+import haveric.recipeManager.recipes.smithing.RMSmithing1_19_4Recipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.*;
 import org.bukkit.Bukkit;
@@ -682,8 +682,6 @@ public class Vanilla {
                     recipe = new RMStonecuttingRecipe((StonecuttingRecipe) r);
                 } else if (Version.has1_16Support() && r instanceof SmithingRecipe) {
                     recipe = new RMSmithingRecipe((SmithingRecipe) r);
-                } else if (Version.has1_19_4Support() && r instanceof SmithingTransformRecipe) {
-                    recipe = new RMSmithingTransformRecipe((SmithingTransformRecipe) r);
                 }
 
                 if (recipe == null) {
@@ -758,8 +756,8 @@ public class Vanilla {
             return removeStonecuttingRecipe((RMStonecuttingRecipe) recipe);
         }
 
-        if (recipe instanceof RMSmithingTransformRecipe) {
-            return removeSmithingTransformRecipe((RMSmithingTransformRecipe) recipe);
+        if (recipe instanceof RMSmithing1_19_4Recipe) {
+            return removeSmithingTransformRecipe((RMSmithing1_19_4Recipe) recipe);
         }
 
         if (recipe instanceof RMSmithingRecipe) {
@@ -997,7 +995,7 @@ public class Vanilla {
         return null;
     }
 
-    private static Recipe removeSmithingTransformRecipe(RMSmithingTransformRecipe recipe) {
+    private static Recipe removeSmithingTransformRecipe(RMSmithing1_19_4Recipe recipe) {
         ItemStack templateIngredient;
         ItemStack baseIngredient;
         ItemStack addIngredient;

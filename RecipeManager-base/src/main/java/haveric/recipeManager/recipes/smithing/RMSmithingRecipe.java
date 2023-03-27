@@ -174,7 +174,7 @@ public class RMSmithingRecipe extends PreparableResultRecipe {
 
         for (String primaryIndex : primaryIndexes) {
             for (String secondaryIndex : secondaryIndexes) {
-                indexString.add(Material.AIR + "-" + primaryIndex + "-" + secondaryIndex);
+                indexString.add(primaryIndex + "-" + secondaryIndex);
             }
         }
 

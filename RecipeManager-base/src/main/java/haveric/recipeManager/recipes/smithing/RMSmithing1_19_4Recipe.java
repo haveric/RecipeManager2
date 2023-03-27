@@ -4,8 +4,6 @@ import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.flag.args.ArgBuilder;
-import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
@@ -13,30 +11,23 @@ import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.SmithingRecipe;
 import org.bukkit.inventory.SmithingTransformRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RMSmithingTransformRecipe extends RMSmithingRecipe {
+public class RMSmithing1_19_4Recipe extends RMSmithingRecipe {
     private RecipeChoice templateIngredient;
 
-    public RMSmithingTransformRecipe() {
+    public RMSmithing1_19_4Recipe() {
 
     }
 
-    public RMSmithingTransformRecipe(SmithingTransformRecipe recipe) {
+    public RMSmithing1_19_4Recipe(BaseRecipe recipe) {
         super(recipe);
 
-        setTemplateIngredient(recipe.getTemplate());
-    }
-
-    public RMSmithingTransformRecipe(BaseRecipe recipe) {
-        super(recipe);
-
-        if (recipe instanceof RMSmithingTransformRecipe) {
-            RMSmithingTransformRecipe r = (RMSmithingTransformRecipe) recipe;
+        if (recipe instanceof RMSmithing1_19_4Recipe) {
+            RMSmithing1_19_4Recipe r = (RMSmithing1_19_4Recipe) recipe;
 
             if (r.templateIngredient != null) {
                 templateIngredient = r.templateIngredient.clone();
@@ -46,7 +37,7 @@ public class RMSmithingTransformRecipe extends RMSmithingRecipe {
         }
     }
 
-    public RMSmithingTransformRecipe(Flags flags) {
+    public RMSmithing1_19_4Recipe(Flags flags) {
         super(flags);
     }
 
@@ -106,40 +97,8 @@ public class RMSmithingTransformRecipe extends RMSmithingRecipe {
     }
 
     @Override
-    public SmithingRecipe toBukkitRecipe(boolean vanilla) {
-        if (!hasIngredients() || !hasResults()) {
-            return null;
-        }
-
-        SmithingRecipe bukkitRecipe;
-
-        if (hasTemplateIngredient()) {
-            if (vanilla) {
-                bukkitRecipe = new SmithingTransformRecipe(getNamespacedKey(), getFirstResult(), templateIngredient, getPrimaryIngredient(), getSecondaryIngredient());
-            } else {
-                ItemResult firstResult = getFirstResult();
-
-                Args a = ArgBuilder.create().result(firstResult).build();
-                getFlags().sendPrepare(a, true);
-                firstResult.getFlags().sendPrepare(a, true);
-
-                bukkitRecipe = new SmithingTransformRecipe(getNamespacedKey(), a.result(), templateIngredient, getPrimaryIngredient(), getSecondaryIngredient());
-            }
-        } else {
-            if (vanilla) {
-                bukkitRecipe = new SmithingRecipe(getNamespacedKey(), getFirstResult(), getPrimaryIngredient(), getSecondaryIngredient());
-            } else {
-                ItemResult firstResult = getFirstResult();
-
-                Args a = ArgBuilder.create().result(firstResult).build();
-                getFlags().sendPrepare(a, true);
-                firstResult.getFlags().sendPrepare(a, true);
-
-                bukkitRecipe = new SmithingRecipe(getNamespacedKey(), a.result(), getPrimaryIngredient(), getSecondaryIngredient());
-            }
-        }
-
-        return bukkitRecipe;
+    public SmithingTransformRecipe toBukkitRecipe(boolean vanilla) {
+        return null;
     }
 
     private void updateHash() {
@@ -188,22 +147,17 @@ public class RMSmithingTransformRecipe extends RMSmithingRecipe {
     public List<String> getIndexes() {
         List<String> indexString = new ArrayList<>();
 
+        if (templateIngredient == null) {
+            templateIngredient = new RecipeChoice.MaterialChoice(Material.AIR);
+        }
         List<String> templateIndexes = getIndexForChoice(templateIngredient);
         List<String> primaryIndexes = getIndexForChoice(getPrimaryIngredient());
         List<String> secondaryIndexes = getIndexForChoice(getSecondaryIngredient());
 
-        if (hasTemplateIngredient()) {
-            for (String templateIndex : templateIndexes) {
-                for (String primaryIndex : primaryIndexes) {
-                    for (String secondaryIndex : secondaryIndexes) {
-                        indexString.add(templateIndex + "-" + primaryIndex + "-" + secondaryIndex);
-                    }
-                }
-            }
-        } else {
+        for (String templateIndex : templateIndexes) {
             for (String primaryIndex : primaryIndexes) {
                 for (String secondaryIndex : secondaryIndexes) {
-                    indexString.add(Material.AIR + "-" + primaryIndex + "-" + secondaryIndex);
+                    indexString.add(templateIndex + "-" + primaryIndex + "-" + secondaryIndex);
                 }
             }
         }
@@ -254,9 +208,7 @@ public class RMSmithingTransformRecipe extends RMSmithingRecipe {
     @Override
     public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
         List<String> recipeIndexes = new ArrayList<>();
-        if (ingredients.size() == 2) {
-            recipeIndexes.add(ingredients.get(0).getType() + "-" + ingredients.get(1).getType());
-        } else if (ingredients.size() == 3) {
+        if (ingredients.size() == 3) {
             recipeIndexes.add(ingredients.get(0).getType() + "-" + ingredients.get(1).getType() + "-" + ingredients.get(2).getType());
         }
 
@@ -299,5 +251,10 @@ public class RMSmithingTransformRecipe extends RMSmithingRecipe {
         }
 
         return totalQuality;
+    }
+
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return true;
     }
 }

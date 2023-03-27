@@ -27,7 +27,7 @@ import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
 import haveric.recipeManager.recipes.grindstone.GrindstoneRecipe;
 import haveric.recipeManager.recipes.smithing.RMSmithingRecipe;
-import haveric.recipeManager.recipes.smithing.RMSmithingTransformRecipe;
+import haveric.recipeManager.recipes.smithing.RMSmithing1_19_4Recipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
@@ -213,9 +213,9 @@ public class RecipeCommand implements TabExecutor {
                 return containsRecipeChoice(((RMBaseFurnaceRecipe1_13) recipe).getIngredientChoice(), item.getType());
             } else if (recipe instanceof RMCampfireRecipe) {
                 return containsRecipeChoice(((RMCampfireRecipe) recipe).getIngredientChoice(), item.getType());
-            } else if (recipe instanceof RMSmithingTransformRecipe) {
-                RMSmithingTransformRecipe rmSmithingTransformRecipe = (RMSmithingTransformRecipe) recipe;
-                return containsRecipeChoice(rmSmithingTransformRecipe.getTemplateIngredient(), item) || containsRecipeChoice(rmSmithingTransformRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(rmSmithingTransformRecipe.getSecondaryIngredient(), item);
+            } else if (recipe instanceof RMSmithing1_19_4Recipe) {
+                RMSmithing1_19_4Recipe rmSmithing1_19_4Recipe = (RMSmithing1_19_4Recipe) recipe;
+                return containsRecipeChoice(rmSmithing1_19_4Recipe.getTemplateIngredient(), item) || containsRecipeChoice(rmSmithing1_19_4Recipe.getPrimaryIngredient(), item) || containsRecipeChoice(rmSmithing1_19_4Recipe.getSecondaryIngredient(), item);
             } else if (recipe instanceof RMSmithingRecipe) {
                 RMSmithingRecipe rmSmithingRecipe = (RMSmithingRecipe) recipe;
                 return containsRecipeChoice(rmSmithingRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(rmSmithingRecipe.getSecondaryIngredient(), item);
