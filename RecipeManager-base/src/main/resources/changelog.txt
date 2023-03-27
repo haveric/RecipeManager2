@@ -10,6 +10,9 @@ This file will be automatically overwritten when a new version is installed.
 * NEW: Added recipe book category to crafting and cooking recipe parsers
 * FIX: Fix brewing recipes not starting when shift clicking or dragging items into the brewing stand
 * FIX: 1.12 and below: Fixed /rmextract
+* FIX: `@SkullOwner`: Fixed the dynamic `{player}` argument
+* FIX: 1.18.1+: `@SkullOwner`: Replace texture handling with player profiles
+    * It is recommended to replace `texture <base64>` with `textureurl <url>`
 * FIX: 1.19: Fixed scaffolding fuel amount
 * NEW: 1.19.2: `@Summon`: Added `allayCanDuplicate [true/false]` and `allayDuplicateCooldown <ticks>`
 * NEW: 1.19: `@Summon`: Added `zombiecanbreakdoors [true/false]` for setting if a zombie can break doors

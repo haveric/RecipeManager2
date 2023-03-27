@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.inventory.recipe.CraftingBookCategory;
+import org.bukkit.profile.PlayerProfile;
 
 import static org.bukkit.Tag.REGISTRY_BLOCKS;
 
@@ -24,6 +25,7 @@ public class Supports {
     static boolean categories = false;
     static boolean campfireStartEvent = false;
     static boolean experimental1_20 = false;
+    static boolean playerProfile = false;
 
     public static void init() {
         checkAxolotlBucketMeta();
@@ -37,6 +39,7 @@ public class Supports {
         checkCategories();
         checkCampfireStartEvent();
         checkExperimental1_20();
+        checkPlayerProfile();
     }
 
     // 1.12
@@ -107,6 +110,23 @@ public class Supports {
             axolotlBucketMeta = true;
         } catch (NoSuchFieldError | NoClassDefFoundError e) {
             axolotlBucketMeta = false;
+        }
+    }
+
+    // 1.18.1
+    private static void checkPlayerProfile() {
+        try {
+            ItemStack playerHead = new ItemStack(Material.PLAYER_HEAD);
+            SkullMeta skullMeta = (SkullMeta) playerHead.getItemMeta();
+
+            if (skullMeta != null) {
+                @SuppressWarnings("unused")
+                PlayerProfile profile = skullMeta.getOwnerProfile();
+
+                playerProfile = true;
+            }
+        } catch (NoSuchMethodError | NoClassDefFoundError e) {
+            playerProfile = false;
         }
     }
 
@@ -210,5 +230,9 @@ public class Supports {
 
     public static boolean experimental1_20() {
         return experimental1_20;
+    }
+
+    public static boolean playerProfile() {
+        return playerProfile;
     }
 }

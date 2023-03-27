@@ -1,21 +1,28 @@
 package haveric.recipeManager.flag.flags.result;
 
+import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.UUID;
 
 public class FlagSkullOwner extends Flag {
 
+    private final String MINECRAFT_TEXTURE_URL = "https://textures.minecraft.net/texture/";
     @Override
     public String getFlagType() {
         return FlagType.SKULL_OWNER;
@@ -23,38 +30,82 @@ public class FlagSkullOwner extends Flag {
 
     @Override
     protected String[] getArguments() {
-        return new String[] {
-            "{flag} <name>",
+        String[] arguments = new String[]{
             "{flag} <uuid>",
-            "{flag} texture <base64>",
-            "{flag} <name> | texture <base64>",
-            "{flag} <uuid> | texture <base64>", };
+            "{flag} <name>",
+        };
+
+        if (Supports.playerProfile()) {
+            arguments = ObjectArrays.concat(arguments, new String[]{
+                "{flag} textureurl <url>",
+                "{flag} <name> | textureurl <url>",
+                "{flag} <uuid> | textureurl <url>",
+            }, String.class);
+        } else {
+            arguments = ObjectArrays.concat(arguments, new String[]{
+                "{flag} texture <base64>",
+                "{flag} <uuid> | texture <base64>",
+                "{flag} <name> | texture <base64>",
+            }, String.class);
+        }
+
+        return arguments;
     }
 
     @Override
     protected String[] getDescription() {
-        return new String[] {
+        String[] description = new String[]{
             "Sets the human skull's owner to apply the skin.",
             "If you set it to '{player}' then it will use crafter's name.",
             "",
-            "For base64 textures, you can reference https://freshcoal.com/, https://minecraft-heads.com/, https://mineskin.org/ or any other Minecraft head repository",
-            "  You can only use the base64 encoded string of a valid mojang texture. Each of the above sites should be able to provide those",
-            "",
-            "  WARNING: The texture parameter will conflict with " + FlagType.ITEM_NBT + " and whichever is used last will be the one that gets used.", };
+        };
+
+        if (Supports.playerProfile()) {
+            description = ObjectArrays.concat(description, new String[]{
+                "For texture, you can reference https://minecraft-heads.com/, https://mineskin.org/ or any other Minecraft head repository",
+                "  You can only use textures that are located on the Minecraft texture server (" + MINECRAFT_TEXTURE_URL + "). Each of the above sites should be able to provide those",
+                "",
+                "  NOTE: You should exclude the base texture url in the arguments",
+                "  Example texture url: " + MINECRAFT_TEXTURE_URL + "c0b8b5889ee1c6388dc6c2c5dbd70b6984aefe54319a095e64db7638097b821",
+                "    Value you'd use: c0b8b5889ee1c6388dc6c2c5dbd70b6984aefe54319a095e64db7638097b821",
+            }, String.class);
+        } else {
+            description = ObjectArrays.concat(description, new String[]{
+                "For textureurl, you can reference https://minecraft-heads.com/, https://mineskin.org/ or any other Minecraft head repository",
+                "  You can only use the base64 encoded string of a valid mojang texture. Each of the above sites should be able to provide those",
+                "",
+                "  WARNING: The texture parameter will conflict with " + FlagType.ITEM_NBT + " and whichever is used last will be the one that gets used.",
+            }, String.class);
+        }
+
+        return description;
     }
 
     @Override
     protected String[] getExamples() {
-        return new String[] {
+        String[] examples = new String[]{
             "{flag} Notch",
             "{flag} {player}",
-            "{flag} texture eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzBiOGI1ODg5ZWUxYzYzODhkYzZjMmM1ZGJkNzBiNjk4NGFlZmU1NDMxOWEwOTVlNjRkYjc2MzgwOTdiODIxIn19fQ== // Jam texture", };
+        };
+
+        if (Supports.playerProfile()) {
+            examples = ObjectArrays.concat(examples, new String[]{
+                "{flag} textureurl c0b8b5889ee1c6388dc6c2c5dbd70b6984aefe54319a095e64db7638097b821 // Jam texture",
+            }, String.class);
+        } else {
+            examples = ObjectArrays.concat(examples, new String[]{
+                "{flag} texture eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzBiOGI1ODg5ZWUxYzYzODhkYzZjMmM1ZGJkNzBiNjk4NGFlZmU1NDMxOWEwOTVlNjRkYjc2MzgwOTdiODIxIn19fQ== // Jam texture",
+            }, String.class);
+        }
+
+        return examples;
     }
 
 
     private String owner;
     private UUID ownerUUID;
     private String textureBase64;
+    private URL textureURL;
 
     public FlagSkullOwner() {
     }
@@ -64,16 +115,12 @@ public class FlagSkullOwner extends Flag {
         owner = flag.owner;
         ownerUUID = flag.ownerUUID;
         textureBase64 = flag.textureBase64;
+        textureURL = flag.textureURL;
     }
 
     @Override
     public FlagSkullOwner clone() {
         return new FlagSkullOwner((FlagSkullOwner) super.clone());
-    }
-
-    @Override
-    public boolean requiresRecipeManagerModification() {
-        return false;
     }
 
     public boolean hasOwner() {
@@ -86,6 +133,10 @@ public class FlagSkullOwner extends Flag {
 
     public void setOwner(String newOwner) {
         owner = newOwner;
+    }
+
+    public boolean isOwnerDynamicPlayer() {
+        return owner != null && owner.equalsIgnoreCase("{player}");
     }
 
     public boolean hasOwnerUUID() {
@@ -110,6 +161,18 @@ public class FlagSkullOwner extends Flag {
 
     public boolean hasTextureBase64() {
         return textureBase64 != null;
+    }
+
+    public URL getTextureURL() {
+        return textureURL;
+    }
+
+    public void setTextureURL(URL url) {
+        textureURL = url;
+    }
+
+    public boolean hasTextureURL() {
+        return textureURL != null;
     }
 
     @Override
@@ -149,8 +212,26 @@ public class FlagSkullOwner extends Flag {
         for (String arg : args) {
             arg = arg.trim();
 
-            if (arg.toLowerCase().startsWith("texture")) {
+            String argLower = arg.toLowerCase();
+            if (Supports.playerProfile() && argLower.startsWith("textureurl")) {
+                String urlString;
+                String textureString = arg.substring("textureurl".length()).trim();
+                if (textureString.startsWith("http")) {
+                    urlString = textureString;
+                } else {
+                    urlString = MINECRAFT_TEXTURE_URL + textureString;
+                }
+
+                try {
+                    textureURL = new URL(urlString);
+                } catch (MalformedURLException e) {
+                    return ErrorReporter.getInstance().error("Flag " + getFlagType() + " has an invalid url: " + urlString);
+                }
+            } else if (argLower.startsWith("texture")) {
                 textureBase64 = arg.substring("texture".length()).trim();
+                if (Supports.playerProfile()) {
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " is using texture argument.", "`texture <base64>` should be replaced with `textureurl <url>` for better support.");
+                }
             } else {
                 String[] components = arg.split("-");
                 if (components.length == 5) {
@@ -179,7 +260,7 @@ public class FlagSkullOwner extends Flag {
         String ownerString = null;
         OfflinePlayer offlinePlayer = null;
         if (hasOwner()) {
-            if (owner.equalsIgnoreCase("{player}")) {
+            if (isOwnerDynamicPlayer()) {
                 if (!a.hasPlayerUUID()) {
                     a.addCustomReason("Needs player UUID!");
                     return;
@@ -193,37 +274,67 @@ public class FlagSkullOwner extends Flag {
             offlinePlayer = Bukkit.getOfflinePlayer(ownerUUID);
         }
 
-        String name = "";
-        UUID uuid = null;
-        String id = "";
-        String texture = "";
+        if (Supports.playerProfile() && !hasTextureBase64()) {
+            PlayerProfile clonedProfile = null;
+            if (offlinePlayer == null) {
+                if (ownerString != null) {
+                    clonedProfile = Bukkit.createPlayerProfile(ownerString);
+                }
+            } else {
+                PlayerProfile originalProfile = offlinePlayer.getPlayerProfile();
+                clonedProfile = originalProfile.clone();
+            }
 
-        if (hasTextureBase64()) {
-            texture = "Properties:{textures:[{Value:\"" + textureBase64 + "\"}]}";
-            uuid = new UUID(textureBase64.hashCode(), textureBase64.hashCode());
-        }
+            if (clonedProfile == null) {
+                clonedProfile = Bukkit.createPlayerProfile(UUID.randomUUID());
+            }
 
-        if (offlinePlayer != null) {
-            uuid = offlinePlayer.getUniqueId();
-        }
+            if (hasTextureURL()) {
+                PlayerTextures playerTextures = clonedProfile.getTextures();
+                playerTextures.setSkin(textureURL);
+                clonedProfile.setTextures(playerTextures);
+            }
 
-        if (Version.has1_16Support()) {
-            if (uuid != null) {
-                long most = uuid.getMostSignificantBits();
-                long least = uuid.getLeastSignificantBits();
-                id = "Id:[I;" + (int) least + "," + (int) (least >> 32) + "," + (int) most + "," + (int) (most >> 32) + "],";
+            SkullMeta meta = (SkullMeta) a.result().getItemMeta();
+            if (meta != null) {
+                meta.setOwnerProfile(clonedProfile);
+                clonedProfile.update();
+
+                a.result().setItemMeta(meta);
             }
         } else {
-            if (uuid != null) {
-                id = "Id:\"" + uuid + "\",";
+            String name = "";
+            UUID uuid = null;
+            String id = "";
+            String texture = "";
+
+            if (hasTextureBase64()) {
+                texture = "Properties:{textures:[{Value:\"" + textureBase64 + "\"}]}";
+                uuid = new UUID(textureBase64.hashCode(), textureBase64.hashCode());
             }
-        }
 
-        if (ownerString != null) {
-            name = "Name:\"" + ownerString + "\",";
-        }
+            if (offlinePlayer != null) {
+                uuid = offlinePlayer.getUniqueId();
+            }
 
-        addNBTRaw(a, "{SkullOwner:{" + id + name + texture + "}}");
+            if (Version.has1_16Support()) {
+                if (uuid != null) {
+                    long most = uuid.getMostSignificantBits();
+                    long least = uuid.getLeastSignificantBits();
+                    id = "Id:[I;" + (int) least + "," + (int) (least >> 32) + "," + (int) most + "," + (int) (most >> 32) + "],";
+                }
+            } else {
+                if (uuid != null) {
+                    id = "Id:\"" + uuid + "\",";
+                }
+            }
+
+            if (ownerString != null) {
+                name = "Name:\"" + ownerString + "\",";
+            }
+
+            addNBTRaw(a, "{SkullOwner:{" + id + name + texture + "}}");
+        }
     }
 
     @Override
@@ -232,8 +343,18 @@ public class FlagSkullOwner extends Flag {
 
         toHash += "owner: " + owner;
         toHash += "ownerUUID: " + ownerUUID.toString();
-        toHash += "textureBase64: " + textureBase64;
+
+        if (Supports.playerProfile()) {
+            toHash += "textureURL: " + textureURL.toString();
+        } else {
+            toHash += "textureBase64: " + textureBase64;
+        }
 
         return toHash.hashCode();
+    }
+
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return isOwnerDynamicPlayer();
     }
 }
