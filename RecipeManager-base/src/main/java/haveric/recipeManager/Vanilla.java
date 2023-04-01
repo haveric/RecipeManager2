@@ -608,9 +608,9 @@ public class Vanilla {
         }
 
         if (Version.has1_19_4Support()) {
-            addCompostRecipe(Material.TORCHFLOWER, 65); // Confirmed
-            addCompostRecipe(Material.TORCHFLOWER_SEEDS, 30); // TODO: Probable due to other seeds being 30%
-            addCompostRecipe(Material.PINK_PETALS, 30); // TODO: Unconfirmed
+            addCompostRecipe(Material.TORCHFLOWER, 65);
+            addCompostRecipe(Material.TORCHFLOWER_SEEDS, 30);
+            addCompostRecipe(Material.PINK_PETALS, 30);
 
             addCompostRecipe(Material.CHERRY_LEAVES, 30);
             addCompostRecipe(Material.CHERRY_SAPLING, 30);
