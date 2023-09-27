@@ -677,7 +677,7 @@ public class Files {
 
         s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "material", "MATERIAL LIST", "Material", "Material");
-        s.append("Data/damage/durability values are listed at <a href='https://minecraft.fandom.com/wiki/Data_values#Data'>Minecraft Fandom / Data Values</a>");
+        s.append("Data/damage/durability values are listed at <a href='https://minecraft.wiki/w/Java_Edition_data_values'>Minecraft Wiki / Data Values</a>");
         s.append(NL);
         if (Version.has1_12Support()) {
             s.append(NL).append(String.format("<b> %-34s %-34s %-5s  %-14s  %-5s %-4s</b>", "Name", "Alias", "Stack", "Max durability", "Block", "Item"));
@@ -739,7 +739,7 @@ public class Files {
         s.append(NL);
         s.append(NL).append("NOTE: The duration is compensated when setting potions in flags, so when using 2 seconds it will last 2 seconds regardless of effect type.");
         s.append(NL);
-        s.append(NL).append("More about potions, effects and custom effects: <a href=\"https://minecraft.gamepedia.com/Status_effect\">https://minecraft.gamepedia.com/Status_effect</a>");
+        s.append(NL).append("More about potions, effects and custom effects: <a href=\"https://minecraft.wiki/w/Status_effect\">https://minecraft.wiki/w/Status_effect</a>");
 
         s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "potiontype", "POTION TYPE LIST", "potion/PotionType", "PotionType");

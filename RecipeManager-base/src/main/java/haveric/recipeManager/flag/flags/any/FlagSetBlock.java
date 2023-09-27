@@ -33,7 +33,7 @@ public class FlagSetBlock extends Flag {
             "Using this flag more than once will overwrite the previous flag.",
             "",
             "Replace '&lt;block material&gt;' with a block material (not item!), see " + Files.getNameIndexHashLink("material"),
-            "Optionally you can define a data value which defines its skin, direction and other stuff, see <a href='https://minecraft.fandom.com/wiki/Data_values#Data'>Minecraft Fandom / Data Values</a>",
+            "Optionally you can define a data value which defines its skin, direction and other stuff, see <a href='https://minecraft.wiki/w/Java_Edition_data_values'>Minecraft Wiki / Data Values</a>",
             "You can also use aliases for materials and data values too.",
             "",
             "Additionally you can define a set of arguments separated by | character:",
