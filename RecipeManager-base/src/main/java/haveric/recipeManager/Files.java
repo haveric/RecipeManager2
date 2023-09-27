@@ -739,7 +739,7 @@ public class Files {
         s.append(NL);
         s.append(NL).append("NOTE: The duration is compensated when setting potions in flags, so when using 2 seconds it will last 2 seconds regardless of effect type.");
         s.append(NL);
-        s.append(NL).append("More about potions, effects and custom effects: <a href=\"https://minecraft.wiki/w/Status_effect\">https://minecraft.wiki/w/Status_effect</a>");
+        s.append(NL).append("More about potions, effects and custom effects: <a href=\"https://minecraft.wiki/w/Effect\">https://minecraft.wiki/w/Effect</a>");
 
         s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "potiontype", "POTION TYPE LIST", "potion/PotionType", "PotionType");
