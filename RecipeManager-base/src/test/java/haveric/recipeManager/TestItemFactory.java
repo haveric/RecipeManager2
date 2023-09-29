@@ -3,6 +3,7 @@ package haveric.recipeManager;
 import com.google.common.base.Preconditions;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -292,5 +293,10 @@ public class TestItemFactory implements ItemFactory {
     @Override
     public Material updateMaterial(ItemMeta meta, Material material) throws IllegalArgumentException {
         return material;
+    }
+
+    @Override
+    public Material getSpawnEgg(EntityType type) {
+        return null;
     }
 }

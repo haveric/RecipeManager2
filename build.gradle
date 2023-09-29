@@ -4,6 +4,16 @@ subprojects {
 
     sourceCompatibility = 1.8
 
+    configurations.configureEach {
+        resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {
+            select("com.google.guava:guava:0")
+        }
+        // and/or
+        resolutionStrategy.capabilitiesResolution.withCapability("com.google.guava:listenablefuture") {
+            select("com.google.guava:guava:0")
+        }
+    }
+
     configurations {
         extra {
             transitive false

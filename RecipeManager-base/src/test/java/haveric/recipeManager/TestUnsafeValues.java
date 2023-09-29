@@ -1,6 +1,7 @@
 package haveric.recipeManager;
 
 import com.google.common.collect.Multimap;
+import org.bukkit.FeatureFlag;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.UnsafeValues;
@@ -108,4 +109,9 @@ public class TestUnsafeValues implements UnsafeValues {
 
     @Override
     public String getTranslationKey(ItemStack itemStack) { return null; }
+
+    @Override
+    public FeatureFlag getFeatureFlag(NamespacedKey key) {
+        return null;
+    }
 }

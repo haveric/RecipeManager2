@@ -1,13 +1,13 @@
 package haveric.recipeManager;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.Statistic;
+import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.profile.PlayerProfile;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -35,6 +35,21 @@ public class TestOfflinePlayer implements OfflinePlayer {
     @Override
     public boolean isBanned() {
         return false;
+    }
+
+    @Override
+    public BanEntry<PlayerProfile> ban(String reason, Date expires, String source) {
+        return null;
+    }
+
+    @Override
+    public BanEntry<PlayerProfile> ban(String reason, Instant expires, String source) {
+        return null;
+    }
+
+    @Override
+    public BanEntry<PlayerProfile> ban(String reason, Duration duration, String source) {
+        return null;
     }
 
     public void setBanned(boolean value) {
