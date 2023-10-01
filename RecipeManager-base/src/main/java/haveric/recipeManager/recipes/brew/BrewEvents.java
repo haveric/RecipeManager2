@@ -477,6 +477,8 @@ public class BrewEvents extends BaseRecipeEvents {
                     ItemResult result = results.get(0);
 
                     if (result != null) {
+                        result = result.clone();
+
                         a.setResult(result);
                         boolean recipeCheckFlags = recipe.checkFlags(a);
                         boolean resultCheckFlags = result.checkFlags(a);

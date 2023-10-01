@@ -2,6 +2,7 @@
 This file will be automatically overwritten when a new version is installed.
 
 ### v2.29.3 (Coming Soon)
+* FIX: Fixed duplicate lores on brewing recipes
 * FIX: Fixed repair and repair-metadata special recipes
 * FIX: Fuel recipes can now be set to as low as 1 tick instead of 1 second
 * FIX: Campfire recipe group option is now applied correctly
