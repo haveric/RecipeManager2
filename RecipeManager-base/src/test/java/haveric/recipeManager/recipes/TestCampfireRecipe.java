@@ -60,7 +60,7 @@ public class TestCampfireRecipe extends FlagBaseTest {
                     assertEquals(1, primaryMaterials.size());
                     assertTrue(primaryMaterials.contains(Material.DIRT));
 
-                    assertEquals(Material.GRASS, result.getType());
+                    assertEquals(Material.SHORT_GRASS, result.getType());
 
                     numRecipesChecked++;
                 } else if (name.equals("data")) {

@@ -54,7 +54,7 @@ public class TestBrewRecipe extends FlagBaseTest {
                     assertTrue(secondaryChoice instanceof RecipeChoice.MaterialChoice);
                     List<Material> secondaryMaterials = ((RecipeChoice.MaterialChoice) secondaryChoice).getChoices();
                     assertEquals(1, secondaryMaterials.size());
-                    assertTrue(secondaryMaterials.contains(Material.GRASS));
+                    assertTrue(secondaryMaterials.contains(Material.SHORT_GRASS));
 
                     assertEquals(Material.DIRT, result.getType());
 
@@ -72,7 +72,7 @@ public class TestBrewRecipe extends FlagBaseTest {
                     assertEquals(1, secondaryMaterials.size());
                     assertTrue(secondaryMaterials.contains(Material.STONE));
 
-                    assertEquals(Material.GRASS, result.getType());
+                    assertEquals(Material.SHORT_GRASS, result.getType());
 
                     numRecipesChecked++;
                 } else if (name.equals("data")) {

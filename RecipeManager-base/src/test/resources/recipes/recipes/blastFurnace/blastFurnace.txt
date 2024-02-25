@@ -4,7 +4,7 @@ dirt
 
 blasting shape
 a dirt
-= grass
+= short_grass
 
 blasting data
 wooden_sword:2

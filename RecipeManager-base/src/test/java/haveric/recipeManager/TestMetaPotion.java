@@ -75,6 +75,16 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
         return type;
     }
 
+    @Override
+    public void setBasePotionType(PotionType potionType) {
+
+    }
+
+    @Override
+    public PotionType getBasePotionType() {
+        return null;
+    }
+
     public boolean hasCustomEffects() {
         return customEffects != null;
     }

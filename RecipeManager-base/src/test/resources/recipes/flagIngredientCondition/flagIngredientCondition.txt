@@ -29,7 +29,7 @@ dirt + iron_sword
 @ingredientcondition iron_sword | unbreakable
 
 craft
-grass + iron_sword
+short_grass + iron_sword
 = golden_sword
 @ingredientcondition iron_sword | !unbreakable
 
@@ -39,7 +39,7 @@ gravel + iron_sword
 @ingredientcondition iron_sword | nometa
 
 craft
-brick + grass
+brick + short_grass
 = brick
 @ingredientcondition brick | nometa
 

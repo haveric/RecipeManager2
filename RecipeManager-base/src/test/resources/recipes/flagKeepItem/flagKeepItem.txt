@@ -9,6 +9,6 @@ stone_sword + stone
 @keepitem stone_sword | replace golden_sword
 
 craft
-stone_sword + grass
+stone_sword + short_grass
 = diamond_sword
 @keepitem stone_sword | damage 50

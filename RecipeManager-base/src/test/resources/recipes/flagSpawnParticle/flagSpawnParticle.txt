@@ -29,7 +29,7 @@ dirt + stick
 @spawnparticle heart | count 20 | randomoffset -1 | offset -2
 
 craft multiple
-dirt + grass
+dirt + short_grass
 = dirt
 @particle heart | count 3
 @particle heart | count 5

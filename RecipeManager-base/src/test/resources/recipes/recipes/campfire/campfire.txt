@@ -4,7 +4,7 @@ dirt
 
 campfire shape
 a dirt
-= grass
+= short_grass
 
 campfire data
 wooden_sword:2

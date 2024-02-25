@@ -11,7 +11,7 @@ enchanted_book + stone_sword + cobblestone
 @applyenchantment ingredientaction combine
 
 craft resultcombine
-enchanted_book + stone_sword + grass
+enchanted_book + stone_sword + short_grass
 = iron_sword
 @enchant sharpness
 @applyenchantment resultaction combine

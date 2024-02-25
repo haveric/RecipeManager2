@@ -63,7 +63,7 @@ public class TestBlastFurnaceRecipe extends FlagBaseTest {
 
                     assertFalse(recipe.hasFuel());
 
-                    assertEquals(Material.GRASS, result.getType());
+                    assertEquals(Material.SHORT_GRASS, result.getType());
 
                     numRecipesChecked++;
                 } else if (name.equals("data")) {

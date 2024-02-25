@@ -88,7 +88,7 @@ public class FlagIngredientConditionTest extends FlagBaseYamlTest {
             sponge = new ItemStack(Material.SPONGE);
             spongeStack10 = new ItemStack(Material.SPONGE, 10);
             brickStack45 = new ItemStack(Material.BRICK, 45);
-            grassStack10 = new ItemStack(Material.GRASS, 10);
+            grassStack10 = new ItemStack(Material.SHORT_GRASS, 10);
 
             air = new ItemStack(Material.AIR);
 

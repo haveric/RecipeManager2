@@ -1,12 +1,12 @@
 brew default
 dirt
-grass
+short_grass
 = dirt
 
 brew shape
 a dirt
 b stone
-= grass
+= short_grass
 
 brew data
 wooden_sword:2

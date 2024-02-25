@@ -5,7 +5,7 @@ dirt + cobblestone
 combine pattern-default
 pattern ab
 a dirt
-b grass
+b short_grass
 = cobblestone
 
 combine pattern-ingredient-flag

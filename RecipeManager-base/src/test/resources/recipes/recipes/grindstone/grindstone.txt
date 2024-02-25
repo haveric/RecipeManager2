@@ -1,11 +1,11 @@
 grindstone default
-dirt + grass
+dirt + short_grass
 = dirt
 
 grindstone shape
 a dirt
 b stone
-= grass
+= short_grass
 
 grindstone data
 wooden_sword:2 + wooden_sword:3

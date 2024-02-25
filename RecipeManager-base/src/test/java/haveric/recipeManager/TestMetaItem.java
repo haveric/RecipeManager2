@@ -179,6 +179,11 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     }
 
     @Override
+    public void removeEnchantments() {
+
+    }
+
+    @Override
     public boolean hasConflictingEnchant(Enchantment ench) {
         boolean conflicts = false;
         for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {

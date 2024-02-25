@@ -4,7 +4,7 @@ dirt
 
 stonecutting shape
 a dirt
-= grass
+= short_grass
 
 stonecutting data
 wooden_sword:2

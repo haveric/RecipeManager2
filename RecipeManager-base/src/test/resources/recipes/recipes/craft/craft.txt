@@ -5,18 +5,18 @@ dirt + cobblestone
 craft pattern-default
 pattern ab
 a dirt
-b grass
+b short_grass
 = cobblestone
 
 craft choice
-dirt, grass
+dirt, short_grass
 sponge, brick
 = brick
 
 craft pattern-choice
 pattern a | b
 a sponge, brick
-b dirt, grass
+b dirt, short_grass
 = sponge
 
 craft pattern-ingredient-flag

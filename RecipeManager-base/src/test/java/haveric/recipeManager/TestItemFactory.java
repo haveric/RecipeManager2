@@ -3,6 +3,8 @@ package haveric.recipeManager;
 import com.google.common.base.Preconditions;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
@@ -297,6 +299,21 @@ public class TestItemFactory implements ItemFactory {
 
     @Override
     public Material getSpawnEgg(EntityType type) {
+        return null;
+    }
+
+    @Override
+    public ItemStack enchantItem(Entity entity, ItemStack itemStack, int i, boolean b) {
+        return null;
+    }
+
+    @Override
+    public ItemStack enchantItem(World world, ItemStack itemStack, int i, boolean b) {
+        return null;
+    }
+
+    @Override
+    public ItemStack enchantItem(ItemStack itemStack, int i, boolean b) {
         return null;
     }
 }

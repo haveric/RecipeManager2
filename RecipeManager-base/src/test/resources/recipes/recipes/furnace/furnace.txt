@@ -4,7 +4,7 @@ dirt
 
 smelt shape
 a dirt
-= grass
+= short_grass
 
 smelt data
 wooden_sword:2

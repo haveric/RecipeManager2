@@ -58,9 +58,9 @@ public class TestCompostRecipe extends FlagBaseTest {
                     assertTrue(primaryChoice instanceof RecipeChoice.MaterialChoice);
                     List<Material> primaryMaterials = ((RecipeChoice.MaterialChoice) primaryChoice).getChoices();
                     assertEquals(1, primaryMaterials.size());
-                    assertTrue(primaryMaterials.contains(Material.GRASS));
+                    assertTrue(primaryMaterials.contains(Material.SHORT_GRASS));
 
-                    assertEquals(Material.GRASS, result.getType());
+                    assertEquals(Material.SHORT_GRASS, result.getType());
 
                     numRecipesChecked++;
                 } else if (name.equals("data")) {

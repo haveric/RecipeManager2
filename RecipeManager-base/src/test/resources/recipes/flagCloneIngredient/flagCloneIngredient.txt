@@ -14,7 +14,7 @@ stone + stone_sword
 @cloneingredient data +2
 
 craft four
-grass + stone_sword
+short_grass + stone_sword
 = stone_sword
 @cloneingredient data % 2
 

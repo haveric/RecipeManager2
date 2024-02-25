@@ -62,7 +62,7 @@ powered_rail: "powered rail, 27"
 detector_rail: "detector rail, 28"
 sticky_piston: "sticky piston, 29"
 cobweb: "cobweb, 30"
-grass: "grass, tall grass, 31"
+short_grass: "short grass, tall grass, 31"
 dead_bush: "dead bush, 32"
 piston: "piston, 33"
 

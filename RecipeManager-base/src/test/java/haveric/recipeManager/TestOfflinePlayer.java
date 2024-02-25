@@ -92,6 +92,11 @@ public class TestOfflinePlayer implements OfflinePlayer {
     }
 
     @Override
+    public Location getRespawnLocation() {
+        return null;
+    }
+
+    @Override
     public void incrementStatistic(Statistic statistic) throws IllegalArgumentException {
 
     }
@@ -183,6 +188,11 @@ public class TestOfflinePlayer implements OfflinePlayer {
 
     @Override
     public Location getLastDeathLocation() {
+        return null;
+    }
+
+    @Override
+    public Location getLocation() {
         return null;
     }
 

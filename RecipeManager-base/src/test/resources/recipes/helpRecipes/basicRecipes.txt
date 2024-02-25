@@ -10,7 +10,7 @@ air + stick
 = 25% fail
 
 craft
-cobblestone,stone + dirt,grass
+cobblestone,stone + dirt,short_grass
 = light_gray_terracotta
 
 combine

@@ -81,7 +81,7 @@ public class TestCraftRecipe extends FlagBaseTest {
                     assertTrue(choiceB instanceof RecipeChoice.MaterialChoice);
                     List<Material> choicesB = ((RecipeChoice.MaterialChoice) choiceB).getChoices();
                     assertEquals(1, choicesB.size());
-                    assertTrue(choicesB.contains(Material.GRASS));
+                    assertTrue(choicesB.contains(Material.SHORT_GRASS));
 
                     assertEquals(Material.COBBLESTONE, result.getType());
                     numRecipesChecked++;
@@ -97,7 +97,7 @@ public class TestCraftRecipe extends FlagBaseTest {
                     List<Material> choicesA = ((RecipeChoice.MaterialChoice) choiceA).getChoices();
                     assertEquals(2, choicesA.size());
                     assertTrue(choicesA.contains(Material.DIRT));
-                    assertTrue(choicesA.contains(Material.GRASS));
+                    assertTrue(choicesA.contains(Material.SHORT_GRASS));
 
                     RecipeChoice choiceB = recipe.getIngredientsChoiceMap().get('b');
                     assertTrue(choiceB instanceof RecipeChoice.MaterialChoice);
@@ -128,7 +128,7 @@ public class TestCraftRecipe extends FlagBaseTest {
                     List<Material> choicesB = ((RecipeChoice.MaterialChoice) choiceB).getChoices();
                     assertEquals(2, choicesB.size());
                     assertTrue(choicesB.contains(Material.DIRT));
-                    assertTrue(choicesB.contains(Material.GRASS));
+                    assertTrue(choicesB.contains(Material.SHORT_GRASS));
 
                     assertEquals(Material.SPONGE, result.getType());
 

@@ -9,12 +9,16 @@ import org.bukkit.advancement.Advancement;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.damage.DamageEffect;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.CreativeCategory;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.PluginDescriptionFile;
+import org.bukkit.potion.PotionType;
 
 import static org.bukkit.Material.LEGACY_PREFIX;
 
@@ -112,6 +116,21 @@ public class TestUnsafeValues implements UnsafeValues {
 
     @Override
     public FeatureFlag getFeatureFlag(NamespacedKey key) {
+        return null;
+    }
+
+    @Override
+    public PotionType.InternalPotionData getInternalPotionData(NamespacedKey namespacedKey) {
+        return null;
+    }
+
+    @Override
+    public DamageEffect getDamageEffect(String s) {
+        return null;
+    }
+
+    @Override
+    public DamageSource.Builder createDamageSourceBuilder(DamageType damageType) {
         return null;
     }
 }

@@ -53,7 +53,7 @@ public class FlagKeepItemTest extends FlagBaseYamlTest {
             stoneSword = new ItemStack(Material.STONE_SWORD);
             dirtStack = new ItemStack(Material.DIRT, 3);
             stoneStack = new ItemStack(Material.STONE, 3);
-            grassStack = new ItemStack(Material.GRASS, 20);
+            grassStack = new ItemStack(Material.SHORT_GRASS, 20);
 
             File booksDir = new File(workDir.getPath() + "/books/");
             booksDir.mkdirs();

@@ -1,5 +1,6 @@
 package haveric.recipeManager;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
@@ -7,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 public class TestEnchantmentDigSpeed extends Enchantment {
     private final Enchantment target;
     public TestEnchantmentDigSpeed(Enchantment target) {
-        super(target.getKey());
+        super();
         this.target = target;
     }
 
@@ -49,5 +50,10 @@ public class TestEnchantmentDigSpeed extends Enchantment {
     @Override
     public boolean isCursed() {
         return false;
+    }
+
+    @Override
+    public NamespacedKey getKey() {
+        return null;
     }
 }

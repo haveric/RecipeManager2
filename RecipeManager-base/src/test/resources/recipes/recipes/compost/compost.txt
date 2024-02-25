@@ -3,8 +3,8 @@ dirt
 = dirt
 
 compost shape
-a grass
-= grass
+a short_grass
+= short_grass
 
 compost data
 wooden_sword:2

@@ -2,6 +2,7 @@ package haveric.recipeManager;
 
 import com.google.common.base.Preconditions;
 import org.bukkit.Material;
+import org.bukkit.entity.EntitySnapshot;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.meta.SpawnEggMeta;
 
@@ -114,6 +115,16 @@ public class TestMetaSpawnEgg extends TestMetaItem implements SpawnEggMeta {
         Preconditions.checkArgument(type == null || type.getName() != null, "Spawn egg type must have name (%s)", type);
 
         this.spawnedType = type;
+    }
+
+    @Override
+    public EntitySnapshot getSpawnedEntity() {
+        return null;
+    }
+
+    @Override
+    public void setSpawnedEntity(EntitySnapshot entitySnapshot) {
+
     }
 
     @Override

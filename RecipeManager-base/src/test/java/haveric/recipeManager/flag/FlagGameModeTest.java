@@ -81,7 +81,7 @@ public class FlagGameModeTest extends FlagBaseTest{
                 assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
                 assertFalse(flag.getGameModes().contains(GameMode.CREATIVE));
                 assertTrue(flag.getGameModes().contains(GameMode.SURVIVAL));
-            } else if (resultType == Material.GRASS) {
+            } else if (resultType == Material.SHORT_GRASS) {
                 assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
                 assertTrue(flag.getGameModes().contains(GameMode.CREATIVE));
                 assertTrue(flag.getGameModes().contains(GameMode.SURVIVAL));

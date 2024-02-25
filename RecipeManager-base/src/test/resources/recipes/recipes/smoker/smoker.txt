@@ -4,7 +4,7 @@ dirt
 
 smoking shape
 a dirt
-= grass
+= short_grass
 
 smoking data
 wooden_sword:2
