@@ -235,7 +235,7 @@ public class TestItemFactory implements ItemFactory {
             return false;
         }
         if (!(meta instanceof TestMetaItem)) {
-            throw new IllegalArgumentException("Meta of " + meta.getClass().toString() + " not created by " + TestItemFactory.class.getName());
+            throw new IllegalArgumentException("Meta of " + meta.getClass() + " not created by " + TestItemFactory.class.getName());
         }
 
         return ((TestMetaItem) meta).applicableTo(material);

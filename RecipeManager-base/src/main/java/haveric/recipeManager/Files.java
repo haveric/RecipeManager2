@@ -33,7 +33,7 @@ import static org.bukkit.Tag.REGISTRY_BLOCKS;
 import static org.bukkit.Tag.REGISTRY_ITEMS;
 
 public class Files {
-    public static final String NL = System.getProperty("line.separator");
+    public static final String NL = System.lineSeparator();
 
     private final CommandSender sender;
 

@@ -67,12 +67,7 @@ public class Furnaces {
         }
 
         FurnaceInventory inv = furnace.getInventory();
-        FurnaceData data = furnaces.get(id);
-
-        if (data == null) {
-            data = new FurnaceData();
-            furnaces.put(id, data);
-        }
+        FurnaceData data = furnaces.computeIfAbsent(id, k -> new FurnaceData());
 
         if (data.getFuel() == null) {
             data.setFuel(inv.getFuel());
@@ -106,14 +101,7 @@ public class Furnaces {
     public static FurnaceData get(BlockID id) {
         Preconditions.checkNotNull(id, "id argument must not be null!");
 
-        FurnaceData data = furnaces.get(id);
-
-        if (data == null) {
-            data = new FurnaceData();
-            furnaces.put(id, data);
-        }
-
-        return data;
+        return furnaces.computeIfAbsent(id, k -> new FurnaceData());
     }
 
     public static FurnaceData get(Location location) {

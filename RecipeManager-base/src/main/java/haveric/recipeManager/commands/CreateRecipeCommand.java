@@ -324,7 +324,7 @@ public class CreateRecipeCommand implements CommandExecutor {
                 ingredientCondition.append(" | amount ").append(item.getAmount());
             }
 
-            if (item.getEnchantments().size() > 0) {
+            if (!item.getEnchantments().isEmpty()) {
                 for (Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
                     ingredientCondition.append(" | enchant ").append(entry.getKey().getName()).append(" ").append(entry.getValue());
                 }

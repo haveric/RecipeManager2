@@ -62,11 +62,7 @@ public class Composters {
             id = BlockID.fromLocation(composter.getLocation());
         }
 
-        ComposterData data = composters.get(id);
-        if (data == null) {
-            data = new ComposterData();
-            composters.put(id, data);
-        }
+        composters.computeIfAbsent(id, k -> new ComposterData());
     }
 
     public static void add(BlockID id) {
@@ -82,14 +78,7 @@ public class Composters {
     public static ComposterData get(BlockID id) {
         Preconditions.checkNotNull(id, "id argument must not be null!");
 
-        ComposterData data = composters.get(id);
-
-        if (data == null) {
-            data = new ComposterData();
-            composters.put(id, data);
-        }
-
-        return data;
+        return composters.computeIfAbsent(id, k -> new ComposterData());
     }
 
     public static ComposterData get(Location location) {

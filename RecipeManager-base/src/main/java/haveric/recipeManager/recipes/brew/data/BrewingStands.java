@@ -80,12 +80,7 @@ public class BrewingStands {
             return; // invalid brewing stand, no inventory
         }
 
-        BrewingStandData data = brewingStands.get(id);
-
-        if (data == null) {
-            data = new BrewingStandData();
-            brewingStands.put(id, data);
-        }
+        brewingStands.computeIfAbsent(id, k -> new BrewingStandData());
     }
 
     public static void add(BlockID id) {
@@ -101,14 +96,7 @@ public class BrewingStands {
     public static BrewingStandData get(BlockID id) {
         Preconditions.checkNotNull(id, "id argument must not be null!");
 
-        BrewingStandData data = brewingStands.get(id);
-
-        if (data == null) {
-            data = new BrewingStandData();
-            brewingStands.put(id, data);
-        }
-
-        return data;
+        return brewingStands.computeIfAbsent(id, k -> new BrewingStandData());
     }
 
     public static BrewingStandData get(Location location) {

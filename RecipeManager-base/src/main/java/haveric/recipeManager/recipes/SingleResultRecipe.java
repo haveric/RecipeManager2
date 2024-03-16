@@ -164,7 +164,7 @@ public abstract class SingleResultRecipe extends BaseRecipe {
             FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
             List<ConditionsIngredient> conditions = flag.getIngredientConditions(result);
 
-            if (conditions.size() > 0) {
+            if (!conditions.isEmpty()) {
                 ConditionsIngredient condition = conditions.get(0);
 
                 if (condition.hasName()) {

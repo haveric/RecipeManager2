@@ -151,7 +151,7 @@ public class FlagPermission extends Flag {
             }
         }
 
-        if (!success && failed.size() > 0) {
+        if (!success && !failed.isEmpty()) {
             List<String> failedMessages = new ArrayList<>();
 
             for (String perm : failed) {
@@ -177,7 +177,7 @@ public class FlagPermission extends Flag {
             }
         }
 
-        if (!success && succeeded.size() > 0) {
+        if (!success && !succeeded.isEmpty()) {
             List<String> succeededMessages = new ArrayList<>();
 
             for (String perm : succeeded) {

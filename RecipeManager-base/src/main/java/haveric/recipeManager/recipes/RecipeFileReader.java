@@ -164,7 +164,7 @@ public class RecipeFileReader {
     public void parseFlags(Flags flags, int restrictedBit) {
         nextLine();
 
-        while (line != null && line.length() > 0 && lineIsFlag()) {
+        while (line != null && !line.isEmpty() && lineIsFlag()) {
             flags.parseFlag(line, fileName, lineNum, restrictedBit);
             nextLine();
         }

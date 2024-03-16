@@ -81,7 +81,7 @@ public class CooldownData implements ConfigurationSerializable {
     }
 
     public boolean hasCooldowns() {
-        return cooldowns.size() > 0;
+        return !cooldowns.isEmpty();
     }
 
     public Map<UUID, Long> getCooldowns() {

@@ -66,7 +66,7 @@ public class FlagApplyEnchantment extends BaseFlagApplyStoreEnchantment {
         }
 
         Map<Enchantment, Integer> enchantments = copyEnchantmentsByInventory(a);
-        if (enchantments.size() == 0) {
+        if (enchantments.isEmpty()) {
             return;
         }
 

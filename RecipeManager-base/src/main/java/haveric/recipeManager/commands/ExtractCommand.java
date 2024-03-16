@@ -46,13 +46,11 @@ public class ExtractCommand implements TabExecutor {
 
         boolean skipSpecial = true;
 
-        if (args.length > 0) {
-            for (String arg : args) {
-                if (arg.equalsIgnoreCase("special")) {
-                    skipSpecial = false;
-                } else {
-                    Messages.getInstance().send(sender, "cmd.extract.unknownarg", "{arg}", arg);
-                }
+        for (String arg : args) {
+            if (arg.equalsIgnoreCase("special")) {
+                skipSpecial = false;
+            } else {
+                Messages.getInstance().send(sender, "cmd.extract.unknownarg", "{arg}", arg);
             }
         }
 

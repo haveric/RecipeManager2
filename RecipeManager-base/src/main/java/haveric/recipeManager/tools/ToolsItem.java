@@ -136,7 +136,7 @@ public class ToolsItem {
         }
 
         RMCChatColor color;
-        if (item.getEnchantments().size() > 0) {
+        if (!item.getEnchantments().isEmpty()) {
             color = RMCChatColor.AQUA;
         } else {
             color = defColor;
@@ -176,7 +176,7 @@ public class ToolsItem {
         }
 
         String enchantsName = "";
-        if (item.getEnchantments().size() > 0) {
+        if (!item.getEnchantments().isEmpty()) {
             enchantsName += RMCChatColor.AQUA;
         }
         if (itemData == null) {

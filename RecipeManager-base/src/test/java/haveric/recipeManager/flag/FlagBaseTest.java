@@ -8,7 +8,6 @@ import haveric.recipeManager.recipes.RecipeTypeFactory;
 import haveric.recipeManager.recipes.RecipeTypeLoader;
 import haveric.recipeManager.settings.BaseSettings;
 import org.bukkit.Bukkit;
-import org.bukkit.enchantments.Enchantment;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.MockedStatic;

@@ -59,12 +59,7 @@ public class RMCampfires {
             id = BlockID.fromLocation(campfire.getLocation());
         }
 
-        RMCampfireData data = campfires.get(id);
-
-        if (data == null) {
-            data = new RMCampfireData();
-            campfires.put(id, data);
-        }
+        campfires.computeIfAbsent(id, k -> new RMCampfireData());
     }
 
     public static void add(BlockID id) {
@@ -80,14 +75,7 @@ public class RMCampfires {
     public static RMCampfireData get(BlockID id) {
         Preconditions.checkNotNull(id, "id argument must not be null!");
 
-        RMCampfireData data = campfires.get(id);
-
-        if (data == null) {
-            data = new RMCampfireData();
-            campfires.put(id, data);
-        }
-
-        return data;
+        return campfires.computeIfAbsent(id, k -> new RMCampfireData());
     }
 
     public static RMCampfireData get(Location location) {

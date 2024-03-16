@@ -28,7 +28,7 @@ import java.util.Set;
 public class ToolsFlag {
 
     public static void parseItemMeta(ItemStack item, StringBuilder recipeString) {
-        if (item.getEnchantments().size() > 0) {
+        if (!item.getEnchantments().isEmpty()) {
             for (Map.Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
                 recipeString.append(Files.NL).append("@enchant ").append(entry.getKey().getName()).append(' ').append(entry.getValue());
             }

@@ -233,7 +233,7 @@ public class Updater {
                 // Parse the array of files from the query's response
                 JSONArray array = (JSONArray) JSONValue.parse(response);
 
-                if (array.size() > 0) {
+                if (!array.isEmpty()) {
                     // Get the newest file's details
                     JSONObject latest = (JSONObject) array.get(array.size() - 1);
 

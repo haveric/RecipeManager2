@@ -168,7 +168,7 @@ public class Tools {
         RecipeChoice choice = null;
         value = value.trim();
 
-        if (value.length() == 0) {
+        if (value.isEmpty()) {
             return null;
         }
 
@@ -254,7 +254,7 @@ public class Tools {
 
     public static Map<RecipeChoice, Integer> parseRecipeChoiceWithAmount(String value, int settings) {
         value = value.trim();
-        if (value.length() == 0) {
+        if (value.isEmpty()) {
             return null;
         }
 
@@ -436,7 +436,7 @@ public class Tools {
     public static List<Material> parseChoice(String value, int settings) {
         value = value.trim();
 
-        if (value.length() == 0) {
+        if (value.isEmpty()) {
             return null;
         }
 
@@ -513,7 +513,7 @@ public class Tools {
     public static ItemStack parseItem(String value, int defaultData, int settings) {
         value = value.trim();
 
-        if (value.length() == 0) {
+        if (value.isEmpty()) {
             return null;
         }
 

@@ -121,6 +121,6 @@ public class MessageSender {
     public void debug(String message) {
         StackTraceElement[] e = new Exception().getStackTrace();
         int i = 1;
-        Bukkit.getConsoleSender().sendMessage(RMCUtil.parseColors(RMCChatColor.GREEN + "[DEBUG]" + RMCChatColor.AQUA + "" + RMCChatColor.UNDERLINE + e[i].getFileName() + ":" + e[i].getLineNumber() + RMCChatColor.RESET + " " + RMCChatColor.RED + e[i].getMethodName() + "() " + RMCChatColor.WHITE + RMCUtil.parseColors(message, false), false));
+        Bukkit.getConsoleSender().sendMessage(RMCUtil.parseColors(RMCChatColor.GREEN + "[DEBUG]" + RMCChatColor.AQUA + RMCChatColor.UNDERLINE + e[i].getFileName() + ":" + e[i].getLineNumber() + RMCChatColor.RESET + " " + RMCChatColor.RED + e[i].getMethodName() + "() " + RMCChatColor.WHITE + RMCUtil.parseColors(message, false), false));
     }
 }

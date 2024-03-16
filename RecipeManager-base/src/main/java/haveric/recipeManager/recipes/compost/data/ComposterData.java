@@ -175,7 +175,7 @@ public class ComposterData implements ConfigurationSerializable {
     public CompostRecipe getRecipe() {
         CompostRecipe recipe = null;
 
-        if (ingredients != null && ingredients.size() > 0) {
+        if (ingredients != null && !ingredients.isEmpty()) {
             BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.COMPOST, ingredients.get(0));
             if (baseRecipe instanceof CompostRecipe) {
                 recipe = (CompostRecipe) baseRecipe;

@@ -207,7 +207,7 @@ public class CraftRecipe extends BaseCraftRecipe {
                         str.append(':').append(item.getDurability());
                     }
 
-                    if (item.getEnchantments().size() > 0) {
+                    if (!item.getEnchantments().isEmpty()) {
                         for (Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
                             str.append("enchant:").append(entry.getKey().getName()).append(':').append(entry.getValue());
                         }
@@ -442,7 +442,7 @@ public class CraftRecipe extends BaseCraftRecipe {
                         FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
                         List<ConditionsIngredient> conditions = flag.getIngredientConditions(displayIngredients[i]);
 
-                        if (conditions.size() > 0) {
+                        if (!conditions.isEmpty()) {
                             ConditionsIngredient condition = conditions.get(0);
 
                             if (condition.hasName()) {
