@@ -26,6 +26,7 @@ public class Supports {
     static boolean campfireStartEvent = false;
     static boolean experimental1_20 = false;
     static boolean playerProfile = false;
+    static boolean shortGrassMaterial = false;
 
     public static void init() {
         checkAxolotlBucketMeta();
@@ -40,6 +41,7 @@ public class Supports {
         checkCampfireStartEvent();
         checkExperimental1_20();
         checkPlayerProfile();
+        checkShortGrassMaterial();
     }
 
     // 1.12
@@ -189,6 +191,17 @@ public class Supports {
         }
     }
 
+    // 1.20.3
+    private static void checkShortGrassMaterial() {
+        try {
+            @SuppressWarnings("unused")
+            ItemStack shortGrass = new ItemStack(Material.SHORT_GRASS);
+            shortGrassMaterial = true;
+        } catch (NoSuchFieldError | NoClassDefFoundError e) {
+            shortGrassMaterial = false;
+        }
+    }
+
     public static boolean axolotlBucketMeta() {
         return axolotlBucketMeta;
     }
@@ -234,5 +247,9 @@ public class Supports {
 
     public static boolean playerProfile() {
         return playerProfile;
+    }
+
+    public static boolean shortGrassMaterial() {
+        return shortGrassMaterial;
     }
 }

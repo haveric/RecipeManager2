@@ -4,6 +4,7 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Recipes;
+import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.common.util.RMCUtil;
@@ -234,7 +235,7 @@ public class Tools {
                 } else {
                     Material material = parseMaterial(value);
                     if (material == null) {
-                        ErrorReporter.getInstance().warning("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
+                        reportMaterialDoesNotExist(value);
                     } else {
                         if (durSplit.length > 1) {
                             String dataString = durSplit[1].toLowerCase().trim();
@@ -366,7 +367,7 @@ public class Tools {
                 Material material = parseMaterial(value);
                 if (material == null) {
                     if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
-                        ErrorReporter.getInstance().error("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
+                        reportMaterialDoesNotExist(value);
                     }
 
                     return null;
@@ -495,7 +496,7 @@ public class Tools {
 
                 Material material = parseMaterial(value);
                 if (material == null) {
-                    ErrorReporter.getInstance().warning("Material '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
+                    reportMaterialDoesNotExist(value);
                 } else {
                     choices.add(material);
                 }
@@ -528,7 +529,7 @@ public class Tools {
         Material material = parseMaterial(value);
         if (material == null) {
             if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
-                ErrorReporter.getInstance().error("Item '" + value + "' does not exist!", "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.");
+                reportMaterialDoesNotExist(value);
             }
 
             return null;
@@ -1273,5 +1274,15 @@ public class Tools {
         }
 
         return sound;
+    }
+
+    private static void reportMaterialDoesNotExist(String materialValue) {
+        String tip = "Name could be different, look in '" + Files.FILE_INFO_NAMES + "' or '" + Files.FILE_ITEM_ALIASES + "' for material names.";
+
+        if (materialValue.equalsIgnoreCase("grass") && Supports.shortGrassMaterial()) {
+            tip = "'grass' was renamed to 'short_grass' in 1.20.3" + Files.NL + RMCChatColor.DARK_GREEN + "          TIP: " + RMCChatColor.GRAY + tip;
+        }
+
+        ErrorReporter.getInstance().error("Material '" + materialValue + "' does not exist!", tip);
     }
 }
