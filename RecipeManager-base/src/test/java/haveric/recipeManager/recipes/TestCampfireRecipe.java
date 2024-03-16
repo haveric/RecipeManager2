@@ -17,8 +17,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mockStatic;
 
 public class TestCampfireRecipe extends FlagBaseTest {
@@ -45,7 +44,7 @@ public class TestCampfireRecipe extends FlagBaseTest {
                 String name = recipe.getName();
                 if (name.equals("default")) {
                     RecipeChoice primaryChoice = recipe.getIngredientChoice();
-                    assertTrue(primaryChoice instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, primaryChoice);
                     List<Material> primaryMaterials = ((RecipeChoice.MaterialChoice) primaryChoice).getChoices();
                     assertEquals(1, primaryMaterials.size());
                     assertTrue(primaryMaterials.contains(Material.DIRT));
@@ -55,7 +54,7 @@ public class TestCampfireRecipe extends FlagBaseTest {
                     numRecipesChecked++;
                 } else if (name.equals("shape")) {
                     RecipeChoice primaryChoice = recipe.getIngredientChoice();
-                    assertTrue(primaryChoice instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, primaryChoice);
                     List<Material> primaryMaterials = ((RecipeChoice.MaterialChoice) primaryChoice).getChoices();
                     assertEquals(1, primaryMaterials.size());
                     assertTrue(primaryMaterials.contains(Material.DIRT));
@@ -65,13 +64,13 @@ public class TestCampfireRecipe extends FlagBaseTest {
                     numRecipesChecked++;
                 } else if (name.equals("data")) {
                     RecipeChoice primaryChoice = recipe.getIngredientChoice();
-                    assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
+                    assertInstanceOf(RecipeChoice.ExactChoice.class, primaryChoice);
                     List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
                     assertEquals(1, primaryItems.size());
 
                     ItemStack primaryItem = primaryItems.get(0);
                     assertEquals(Material.WOODEN_SWORD, primaryItem.getType());
-                    assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, primaryItem.getItemMeta());
                     Damageable primaryDamageable = (Damageable) primaryItem.getItemMeta();
                     assertEquals(2, primaryDamageable.getDamage());
 
@@ -80,13 +79,13 @@ public class TestCampfireRecipe extends FlagBaseTest {
                     numRecipesChecked++;
                 } else if (name.equals("shape-data")) {
                     RecipeChoice primaryChoice = recipe.getIngredientChoice();
-                    assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
+                    assertInstanceOf(RecipeChoice.ExactChoice.class, primaryChoice);
                     List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
                     assertEquals(1, primaryItems.size());
 
                     ItemStack primaryItem = primaryItems.get(0);
                     assertEquals(Material.IRON_SWORD, primaryItem.getType());
-                    assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, primaryItem.getItemMeta());
                     Damageable primaryDamageable = (Damageable) primaryItem.getItemMeta();
                     assertEquals(2, primaryDamageable.getDamage());
 
@@ -95,13 +94,13 @@ public class TestCampfireRecipe extends FlagBaseTest {
                     numRecipesChecked++;
                 } else if (name.equals("ingredient-flag-data")) {
                     RecipeChoice primaryChoice = recipe.getIngredientChoice();
-                    assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
+                    assertInstanceOf(RecipeChoice.ExactChoice.class, primaryChoice);
                     List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
                     assertEquals(1, primaryItems.size());
 
                     ItemStack primaryItem = primaryItems.get(0);
                     assertEquals(Material.GOLDEN_SWORD, primaryItem.getType());
-                    assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, primaryItem.getItemMeta());
                     ItemMeta primaryMeta = primaryItem.getItemMeta();
                     Damageable primaryDamageable = (Damageable) primaryMeta;
                     assertEquals(3, primaryDamageable.getDamage());
@@ -113,13 +112,13 @@ public class TestCampfireRecipe extends FlagBaseTest {
                     numRecipesChecked++;
                 } else if (name.equals("shape-ingredient-flag")) {
                     RecipeChoice primaryChoice = recipe.getIngredientChoice();
-                    assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
+                    assertInstanceOf(RecipeChoice.ExactChoice.class, primaryChoice);
                     List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
                     assertEquals(1, primaryItems.size());
 
                     ItemStack primaryItem = primaryItems.get(0);
                     assertEquals(Material.DIAMOND_SWORD, primaryItem.getType());
-                    assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, primaryItem.getItemMeta());
                     ItemMeta primaryMeta = primaryItem.getItemMeta();
                     Damageable primaryDamageable = (Damageable) primaryMeta;
                     assertEquals(0, primaryDamageable.getDamage());

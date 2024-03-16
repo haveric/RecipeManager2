@@ -17,8 +17,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mockStatic;
 
 public class TestCombineRecipe extends FlagBaseTest {
@@ -45,13 +44,13 @@ public class TestCombineRecipe extends FlagBaseTest {
                     assertEquals(pattern, recipe.getChoicePattern());
 
                     RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
-                    assertTrue(choiceA instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceA);
                     List<Material> choicesA = ((RecipeChoice.MaterialChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
                     assertTrue(choicesA.contains(Material.DIRT));
 
                     RecipeChoice choiceB = recipe.getIngredientsChoiceMap().get('b');
-                    assertTrue(choiceB instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceB);
                     List<Material> choicesB = ((RecipeChoice.MaterialChoice) choiceB).getChoices();
                     assertEquals(1, choicesB.size());
                     assertTrue(choicesB.contains(Material.COBBLESTONE));
@@ -64,13 +63,13 @@ public class TestCombineRecipe extends FlagBaseTest {
                     assertEquals(pattern, recipe.getChoicePattern());
 
                     RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
-                    assertTrue(choiceA instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceA);
                     List<Material> choicesA = ((RecipeChoice.MaterialChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
                     assertTrue(choicesA.contains(Material.DIRT));
 
                     RecipeChoice choiceB = recipe.getIngredientsChoiceMap().get('b');
-                    assertTrue(choiceB instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceB);
                     List<Material> choicesB = ((RecipeChoice.MaterialChoice) choiceB).getChoices();
                     assertEquals(1, choicesB.size());
                     assertTrue(choicesB.contains(Material.SHORT_GRASS));
@@ -79,14 +78,14 @@ public class TestCombineRecipe extends FlagBaseTest {
                     numRecipesChecked++;
                 } else if (name.equals("pattern-ingredient-flag")) {
                     RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
-                    assertTrue(choiceA instanceof RecipeChoice.ExactChoice);
+                    assertInstanceOf(RecipeChoice.ExactChoice.class, choiceA);
                     List<ItemStack> choicesA = ((RecipeChoice.ExactChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
 
                     ItemStack itemA = choicesA.get(0);
                     assertEquals(Material.DIAMOND_SWORD, itemA.getType());
                     ItemMeta meta = itemA.getItemMeta();
-                    assertTrue(meta instanceof Damageable);
+                    assertInstanceOf(Damageable.class, meta);
                     Damageable damageable = (Damageable) meta;
                     assertEquals(0, damageable.getDamage());
 
@@ -97,13 +96,13 @@ public class TestCombineRecipe extends FlagBaseTest {
                     numRecipesChecked++;
                 } else if (name.equals("data")) {
                     RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
-                    assertTrue(choiceA instanceof RecipeChoice.ExactChoice);
+                    assertInstanceOf(RecipeChoice.ExactChoice.class, choiceA);
                     List<ItemStack> choicesA = ((RecipeChoice.ExactChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
 
                     ItemStack itemA = choicesA.get(0);
                     assertEquals(Material.IRON_SWORD, itemA.getType());
-                    assertTrue(itemA.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, itemA.getItemMeta());
                     Damageable damageable = (Damageable) itemA.getItemMeta();
                     assertEquals(1, damageable.getDamage());
 
@@ -112,13 +111,13 @@ public class TestCombineRecipe extends FlagBaseTest {
                     numRecipesChecked++;
                 } else if (name.equals("pattern-data")) {
                     RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
-                    assertTrue(choiceA instanceof RecipeChoice.ExactChoice);
+                    assertInstanceOf(RecipeChoice.ExactChoice.class, choiceA);
                     List<ItemStack> choicesA = ((RecipeChoice.ExactChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
 
                     ItemStack itemA = choicesA.get(0);
                     assertEquals(Material.GOLDEN_SWORD, itemA.getType());
-                    assertTrue(itemA.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, itemA.getItemMeta());
                     Damageable damageable = (Damageable) itemA.getItemMeta();
                     assertEquals(1, damageable.getDamage());
 
@@ -127,19 +126,19 @@ public class TestCombineRecipe extends FlagBaseTest {
                     numRecipesChecked++;
                 } else if (name.contains("multiple-data")) {
                     RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
-                    assertTrue(choiceA instanceof RecipeChoice.ExactChoice);
+                    assertInstanceOf(RecipeChoice.ExactChoice.class, choiceA);
                     List<ItemStack> choicesA = ((RecipeChoice.ExactChoice) choiceA).getChoices();
                     assertEquals(2, choicesA.size());
 
                     ItemStack itemA = choicesA.get(0);
                     assertEquals(Material.WOODEN_SWORD, itemA.getType());
-                    assertTrue(itemA.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, itemA.getItemMeta());
                     Damageable damageable = (Damageable) itemA.getItemMeta();
                     assertEquals(1, damageable.getDamage());
 
                     ItemStack itemB = choicesA.get(1);
                     assertEquals(Material.IRON_SWORD, itemB.getType());
-                    assertTrue(itemB.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, itemB.getItemMeta());
                     Damageable damageableB = (Damageable) itemB.getItemMeta();
                     assertEquals(2, damageableB.getDamage());
 

@@ -13,8 +13,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSmelt extends FlagBaseTest {
     @Test
@@ -29,7 +28,7 @@ public class TestSmelt extends FlagBaseTest {
             RMFurnaceRecipe1_13 recipe = (RMFurnaceRecipe1_13) entry.getKey();
             RecipeChoice recipeChoice = recipe.getIngredientChoice();
 
-            assertTrue(recipeChoice instanceof RecipeChoice.MaterialChoice);
+            assertInstanceOf(RecipeChoice.MaterialChoice.class, recipeChoice);
 
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) recipeChoice;
             List<Material> ingredientMaterials = materialChoice.getChoices();

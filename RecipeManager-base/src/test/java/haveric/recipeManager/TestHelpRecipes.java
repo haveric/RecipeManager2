@@ -23,8 +23,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mockStatic;
 
 public class TestHelpRecipes extends FlagBaseYamlTest {
@@ -92,7 +91,7 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
                 } else if (baseRecipe instanceof FuelRecipe1_13) {
                     FuelRecipe1_13 recipe = (FuelRecipe1_13) baseRecipe;
                     RecipeChoice choice = recipe.getIngredientChoice();
-                    assertTrue(choice instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, choice);
 
                     List<Material> choices = ((RecipeChoice.MaterialChoice) choice).getChoices();
 

@@ -50,13 +50,13 @@ public class TestCraftRecipe extends FlagBaseTest {
                     assertArrayEquals(pattern, recipe.getChoicePattern());
 
                     RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
-                    assertTrue(choiceA instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceA);
                     List<Material> choicesA = ((RecipeChoice.MaterialChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
                     assertTrue(choicesA.contains(Material.DIRT));
 
                     RecipeChoice choiceB = recipe.getIngredientsChoiceMap().get('b');
-                    assertTrue(choiceB instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceB);
                     List<Material> choicesB = ((RecipeChoice.MaterialChoice) choiceB).getChoices();
                     assertEquals(1, choicesB.size());
                     assertTrue(choicesB.contains(Material.COBBLESTONE));
@@ -72,13 +72,13 @@ public class TestCraftRecipe extends FlagBaseTest {
                     assertArrayEquals(pattern, recipe.getChoicePattern());
 
                     RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
-                    assertTrue(choiceA instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceA);
                     List<Material> choicesA = ((RecipeChoice.MaterialChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
                     assertTrue(choicesA.contains(Material.DIRT));
 
                     RecipeChoice choiceB = recipe.getIngredientsChoiceMap().get('b');
-                    assertTrue(choiceB instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceB);
                     List<Material> choicesB = ((RecipeChoice.MaterialChoice) choiceB).getChoices();
                     assertEquals(1, choicesB.size());
                     assertTrue(choicesB.contains(Material.SHORT_GRASS));
@@ -93,14 +93,14 @@ public class TestCraftRecipe extends FlagBaseTest {
                     assertArrayEquals(pattern, recipe.getChoicePattern());
 
                     RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
-                    assertTrue(choiceA instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceA);
                     List<Material> choicesA = ((RecipeChoice.MaterialChoice) choiceA).getChoices();
                     assertEquals(2, choicesA.size());
                     assertTrue(choicesA.contains(Material.DIRT));
                     assertTrue(choicesA.contains(Material.SHORT_GRASS));
 
                     RecipeChoice choiceB = recipe.getIngredientsChoiceMap().get('b');
-                    assertTrue(choiceB instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceB);
                     List<Material> choicesB = ((RecipeChoice.MaterialChoice) choiceB).getChoices();
                     assertEquals(2, choicesB.size());
                     assertTrue(choicesB.contains(Material.SPONGE));
@@ -117,14 +117,14 @@ public class TestCraftRecipe extends FlagBaseTest {
                     assertArrayEquals(pattern, recipe.getChoicePattern());
 
                     RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
-                    assertTrue(choiceA instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceA);
                     List<Material> choicesA = ((RecipeChoice.MaterialChoice) choiceA).getChoices();
                     assertEquals(2, choicesA.size());
                     assertTrue(choicesA.contains(Material.SPONGE));
                     assertTrue(choicesA.contains(Material.BRICK));
 
                     RecipeChoice choiceB = recipe.getIngredientsChoiceMap().get('b');
-                    assertTrue(choiceB instanceof RecipeChoice.MaterialChoice);
+                    assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceB);
                     List<Material> choicesB = ((RecipeChoice.MaterialChoice) choiceB).getChoices();
                     assertEquals(2, choicesB.size());
                     assertTrue(choicesB.contains(Material.DIRT));
@@ -138,14 +138,14 @@ public class TestCraftRecipe extends FlagBaseTest {
                     assertEquals(1, recipe.getHeight());
 
                     RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
-                    assertTrue(choiceA instanceof RecipeChoice.ExactChoice);
+                    assertInstanceOf(RecipeChoice.ExactChoice.class, choiceA);
                     List<ItemStack> choicesA = ((RecipeChoice.ExactChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
 
                     ItemStack itemA = choicesA.get(0);
                     assertEquals(Material.DIAMOND_SWORD, itemA.getType());
                     ItemMeta meta = itemA.getItemMeta();
-                    assertTrue(meta instanceof Damageable);
+                    assertInstanceOf(Damageable.class, meta);
                     Damageable damageable = (Damageable) meta;
                     assertEquals(0, damageable.getDamage());
 
@@ -159,13 +159,13 @@ public class TestCraftRecipe extends FlagBaseTest {
                     assertEquals(1, recipe.getHeight());
 
                     RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
-                    assertTrue(choiceA instanceof RecipeChoice.ExactChoice);
+                    assertInstanceOf(RecipeChoice.ExactChoice.class, choiceA);
                     List<ItemStack> choicesA = ((RecipeChoice.ExactChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
 
                     ItemStack itemA = choicesA.get(0);
                     assertEquals(Material.IRON_SWORD, itemA.getType());
-                    assertTrue(itemA.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, itemA.getItemMeta());
                     Damageable damageable = (Damageable) itemA.getItemMeta();
                     assertEquals(1, damageable.getDamage());
 
@@ -177,13 +177,13 @@ public class TestCraftRecipe extends FlagBaseTest {
                     assertEquals(1, recipe.getHeight());
 
                     RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
-                    assertTrue(choiceA instanceof RecipeChoice.ExactChoice);
+                    assertInstanceOf(RecipeChoice.ExactChoice.class, choiceA);
                     List<ItemStack> choicesA = ((RecipeChoice.ExactChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
 
                     ItemStack itemA = choicesA.get(0);
                     assertEquals(Material.GOLDEN_SWORD, itemA.getType());
-                    assertTrue(itemA.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, itemA.getItemMeta());
                     Damageable damageable = (Damageable) itemA.getItemMeta();
                     assertEquals(1, damageable.getDamage());
 
@@ -195,19 +195,19 @@ public class TestCraftRecipe extends FlagBaseTest {
                     assertEquals(1, recipe.getHeight());
 
                     RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
-                    assertTrue(choiceA instanceof RecipeChoice.ExactChoice);
+                    assertInstanceOf(RecipeChoice.ExactChoice.class, choiceA);
                     List<ItemStack> choicesA = ((RecipeChoice.ExactChoice) choiceA).getChoices();
                     assertEquals(2, choicesA.size());
 
                     ItemStack itemA = choicesA.get(0);
                     assertEquals(Material.WOODEN_SWORD, itemA.getType());
-                    assertTrue(itemA.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, itemA.getItemMeta());
                     Damageable damageable = (Damageable) itemA.getItemMeta();
                     assertEquals(1, damageable.getDamage());
 
                     ItemStack itemB = choicesA.get(1);
                     assertEquals(Material.IRON_SWORD, itemB.getType());
-                    assertTrue(itemB.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, itemB.getItemMeta());
                     Damageable damageableB = (Damageable) itemB.getItemMeta();
                     assertEquals(2, damageableB.getDamage());
 

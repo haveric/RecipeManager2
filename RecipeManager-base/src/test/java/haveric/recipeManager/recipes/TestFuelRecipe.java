@@ -36,7 +36,7 @@ public class TestFuelRecipe extends FlagBaseTest {
             String name = recipe.getName();
             if (name.equals("default")) {
                 RecipeChoice primaryChoice = recipe.getIngredientChoice();
-                assertTrue(primaryChoice instanceof RecipeChoice.MaterialChoice);
+                assertInstanceOf(RecipeChoice.MaterialChoice.class, primaryChoice);
                 List<Material> primaryMaterials = ((RecipeChoice.MaterialChoice) primaryChoice).getChoices();
                 assertEquals(1, primaryMaterials.size());
                 assertTrue(primaryMaterials.contains(Material.DIRT));
@@ -46,13 +46,13 @@ public class TestFuelRecipe extends FlagBaseTest {
                 numRecipesChecked ++;
             } else if (name.equals("data")) {
                 RecipeChoice primaryChoice = recipe.getIngredientChoice();
-                assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
+                assertInstanceOf(RecipeChoice.ExactChoice.class, primaryChoice);
                 List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
                 assertEquals(1, primaryItems.size());
 
                 ItemStack primaryItem = primaryItems.get(0);
                 assertEquals(Material.WOODEN_SWORD, primaryItem.getType());
-                assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                assertInstanceOf(Damageable.class, primaryItem.getItemMeta());
                 Damageable primaryDamageable = (Damageable) primaryItem.getItemMeta();
                 assertEquals(2, primaryDamageable.getDamage());
 
@@ -61,13 +61,13 @@ public class TestFuelRecipe extends FlagBaseTest {
                 numRecipesChecked ++;
             } else if (name.equals("multiple")) {
                 RecipeChoice primaryChoice = recipe.getIngredientChoice();
-                assertTrue(primaryChoice instanceof RecipeChoice.ExactChoice);
+                assertInstanceOf(RecipeChoice.ExactChoice.class, primaryChoice);
                 List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
                 assertEquals(1, primaryItems.size());
 
                 ItemStack primaryItem = primaryItems.get(0);
                 if (primaryItem.getType() == Material.IRON_SWORD) {
-                    assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, primaryItem.getItemMeta());
                     ItemMeta primaryMeta = primaryItem.getItemMeta();
                     Damageable primaryDamageable = (Damageable) primaryMeta;
                     assertEquals(2, primaryDamageable.getDamage());
@@ -78,7 +78,7 @@ public class TestFuelRecipe extends FlagBaseTest {
 
                     numRecipesChecked ++;
                 } else if (primaryItem.getType() == Material.GOLDEN_SWORD) {
-                    assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, primaryItem.getItemMeta());
                     ItemMeta primaryMeta = primaryItem.getItemMeta();
                     Damageable primaryDamageable = (Damageable) primaryMeta;
                     assertEquals(3, primaryDamageable.getDamage());
@@ -95,7 +95,7 @@ public class TestFuelRecipe extends FlagBaseTest {
                     List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
                     assertEquals(1, primaryItems.size());
                     ItemStack primaryItem = primaryItems.get(0);
-                    assertTrue(primaryItem.getItemMeta() instanceof Damageable);
+                    assertInstanceOf(Damageable.class, primaryItem.getItemMeta());
                     ItemMeta primaryMeta = primaryItem.getItemMeta();
                     Damageable primaryDamageable = (Damageable) primaryMeta;
                     assertEquals(0, primaryDamageable.getDamage());
