@@ -494,7 +494,12 @@ public class Vanilla {
         if (Version.has1_14Support()) {
             addCompostRecipe(Material.BEETROOT_SEEDS, 30);
             addCompostRecipe(Material.DRIED_KELP, 30);
-            addCompostRecipe(Material.SHORT_GRASS, 30);
+
+            if (Supports.shortGrassMaterial()) {
+                addCompostRecipe(Material.SHORT_GRASS, 30);
+            } else {
+                addCompostRecipe(Material.getMaterial("GRASS"), 30);
+            }
             addCompostRecipe(Material.KELP, 30);
             addCompostRecipe(Material.ACACIA_LEAVES, 30);
             addCompostRecipe(Material.BIRCH_LEAVES, 30);
