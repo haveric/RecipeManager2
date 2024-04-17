@@ -19,8 +19,8 @@ import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
+import haveric.recipeManager.recipes.smithing.RMSmithing1_19_4TransformRecipe;
 import haveric.recipeManager.recipes.smithing.RMSmithingRecipe;
-import haveric.recipeManager.recipes.smithing.RMSmithing1_19_4Recipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.*;
 import org.bukkit.Bukkit;
@@ -685,6 +685,8 @@ public class Vanilla {
                     recipe = new RMCampfireRecipe((CampfireRecipe) r);
                 } else if (r instanceof StonecuttingRecipe) {
                     recipe = new RMStonecuttingRecipe((StonecuttingRecipe) r);
+                } else if (Supports.experimental1_20() && r instanceof SmithingTransformRecipe) {
+                    recipe = new RMSmithing1_19_4TransformRecipe((SmithingTransformRecipe) r);
                 } else if (Version.has1_16Support() && r instanceof SmithingRecipe) {
                     recipe = new RMSmithingRecipe((SmithingRecipe) r);
                 }
@@ -761,8 +763,8 @@ public class Vanilla {
             return removeStonecuttingRecipe((RMStonecuttingRecipe) recipe);
         }
 
-        if (recipe instanceof RMSmithing1_19_4Recipe) {
-            return removeSmithingTransformRecipe((RMSmithing1_19_4Recipe) recipe);
+        if (recipe instanceof RMSmithing1_19_4TransformRecipe) {
+            return removeSmithing1_19_4TransformRecipe((RMSmithing1_19_4TransformRecipe) recipe);
         }
 
         if (recipe instanceof RMSmithingRecipe) {
@@ -1000,12 +1002,12 @@ public class Vanilla {
         return null;
     }
 
-    private static Recipe removeSmithingTransformRecipe(RMSmithing1_19_4Recipe recipe) {
+    private static Recipe removeSmithing1_19_4TransformRecipe(RMSmithing1_19_4TransformRecipe recipe) {
         ItemStack templateIngredient;
         ItemStack baseIngredient;
         ItemStack addIngredient;
 
-        RecipeChoice templateChoice = recipe.getPrimaryIngredient();
+        RecipeChoice templateChoice = recipe.getTemplateIngredient();
         if (templateChoice instanceof RecipeChoice.MaterialChoice) {
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) templateChoice;
             templateIngredient = new ItemStack(materialChoice.getChoices().get(0));
@@ -1051,7 +1053,7 @@ public class Vanilla {
             try {
                 r = iterator.next();
 
-                if (r instanceof SmithingRecipe) {
+                if (r instanceof SmithingTransformRecipe) {
                     if (toolsRecipe.matchesSmithingTransform(r, templateIngredient, baseIngredient, addIngredient)) {
                         iterator.remove();
 
@@ -1069,6 +1071,7 @@ public class Vanilla {
 
         return null;
     }
+
     private static Recipe removeSmithingRecipe(RMSmithingRecipe recipe) {
         RecipeChoice baseChoice = recipe.getPrimaryIngredient();
         ItemStack baseIngredient;

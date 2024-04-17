@@ -60,8 +60,8 @@ public class RMSmithingEvents extends BaseRecipeEvents {
 
         BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.SMITHING, ingredients, null);
         RMSmithingRecipe recipe = null;
-        if (baseRecipe instanceof RMSmithing1_19_4Recipe) {
-            recipe = (RMSmithing1_19_4Recipe) baseRecipe;
+        if (baseRecipe instanceof RMSmithing1_19_4TransformRecipe) {
+            recipe = (RMSmithing1_19_4TransformRecipe) baseRecipe;
         } else if (!isNewSmithingTable && baseRecipe instanceof RMSmithingRecipe) {
             recipe = (RMSmithingRecipe) baseRecipe;
         }
@@ -237,8 +237,8 @@ public class RMSmithingEvents extends BaseRecipeEvents {
 
             BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.SMITHING, ingredients, null);
             RMSmithingRecipe recipe = null;
-            if (baseRecipe instanceof RMSmithing1_19_4Recipe) {
-                recipe = (RMSmithing1_19_4Recipe) baseRecipe;
+            if (baseRecipe instanceof RMSmithing1_19_4TransformRecipe) {
+                recipe = (RMSmithing1_19_4TransformRecipe) baseRecipe;
             } else if (!isNewSmithingTable && baseRecipe instanceof RMSmithingRecipe) {
                 recipe = (RMSmithingRecipe) baseRecipe;
             }
@@ -512,8 +512,8 @@ public class RMSmithingEvents extends BaseRecipeEvents {
 
             BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.SMITHING, ingredients, null);
             RMSmithingRecipe recipe = null;
-            if (baseRecipe instanceof RMSmithing1_19_4Recipe) {
-                recipe = (RMSmithing1_19_4Recipe) baseRecipe;
+            if (baseRecipe instanceof RMSmithing1_19_4TransformRecipe) {
+                recipe = (RMSmithing1_19_4TransformRecipe) baseRecipe;
             }
 
             if (recipe != null) {

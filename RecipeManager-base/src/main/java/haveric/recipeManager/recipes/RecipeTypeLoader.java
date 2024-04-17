@@ -29,10 +29,7 @@ import haveric.recipeManager.recipes.grindstone.GrindstoneRecipe;
 import haveric.recipeManager.recipes.grindstone.GrindstoneRecipeParser;
 import haveric.recipeManager.recipes.item.ItemRecipe;
 import haveric.recipeManager.recipes.item.ItemRecipeParser;
-import haveric.recipeManager.recipes.smithing.RMSmithingEvents;
-import haveric.recipeManager.recipes.smithing.RMSmithingRecipe;
-import haveric.recipeManager.recipes.smithing.RMSmithingRecipeParser;
-import haveric.recipeManager.recipes.smithing.RMSmithing1_19_4Recipe;
+import haveric.recipeManager.recipes.smithing.*;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipeParser;
 import haveric.recipeManager.tools.Supports;
@@ -83,7 +80,7 @@ public class RecipeTypeLoader {
         }
 
         if (Version.has1_19_4Support()) {
-            loadRecipeType(RMCRecipeType.SMITHING.getDirective(), new RMSmithing1_19_4Recipe(), new RMSmithingRecipeParser(), new RMSmithingEvents());
+            loadRecipeType(RMCRecipeType.SMITHING.getDirective(), new RMSmithing1_19_4TransformRecipe(), new RMSmithingRecipeParser(), new RMSmithingEvents());
         } else if (Version.has1_16Support()) {
             loadRecipeType(RMCRecipeType.SMITHING.getDirective(), new RMSmithingRecipe(), new RMSmithingRecipeParser(), new RMSmithingEvents());
         }

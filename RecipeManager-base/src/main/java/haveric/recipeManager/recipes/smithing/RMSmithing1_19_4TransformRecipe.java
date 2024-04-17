@@ -4,30 +4,38 @@ import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.SmithingTransformRecipe;
+import org.bukkit.inventory.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class RMSmithing1_19_4Recipe extends RMSmithingRecipe {
+public class RMSmithing1_19_4TransformRecipe extends RMSmithingRecipe {
     private RecipeChoice templateIngredient;
 
-    public RMSmithing1_19_4Recipe() {
+    public RMSmithing1_19_4TransformRecipe() {
 
     }
 
-    public RMSmithing1_19_4Recipe(BaseRecipe recipe) {
+    public RMSmithing1_19_4TransformRecipe(SmithingTransformRecipe recipe) {
+        setTemplateIngredient(recipe.getTemplate());
+        setPrimaryIngredient(recipe.getBase());
+        setSecondaryIngredient(recipe.getAddition());
+
+        setResult(recipe.getResult());
+    }
+
+    public RMSmithing1_19_4TransformRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof RMSmithing1_19_4Recipe) {
-            RMSmithing1_19_4Recipe r = (RMSmithing1_19_4Recipe) recipe;
+        if (recipe instanceof RMSmithing1_19_4TransformRecipe) {
+            RMSmithing1_19_4TransformRecipe r = (RMSmithing1_19_4TransformRecipe) recipe;
 
             if (r.templateIngredient != null) {
                 templateIngredient = r.templateIngredient.clone();
@@ -37,7 +45,7 @@ public class RMSmithing1_19_4Recipe extends RMSmithingRecipe {
         }
     }
 
-    public RMSmithing1_19_4Recipe(Flags flags) {
+    public RMSmithing1_19_4TransformRecipe(Flags flags) {
         super(flags);
     }
 
@@ -98,7 +106,24 @@ public class RMSmithing1_19_4Recipe extends RMSmithingRecipe {
 
     @Override
     public SmithingTransformRecipe toBukkitRecipe(boolean vanilla) {
-        return null;
+        if (!hasIngredients() || !hasResults()) {
+            return null;
+        }
+
+        SmithingTransformRecipe bukkitRecipe;
+        if (vanilla) {
+            bukkitRecipe = new SmithingTransformRecipe(getNamespacedKey(), getFirstResult(), templateIngredient, getPrimaryIngredient(), getSecondaryIngredient());
+        } else {
+            ItemResult firstResult = getFirstResult();
+
+            Args a = ArgBuilder.create().result(firstResult).build();
+            getFlags().sendPrepare(a, true);
+            firstResult.getFlags().sendPrepare(a, true);
+
+            bukkitRecipe = new SmithingTransformRecipe(getNamespacedKey(), a.result(), templateIngredient, getPrimaryIngredient(), getSecondaryIngredient());
+        }
+
+        return bukkitRecipe;
     }
 
     private void updateHash() {
@@ -251,10 +276,5 @@ public class RMSmithing1_19_4Recipe extends RMSmithingRecipe {
         }
 
         return totalQuality;
-    }
-
-    @Override
-    public boolean requiresRecipeManagerModification() {
-        return true;
     }
 }

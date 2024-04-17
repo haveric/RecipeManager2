@@ -1,5 +1,6 @@
 package haveric.recipeManager.recipes.smithing;
 
+import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
@@ -28,7 +29,7 @@ public class RMSmithingRecipeParser extends BaseRecipeParser {
     public boolean parseRecipe(int directiveLine) {
         RMSmithingRecipe recipe;
         if (Supports.experimental1_20()) {
-            recipe = new RMSmithing1_19_4Recipe(fileFlags); // create recipe and copy flags from file
+            recipe = new RMSmithing1_19_4TransformRecipe(fileFlags); // create recipe and copy flags from file
         } else {
             recipe = new RMSmithingRecipe(fileFlags); // create recipe and copy flags from file
         }
@@ -44,6 +45,10 @@ public class RMSmithingRecipeParser extends BaseRecipeParser {
                 RecipeChoice choice = Tools.parseRecipeChoice(line.substring(2), ParseBit.NONE);
                 if (choice == null) {
                     return false;
+                }
+
+                if (!Supports.experimental1_20() && ingredientChar == 't') {
+                    ErrorReporter.getInstance().warning("Template ingredients are not supported in 2 slot smithing tables and will not be used in this recipe.", "Make sure you are only using pattern variables 'a' and 'b'.");
                 }
 
                 FlaggableRecipeChoice flaggable = new FlaggableRecipeChoice();
@@ -91,16 +96,29 @@ public class RMSmithingRecipeParser extends BaseRecipeParser {
             } else {
                 // get the ingredients
                 String[] ingredientsRaw = reader.getLine().split("\\+");
+                int numIngredients = ingredientsRaw.length;
+                int ingredient = 0;
 
-                RecipeChoice primaryChoice = Tools.parseRecipeChoice(ingredientsRaw[0], ParseBit.NO_WARNINGS);
+                if (Supports.experimental1_20() && numIngredients == 3) {
+                    RecipeChoice templateChoice = Tools.parseRecipeChoice(ingredientsRaw[ingredient], ParseBit.NO_WARNINGS);
+                    if (templateChoice == null) {
+                        return false;
+                    }
+
+                    ((RMSmithing1_19_4TransformRecipe) recipe).setTemplateIngredient(templateChoice);
+                    ingredient += 1;
+                }
+
+                RecipeChoice primaryChoice = Tools.parseRecipeChoice(ingredientsRaw[ingredient], ParseBit.NO_WARNINGS);
                 if (primaryChoice == null) {
                     return false;
                 }
 
                 recipe.setPrimaryIngredient(primaryChoice);
+                ingredient += 1;
 
-                if (ingredientsRaw.length > 1) {
-                    RecipeChoice secondaryChoice = Tools.parseRecipeChoice(ingredientsRaw[1], ParseBit.NO_WARNINGS);
+                if ((Supports.experimental1_20() && numIngredients > 2) || (!Supports.experimental1_20() && numIngredients > 1)) {
+                    RecipeChoice secondaryChoice = Tools.parseRecipeChoice(ingredientsRaw[ingredient], ParseBit.NO_WARNINGS);
                     if (secondaryChoice == null) {
                         return false;
                     }

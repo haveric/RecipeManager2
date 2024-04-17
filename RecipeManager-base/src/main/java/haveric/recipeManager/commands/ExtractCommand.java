@@ -308,8 +308,16 @@ public class ExtractCommand implements TabExecutor {
                     if (r instanceof SmithingRecipe) {
                         SmithingRecipe recipe = (SmithingRecipe) r;
                         StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMITHING.getDirective());
-
                         appendNamespacedKey(recipeString, recipe.getKey());
+
+                        if (Supports.experimental1_20()) {
+                            if (r instanceof SmithingTransformRecipe) {
+                                SmithingTransformRecipe transformRecipe = (SmithingTransformRecipe) r;
+
+                                parseChoice(transformRecipe.getTemplate(), recipeString);
+                                recipeString.append(" + ");
+                            }
+                        }
 
                         parseChoice(recipe.getBase(), recipeString);
                         recipeString.append(" + ");
