@@ -99,7 +99,7 @@ public class ExtractCommand implements TabExecutor {
                         }
 
                         if (Supports.categories()) {
-                            recipeString.append("category ").append(recipe.getCategory().name());
+                            recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
                         }
 
                         Map<Character, RecipeChoice> choices = recipe.getChoiceMap();
@@ -160,7 +160,7 @@ public class ExtractCommand implements TabExecutor {
                         }
 
                         if (Supports.categories()) {
-                            recipeString.append("category ").append(recipe.getCategory().name());
+                            recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
                         }
 
                         List<RecipeChoice> ingredientChoices = recipe.getChoiceList();
@@ -202,7 +202,7 @@ public class ExtractCommand implements TabExecutor {
                         }
 
                         if (Supports.categories()) {
-                            recipeString.append("category ").append(recipe.getCategory().name());
+                            recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
                         }
 
                         recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
@@ -230,7 +230,7 @@ public class ExtractCommand implements TabExecutor {
                         }
 
                         if (Supports.categories()) {
-                            recipeString.append("category ").append(recipe.getCategory().name());
+                            recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
                         }
 
                         recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
@@ -252,7 +252,7 @@ public class ExtractCommand implements TabExecutor {
                         }
 
                         if (Supports.categories()) {
-                            recipeString.append("category ").append(recipe.getCategory().name());
+                            recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
                         }
 
                         recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
@@ -274,7 +274,7 @@ public class ExtractCommand implements TabExecutor {
                         }
 
                         if (Supports.categories()) {
-                            recipeString.append("category ").append(recipe.getCategory().name());
+                            recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
                         }
 
                         recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
