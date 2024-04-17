@@ -16,7 +16,7 @@ public class ToolsRecipeV1_19_4 extends ToolsRecipeV1_16_1 {
         if (bukkitRecipe instanceof SmithingTransformRecipe) {
             SmithingTransformRecipe smithingTransformRecipe = (SmithingTransformRecipe) bukkitRecipe;
 
-            boolean isTemplateSame = RMBukkitTools.isSameItemFromChoice(smithingTransformRecipe.getTemplate(), baseIngredient);
+            boolean isTemplateSame = RMBukkitTools.isSameItemFromChoice(smithingTransformRecipe.getTemplate(), templateIngredient);
             boolean isBaseSame = RMBukkitTools.isSameItemFromChoice(smithingTransformRecipe.getBase(), baseIngredient);
             boolean isAddSame = RMBukkitTools.isSameItemFromChoice(smithingTransformRecipe.getAddition(), addIngredient);
             return isTemplateSame && isBaseSame && isAddSame;
