@@ -613,7 +613,7 @@ public class Vanilla {
         }
 
         if (Version.has1_19_4Support()) {
-            addCompostRecipe(Material.TORCHFLOWER, 65);
+            addCompostRecipe(Material.TORCHFLOWER, 85);
             addCompostRecipe(Material.TORCHFLOWER_SEEDS, 30);
             addCompostRecipe(Material.PINK_PETALS, 30);
 
