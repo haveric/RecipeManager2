@@ -56,4 +56,9 @@ public class TestEnchantmentSharpness extends Enchantment {
     public NamespacedKey getKey() {
         return null;
     }
+
+    @Override
+    public String getTranslationKey() {
+        return null;
+    }
 }

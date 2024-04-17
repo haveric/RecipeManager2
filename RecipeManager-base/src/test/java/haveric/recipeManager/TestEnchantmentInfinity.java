@@ -56,4 +56,9 @@ public class TestEnchantmentInfinity extends Enchantment {
     public NamespacedKey getKey() {
         return null;
     }
+
+    @Override
+    public String getTranslationKey() {
+        return null;
+    }
 }

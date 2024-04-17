@@ -115,6 +115,11 @@ public class TestUnsafeValues implements UnsafeValues {
     public String getTranslationKey(ItemStack itemStack) { return null; }
 
     @Override
+    public String getTranslationKey(Attribute attribute) {
+        return null;
+    }
+
+    @Override
     public FeatureFlag getFeatureFlag(NamespacedKey key) {
         return null;
     }
