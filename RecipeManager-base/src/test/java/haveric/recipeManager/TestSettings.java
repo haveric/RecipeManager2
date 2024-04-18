@@ -157,12 +157,32 @@ public class TestSettings extends BaseSettings {
     }
 
     @Override
+    public boolean getSpecialSmithingArmorTrimHost() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimRaiser() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
     public boolean getSpecialSmithingArmorTrimRib() {
         return SPECIAL_RECIPE_DEFAULT;
     }
 
     @Override
     public boolean getSpecialSmithingArmorTrimSentry() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimShaper() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimSilence() {
         return SPECIAL_RECIPE_DEFAULT;
     }
 
@@ -188,6 +208,11 @@ public class TestSettings extends BaseSettings {
 
     @Override
     public boolean getSpecialSmithingArmorTrimWard() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimWayfinder() {
         return SPECIAL_RECIPE_DEFAULT;
     }
 

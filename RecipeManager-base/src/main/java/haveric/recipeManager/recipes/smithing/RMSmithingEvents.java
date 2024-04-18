@@ -130,6 +130,22 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                     }
                 }
 
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimHost()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimHost(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.host");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimRaiser()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimRaiser(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.raiser");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimRib()) {
                     if (Vanilla.recipeMatchesSmithingArmorTrimRib(recipe)) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.rib");
@@ -141,6 +157,22 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimSentry()) {
                     if (Vanilla.recipeMatchesSmithingArmorTrimSentry(recipe)) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.sentry");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimShaper()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimShaper(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.shaper");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimSilence()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimSilence(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.silence");
                         inv.setResult(null);
                         return true;
                     }
@@ -181,6 +213,14 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimWard()) {
                     if (Vanilla.recipeMatchesSmithingArmorTrimWard(recipe)) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.ward");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimWayfinder()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimWayfinder(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.wayfinder");
                         inv.setResult(null);
                         return true;
                     }

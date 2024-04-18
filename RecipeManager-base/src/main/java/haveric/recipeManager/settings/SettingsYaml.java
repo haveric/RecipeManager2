@@ -558,12 +558,28 @@ public class SettingsYaml extends BaseSettings {
         return fileConfig.getBoolean("special-recipes.smithing.armor-trim.eye", SPECIAL_RECIPE_DEFAULT);
     }
 
+    public boolean getSpecialSmithingArmorTrimHost() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.host", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimRaiser() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.raiser", SPECIAL_RECIPE_DEFAULT);
+    }
+
     public boolean getSpecialSmithingArmorTrimRib() {
         return fileConfig.getBoolean("special-recipes.smithing.armor-trim.rib", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialSmithingArmorTrimSentry() {
         return fileConfig.getBoolean("special-recipes.smithing.armor-trim.sentry", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimShaper() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.shaper", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimSilence() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.silence", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialSmithingArmorTrimSnout() {
@@ -584,6 +600,10 @@ public class SettingsYaml extends BaseSettings {
 
     public boolean getSpecialSmithingArmorTrimWard() {
         return fileConfig.getBoolean("special-recipes.smithing.armor-trim.ward", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimWayfinder() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.wayfinder", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialSmithingArmorTrimWild() {
