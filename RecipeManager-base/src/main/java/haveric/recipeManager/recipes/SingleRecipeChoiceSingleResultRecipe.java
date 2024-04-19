@@ -122,11 +122,6 @@ public abstract class SingleRecipeChoiceSingleResultRecipe extends SingleResultR
     }
 
     @Override
-    public int hashCode() {
-        return hash;
-    }
-
-    @Override
     public boolean isValid() {
         return hasIngredientChoice() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResult());
     }

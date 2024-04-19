@@ -32,7 +32,7 @@ special-recipes:
     clone: true              # clone maps recipe
     extend: true             # extend/zoom maps recipe
     lock: true               # lock maps recipe
-  decorated-pot: true        # (1.20 experimental)
+  decorated-pot: true        # decorated pots recipe
   fireworks: true            # fireworks recipes
   firework-star: true        # firework star recipes
   firework-star-fade: true   # firework star fade recipes
@@ -58,17 +58,22 @@ special-recipes:
   shield-banner: true        # shield decoration (banner) recipes
   shulker-dye: true          # shulker dying recipes
   smithing:
-    armor-trim:              # (1.20 experimental)
+    armor-trim:              # Armor trim recipes
       coast: true
       dune: true
       eye: true
+      host: true
+      raiser: true
       rib: true
       sentry: true
+      shaper: true
+      silence: true
       snout: true
       spire: true
       tide: true
       vex: true
       ward: true
+      wayfinder: true
       wild: true
   suspicious-stew: true      # suspicious stew recipes
   tipped-arrows: true        # tipped/potion arrows recipes

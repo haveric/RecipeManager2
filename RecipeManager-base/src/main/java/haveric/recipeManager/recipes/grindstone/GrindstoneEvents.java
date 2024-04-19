@@ -336,7 +336,7 @@ public class GrindstoneEvents extends BaseRecipeEvents {
         if (isShiftClick) {
             times = 64;
         }
-        // Clone the recipe so we can add custom flags to it
+        // Clone the recipe, so we can add custom flags to it
         GrindstoneRecipe recipe = new GrindstoneRecipe(grindstone.getRecipe());
         Args a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).build();
 

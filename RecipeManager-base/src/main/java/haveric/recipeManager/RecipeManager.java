@@ -177,7 +177,7 @@ public class RecipeManager extends JavaPlugin {
     }
 
     /**
-     * Reload RecipeManager's settings, messages, etc and re-parse recipes.
+     * Reload RecipeManager's settings, messages, etc. and reparse recipes.
      *
      * @param sender
      *            To whom to send the messages to, null = console.

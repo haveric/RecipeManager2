@@ -23,7 +23,7 @@
         <p>You can create new books just by creating a new .yml file in that folder but unlike recipes that folder does not support sub-folders.</p>
 
         <p>The book's filename defines the book's ID which will be used to identify books even if they're renamed.<br/>
-            This is useful when editing books that players already have which the plugin will automatically update, if you edit the file name their old book items will not be updated any more.</p>
+            This is useful when editing books that players already have which the plugin will automatically update, if you edit the file name their old book items will not be updated anymore.</p>
 
         <p>A book's .yml file can have:</p>
     </div>
@@ -55,7 +55,7 @@
         - etc ...
         volume ...
 
-        # these are comments by the way but they will not be preserved since the plugin will rewrite the files.
+        # these are comments by the way, but they will not be preserved since the plugin will rewrite the files.
     </div>
     <p>Note that a book can not contain the same recipe twice.</p>
 
@@ -69,14 +69,14 @@
         This does not limit you from adding more recipes in volumes.</p>
 
     <p>'<b>cover</b>', '<b>contents</b>' and '<b>end</b>' (optional, default all true) toggle if the cover, contents or end pages are generated for the book.<br/>
-        You can toggle them any time but you need to reload the books for them to have effect.</p>
+        You can toggle them any time, but you need to reload the books for them to have effect.</p>
 
     <p>'<b>customend</b>' sets a custom text for the last page, only works if 'end' is true. Supports colors and \n for newlines.</p>
 
     <p>Then you can use 'recipes' node to list the recipes you want to add or use special arguments (see below).<br/>
         Once 'recipes' is defined and book is loaded, the node will be deleted and will auto-generate the volumes according to the recipe-per-volume limit.</p>
 
-    <p>You can add the 'recipes' node again to append recipes to the existing volumes automatically or you can just add them directly to the volumes you want.</p>
+    <p>You can add the 'recipes' node again to append recipes to the existing volumes automatically, or you can just add them directly to the volumes you want.</p>
 
 
     <p>To add recipes to a book, give it a custom name or use the <a href="recipe flags.html#addtobook">@addtobook</a> flag.</p>
@@ -115,7 +115,7 @@
 
     <p>You can use <a href="recipe flags.html#getrecipebook">@getrecipebook</a> flag in a recipe to craft a recipe book.</p>
 
-    <p>Additionally you can get books with the 'rmgetbook' command, available to operators.</p>
+    <p>Additionally, you can get books with the 'rmgetbook' command, available to operators.</p>
 
     <p>
         <b>Example book:</b>

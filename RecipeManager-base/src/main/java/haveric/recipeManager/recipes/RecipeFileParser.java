@@ -7,8 +7,9 @@ import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.Flags;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class RecipeFileParser {
 
@@ -21,7 +22,7 @@ public class RecipeFileParser {
     }
 
     public void parseFile(String root, String fileName) throws Throwable {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(root + fileName)));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(Files.newInputStream(Paths.get(root + fileName))));
 
         currentFile = fileName;
         if (currentFile.isEmpty()) {

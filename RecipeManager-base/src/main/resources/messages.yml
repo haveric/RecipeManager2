@@ -139,13 +139,18 @@ craft:
         coast: <red>Coast Armor Trim crafting is disabled.
         dune: <red>Dune Armor Trim crafting is disabled.
         eye: <red>Eye Armor Trim crafting is disabled.
+        host: <red>Host Armor Trim crafting is disabled.
+        raiser: <red>Raiser Armor Trim crafting is disabled.
         rib: <red>Rib Armor Trim crafting is disabled.
         sentry: <red>Sentry Armor Trim crafting is disabled.
+        shaper: <red>Shaper Armor Trim crafting is disabled.
+        silence: <red>Silence Armor Trim crafting is disabled.
         snout: <red>Snout Armor Trim crafting is disabled.
         spire: <red>Spire Armor Trim crafting is disabled.
         tide: <red>Tide Armor Trim crafting is disabled.
         vex: <red>Vex Armor Trim crafting is disabled.
         ward: <red>Ward Armor Trim crafting is disabled.
+        wayfinder: <red>Wayfinder Armor Trim crafting is disabled.
         wild: <red>Wild Armor Trim crafting is disabled.
   result:
     denied:
@@ -208,8 +213,8 @@ recipebook:
   anvil:
     repaircost: "<black><underline>Repair Cost:<dark_green> {repaircost}"
   update:
-    extinct: <red>Your '<yellow>{title}<red>' recipe book does not exist any more, it won't be updated further.
-    novolume: <red>Your '<yellow>{title}<red>' recipe book does not have <yellow>volume {volume}<red> any more, it won't be updated further.
+    extinct: <red>Your '<yellow>{title}<red>' recipe book does not exist anymore, it won't be updated further.
+    novolume: <red>Your '<yellow>{title}<red>' recipe book does not have <yellow>volume {volume}<red> anymore, it won't be updated further.
     done: <gray>Your held recipe book has been updated!
     changed:
       title: <gray>Title changed from '<reset>{oldtitle}<gray>' to '<reset>{newtitle}<gray>'.

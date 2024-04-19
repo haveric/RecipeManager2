@@ -1,7 +1,6 @@
 package haveric.recipeManager.recipes.smithing;
 
 import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -11,7 +10,9 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
+import org.bukkit.inventory.SmithingTransformRecipe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,10 +48,6 @@ public class RMSmithing1_19_4TransformRecipe extends RMSmithingRecipe {
 
     public RMSmithing1_19_4TransformRecipe(Flags flags) {
         super(flags);
-    }
-
-    public boolean isValidBlockMaterial(Material material) {
-        return material == Material.SMITHING_TABLE;
     }
 
     @Override
@@ -189,17 +186,6 @@ public class RMSmithing1_19_4TransformRecipe extends RMSmithingRecipe {
 
         return indexString;
     }
-
-    @Override
-    public boolean isValid() {
-        return hasIngredients() && hasResults();
-    }
-
-    @Override
-    public RMCRecipeType getType() {
-        return RMCRecipeType.SMITHING;
-    }
-
 
     @Override
     public String printBookResult(ItemResult result) {

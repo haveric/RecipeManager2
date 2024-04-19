@@ -68,7 +68,7 @@ public class Workbenches {
         } else {
             craftingTableMaterial = Material.getMaterial("WORKBENCH");
         }
-        if (block.getType() != craftingTableMaterial) { // Workbench doesn't exist any more
+        if (block.getType() != craftingTableMaterial) { // Workbench doesn't exist anymore
             workbenches.remove(human.getName());
             return playerLoc;
         }

@@ -122,12 +122,7 @@ public class FlagKeepItem extends Flag {
      *            can be Integer or ItemStack object
      */
     public void addItem(ItemStack item, Object object) {
-        String key = item.getType().toString();
-
-        if (item.getDurability() != RMCVanilla.DATA_WILDCARD) {
-            key += ":" + item.getDurability();
-        }
-
+        String key = Tools.convertItemToStringId(item);
         keepItems.put(key, object);
     }
 
@@ -141,11 +136,7 @@ public class FlagKeepItem extends Flag {
             return false;
         }
 
-        String key = item.getType().toString();
-        if (item.getDurability() != RMCVanilla.DATA_WILDCARD) {
-            key += ":" + item.getDurability();
-        }
-
+        String key = Tools.convertItemToStringId(item);
         if (keepItems.containsKey(key)) {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " already has the '" + ToolsItem.print(item) + "' ingredient added.");
             return false;

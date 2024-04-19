@@ -102,7 +102,7 @@ public class RecipeRegistrator {
             processed++;
         }
 
-        registered = true; // mark this class as registered so it doesn't get re-registered
+        registered = true; // mark this class as registered, so it doesn't get re-registered
         // clear the queues to let the classes vanish
         queuedRemovedRecipes.clear();
         queuedRecipes.clear();

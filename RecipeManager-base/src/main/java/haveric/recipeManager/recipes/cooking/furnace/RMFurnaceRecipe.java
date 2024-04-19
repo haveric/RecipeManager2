@@ -198,11 +198,6 @@ public class RMFurnaceRecipe extends SingleResultRecipe {
         return fuelIndex;
     }
 
-    @Override
-    public int hashCode() {
-        return hash;
-    }
-
     public boolean hasIngredient() {
         return ingredient != null;
     }

@@ -121,7 +121,7 @@ public class Flags implements Cloneable {
             flag = type.createFlagClass();
         }
 
-        flag.setFlagsContainer(this); // set container before hand to allow checks
+        flag.setFlagsContainer(this); // set container beforehand to allow checks
         if (split.length > 1) {
             value = split[1].trim();
         } else {

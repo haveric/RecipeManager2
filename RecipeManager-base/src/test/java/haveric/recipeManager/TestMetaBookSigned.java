@@ -1,6 +1,5 @@
 package haveric.recipeManager;
 
-import org.bukkit.Material;
 import org.bukkit.inventory.meta.BookMeta;
 
 public class TestMetaBookSigned extends TestMetaBook implements BookMeta {
@@ -12,17 +11,6 @@ public class TestMetaBookSigned extends TestMetaBook implements BookMeta {
     @Override
     boolean isEmpty() {
         return super.isEmpty();
-    }
-
-    @Override
-    boolean applicableTo(Material type) {
-        switch (type) {
-            case WRITTEN_BOOK:
-            case WRITABLE_BOOK:
-                return true;
-            default:
-                return false;
-        }
     }
 
     @Override

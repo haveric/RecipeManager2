@@ -188,7 +188,7 @@ public class FlagForRepeat extends Flag {
         }
 
         Flag flag = type.createFlagClass();
-        flag.setFlagsContainer(getFlagsContainer()); // set container before hand to allow checks
+        flag.setFlagsContainer(getFlagsContainer()); // set container beforehand to allow checks
 
         String value;
         if (split.length > 1) {

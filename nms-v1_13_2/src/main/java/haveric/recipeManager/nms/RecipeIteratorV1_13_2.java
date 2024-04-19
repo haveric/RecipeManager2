@@ -147,8 +147,4 @@ public class RecipeIteratorV1_13_2 extends BaseRecipeIterator implements Iterato
             MessageSender.getInstance().error(null, e, "NMS failure for v1.13 support during grid recipe replace");
         }
     }
-
-    @Override
-    public void finish() {
-    }
 }

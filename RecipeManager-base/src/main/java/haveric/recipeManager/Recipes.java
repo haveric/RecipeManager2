@@ -297,7 +297,7 @@ public class Recipes {
     }
 
     /**
-     * Gets the recipe's information (owner, adder, status, etc).<br>
+     * Gets the recipe's information (owner, adder, status, etc.).<br>
      * You can use this on Bukkit recipes by converting them to RecipeManager format using:<br>
      * <code>new BaseRecipe(bukkitRecipe);</code>
      *
@@ -311,7 +311,7 @@ public class Recipes {
 
     /**
      * Gets a copy of RecipeManager's recipe list.<br>
-     * Returned values are mutable so you can edit individual recipes.<br>
+     * Returned values are mutable, so you can edit individual recipes.<br>
      * Removing from this list does nothing, see {@link BaseRecipe #remove()} method instead.
      *
      * @return copy of HashMap

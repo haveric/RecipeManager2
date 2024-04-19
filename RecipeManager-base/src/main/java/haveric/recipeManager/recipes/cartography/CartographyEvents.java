@@ -259,7 +259,7 @@ public class CartographyEvents extends BaseRecipeEvents {
             times = 64;
         }
 
-        // Clone the recipe so we can add custom flags to it
+        // Clone the recipe, so we can add custom flags to it
         CartographyRecipe recipe = new CartographyRecipe(cartographyTable.getRecipe());
         Args a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).build();
 

@@ -1,12 +1,12 @@
 package haveric.recipeManager.flag.flags.result;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -189,7 +189,7 @@ public class FlagCloneIngredient extends Flag {
      * @param symbol
      *            can be: +, -, *, /, %
      * @param data
-     *            the amount amount to change
+     *            the amount to change
      */
     public void setAmountModifier(char symbol, int data) {
         amountModifier[0] = symbol;
@@ -264,11 +264,7 @@ public class FlagCloneIngredient extends Flag {
                 String[] types = value.split(",");
 
                 for (String type : types) {
-                    Material material = RecipeManager.getSettings().getMaterial(type);
-                    if (material == null) {
-                        material = Material.matchMaterial(type);
-                    }
-
+                    Material material = Tools.parseMaterial(type);
                     if (material == null) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid allowedtypes value: " + type + ". Value must be a material name.");
                     } else {

@@ -342,8 +342,7 @@ public class CreateRecipeCommand implements CommandExecutor {
 
             Map<String, Integer> conditionsForType = conditions.get(type);
             if (conditionsForType.containsKey(finalIngredientCondition)) {
-                int num = conditionsForType.get(finalIngredientCondition);
-                conditionsForType.put(finalIngredientCondition, num + 1);
+                conditionsForType.compute(finalIngredientCondition, (k, num) -> num + 1);
             } else {
                 conditionsForType.put(finalIngredientCondition, 1);
             }
