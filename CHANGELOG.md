@@ -1,5 +1,28 @@
 ## Change log
 
+### v2.30.0
+* FIX: Fixed duplicate lores on brewing recipes
+* FIX: Fixed repair and repair-metadata special recipes
+* FIX: Fuel recipes can now be set to as low as 1 tick instead of 1 second
+* FIX: Campfire recipe group option is now applied correctly
+* FIX: 1.19.3: Campfire recipes support for random cook times
+* NEW: 1.19.3: Add support for recipe book categories
+* NEW: Added recipe book category to crafting and cooking recipe parsers
+* FIX: Fix brewing recipes not starting when shift clicking or dragging items into the brewing stand
+* FIX: 1.12 and below: Fixed /rmextract
+* FIX: `@SkullOwner`: Fixed the dynamic `{player}` argument
+* FIX: 1.18.1+: `@SkullOwner`: Replace texture handling with player profiles
+  * It is recommended to replace `texture <base64>` with `textureurl <url>`
+* FIX: 1.19: Fixed scaffolding fuel amount
+* NEW: 1.19.2: `@Summon`: Added `allayCanDuplicate [true/false]` and `allayDuplicateCooldown <ticks>`
+* NEW: 1.19: `@Summon`: Added `zombiecanbreakdoors [true/false]` for setting if a zombie can break doors
+* NEW: 1.20: Added new furnace fuels
+* NEW: 1.20: Added new composting items
+* NEW: 1.20: Added `special-recipes.decorated-pot` for disabling decorated pots recipes
+* NEW: 1.20: Added `special-recipes.smithing.armor-trim` for disabling individual armor trim recipes
+* NEW: 1.20: FlagHide: Added support for hiding armor trim with `armortrim` argument
+* NEW: 1.20: Add support for smithing recipes with 3 ingredients
+
 ### v2.29.2
 * FIX: `@LightLevel`: Fixed light level check for solid blocks, such as crafting tables
 * NEW: `@LightLevel`: Allow multiple conditions where either passing is valid: `0-3 blocks, 12-15 sun`

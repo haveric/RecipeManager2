@@ -1172,6 +1172,7 @@ title: Recipe Flags
       potioneffects  = Hide potion effects, book and firework information, map tooltips, patterns of banners, and enchantments of enchanted books
       unbreakable    = Hide the unbreakable state
       dye            = Hides dyes from colored leather armor
+      armortrim      = Hides armor trim from leather armor
       all            = Hides everything
     Arguments can be listed in any order.
 </span>
@@ -2541,11 +2542,11 @@ title: Recipe Flags
     </div>
     <div class='doc-section__group'>
         <a href='#contents' class='back-to-top'>^ Contents</a><a id='skullowner'></a>
-        <h3 class='doc-section__title'>@skullowner &lt;name&gt;</h3>
         <h3 class='doc-section__title'>@skullowner &lt;uuid&gt;</h3>
-        <h3 class='doc-section__title'>@skullowner texture &lt;base64&gt;</h3>
-        <h3 class='doc-section__title'>@skullowner &lt;name&gt; | texture &lt;base64&gt;</h3>
-        <h3 class='doc-section__title'>@skullowner &lt;uuid&gt; | texture &lt;base64&gt;</h3>
+        <h3 class='doc-section__title'>@skullowner &lt;name&gt;</h3>
+        <h3 class='doc-section__title'>@skullowner textureurl &lt;url&gt;</h3>
+        <h3 class='doc-section__title'>@skullowner &lt;name&gt; | textureurl &lt;url&gt;</h3>
+        <h3 class='doc-section__title'>@skullowner &lt;uuid&gt; | textureurl &lt;url&gt;</h3>
         <pre>
     <span class='flagtype flagtype-ingredient'>Ingredient</span><span class='flagtype flagtype-result'>Result</span>
 
@@ -2553,10 +2554,12 @@ title: Recipe Flags
     Sets the human skull's owner to apply the skin.
     If you set it to '{player}' then it will use crafter's name.
 
-    For base64 textures, you can reference https://freshcoal.com/, https://minecraft-heads.com/, https://mineskin.org/ or any other Minecraft head repository
-      You can only use the base64 encoded string of a valid mojang texture. Each of the above sites should be able to provide those
+    For texture, you can reference https://minecraft-heads.com/, https://mineskin.org/ or any other Minecraft head repository
+      You can only use textures that are located on the Minecraft texture server (https://textures.minecraft.net/texture/). Each of the above sites should be able to provide those
 
-      WARNING: The texture parameter will conflict with @itemnbt and whichever is used last will be the one that gets used.
+      NOTE: You should exclude the base texture url in the arguments
+      Example texture url: https://textures.minecraft.net/texture/c0b8b5889ee1c6388dc6c2c5dbd70b6984aefe54319a095e64db7638097b821
+        Value you'd use: c0b8b5889ee1c6388dc6c2c5dbd70b6984aefe54319a095e64db7638097b821
 </span>
 
     Setting to 'false' or 'remove' will disable the flag.
@@ -2564,7 +2567,7 @@ title: Recipe Flags
     <b>Examples:</b>
       @skullowner Notch
       @skullowner {player}
-      @skullowner texture eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvYzBiOGI1ODg5ZWUxYzYzODhkYzZjMmM1ZGJkNzBiNjk4NGFlZmU1NDMxOWEwOTVlNjRkYjc2MzgwOTdiODIxIn19fQ== // Jam texture
+      @skullowner textureurl c0b8b5889ee1c6388dc6c2c5dbd70b6984aefe54319a095e64db7638097b821 // Jam texture
 
     <b>Aliases:</b> @skullitem, skull, head
 </pre>
@@ -2682,6 +2685,8 @@ title: Recipe Flags
     Optionally you can add some arguments separated by | character, those being:
       adult                      = forces entity to spawn as an adult, works with animals and villagers (works opposite of baby).
       agelock                    = prevent the entity from maturing or getting ready for mating, works with animals and villagers.
+      allayCanDuplicate [true/false] = sets whether the allay can duplicate. Default is true.
+      allayDuplicateCooldown &lt;ticks&gt; = sets the cooldown (in ticks) before the allay can duplicate again. Default is 0.
       angry                      = makes entity angry, only works for wolves and pigzombies; you can't use 'pet' with this.
       arrowcooldown &lt;ticks&gt;      = sets the ticks until the next arrow leaves the entity's body.
       arrowsinbody &lt;amount&gt;      = sets the number of arrows in the entity's body.
@@ -2761,6 +2766,7 @@ title: Recipe Flags
       visualfire                 = sets if the entity has visual fire (it will always appear to be on fire).
       wanderingtraderdespawndelay &lt;ticks&gt; = sets if the despawn delay (in ticks) of a wandering trader. If ticks is less than or equal to zero, the trader will not be despawned.
       wardenanger &lt;level&gt;        = Sets the wardens anger level towards the player. Anger is an integer from 0 to 150. Once a Warden reaches 80 anger at a target it will actively pursue it.
+      zombiecanbreakdoors [true/false] = Sets whether the zombie can break doors.
 
     These arguments can be used in any order and they're all optional.
 </span>
