@@ -1,6 +1,6 @@
 dependencies {
     implementation 'com.googlecode.json-simple:json-simple:1.1.1'
-    implementation 'org.spigotmc:spigot-api:1.20.4-R0.1-SNAPSHOT'
+    implementation 'org.spigotmc:spigot-api:1.20.5-R0.1-SNAPSHOT'
     implementation project(':RecipeManager-bukkit')
     implementation project(':RecipeManager-common')
     implementation project(':nms')
