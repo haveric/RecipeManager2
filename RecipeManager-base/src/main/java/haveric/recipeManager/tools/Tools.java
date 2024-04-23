@@ -1163,6 +1163,10 @@ public class Tools {
             tip = "'grass' was renamed to 'short_grass' in 1.20.3" + Files.NL + RMCChatColor.DARK_GREEN + "          TIP: " + RMCChatColor.GRAY + tip;
         }
 
+        if (materialValue.equalsIgnoreCase("scute") && Version.has1_20_5Support()) {
+            tip = "'scute' was renamed to 'turtle_scute' in 1.20.5" + Files.NL + RMCChatColor.DARK_GREEN + "          TIP: " + RMCChatColor.GRAY + tip;
+        }
+
         ErrorReporter.getInstance().error("Material '" + materialValue + "' does not exist!", tip);
     }
 }
