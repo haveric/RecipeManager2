@@ -141,11 +141,13 @@ public class Customization implements Cloneable {
         horseColor = c.horseColor;
         horseStyle = c.horseStyle;
         hp = c.hp;
+        invulnerable = c.invulnerable;
         jumpStrength = c.jumpStrength;
         maxHp = c.maxHp;
         mount = c.mount;
         mountNext = c.mountNext;
         name = c.name;
+        noAi = c.noAi;
         noBreed = c.noBreed;
         noCollision = c.noCollision;
         noEffect = c.noEffect;
@@ -167,11 +169,6 @@ public class Customization implements Cloneable {
         spread = c.spread;
         target = c.target;
         villager = c.villager;
-
-        if (Version.has1_10Support()) {
-            invulnerable = c.invulnerable;
-            noAi = c.noAi;
-        }
 
         if (!Version.has1_12Support()) {
             elder = c.elder;
@@ -542,10 +539,8 @@ public class Customization implements Cloneable {
                 ent.setCollidable(false);
             }
 
-            if (Version.has1_10Support()) {
-                ent.setInvulnerable(invulnerable);
-                ent.setAI(!noAi);
-            }
+            ent.setInvulnerable(invulnerable);
+            ent.setAI(!noAi);
 
             if (Version.has1_12Support()) {
                 if (ent instanceof Parrot) {
@@ -1301,9 +1296,9 @@ public class Customization implements Cloneable {
             }
         } else if (lower.equals("nocollision")) {
             noCollision = true;
-        } else if (Version.has1_10Support() && lower.equals("invulnerable")) {
+        } else if (lower.equals("invulnerable")) {
             invulnerable = true;
-        } else if (Version.has1_10Support() && lower.equals("noai")) {
+        } else if (lower.equals("noai")) {
             noAi = true;
         } else if (!Version.has1_12Support() && lower.equals("elder")) {
             if (entityType != EntityType.GUARDIAN) {
@@ -1644,11 +1639,13 @@ public class Customization implements Cloneable {
         toHash += "horseStyle: " + horseStyle.toString();
         toHash += "hit: " + hit;
         toHash += "hp: " + hp;
+        toHash += "invulnerable: " + invulnerable;
         toHash += "jumpStrength: " + jumpStrength.toString();
         toHash += "maxHp: " + maxHp;
         toHash += "mount: " + mount;
         toHash += "mountNext: " + mountNext;
         toHash += "name: " + name;
+        toHash += "noAi: " + noAi;
         toHash += "noBreed: " + noBreed;
         toHash += "noCollision: " + noCollision;
         toHash += "noEffect: " + noEffect;
@@ -1674,11 +1671,6 @@ public class Customization implements Cloneable {
         toHash += "spread: " + spread;
         toHash += "target: " + target;
         toHash += "villager: " + villager.toString();
-
-        if (Version.has1_10Support()) {
-            toHash += "invulnerable: " + invulnerable;
-            toHash += "noAi: " + noAi;
-        }
 
         if (!Version.has1_12Support()) {
             toHash += "elder: " + elder;

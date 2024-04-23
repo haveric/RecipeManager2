@@ -2,7 +2,7 @@
 This file will be automatically overwritten when a new version is installed.
 
 ### Coming Soon
-* Dropped support for Minecraft 1.8
+* Dropped support for Minecraft 1.8 - 1.9
 
 ### v2.30.0
 * FIX: Fixed duplicate lores on brewing recipes
