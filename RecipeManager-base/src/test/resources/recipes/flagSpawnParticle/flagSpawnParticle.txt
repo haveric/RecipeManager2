@@ -39,6 +39,6 @@ craft multiple2
 dirt + cobblestone
 = dirt
 @particle heart | count 3
-@particle smoke_normal | count 5
+@particle smoke | count 5
 @particle lava | count 20 | randomoffset -1 2 1 | offset -2 3
-@particle smoke_large
+@particle large_smoke

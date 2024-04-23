@@ -140,9 +140,9 @@ public class FlagSpawnParticleTest extends FlagBaseTest {
                     case "multiple2":
                         assertEquals(4, particles.size());
                         assertEquals(Particle.HEART, particles.get(0).getParticle());
-                        assertEquals(Particle.SMOKE_NORMAL, particles.get(1).getParticle());
+                        assertEquals(Particle.SMOKE, particles.get(1).getParticle());
                         assertEquals(Particle.LAVA, particles.get(2).getParticle());
-                        assertEquals(Particle.SMOKE_LARGE, particles.get(3).getParticle());
+                        assertEquals(Particle.LARGE_SMOKE, particles.get(3).getParticle());
 
                         assertEquals(RMParticle.DEFAULT_RANDOM_OFFSET, particles.get(3).getRandomOffsetX(), .001);
                         assertEquals(RMParticle.DEFAULT_RANDOM_OFFSET, particles.get(3).getRandomOffsetY(), .001);
