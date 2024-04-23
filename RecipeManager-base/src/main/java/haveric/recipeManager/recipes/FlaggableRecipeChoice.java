@@ -137,10 +137,9 @@ public class FlaggableRecipeChoice implements Flaggable {
         return sendEnd;
     }
 
-    // Can't override hashCode due to 1.10 and older having a final hashCode
-    public int getHashCode() {
-        String toHash = "";
-        toHash += super.hashCode(); // Get ItemStack's hash
+    @Override
+    public int hashCode() {
+        String toHash = String.valueOf(super.hashCode()); // Get ItemStack's hash
 
         if (hasFlags() && flags.hasFlags()) {
             toHash += flags.hashCode();

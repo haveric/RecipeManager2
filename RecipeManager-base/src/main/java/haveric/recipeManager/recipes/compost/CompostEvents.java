@@ -197,7 +197,7 @@ public class CompostEvents extends BaseRecipeEvents {
                     if (!recipe.isMultiResult()) {
                         ItemResult recipeResult = recipe.getFirstResult();
 
-                        if (recipeResult.getHashCode() == CompostRecipe.VANILLA_ITEM_RESULT.getHashCode()) {
+                        if (recipeResult.hashCode() == CompostRecipe.VANILLA_ITEM_RESULT.hashCode()) {
                             matchesVanillaResult = true;
                         }
                     }
@@ -216,7 +216,7 @@ public class CompostEvents extends BaseRecipeEvents {
                             ItemResult recipeResult = recipe.getFirstResult();
                             ItemResult dataRecipeResult = dataRecipe.getFirstResult();
 
-                            if (recipeResult.getHashCode() == dataRecipeResult.getHashCode()) {
+                            if (recipeResult.hashCode() == dataRecipeResult.hashCode()) {
                                 sameResult = true;
                             }
                         }

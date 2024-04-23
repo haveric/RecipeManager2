@@ -49,7 +49,6 @@ public class Vanilla {
     /**
      * Map extending's special recipe result, you can use it to identify vanilla recipes.
      */
-    public static ItemStack RECIPE_MAPEXTEND;
     public static ItemStack RECIPE_MAPEXTEND_1_11;
 
     /**
@@ -131,6 +130,11 @@ public class Vanilla {
         addFuelRecipe(Material.DARK_OAK_FENCE_GATE, 15);
         addFuelRecipe(Material.ACACIA_FENCE_GATE, 15);
 
+        addFuelRecipe(Material.LADDER, 15);
+        addFuelRecipe(Material.BOW, 10);
+        addFuelRecipe(Material.FISHING_ROD, 15);
+        addFuelRecipe(Material.BOWL, 5);
+
         if (!Version.has1_13BasicSupport()) {
             addFuelRecipe("LOG", 15);
             addFuelRecipe("LOG_2", 15);
@@ -154,35 +158,25 @@ public class Vanilla {
             addFuelRecipe("HUGE_MUSHROOM_1", 15);
             addFuelRecipe("HUGE_MUSHROOM_2", 15);
             addFuelRecipe("BANNER", 15);
+            addFuelRecipe("WOOL", 5);
+            addFuelRecipe("CARPET", 3.35f);
+            addFuelRecipe("WOOD_BUTTON", 5);
+            addFuelRecipe("WOOD_DOOR", 10);
+            addFuelRecipe("DARK_OAK_DOOR_ITEM", 10);
+            addFuelRecipe("ACACIA_DOOR_ITEM", 10);
+            addFuelRecipe("BIRCH_DOOR_ITEM", 10);
+            addFuelRecipe("JUNGLE_DOOR_ITEM", 10);
+            addFuelRecipe("SPRUCE_DOOR_ITEM", 10);
+            addFuelRecipe("BOAT", 20);
+            addFuelRecipe("BOAT_ACACIA", 20);
+            addFuelRecipe("BOAT_BIRCH", 20);
+            addFuelRecipe("BOAT_DARK_OAK", 20);
+            addFuelRecipe("BOAT_JUNGLE", 20);
+            addFuelRecipe("BOAT_SPRUCE", 20);
         }
 
-        if (Version.has1_11Support()) {
-            addFuelRecipe(Material.LADDER, 15);
-            addFuelRecipe(Material.BOW, 10);
-            addFuelRecipe(Material.FISHING_ROD, 15);
-            addFuelRecipe(Material.BOWL, 5);
-
-            if (!Version.has1_13BasicSupport()) {
-                addFuelRecipe("WOOL", 5);
-                addFuelRecipe("CARPET", 3.35f);
-                addFuelRecipe("WOOD_BUTTON", 5);
-                addFuelRecipe("WOOD_DOOR", 10);
-                addFuelRecipe("DARK_OAK_DOOR_ITEM", 10);
-                addFuelRecipe("ACACIA_DOOR_ITEM", 10);
-                addFuelRecipe("BIRCH_DOOR_ITEM", 10);
-                addFuelRecipe("JUNGLE_DOOR_ITEM", 10);
-                addFuelRecipe("SPRUCE_DOOR_ITEM", 10);
-                addFuelRecipe("BOAT", 20);
-                addFuelRecipe("BOAT_ACACIA", 20);
-                addFuelRecipe("BOAT_BIRCH", 20);
-                addFuelRecipe("BOAT_DARK_OAK", 20);
-                addFuelRecipe("BOAT_JUNGLE", 20);
-                addFuelRecipe("BOAT_SPRUCE", 20);
-            }
-
-            if (!Version.has1_14Support()) {
-                addFuelRecipe("SIGN", 10);
-            }
+        if (!Version.has1_14Support()) {
+            addFuelRecipe("SIGN", 10);
         }
 
         if (Version.has1_13BasicSupport()) {
@@ -636,17 +630,13 @@ public class Vanilla {
     private static void initSpecialRecipes() {
         if (!Version.has1_13BasicSupport()) {
             RECIPE_MAPCLONE = new ItemStack(Material.getMaterial("EMPTY_MAP"), 0, (short) -1);
-            RECIPE_MAPEXTEND = new ItemStack(Material.getMaterial("EMPTY_MAP"), 0, (short) 0);
             RECIPE_MAPEXTEND_1_11 = new ItemStack(Material.getMaterial("EMPTY_MAP"), 1, (short) 0);
             RECIPE_FIREWORKS = new ItemStack(Material.getMaterial("FIREWORK"), 0, (short) 0);
             RECIPE_BANNER = new ItemStack(Material.getMaterial("BANNER"), 0, (short) 0);
         }
 
         RECIPE_SHIELD_BANNER = new ItemStack(Material.SHIELD, 0, (short) 0);
-
-        if (Version.has1_11Support()) {
-            RECIPE_TIPPED_ARROW = new ItemStack(Material.TIPPED_ARROW, 8, (short) 0);
-        }
+        RECIPE_TIPPED_ARROW = new ItemStack(Material.TIPPED_ARROW, 8, (short) 0);
     }
 
     private static void initVanillaRecipes() {
@@ -1557,7 +1547,7 @@ public class Vanilla {
         } else if (recipe != null) {
             ItemStack result = recipe.getResult();
 
-            if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND) || result.equals(RECIPE_MAPEXTEND_1_11) || result.equals(RECIPE_BOOKCLONE)) {
+            if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND_1_11) || result.equals(RECIPE_BOOKCLONE)) {
                 isSpecial = true;
             }
 
@@ -1652,11 +1642,7 @@ public class Vanilla {
                 }
             }
         } else if (recipe instanceof ShapelessRecipe) {
-            if (Version.has1_11Support()) {
-                if (recipe.getResult().getType() == Material.AIR && result.getType().equals(Material.MAP) && result.getAmount() > 1) {
-                    matches = true;
-                }
-            } else if (recipe.getResult().equals(Vanilla.RECIPE_MAPCLONE)) {
+            if (recipe.getResult().getType() == Material.AIR && result.getType().equals(Material.MAP) && result.getAmount() > 1) {
                 matches = true;
             }
         }
@@ -1684,11 +1670,7 @@ public class Vanilla {
                             break;
                     }
                 }
-            } else if (Version.has1_11Support()) {
-                if (recipe.getResult().equals(Vanilla.RECIPE_MAPEXTEND_1_11)) {
-                    matches = true;
-                }
-            } else if (recipe.getResult().equals(Vanilla.RECIPE_MAPEXTEND)) {
+            } else if (recipe.getResult().equals(Vanilla.RECIPE_MAPEXTEND_1_11)) {
                 matches = true;
             }
         }
@@ -1715,11 +1697,7 @@ public class Vanilla {
                 }
             }
         } else if (recipe instanceof ShapelessRecipe) {
-            if (Version.has1_11Support()) {
-                if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("FIREWORK")) {
-                    matches = true;
-                }
-            } else if (recipe.getResult().equals(Vanilla.RECIPE_FIREWORKS) && result.getType() != Material.getMaterial("FIREWORK_CHARGE")) {
+            if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("FIREWORK")) {
                 matches = true;
             }
         }
@@ -1828,14 +1806,7 @@ public class Vanilla {
                 }
             }
         } else if (recipe instanceof ShapelessRecipe) {
-             if (Version.has1_11Support()) {
-                if (result.getType().equals(Material.WRITTEN_BOOK)) {
-                    matches = true;
-                }
-            } else if (recipe.getResult().equals(Vanilla.RECIPE_BOOKCLONE)) {
-                matches = true;
-            // 1.10
-            } else if (recipe.getResult().getType() == Material.WRITTEN_BOOK && recipe.getResult().getAmount() == 0) {
+            if (result.getType().equals(Material.WRITTEN_BOOK)) {
                 matches = true;
             }
         }
@@ -1899,13 +1870,8 @@ public class Vanilla {
              if ((recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("BANNER")) || recipe.getResult().equals(Vanilla.RECIPE_BANNER)) {
                 List<ItemStack> ingredients = shapeless.getIngredientList();
 
-                if (ingredients.size() == 1) {
-                    if (Version.has1_11Support() && ingredients.get(0).getType() == Material.AIR) {
-                        matches = true;
-                    // 1.10
-                    } else if (ingredients.get(0).getType() == Material.getMaterial("INK_SACK")) {
-                        matches = true;
-                    }
+                if (ingredients.size() == 1 && ingredients.get(0).getType() == Material.AIR) {
+                    matches = true;
                 }
             }
         }
@@ -1933,11 +1899,7 @@ public class Vanilla {
                 }
             }
         } else if (recipe instanceof ShapelessRecipe) {
-            if (Version.has1_11Support()) {
-                if (result.getType().equals(Material.SHIELD)) {
-                    matches = true;
-                }
-            } else if (recipe.getResult().equals(Vanilla.RECIPE_SHIELD_BANNER)) {
+            if (result.getType().equals(Material.SHIELD)) {
                 matches = true;
             }
         }
@@ -1967,9 +1929,6 @@ public class Vanilla {
         } else if (recipe instanceof ShapedRecipe) {
             if (recipe.getResult().equals(Vanilla.RECIPE_TIPPED_ARROW)) {
                 matches = true;
-            // 1.10
-            } else if (recipe.getResult().getType() == Material.TIPPED_ARROW && recipe.getResult().getAmount() == 8) {
-                matches = true;
             }
         }
 
@@ -1996,7 +1955,7 @@ public class Vanilla {
                 }
             }
         } else if (recipe instanceof ShapelessRecipe) {
-            if (Version.has1_11Support() && ToolsItem.isShulkerBox(result.getType())) {
+            if (ToolsItem.isShulkerBox(result.getType())) {
                 matches = true;
             }
         }

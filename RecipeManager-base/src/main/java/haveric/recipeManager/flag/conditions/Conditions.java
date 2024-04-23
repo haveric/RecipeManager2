@@ -1457,7 +1457,7 @@ public class Conditions implements Cloneable {
             }
         }
 
-        if (Version.has1_11Support() && !checkUnbreakable(meta.isUnbreakable())) {
+        if (!checkUnbreakable(meta.isUnbreakable())) {
             if (a == null) {
                 return false;
             }

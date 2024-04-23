@@ -4,7 +4,6 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.Version;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +23,6 @@ public class BaseAnvilParser extends BaseRecipeParser {
                     int repairCost = Integer.parseInt(repairString);
 
                     recipe.setRepairCost(repairCost);
-
-                    if (!Version.has1_11Support()) {
-                        ErrorReporter.getInstance().warning("Repair Cost is only supported in 1.11 or newer.");
-                    }
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().error("Recipe has invalid repair cost: " + split[1] + ". Defaulting to 0.");
                 }

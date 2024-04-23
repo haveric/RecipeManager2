@@ -11,7 +11,6 @@ import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.flag.flags.recipe.FlagDisplayResult;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.CraftingInventory;
 import org.bukkit.inventory.Inventory;
@@ -41,13 +40,7 @@ public abstract class PreparableResultRecipe extends MultiResultRecipe {
     public ItemResult getDisplayResult(Args a) {
         a.clear();
 
-        int displayAmount = 0;
-
-        // Just to maintain previous functionality
-        if (Version.has1_11Support()) {
-            displayAmount = 1;
-        }
-
+        int displayAmount = 1;
         if (!checkFlags(a)) {
             List<String> reasons = new ArrayList<>();
             for (String reason : a.reasons()) {

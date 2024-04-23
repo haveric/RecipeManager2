@@ -98,21 +98,16 @@ public class AnvilEvents extends BaseRecipeEvents {
                 event.setResult(result);
 
 
-                String renameText = "";
-
-                // 1.10 didn't support repair cost or rename text
-                if (Version.has1_11Support()) {
-                    renameText = inventory.getRenameText();
-                    int repairCost = recipe.getRepairCost();
-                    if (recipe.isRenamingAllowed() && renameText != null && !renameText.isEmpty()) {
-                        repairCost += 1;
-                    }
-
-                    int finalRepairCost = repairCost;
-
-                    updateRepairCost(player, inventory, finalRepairCost);
-                    Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), () -> updateRepairCost(player, inventory, finalRepairCost), 2);
+                String renameText = inventory.getRenameText();
+                int repairCost = recipe.getRepairCost();
+                if (recipe.isRenamingAllowed() && renameText != null && !renameText.isEmpty()) {
+                    repairCost += 1;
                 }
+
+                int finalRepairCost = repairCost;
+
+                updateRepairCost(player, inventory, finalRepairCost);
+                Bukkit.getScheduler().runTaskLater(RecipeManager.getPlugin(), () -> updateRepairCost(player, inventory, finalRepairCost), 2);
 
                 Anvils.remove(player);
                 Anvils.add(player, recipe, ingredients, result, renameText);
@@ -122,13 +117,7 @@ public class AnvilEvents extends BaseRecipeEvents {
             Player player = (Player) view.getPlayer();
 
             Anvils.remove(player);
-            String renameText = "";
-
-            // 1.10 didn't support repair cost or rename text
-            if (Version.has1_11Support()) {
-                renameText = inventory.getRenameText();
-            }
-
+            String renameText = inventory.getRenameText();
             if (left != null && renameText != null && !renameText.isEmpty()) {
                 List<Material> renamingMaterials = RecipeManager.getSettings().getAnvilRenaming();
 

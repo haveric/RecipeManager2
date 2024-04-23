@@ -39,15 +39,10 @@ public class FlagMapItem extends Flag {
             "",
             "Replace <arguments> with the following arguments separated by | character:",
             "  scaling [false]            = Sets if the map is scaling.",
+            "",
+            "  locationname <name>        = Sets the location name.",
+            "  color <red> <green> <blue> = Sets the map color. Colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.",
         };
-
-        if (Version.has1_11Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                "",
-                "  locationname <name>        = Sets the location name.",
-                "  color <red> <green> <blue> = Sets the map color. Colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.",
-            }, String.class);
-        }
 
         if (Version.has1_13Support()) {
             description = ObjectArrays.concat(description, new String[]{
@@ -348,14 +343,12 @@ public class FlagMapItem extends Flag {
 
             mapMeta.setScaling(isScaling);
 
-            if (Version.has1_11Support()) {
-                if (hasLocationName()) {
-                    mapMeta.setLocationName(locationName);
-                }
+            if (hasLocationName()) {
+                mapMeta.setLocationName(locationName);
+            }
 
-                if (hasMapColor()) {
-                    mapMeta.setColor(mapColor);
-                }
+            if (hasMapColor()) {
+                mapMeta.setColor(mapColor);
             }
 
             if (Version.has1_13Support()) {

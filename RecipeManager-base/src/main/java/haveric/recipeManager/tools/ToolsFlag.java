@@ -72,7 +72,7 @@ public class ToolsFlag {
                 recipeString.append(Files.NL).append("@localizedname ").append(meta.getLocalizedName());
             }
 
-            if (Version.has1_11Support() && meta.isUnbreakable()) {
+            if (meta.isUnbreakable()) {
                 recipeString.append(Files.NL).append("@itemunbreakable");
             }
 
@@ -393,17 +393,15 @@ public class ToolsFlag {
                     recipeString.append(" false");
                 }
 
-                if (Version.has1_11Support()) {
-                    if (mapMeta.hasLocationName()) {
-                        String locationName = mapMeta.getLocationName();
-                        recipeString.append(" | locationname ").append(locationName);
-                    }
+                if (mapMeta.hasLocationName()) {
+                    String locationName = mapMeta.getLocationName();
+                    recipeString.append(" | locationname ").append(locationName);
+                }
 
-                    if (mapMeta.hasColor()) {
-                        Color mapColor = mapMeta.getColor();
-                        if (mapColor != null) {
-                            recipeString.append(" | color ").append(mapColor.getRed()).append(mapColor.getGreen()).append(mapColor.getBlue());
-                        }
+                if (mapMeta.hasColor()) {
+                    Color mapColor = mapMeta.getColor();
+                    if (mapColor != null) {
+                        recipeString.append(" | color ").append(mapColor.getRed()).append(mapColor.getGreen()).append(mapColor.getBlue());
                     }
                 }
 

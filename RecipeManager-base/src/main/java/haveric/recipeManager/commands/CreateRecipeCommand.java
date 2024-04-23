@@ -207,7 +207,7 @@ public class CreateRecipeCommand implements CommandExecutor {
                     ingredientCondition.append(" | localizedname ").append(meta.getLocalizedName());
                 }
 
-                if (Version.has1_11Support() && meta.isUnbreakable()) {
+                if (meta.isUnbreakable()) {
                     ingredientCondition.append(" | unbreakable");
                 }
 
