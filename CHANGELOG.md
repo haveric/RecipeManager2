@@ -556,8 +556,8 @@
 * `@Enchant` and `@EnchantBook` Added 'remove' option for cloned ingredients
 * Added `@BannerItem` flag (See 'recipe flags.html' for patterns and colors)
     * `@banner black`
-    * `@banner red | circle_middle blue | skull yellow`
-    * `@banner green | half_horizontal yellow | circle_middle orange`
+    * `@banner red | circle blue | skull yellow`
+    * `@banner green | half_horizontal yellow | circle orange`
 * Added `@IndividualResults` flag
     * Allows multi-result recipes to have individual result outcomes, instead of a chance based outcome between all results.
     * With this flag set, the first valid recipe found will be the one crafted

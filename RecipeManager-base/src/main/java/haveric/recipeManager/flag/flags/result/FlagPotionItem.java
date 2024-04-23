@@ -44,12 +44,10 @@ public class FlagPotionItem extends Flag {
                 "",
                 "Instead of <basic effect> argument you must enter a series of arguments separated by | character, in any order.",
                 "Arguments for basic effect:",
-                "  type &lt;potion type&gt;   = (REQUIRED if you want to use level or extended) Type of potion, see " + Files.getNameIndexHashLink("potiontype"),
-                "  level <number or max>      = (optional) Potion's level/tier, usually 1(default) or 2, you can enter 'max' to set it at highest supported level",
-                "  extended                   = (optional) Potion has extended duration",
+                "  type &lt;potion type&gt;   = Type of potion, see " + Files.getNameIndexHashLink("potiontype"),
                 "  color <red> <green> <blue> = (optional) Sets the base color. Colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.",
                 "  splash                     = (optional) Throwable/breakable potion instead of drinkable",
-                "  lingering              = (optional) Lingering potion instead of drinkable",
+                "  lingering                  = (optional) Lingering potion instead of drinkable",
                 "",
                 "",
                 "Building a custom potion requires adding individual effects:",
@@ -58,7 +56,6 @@ public class FlagPotionItem extends Flag {
                 "- If no basic potion is defined the bottle will look like 'water bottle' with no effects listed, effects still apply when drank",
                 "- Basic potion's type affects bottle liquid color",
                 "- Basic potion's splash still affects if the bottle is throwable instead of drinkable",
-                "- Basic potion's extended and level do absolutely nothing.",
                 "- The first custom effect added is the potion's name, rest of effects are in description (of course you can use @name to change the item name)",
                 "",
                 "Once you understand that, you may use @potion custom as many times to add as many effects you want.",
@@ -87,7 +84,7 @@ public class FlagPotionItem extends Flag {
     @Override
     protected String[] getExamples() {
         return new String[] {
-            "{flag} type FIRE_RESISTANCE | level max | extended // basic extended fire resistance potion",
+            "{flag} type FIRE_RESISTANCE // basic fire resistance potion",
             "// advanced potion example:",
             "{flag} type POISON | splash | color 255 128 0 // set the bottle design and set it as splash with a custom color",
             "{flag} custom WITHER | duration 10 // add wither effect",
@@ -218,7 +215,7 @@ public class FlagPotionItem extends Flag {
             PotionMeta baseMeta = (PotionMeta) basePotion.getItemMeta();
             PotionMeta resultMeta = (PotionMeta) a.result().getItemMeta();
             if (baseMeta != null && resultMeta != null) {
-                resultMeta.setBasePotionData(baseMeta.getBasePotionData());
+                resultMeta.setBasePotionType(baseMeta.getBasePotionType());
 
                 if (baseMeta.hasColor()) {
                     resultMeta.setColor(baseMeta.getColor());

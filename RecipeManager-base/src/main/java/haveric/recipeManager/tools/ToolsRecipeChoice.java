@@ -12,7 +12,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.meta.*;
-import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionType;
 
 import java.util.*;
 
@@ -543,18 +543,10 @@ public class ToolsRecipeChoice {
                                 }
                             }
 
-                            PotionData itemPotionData = itemPotion.getBasePotionData();
-                            PotionData ingredientPotionData = ingredientPotion.getBasePotionData();
+                            PotionType itemPotionType = itemPotion.getBasePotionType();
+                            PotionType ingredientPotionType = ingredientPotion.getBasePotionType();
 
-                            if (itemPotionData.getType() == ingredientPotionData.getType()) {
-                                quality ++;
-                            }
-
-                            if (itemPotionData.isExtended() == ingredientPotionData.isExtended()) {
-                                quality ++;
-                            }
-
-                            if (itemPotionData.isUpgraded() == ingredientPotionData.isUpgraded()) {
+                            if (itemPotionType == ingredientPotionType) {
                                 quality ++;
                             }
 

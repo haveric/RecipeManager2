@@ -4,6 +4,9 @@ This file will be automatically overwritten when a new version is installed.
 ### Coming Soon
 * REMOVED support for Minecraft 1.8 - 1.11
 * REMOVED `@Summon` arguments: `elder`, `horse`, `skeleton`, `zombievillager`
+* REMOVED `@PotionItem` arguments: `level`, `extended`
+    * The type argument is also now required
+* REMOVED `@IngredientCondition` argument: `potion` options for `level`, `extended`
 * FIX: 1.16+: `@Summon`: Add `strider` as allowed saddle argument
 
 ### v2.30.0

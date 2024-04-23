@@ -5,7 +5,6 @@ import com.google.common.collect.ImmutableList;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -13,9 +12,10 @@ import org.bukkit.potion.PotionType;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 public class TestMetaPotion extends TestMetaItem implements PotionMeta {
-    private PotionData type = new PotionData(PotionType.UNCRAFTABLE, false, false);
+    private PotionType type;
     private List<PotionEffect> customEffects;
     private Color color;
 
@@ -38,7 +38,7 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
     }
 
     boolean isPotionEmpty() {
-        return (type.getType() == PotionType.UNCRAFTABLE) && !(hasCustomEffects());
+        return (type == null) && !(hasCustomEffects() || hasColor());
     }
 
     @Override
@@ -64,25 +64,18 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
         return clone;
     }
 
-    @Override
-    public void setBasePotionData(PotionData data) {
-        Preconditions.checkNotNull(data, "PotionData cannot be null");
-        this.type = data;
-    }
-
-    @Override
-    public PotionData getBasePotionData() {
-        return type;
-    }
-
-    @Override
     public void setBasePotionType(PotionType potionType) {
-
+        type = potionType;
     }
 
     @Override
     public PotionType getBasePotionType() {
-        return null;
+        return type;
+    }
+
+    @Override
+    public boolean hasBasePotionType() {
+        return type != null;
     }
 
     public boolean hasCustomEffects() {
@@ -202,7 +195,7 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
         if (meta instanceof TestMetaPotion) {
             TestMetaPotion that = (TestMetaPotion) meta;
 
-            return type.equals(that.type)
+            return Objects.equals(type, that.type)
                     && (this.hasCustomEffects() ? that.hasCustomEffects() && this.customEffects.equals(that.customEffects) : !that.hasCustomEffects())
                     && (this.hasColor() ? that.hasColor() && this.color.equals(that.color) : !that.hasColor());
         }

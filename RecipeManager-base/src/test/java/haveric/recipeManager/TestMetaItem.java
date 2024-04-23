@@ -10,10 +10,12 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.meta.BlockDataMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
+import org.bukkit.inventory.meta.components.FoodComponent;
 import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.persistence.PersistentDataContainer;
 
@@ -76,6 +78,21 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     }
 
     @Override
+    public boolean hasItemName() {
+        return false;
+    }
+
+    @Override
+    public String getItemName() {
+        return "";
+    }
+
+    @Override
+    public void setItemName(String s) {
+
+    }
+
+    @Override
     public String getLocalizedName() {
         return locName;
     }
@@ -89,6 +106,7 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     public boolean hasLocalizedName() {
         return !Strings.isNullOrEmpty(locName);
     }
+
     @Override
     public boolean hasLore() {
         return !lores.isEmpty();
@@ -218,6 +236,16 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     }
 
     @Override
+    public boolean isHideTooltip() {
+        return false;
+    }
+
+    @Override
+    public void setHideTooltip(boolean b) {
+
+    }
+
+    @Override
     public boolean hasDamage() {
         return damage > 0;
     }
@@ -230,6 +258,21 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     @Override
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+
+    @Override
+    public boolean hasMaxDamage() {
+        return false;
+    }
+
+    @Override
+    public int getMaxDamage() {
+        return 0;
+    }
+
+    @Override
+    public void setMaxDamage(Integer integer) {
+
     }
 
     @Override
@@ -284,6 +327,76 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     @Override
     public void setUnbreakable(boolean unbreakable) {
         this.unbreakable = unbreakable;
+    }
+
+    @Override
+    public boolean hasEnchantmentGlintOverride() {
+        return false;
+    }
+
+    @Override
+    public Boolean getEnchantmentGlintOverride() {
+        return null;
+    }
+
+    @Override
+    public void setEnchantmentGlintOverride(Boolean aBoolean) {
+
+    }
+
+    @Override
+    public boolean isFireResistant() {
+        return false;
+    }
+
+    @Override
+    public void setFireResistant(boolean b) {
+
+    }
+
+    @Override
+    public boolean hasMaxStackSize() {
+        return false;
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return 0;
+    }
+
+    @Override
+    public void setMaxStackSize(Integer integer) {
+
+    }
+
+    @Override
+    public boolean hasRarity() {
+        return false;
+    }
+
+    @Override
+    public ItemRarity getRarity() {
+        return null;
+    }
+
+    @Override
+    public void setRarity(ItemRarity itemRarity) {
+
+    }
+
+    @Override
+    public boolean hasFood() {
+        return false;
+    }
+
+    @Override
+    public FoodComponent getFood() {
+        return null;
+    }
+
+    @Override
+    public void setFood(FoodComponent foodComponent) {
+
     }
 
     @Override

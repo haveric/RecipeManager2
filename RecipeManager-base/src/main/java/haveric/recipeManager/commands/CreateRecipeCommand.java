@@ -26,7 +26,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.*;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -258,26 +257,9 @@ public class CreateRecipeCommand implements CommandExecutor {
 
                 if (meta instanceof PotionMeta) {
                     PotionMeta potionMeta = (PotionMeta) meta;
-                    PotionData potionData = potionMeta.getBasePotionData();
-                    PotionType potionType = potionData.getType();
+                    PotionType potionType = potionMeta.getBasePotionType();
 
                     ingredientCondition.append(" | potion type ").append(potionType);
-                    if (potionData.isUpgraded()) {
-                        ingredientCondition.append(", level 2");
-                    }
-                    if (potionData.isExtended()) {
-                        ingredientCondition.append(", extended");
-                    }
-
-                    // TODO: Add color support to ConditionPotion
-                    /*
-                    if (potionMeta.hasColor()) {
-                        Color potionColor = potionMeta.getColor();
-                        if (potionColor != null) {
-                            recipeString.append(", color ").append(potionColor.getRed()).append(" ").append(potionColor.getGreen()).append(" ").append(potionColor.getBlue());
-                        }
-                    }
-                    */
 
                     if (potionMeta.hasCustomEffects()) {
                         List<PotionEffect> potionEffects = potionMeta.getCustomEffects();

@@ -678,10 +678,7 @@ public class Tools {
             return null;
         }
 
-        boolean extended = false;
-        int level = 1;
         PotionType potionType = null;
-        boolean needsPotionType = false;
 
         for (String s : split) {
             s = s.trim();
@@ -690,11 +687,7 @@ public class Tools {
                 potion.setType(Material.SPLASH_POTION);
             } else if (s.equals("lingering")) {
                 potion.setType(Material.LINGERING_POTION);
-            } else if (s.equals("extended")) {
-                needsPotionType = true;
-                extended = true;
             } else if (s.startsWith("type")) {
-                needsPotionType = true;
                 String[] typeSplit = s.split(" ", 2);
 
                 if (typeSplit.length <= 1) {
@@ -709,26 +702,6 @@ public class Tools {
                 } catch (IllegalArgumentException e) {
                     ErrorReporter.getInstance().error("Flag " + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
                     return null;
-                }
-            } else if (s.startsWith("level")) {
-                needsPotionType = true;
-                String[] levelSplit = s.split(" ", 2);
-
-                if (levelSplit.length <= 1) {
-                    ErrorReporter.getInstance().error("Flag " + type + " has 'level' argument with no level!");
-                    continue;
-                }
-
-                value = levelSplit[1].trim();
-
-                if (value.equals("max")) {
-                    level = 9999;
-                } else {
-                    try {
-                        level = Integer.parseInt(value);
-                    } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().error("Flag " + type + " has invalid 'level' number: " + value);
-                    }
                 }
             } else if (s.startsWith("color")) {
                 String[] colorSplit = s.split(" ", 2);
@@ -749,24 +722,12 @@ public class Tools {
             }
         }
 
-        if (needsPotionType) {
-            if (potionType == null) {
-                ErrorReporter.getInstance().error("Flag " + type + " is missing 'type' argument!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
-                return null;
-            }
-
-            boolean upgraded = false;
-            if (potionType.getMaxLevel() > 0) {
-                int newLevel = Math.min(Math.max(level, 1), potionType.getMaxLevel());
-                if (newLevel == 2) {
-                    upgraded = true;
-                }
-            }
-            PotionData potionData = new PotionData(potionType, extended, upgraded);
-
-            potionMeta.setBasePotionData(potionData);
+        if (potionType == null) {
+            ErrorReporter.getInstance().error("Flag " + type + " needs valid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
+            return null;
         }
 
+        potionMeta.setBasePotionType(potionType);
         potion.setItemMeta(potionMeta);
 
         return potion;

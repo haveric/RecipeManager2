@@ -145,8 +145,6 @@ public class FlagHoldItem extends Flag {
             "",
             "  potion <condition>, [...]",
             "    type &lt;potiontype&gt;      = Type of potion, see " + Files.getNameIndexHashLink("potiontype"),
-            "    level                  = Potion's level/tier, usually 1(default) or 2, you can enter 'max' to set it at highest supported level",
-            "    extended or !extended  = Potion's extended duration",
             "",
             "  potioneffect <condition>, [...]",
             "    type &lt;effecttype&gt;         = Type of potion effect, see " + Files.getNameIndexHashLink("potioneffect"),
