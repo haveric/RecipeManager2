@@ -48,7 +48,6 @@ public class Conditions implements Cloneable {
     private PotionType potionType;
     private Map<PotionEffectType, ConditionPotionEffect> potionEffectConditions = new HashMap<>();
     private Map<PotionEffectType, ConditionPotionEffect> suspiciousStewConditions = new HashMap<>();
-    private DyeColor bannerColor;
     private Map<PatternType, DyeColor> bannerPatterns = new EnumMap<>(PatternType.class);
     private EntityType spawnEggEntityType;
     private String localizedName;
@@ -109,7 +108,6 @@ public class Conditions implements Cloneable {
         potionType = original.potionType;
         potionEffectConditions.putAll(original.potionEffectConditions);
         suspiciousStewConditions.putAll(original.suspiciousStewConditions);
-        bannerColor = original.bannerColor;
         bannerPatterns.putAll(original.bannerPatterns);
         spawnEggEntityType = original.spawnEggEntityType;
         localizedName = original.localizedName;
@@ -986,18 +984,6 @@ public class Conditions implements Cloneable {
         return conditionsMet == suspiciousStewConditions.entrySet().size();
     }
 
-    public void setBannerColor(DyeColor color) {
-        bannerColor = color;
-    }
-
-    public boolean hasBannerColor() {
-        return bannerColor != null;
-    }
-
-    public boolean checkBannerColor(BannerMeta meta) {
-        return meta.getBaseColor().equals(bannerColor);
-    }
-
     public void addBannerPattern(PatternType pattern, DyeColor color) {
         bannerPatterns.put(pattern, color);
     }
@@ -1334,33 +1320,6 @@ public class Conditions implements Cloneable {
 
                 if (addReasons) {
                     a.addReason("flag.ingredientconditions.nosuspicioussteweffect", failMessage, "{item}", ToolsItem.print(item), "{effect}", suspiciousStewConditions); // TODO: This probably needs updating
-                }
-                ok = false;
-
-                if (failMessage != null) {
-                    return false;
-                }
-            }
-        }
-
-        if (hasBannerColor()) {
-            boolean failed = true;
-
-            if (meta instanceof BannerMeta) {
-                BannerMeta banner = (BannerMeta) meta;
-
-                if (checkBannerColor(banner)) {
-                    failed = false;
-                }
-            }
-
-            if (failed) {
-                if (a == null) {
-                    return false;
-                }
-
-                if (addReasons) {
-                    a.addReason("flag.ingredientconditions.nobannercolor", failMessage, "{item}", ToolsItem.print(item), "color", bannerColor);
                 }
                 ok = false;
 
@@ -1938,16 +1897,7 @@ public class Conditions implements Cloneable {
 
             String[] split = value.split(",");
             for (String element : split) {
-                if (element.startsWith("color")) {
-                    String[] colorSplit = element.split(" ", 2);
-                    String colorValue = colorSplit[1].trim();
-
-                    try {
-                        bannerColor = DyeColor.valueOf(colorValue.toUpperCase());
-                    } catch (IllegalArgumentException e) {
-                        ErrorReporter.getInstance().warning("Flag " + flagType + " has 'color' argument with invalid dye color: " + colorValue);
-                    }
-                } else if (element.startsWith("pattern")) {
+                if (element.startsWith("pattern")) {
                     String[] patternSplit = element.split(" ", 3);
                     String patternValue = patternSplit[1].trim();
 
@@ -2054,10 +2004,6 @@ public class Conditions implements Cloneable {
         toHash += "suspiciousStewConditions: ";
         for (Map.Entry<PotionEffectType, ConditionPotionEffect> entry : suspiciousStewConditions.entrySet()) {
             toHash += entry.getKey().toString() + entry.getValue().hashCode();
-        }
-
-        if (hasBannerColor()) {
-            toHash += "bannerColor: " + bannerColor.toString();
         }
 
         toHash += "bannerPatterns: ";

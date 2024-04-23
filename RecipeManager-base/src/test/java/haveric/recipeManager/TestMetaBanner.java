@@ -24,14 +24,6 @@ public class TestMetaBanner extends TestMetaItem implements BannerMeta {
         patterns = new ArrayList<>(banner.getPatterns());
     }
 
-    public DyeColor getBaseColor() {
-        return baseColor;
-    }
-
-    public void setBaseColor(DyeColor color) {
-        baseColor = color;
-    }
-
     public List<Pattern> getPatterns() {
         return new ArrayList<>(patterns);
     }

@@ -82,29 +82,25 @@ public class FlagBannerItemTest extends FlagBaseTest {
 
                 switch (name) {
                     case "base":
-                        assertEquals(DyeColor.BLACK, meta.getBaseColor());
                         assertTrue(meta.getPatterns().isEmpty());
                         break;
                     case "one":
-                        assertEquals(DyeColor.RED, meta.getBaseColor());
                         assertEquals(1, meta.numberOfPatterns());
-                        assertEquals(PatternType.CIRCLE_MIDDLE, meta.getPattern(0).getPattern());
+                        assertEquals(PatternType.CIRCLE, meta.getPattern(0).getPattern());
                         assertEquals(DyeColor.BLUE, meta.getPattern(0).getColor());
                         break;
                     case "two":
-                        assertEquals(DyeColor.RED, meta.getBaseColor());
                         assertEquals(2, meta.numberOfPatterns());
-                        assertEquals(PatternType.CIRCLE_MIDDLE, meta.getPattern(0).getPattern());
+                        assertEquals(PatternType.CIRCLE, meta.getPattern(0).getPattern());
                         assertEquals(DyeColor.BLUE, meta.getPattern(0).getColor());
                         assertEquals(PatternType.SKULL, meta.getPattern(1).getPattern());
                         assertEquals(DyeColor.YELLOW, meta.getPattern(1).getColor());
                         break;
                     case "override":
-                        assertEquals(DyeColor.GREEN, meta.getBaseColor());
                         assertEquals(2, meta.numberOfPatterns());
                         assertEquals(PatternType.HALF_HORIZONTAL, meta.getPattern(0).getPattern());
                         assertEquals(DyeColor.YELLOW, meta.getPattern(0).getColor());
-                        assertEquals(PatternType.CIRCLE_MIDDLE, meta.getPattern(1).getPattern());
+                        assertEquals(PatternType.CIRCLE, meta.getPattern(1).getPattern());
                         assertEquals(DyeColor.ORANGE, meta.getPattern(1).getColor());
                         break;
                 }

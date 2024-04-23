@@ -126,8 +126,7 @@ public class ToolsFlag {
             if (meta instanceof BannerMeta) {
                 BannerMeta bannerMeta = (BannerMeta) meta;
 
-                DyeColor bannerColor = bannerMeta.getBaseColor();
-                recipeString.append(Files.NL).append("@banneritem ").append(bannerColor.name());
+                recipeString.append(Files.NL).append("@banneritem ");
 
                 for (Pattern pattern : bannerMeta.getPatterns()) {
                     PatternType patternType = pattern.getPattern();

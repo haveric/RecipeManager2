@@ -210,13 +210,20 @@ public class CreateRecipeCommand implements CommandExecutor {
                 if (meta instanceof BannerMeta) {
                     BannerMeta bannerMeta = (BannerMeta) meta;
 
-                    DyeColor bannerColor = bannerMeta.getBaseColor();
-                    ingredientCondition.append(" | banner color ").append(bannerColor.name());
+                    ingredientCondition.append(" | banner");
 
+                    boolean first = true;
                     for (Pattern pattern : bannerMeta.getPatterns()) {
                         PatternType patternType = pattern.getPattern();
                         DyeColor patternColor = pattern.getColor();
-                        ingredientCondition.append(", pattern ").append(patternType.name()).append(" ").append(patternColor.name());
+
+                        String comma = "";
+                        if (!first) {
+                            comma = ",";
+                        }
+                        ingredientCondition.append(comma).append(" pattern ").append(patternType.name()).append(" ").append(patternColor.name());
+
+                        first = false;
                     }
                 }
 

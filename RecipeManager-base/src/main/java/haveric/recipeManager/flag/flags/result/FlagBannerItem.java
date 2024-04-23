@@ -17,7 +17,6 @@ import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class FlagBannerItem extends Flag {
@@ -30,7 +29,7 @@ public class FlagBannerItem extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} <basecolor> | [pattern] <color> | [...]", };
+            "{flag} | [pattern] <color> | [...]", };
     }
 
     @Override
@@ -38,9 +37,6 @@ public class FlagBannerItem extends Flag {
         return new String[] {
             "Creates a custom banner",
             "Using this flag more than once will overwrite the previous one.",
-            "",
-            "The <basecolor> argument is required",
-            "  Values: " + RMCUtil.collectionToString(Arrays.asList(DyeColor.values())).toLowerCase(),
             "",
             "Patterns can be added after the base color and are separated by the '|' character",
             "  [pattern] is the banner pattern type",
@@ -53,19 +49,16 @@ public class FlagBannerItem extends Flag {
     protected String[] getExamples() {
         return new String[] {
             "{flag} black",
-            "{flag} red | circle_middle blue | skull yellow",
-            "{flag} green | half_horizontal yellow | circle_middle orange", };
+            "{flag} red | circle blue | skull yellow",
+            "{flag} green | half_horizontal yellow | circle orange", };
     }
 
-
-    private DyeColor baseColor;
     private List<Pattern> patterns = new ArrayList<>();
 
     public FlagBannerItem() { }
 
     public FlagBannerItem(FlagBannerItem flag) {
         super(flag);
-        baseColor = flag.baseColor;
         patterns.addAll(flag.patterns);
     }
 
@@ -77,10 +70,6 @@ public class FlagBannerItem extends Flag {
     @Override
     public boolean requiresRecipeManagerModification() {
         return false;
-    }
-
-    public DyeColor getBaseColor() {
-        return baseColor;
     }
 
     public List<Pattern> getPatterns() {
@@ -116,13 +105,6 @@ public class FlagBannerItem extends Flag {
     public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
         super.onParse(value, fileName, lineNum, restrictedBit);
         String[] args = value.toUpperCase().split("\\|");
-
-        baseColor = RMCUtil.parseEnum(args[0].trim(), DyeColor.values());
-
-        if (baseColor == null) {
-            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid base color!");
-            return false;
-        }
 
         patterns.clear();
 
@@ -165,8 +147,6 @@ public class FlagBannerItem extends Flag {
 
             BannerMeta banner = (BannerMeta) meta;
 
-            banner.setBaseColor(baseColor);
-
             for (Pattern pattern : patterns) {
                 banner.addPattern(pattern);
             }
@@ -178,8 +158,6 @@ public class FlagBannerItem extends Flag {
     @Override
     public int hashCode() {
         String toHash = "" + super.hashCode();
-
-        toHash += "baseColor: " + baseColor.toString();
 
         for (Pattern pattern : patterns) {
             toHash += pattern.hashCode();

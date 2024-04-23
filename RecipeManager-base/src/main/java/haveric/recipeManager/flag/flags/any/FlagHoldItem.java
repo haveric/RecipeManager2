@@ -175,11 +175,10 @@ public class FlagHoldItem extends Flag {
         description = ObjectArrays.concat(description, new String[]{
             "",
             "  banner <condition>, [...]",
-            "    color <dyecolor>",
             "    pattern <pattern> [dyecolor]",
             "",
-            "    Dye Colors: " + RMCUtil.collectionToString(Arrays.asList(DyeColor.values())).toLowerCase(),
             "    Patterns: " + Files.getNameIndexHashLink("bannerpattern"),
+            "    Dye Colors: " + RMCUtil.collectionToString(Arrays.asList(DyeColor.values())).toLowerCase(),
             "",
             "  spawnegg &lt;entitytype&gt; = Type of entity contained in a spawn egg, see " + Files.getNameIndexHashLink("entitytype"), }, String.class);
 

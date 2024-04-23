@@ -6,7 +6,10 @@ This file will be automatically overwritten when a new version is installed.
 * REMOVED `@Summon` arguments: `elder`, `horse`, `skeleton`, `zombievillager`
 * REMOVED `@PotionItem` arguments: `level`, `extended`
     * The type argument is also now required
-* REMOVED `@IngredientCondition` argument: `potion` options for `level`, `extended`
+* REMOVED `@IngredientCondition`, `@HoldItem` argument: `potion` options for `level`, `extended`
+* REMOVED `@IngredientCondition`, `@HoldItem` argument: `banner` color option
+* UPDATED: `messages.yml`: `nopotion` replaced with `nopotiontype`
+* REMOVED: `messages.yml`: Removed `nobannercolor`
 * FIX: 1.16+: `@Summon`: Add `strider` as allowed saddle argument
 
 ### v2.30.0

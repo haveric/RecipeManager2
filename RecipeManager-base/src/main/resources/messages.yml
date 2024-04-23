@@ -44,7 +44,6 @@ flag:
     nopotiontype: "<yellow>{item}<red> needs potion type: <yellow>{potion}"
     nopotioneffect: "<yellow>{item}<red> needs effect(s): <yellow>{effect}"
     nosuspicioussteweffect: "<yellow>{item}<red> needs effect(s): <yellow>{effect}"
-    nobannercolor: "<yellow>{item}<red> needs banner color: <yellow>{color}"
     nobannerpatterns: "<yellow>{item}<red> needs banner pattern(s): <yellow>{patterns}"
     nospawneggentitytype: "<yellow>{item}<red> needs entity type: <yellow>{entitytype}"
     unbreakable: "<yellow>{item}<red> needs to be unbreakable"
