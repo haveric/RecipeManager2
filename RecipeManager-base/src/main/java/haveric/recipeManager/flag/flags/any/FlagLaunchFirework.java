@@ -164,7 +164,14 @@ public class FlagLaunchFirework extends Flag {
         }
 
         if (chance >= 100 || (RecipeManager.random.nextFloat() * 100) <= chance) {
-            Firework ent = (Firework) a.location().getWorld().spawnEntity(a.location(), EntityType.FIREWORK);
+            EntityType entity;
+            if (Version.has1_20_5Support()) {
+                entity = EntityType.FIREWORK_ROCKET;
+            } else {
+                entity = EntityType.valueOf("FIREWORK");
+            }
+
+            Firework ent = (Firework) a.location().getWorld().spawnEntity(a.location(), entity);
 
             ent.setFireworkMeta(firework);
         }
