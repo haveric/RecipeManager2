@@ -68,30 +68,15 @@ public class Tools {
 
         int itemMaxStackSize = item.getType().getMaxStackSize();
         int inventoryMaxStackSize = inv.getMaxStackSize();
-        if (Version.has1_9Support()) {
-            for (ItemStack i : inv.getStorageContents()) {
-                if (i == null || i.getType() == Material.AIR) {
-                    available += itemMaxStackSize;
-                } else if (item.isSimilar(i)) {
-                    available += Math.max(Math.min(i.getMaxStackSize(), inventoryMaxStackSize) - i.getAmount(), 0);
-                }
-
-                if (available >= amount) {
-                    return true;
-                }
+        for (ItemStack i : inv.getStorageContents()) {
+            if (i == null || i.getType() == Material.AIR) {
+                available += itemMaxStackSize;
+            } else if (item.isSimilar(i)) {
+                available += Math.max(Math.min(i.getMaxStackSize(), inventoryMaxStackSize) - i.getAmount(), 0);
             }
-        } else {
-            for (int j = 0; j < 36; j++) {
-                ItemStack i = inv.getItem(j);
-                if (i == null || i.getType() == Material.AIR) {
-                    available += itemMaxStackSize;
-                } else if (item.isSimilar(i)) {
-                    available += Math.max(Math.min(i.getMaxStackSize(), inventoryMaxStackSize) - i.getAmount(), 0);
-                }
 
-                if (available >= amount) {
-                    return true;
-                }
+            if (available >= amount) {
+                return true;
             }
         }
 
@@ -682,85 +667,6 @@ public class Tools {
         return item;
     }
 
-    @SuppressWarnings("deprecation")
-    public static Potion parsePotion18(String value, String type) {
-        String[] split = value.toLowerCase().split("\\|");
-
-        if (split.length == 0) {
-            ErrorReporter.getInstance().error("Flag " + type + " doesn't have any arguments!", "It must have at least 'type' argument, read '" + Files.FILE_INFO_NAMES + "' for potion types list.");
-            return null;
-        }
-
-        Potion potion = new Potion(null);
-        boolean splash = false;
-        boolean extended = false;
-        int level = 1;
-
-        for (String s : split) {
-            s = s.trim();
-
-            if (s.equals("splash")) {
-                splash = true;
-            } else if (s.equals("extended")) {
-                extended = true;
-            } else if (s.startsWith("type")) {
-                split = s.split(" ", 2);
-
-                if (split.length <= 1) {
-                    ErrorReporter.getInstance().error("Flag " + type + " has 'type' argument with no type!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
-                    return null;
-                }
-
-                value = split[1].trim();
-
-                try {
-                    potion.setType(PotionType.valueOf(value.toUpperCase()));
-                } catch (IllegalArgumentException e) {
-                    ErrorReporter.getInstance().error("Flag " + type + " has invalid 'type' argument value: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
-                    return null;
-                }
-            } else if (s.startsWith("level")) {
-                split = s.split(" ", 2);
-
-                if (split.length <= 1) {
-                    ErrorReporter.getInstance().error("Flag " + type + " has 'level' argument with no level!");
-                    continue;
-                }
-
-                value = split[1].trim();
-
-                if (value.equals("max")) {
-                    level = 9999;
-                } else {
-                    try {
-                        level = Integer.parseInt(value);
-                    } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().error("Flag " + type + " has invalid 'level' number: " + value);
-                    }
-                }
-            } else {
-                ErrorReporter.getInstance().error("Flag " + type + " has unknown argument: " + s, "Maybe it's spelled wrong, check it in '" + Files.FILE_INFO_FLAGS + "' file.");
-            }
-        }
-
-        if (potion.getType() == null) {
-            ErrorReporter.getInstance().error("Flag " + type + " is missing 'type' argument!", "Read '" + Files.FILE_INFO_NAMES + "' for potion types.");
-            return null;
-        }
-
-        if (potion.getType().getMaxLevel() > 0) {
-            potion.setLevel(Math.min(Math.max(level, 1), potion.getType().getMaxLevel()));
-        }
-
-        if (!potion.getType().isInstant()) {
-            potion.setHasExtendedDuration(extended);
-        }
-
-        potion.setSplash(splash);
-
-        return potion;
-    }
-
     public static ItemStack parsePotion19(String value, String type) {
         ItemStack potion = new ItemStack(Material.POTION);
         PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
@@ -1232,7 +1138,7 @@ public class Tools {
                     sound = Sound.valueOf(newSound);
                     break;
             }
-        } else if (Version.has1_9Support()) {
+        } else {
             // set known sounds to make sure Enum isn't changing on us
             switch (newSound) {
                 case "BLOCK_ANVIL_USE":
@@ -1244,32 +1150,6 @@ public class Tools {
                 default:
                     sound = Sound.valueOf(newSound);
                     break;
-            }
-        } else {
-            ArrayList<String> oldSounds = new ArrayList<>();
-            switch (newSound) {
-                case "BLOCK_NOTE_BASS":
-                    oldSounds.add("NOTE_BASS");
-                    break;
-                case "BLOCK_NOTE_PLING":
-                    oldSounds.add("NOTE_PLING");
-                    break;
-                case "BLOCK_ANVIL_USE":
-                    oldSounds.add("ANVIL_USE");
-                    break;
-                case "ENTITY_ITEM_BREAK":
-                    oldSounds.add("ITEM_BREAK");
-                    break;
-                default:
-                    break;
-            }
-
-            for (String oldSound : oldSounds) {
-                try {
-                    sound = Sound.valueOf(oldSound);
-                } catch (IllegalArgumentException e2) {
-                    // Sound is missing
-                }
             }
         }
 

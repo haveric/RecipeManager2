@@ -127,9 +127,7 @@ public class RecipeManager extends JavaPlugin {
         Files.init();
         Players.init();
         Workbenches.init();
-        if (Version.has1_9Support()) {
-            Anvils.init();
-        }
+        Anvils.init();
 
         BrewInventoryUtil.init();
 
@@ -322,11 +320,7 @@ public class RecipeManager extends JavaPlugin {
             }
 
             Workbenches.clean();
-
-            if (Version.has1_9Support()) {
-                Anvils.clean();
-            }
-
+            Anvils.clean();
             BrewInventoryUtil.clean();
 
             Players.clean();

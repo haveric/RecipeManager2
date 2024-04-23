@@ -147,6 +147,7 @@ public class Customization implements Cloneable {
         mountNext = c.mountNext;
         name = c.name;
         noBreed = c.noBreed;
+        noCollision = c.noCollision;
         noEffect = c.noEffect;
         noHideName = c.noHideName;
         noRemove = c.noRemove;
@@ -166,10 +167,6 @@ public class Customization implements Cloneable {
         spread = c.spread;
         target = c.target;
         villager = c.villager;
-
-        if (Version.has1_9Support()) {
-            noCollision = c.noCollision;
-        }
 
         if (Version.has1_10Support()) {
             invulnerable = c.invulnerable;
@@ -541,10 +538,8 @@ public class Customization implements Cloneable {
 
             ent.setRemoveWhenFarAway(!noRemove);
 
-            if (Version.has1_9Support()) {
-                if (noCollision) {
-                    ent.setCollidable(false);
-                }
+            if (noCollision) {
+                ent.setCollidable(false);
             }
 
             if (Version.has1_10Support()) {
@@ -768,15 +763,8 @@ public class Customization implements Cloneable {
                                     npc.setCarriedMaterial(item.getData());
                                 }
                             } else {
-                                if (Version.has1_9Support()) {
-                                    eq.setItemInMainHand(item);
-                                    eq.setItemInMainHandDropChance(drop[j]);
-                                } else {
-                                    //noinspection deprecation
-                                    eq.setItemInHand(item);
-                                    //noinspection deprecation
-                                    eq.setItemInHandDropChance(drop[j]);
-                                }
+                                eq.setItemInMainHand(item);
+                                eq.setItemInMainHandDropChance(drop[j]);
                             }
 
                             break;
@@ -1311,7 +1299,7 @@ public class Customization implements Cloneable {
             if (villager == null) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'villager' argument with invalid entityType: " + lower);
             }
-        } else if (Version.has1_9Support() && lower.equals("nocollision")) {
+        } else if (lower.equals("nocollision")) {
             noCollision = true;
         } else if (Version.has1_10Support() && lower.equals("invulnerable")) {
             invulnerable = true;
@@ -1662,6 +1650,7 @@ public class Customization implements Cloneable {
         toHash += "mountNext: " + mountNext;
         toHash += "name: " + name;
         toHash += "noBreed: " + noBreed;
+        toHash += "noCollision: " + noCollision;
         toHash += "noEffect: " + noEffect;
         toHash += "noHideName: " + noHideName;
         toHash += "noRemove: " + noRemove;
@@ -1685,10 +1674,6 @@ public class Customization implements Cloneable {
         toHash += "spread: " + spread;
         toHash += "target: " + target;
         toHash += "villager: " + villager.toString();
-
-        if (Version.has1_9Support()) {
-            toHash += "noCollision: " + noCollision;
-        }
 
         if (Version.has1_10Support()) {
             toHash += "invulnerable: " + invulnerable;

@@ -642,9 +642,8 @@ public class Vanilla {
             RECIPE_BANNER = new ItemStack(Material.getMaterial("BANNER"), 0, (short) 0);
         }
 
-        if (Version.has1_9Support()) {
-            RECIPE_SHIELD_BANNER = new ItemStack(Material.SHIELD, 0, (short) 0);
-        }
+        RECIPE_SHIELD_BANNER = new ItemStack(Material.SHIELD, 0, (short) 0);
+
         if (Version.has1_11Support()) {
             RECIPE_TIPPED_ARROW = new ItemStack(Material.TIPPED_ARROW, 8, (short) 0);
         }
@@ -1938,7 +1937,7 @@ public class Vanilla {
                 if (result.getType().equals(Material.SHIELD)) {
                     matches = true;
                 }
-            } else if (Version.has1_9Support() && recipe.getResult().equals(Vanilla.RECIPE_SHIELD_BANNER)) {
+            } else if (recipe.getResult().equals(Vanilla.RECIPE_SHIELD_BANNER)) {
                 matches = true;
             }
         }
@@ -1969,7 +1968,7 @@ public class Vanilla {
             if (recipe.getResult().equals(Vanilla.RECIPE_TIPPED_ARROW)) {
                 matches = true;
             // 1.10
-            } else if (Version.has1_9Support() && recipe.getResult().getType() == Material.TIPPED_ARROW && recipe.getResult().getAmount() == 8) {
+            } else if (recipe.getResult().getType() == Material.TIPPED_ARROW && recipe.getResult().getAmount() == 8) {
                 matches = true;
             }
         }

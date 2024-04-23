@@ -58,10 +58,8 @@ public class FlagBiome extends Flag {
             String mushrooms = "{flag} ";
             if (Version.has1_13BasicSupport()) {
                 mushrooms += "!" + Biome.MUSHROOM_FIELDS.name().toLowerCase() + ", !mushroom_field_shore";
-            } else if (Version.has1_9Support()) {
-                mushrooms += "!mushroom_island, !mushroom_island_shore";
             } else {
-                mushrooms += "!mushroom_island, !mushroom_shore";
+                mushrooms += "!mushroom_island, !mushroom_island_shore";
             }
             description = ObjectArrays.concat(description, new String[]{ mushrooms }, String.class);
 

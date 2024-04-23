@@ -57,10 +57,7 @@ public class RecipeTypeLoader {
             loadRecipeType(RMCRecipeType.SMELT.getDirective(), new RMFurnaceRecipe(), new RMBaseFurnaceRecipeParser(RMCRecipeType.SMELT), new RMBaseFurnaceEvents());
             loadRecipeType(RMCRecipeType.BREW.getDirective(), new BrewRecipe(), new BrewRecipeParser(), new BrewEvents());
             loadRecipeType(RMCRecipeType.FUEL.getDirective(), new FuelRecipe(), new FuelRecipeParser());
-
-            if (Version.has1_9Support()) {
-                loadRecipeType(RMCRecipeType.ANVIL.getDirective(), new AnvilRecipe(), new AnvilRecipeParser(), new AnvilEvents());
-            }
+            loadRecipeType(RMCRecipeType.ANVIL.getDirective(), new AnvilRecipe(), new AnvilRecipeParser(), new AnvilEvents());
         }
 
         if (Version.has1_14Support()) {

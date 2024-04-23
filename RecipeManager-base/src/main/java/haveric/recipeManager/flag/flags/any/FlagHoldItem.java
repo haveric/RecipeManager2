@@ -53,14 +53,7 @@ public class FlagHoldItem extends Flag {
             "    Changes the slot that is checked",
             "    Slot name values:",
             "      mainhand: selected hotbar slot. Defaults to this.",
-        };
-
-        if (Version.has1_9Support()) {
-            description = ObjectArrays.concat(description, new String[] {
-            "      offhand or shield: offhand slot.", }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[] {
+            "      offhand or shield: offhand slot.",
             "      helmet: Helmet slot.",
             "      chest or chestplate: Chestplate slot.",
             "      legs or leggings: Leggings slot.",
@@ -161,7 +154,7 @@ public class FlagHoldItem extends Flag {
             "    amplify <num or min-max>  = Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
             "    ambient or !ambient       = Check effect's extra visual particles setting",
             "    particles or !particles   = Check effect's particles setting",
-        }, String.class);
+        };
 
         if (Version.has1_13BasicSupport()) {
             description = ObjectArrays.concat(description, new String[]{
@@ -333,19 +326,12 @@ public class FlagHoldItem extends Flag {
 
             PlayerInventory inventory = a.player().getInventory();
 
-            if (Version.has1_9Support()) {
-                if (getNumConditionsOfSlot(ConditionsSlot.MAINHAND) > 0) {
-                    mainFound = checkConditions(inventory.getItemInMainHand(), a, ConditionsSlot.MAINHAND);
-                }
+            if (getNumConditionsOfSlot(ConditionsSlot.MAINHAND) > 0) {
+                mainFound = checkConditions(inventory.getItemInMainHand(), a, ConditionsSlot.MAINHAND);
+            }
 
-                if (getNumConditionsOfSlot(ConditionsSlot.OFFHAND) > 0) {
-                    offFound = checkConditions(inventory.getItemInOffHand(), a, ConditionsSlot.OFFHAND);
-                }
-            } else {
-                if (getNumConditionsOfSlot(ConditionsSlot.MAINHAND) > 0) {
-                    //noinspection deprecation
-                    mainFound = checkConditions(inventory.getItemInHand(), a, ConditionsSlot.MAINHAND);
-                }
+            if (getNumConditionsOfSlot(ConditionsSlot.OFFHAND) > 0) {
+                offFound = checkConditions(inventory.getItemInOffHand(), a, ConditionsSlot.OFFHAND);
             }
 
             if (getNumConditionsOfSlot(ConditionsSlot.HELMET) > 0) {

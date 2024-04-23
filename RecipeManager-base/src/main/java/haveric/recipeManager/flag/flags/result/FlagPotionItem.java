@@ -14,7 +14,6 @@ import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
@@ -50,14 +49,7 @@ public class FlagPotionItem extends Flag {
                 "  extended                   = (optional) Potion has extended duration",
                 "  color <red> <green> <blue> = (optional) Sets the base color. Colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.",
                 "  splash                     = (optional) Throwable/breakable potion instead of drinkable",
-        };
-
-        if (Version.has1_9Support()) {
-            description = ObjectArrays.concat(description, new String[] {
-                    "  lingering              = (optional) Lingering potion instead of drinkable",
-            }, String.class);
-        }
-        description = ObjectArrays.concat(description, new String[] {
+                "  lingering              = (optional) Lingering potion instead of drinkable",
                 "",
                 "",
                 "Building a custom potion requires adding individual effects:",
@@ -80,7 +72,7 @@ public class FlagPotionItem extends Flag {
                 "  !ambient            = equivalent to 'ambient false'",
                 "  particles [false]   = (defaults true) display particles.",
                 "  !particles          = equivalent to 'particles false'",
-        }, String.class);
+        };
 
         if (Version.has1_13BasicSupport()) {
             description = ObjectArrays.concat(description, new String[]{
@@ -199,17 +191,7 @@ public class FlagPotionItem extends Flag {
                 addEffect(effect);
             }
         } else {
-            if (Version.has1_9Support()) {
-                basePotion = Tools.parsePotion19(value, getFlagType());
-            } else {
-                //noinspection deprecation
-                Potion p = Tools.parsePotion18(value, getFlagType());
-
-                if (p != null) {
-                    //noinspection deprecation
-                    data = p.toDamageValue();
-                }
-            }
+            basePotion = Tools.parsePotion19(value, getFlagType());
         }
 
         return true;

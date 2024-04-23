@@ -190,15 +190,7 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "name <text>", "sets the entity's name, supports colors (<red>, &3, etc)."),
             String.format(argFormat, "noai", "disable the ai on entity."),
             String.format(argFormat, "nobreed", "prevent the entity being able to breed, works for animals and villagers."),
-        }, String.class);
-
-        if (Version.has1_9Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                String.format(argFormat, "nocollision", "disables collision with other entities."),
-            }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[]{
+            String.format(argFormat, "nocollision", "disables collision with other entities."),
             String.format(argFormat, "noeffect", "no spawning particle effects on entity."),
             String.format(argFormat, "nohidename", "don't hide name plate when not aiming at entity."),
             String.format(argFormat, "noremove", "prevents entity from being removed if nobody is near it."),

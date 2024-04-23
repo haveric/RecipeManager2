@@ -560,9 +560,7 @@ public class Files {
             s.append(NL).append("- <a href='#itemattribute'><b>ITEM ATTRIBUTE LIST</b></a>");
         }
         s.append(NL).append("- <a href='#material'><b>MATERIAL LIST</b></a>");
-        if (Version.has1_9Support()) {
-            s.append(NL).append("- <a href='#particle'><b>PARTICLE LIST</b></a>");
-        }
+        s.append(NL).append("- <a href='#particle'><b>PARTICLE LIST</b></a>");
         s.append(NL).append("- <a href='#potioneffect'><b>POTION EFFECT TYPE LIST</b></a>");
         s.append(NL).append("- <a href='#potiontype'><b>POTION TYPE LIST</b></a>");
         s.append(NL).append("- <a href='#sound'><b>SOUND LIST</b></a>");
@@ -717,13 +715,11 @@ public class Files {
             }
         }
 
-        if (Version.has1_9Support()) {
-            s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
-            addNameIndexHeading(s, "particle", "PARTICLE LIST", "Particle", "Particle");
+        s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
+        addNameIndexHeading(s, "particle", "PARTICLE LIST", "Particle", "Particle");
 
-            for (Particle p : Particle.values()) {
-                s.append(NL).append(' ').append(p.name());
-            }
+        for (Particle p : Particle.values()) {
+            s.append(NL).append(' ').append(p.name());
         }
 
         s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
