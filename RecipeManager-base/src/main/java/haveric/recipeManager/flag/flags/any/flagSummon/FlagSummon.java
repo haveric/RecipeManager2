@@ -13,7 +13,6 @@ import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Location;
 import org.bukkit.entity.*;
-import org.bukkit.entity.Skeleton.SkeletonType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -102,15 +101,6 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "chest <item> [drop%]", "equip an item on the entity's chest with optional drop chance."),
             String.format(argFormat, "color <dye>", "sets the color of animal, only works for sheep and pet wolf/cats."),
             String.format(argFormatExtra, "", "Values: " + Files.getNameIndexHashLink("dyecolor")),
-        }, String.class);
-
-        if (!Version.has1_12Support()) {
-            description = ObjectArrays.concat(description, new String[] {
-                // ELDER_GUARDIAN is its own entity type now
-                String.format(argFormat, "elder", "sets a guardian as an elder") }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[]{
             String.format(argFormat, "feet <item> [drop%]", "equip an item on the entity's feet with optional drop chance."),
         }, String.class);
 
@@ -160,16 +150,6 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "head <item> [drop%]", "equip an item on the entity's head with optional drop chance."),
             String.format(argFormat, "hit", "crafter will fake-attack the entity to provoke it into attacking or scare it away."),
             String.format(argFormat, "haschest", "adds a chest to entity (Only works on horses, forces horse to be an adult and tamed)."),
-        }, String.class);
-
-        if (!Version.has1_12Support()) {
-            //noinspection deprecation
-            description = ObjectArrays.concat(description, new String[] {
-                // Horse variants (DONKEY, MULE, ZOMBIE_HORSE, SKELETON_HORSE) are now their own entity types
-                String.format(argFormat, "horse <type>", "set the horse type, values: " + RMCUtil.collectionToString(Arrays.asList(Horse.Variant.values())).toLowerCase()) }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[]{
             String.format(argFormat, "horsecolor <type>", "set the horse color, values: " + RMCUtil.collectionToString(Arrays.asList(Horse.Color.values())).toLowerCase()),
             String.format(argFormat, "horsestyle <type>", "set the horse style, values: " + RMCUtil.collectionToString(Arrays.asList(Horse.Style.values())).toLowerCase()),
             String.format(argFormat, "hp <health> [max]", "set entity's health and optionally max health."),
@@ -205,11 +185,9 @@ public class FlagSummon extends Flag {
             }, String.class);
         }
 
-        if (Version.has1_12Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "parrot <type>", "set the parrot type, values: " + RMCUtil.collectionToString(Arrays.asList(Parrot.Variant.values())).toLowerCase()),
-            }, String.class);
-        }
+        description = ObjectArrays.concat(description, new String[]{
+                String.format(argFormat, "parrot <type>", "set the parrot type, values: " + RMCUtil.collectionToString(Arrays.asList(Parrot.Variant.values())).toLowerCase()),
+        }, String.class);
 
         if (Version.has1_13Support()) {
             description = ObjectArrays.concat(description, new String[]{
@@ -230,13 +208,6 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "saddle [mount]", "adds saddle on entity (forces animal to be adult), only works for pig and horse, optionally you can specify 'mount' to make crafter mount entity."),
             String.format(argFormat, "shearedsheep", "sets the sheep as sheared, only works for sheep."),
         }, String.class);
-
-        if (!Version.has1_12Support()) {
-            //noinspection deprecation
-            description = ObjectArrays.concat(description, new String[] {
-                // Skeleton variants (STRAY, WITHER_SKELETON) are now their own entity types
-                String.format(argFormat, "skeleton <type>", "set the skeleton type, values: " + RMCUtil.collectionToString(Arrays.asList(SkeletonType.values())).toLowerCase()) }, String.class);
-        }
 
         if (Version.has1_18Support()) {
             description = ObjectArrays.concat(description, new String[]{
@@ -286,11 +257,6 @@ public class FlagSummon extends Flag {
                     String.format(argFormat, "wardenanger <level>", "Sets the wardens anger level towards the player. Anger is an integer from 0 to 150. Once a Warden reaches 80 anger at a target it will actively pursue it."),
                     String.format(argFormat, "zombiecanbreakdoors [true/false]", "Sets whether the zombie can break doors.")
             }, String.class);
-        }
-
-        if (!Version.has1_12Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                String.format(argFormat, "zombievillager", "makes zombie a zombie villager, only works on zombies.") }, String.class);
         }
 
         description = ObjectArrays.concat(description, new String[] {

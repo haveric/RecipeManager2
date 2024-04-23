@@ -38,42 +38,10 @@ import java.util.Map.Entry;
 public class Vanilla {
     protected static Map<BaseRecipe, RMCRecipeInfo> initialRecipes = new HashMap<>();
 
-    /** Leather dyeing's special recipe result, you can use it to identify vanilla recipes. */
-    public static final ItemStack RECIPE_LEATHERDYE = new ItemStack(Material.LEATHER_HELMET, 0, (short) 0);
-
-    /**
-     * Map cloning's special recipe result, you can use it to identify vanilla recipes.
-     */
-    public static ItemStack RECIPE_MAPCLONE;
-
-    /**
-     * Map extending's special recipe result, you can use it to identify vanilla recipes.
-     */
-    public static ItemStack RECIPE_MAPEXTEND_1_11;
-
     /**
      * Fireworks' special recipe result, you can use it to identify vanilla recipes.
      */
     public static ItemStack RECIPE_FIREWORKS;
-
-    /**
-     * Item repair special recipe result (SHAPELESS Recipe)
-     */
-    public static final ItemStack RECIPE_REPAIR = new ItemStack(Material.LEATHER_HELMET, 1, (short) 0);
-
-    /**
-     * Banner special recipe result
-     */
-    protected static ItemStack RECIPE_BANNER = null;
-
-    protected static ItemStack RECIPE_SHIELD_BANNER = null;
-
-    protected static ItemStack RECIPE_TIPPED_ARROW = null;
-
-    /**
-     * Book cloning's special recipe
-     */
-    public static final ItemStack RECIPE_BOOKCLONE = new ItemStack(Material.WRITTEN_BOOK, 0, (short) -1);
 
 
     /**
@@ -629,14 +597,8 @@ public class Vanilla {
 
     private static void initSpecialRecipes() {
         if (!Version.has1_13BasicSupport()) {
-            RECIPE_MAPCLONE = new ItemStack(Material.getMaterial("EMPTY_MAP"), 0, (short) -1);
-            RECIPE_MAPEXTEND_1_11 = new ItemStack(Material.getMaterial("EMPTY_MAP"), 1, (short) 0);
             RECIPE_FIREWORKS = new ItemStack(Material.getMaterial("FIREWORK"), 0, (short) 0);
-            RECIPE_BANNER = new ItemStack(Material.getMaterial("BANNER"), 0, (short) 0);
         }
-
-        RECIPE_SHIELD_BANNER = new ItemStack(Material.SHIELD, 0, (short) 0);
-        RECIPE_TIPPED_ARROW = new ItemStack(Material.TIPPED_ARROW, 8, (short) 0);
     }
 
     private static void initVanillaRecipes() {
@@ -1132,8 +1094,6 @@ public class Vanilla {
      * @param recipe RecipeManager recipe
      */
     public static void replaceCustomRecipe(BaseRecipe recipe) {
-        if (!Version.has1_12Support()) return;
-
         if (recipe instanceof CraftRecipe1_13) {
             replaceCraftRecipeV1_13((CraftRecipe1_13) recipe, false);
         }
@@ -1370,11 +1330,7 @@ public class Vanilla {
                 recipe = iterator.next();
 
                 if (recipe != null) {
-                    if (RecipeManager.getRecipes().isCustomRecipe(recipe)) {
-                        if (!Version.has1_12Support()) {
-                            iterator.remove();
-                        }
-                    } else if (Version.has1_12Support()) { // TODO: Ideally check key, if minecraft: domain, ignore.
+                    if (!RecipeManager.getRecipes().isCustomRecipe(recipe)) { // TODO: Ideally check key, if minecraft: domain, ignore.
                         originalRecipes.add(recipe);
                     }
                 }
@@ -1383,17 +1339,15 @@ public class Vanilla {
             }
         }
 
-        if (Version.has1_12Support()) {
-            Bukkit.resetRecipes();
-            Vanilla.init();
+        Bukkit.resetRecipes();
+        Vanilla.init();
 
-            for (Recipe newRecipe : originalRecipes) {
-                try {
-                    if (!Vanilla.isSpecialRecipe(newRecipe)) {
-                        Bukkit.addRecipe(newRecipe);
-                    }
-                } catch (Exception e) { /* for v1.12, we'll reload to preserve ordering, then blindly try to reapply recipes. */ }
-            }
+        for (Recipe newRecipe : originalRecipes) {
+            try {
+                if (!Vanilla.isSpecialRecipe(newRecipe)) {
+                    Bukkit.addRecipe(newRecipe);
+                }
+            } catch (Exception e) { /* for v1.12, we'll reload to preserve ordering, then blindly try to reapply recipes. */ }
         }
     }
 
@@ -1424,45 +1378,6 @@ public class Vanilla {
     }
 
     /**
-     * Adds all recipes that already existed when the plugin was enabled.
-     */
-    public static void restoreInitialRecipes() {
-        // TODO: In 1.12, this will fail.
-        for (Entry<BaseRecipe, RMCRecipeInfo> entry : initialRecipes.entrySet()) {
-            // TODO maybe check if recipe is already in server?
-            Bukkit.addRecipe(entry.getKey().getBukkitRecipe(true));
-        }
-    }
-
-    /**
-     * Adds all recipes except special that already existed when the plugin was enabled.
-     */
-    public static void restoreAllButSpecialRecipes() {
-        // TODO: In 1.12, this will fail.
-        for (Entry<BaseRecipe, RMCRecipeInfo> entry : initialRecipes.entrySet()) {
-            BaseRecipe recipe = entry.getKey();
-
-            if (recipe instanceof BaseFuelRecipe) {
-                RecipeManager.getRecipes().addRecipeToQuickfindIndex(RMCRecipeType.FUEL.getDirective(), recipe);
-            } else {
-                if (recipe.isVanillaSpecialRecipe()) {
-                    continue;
-                }
-                Recipe bukkitRecipe = recipe.getBukkitRecipe(true);
-
-                if (bukkitRecipe != null) {
-                    if (isSpecialRecipe(bukkitRecipe)) {
-                        continue;
-                    }
-
-                    // TODO maybe check if recipe is already in server ?
-                    Bukkit.addRecipe(bukkitRecipe);
-                }
-            }
-        }
-    }
-
-    /**
      * @return a copy of the initial recipes map.
      */
     public static Map<BaseRecipe, RMCRecipeInfo> getInitialRecipes() {
@@ -1472,7 +1387,7 @@ public class Vanilla {
     public static boolean isSpecialRecipe(Recipe recipe) {
         boolean isSpecial = false;
 
-        if (Version.has1_12Support() && recipe instanceof Keyed) {
+        if (recipe instanceof Keyed) {
             Keyed keyedRecipe = (Keyed) recipe;
             NamespacedKey key = keyedRecipe.getKey();
 
@@ -1544,32 +1459,6 @@ public class Vanilla {
                         break;
                 }
             }
-        } else if (recipe != null) {
-            ItemStack result = recipe.getResult();
-
-            if (result.equals(RECIPE_LEATHERDYE) || result.equals(RECIPE_FIREWORKS) || result.equals(RECIPE_MAPCLONE) || result.equals(RECIPE_MAPEXTEND_1_11) || result.equals(RECIPE_BOOKCLONE)) {
-                isSpecial = true;
-            }
-
-            if (result.equals(RECIPE_BANNER)) {
-                isSpecial = true;
-            }
-
-            if (result.equals(RECIPE_SHIELD_BANNER)) {
-                isSpecial = true;
-            }
-
-            if (recipe instanceof ShapelessRecipe && result.equals(RECIPE_REPAIR)) {
-                isSpecial = true;
-            }
-
-            if (result.equals(RECIPE_TIPPED_ARROW)) {
-                isSpecial = true;
-            }
-
-            if (result.getType().equals(Material.AIR)) {
-                isSpecial = true;
-            }
         }
 
         return isSpecial;
@@ -1578,72 +1467,56 @@ public class Vanilla {
     public static boolean recipeMatchesRepair(Recipe recipe) {
         boolean matches = false;
 
-        if (Version.has1_12Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
+        Keyed keyedRecipe = (Keyed) recipe;
+        NamespacedKey key = keyedRecipe.getKey();
 
-            switch (key.getKey()) {
-                case "repairitem": // 1.12 only
-                case "repair_item": // 1.13+
-                    matches = true;
-                    break;
+        switch (key.getKey()) {
+            case "repairitem": // 1.12 only
+            case "repair_item": // 1.13+
+                matches = true;
+                break;
 
-                default:
-                    break;
-            }
+            default:
+                break;
         }
 
         return matches;
     }
 
-    public static boolean recipeMatchesArmorDye(Recipe recipe, ItemStack result) {
+    public static boolean recipeMatchesArmorDye(Recipe recipe) {
         boolean matches = false;
 
-        if (Version.has1_12Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
+        Keyed keyedRecipe = (Keyed) recipe;
+        NamespacedKey key = keyedRecipe.getKey();
 
-            switch (key.getKey()) {
-                case "armordye": // 1.12 only
-                case "armor_dye": // 1.13+
-                    matches = true;
-                    break;
+        switch (key.getKey()) {
+            case "armordye": // 1.12 only
+            case "armor_dye": // 1.13+
+                matches = true;
+                break;
 
-                default:
-                    break;
-            }
-        } else if (recipe instanceof ShapelessRecipe) {
-            if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.LEATHER_HELMET) {
-                matches = true;
-            } else if (recipe.getResult().equals(RECIPE_LEATHERDYE)) {
-                matches = true;
-            }
+            default:
+                break;
         }
 
         return matches;
     }
 
-    public static boolean recipeMatchesMapCloning(Recipe recipe, ItemStack result) {
+    public static boolean recipeMatchesMapCloning(Recipe recipe) {
         boolean matches = false;
 
-        if (Version.has1_12Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
+        Keyed keyedRecipe = (Keyed) recipe;
+        NamespacedKey key = keyedRecipe.getKey();
 
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                switch (key.getKey()) {
-                    case "mapcloning": // 1.12 only
-                    case "map_cloning": // 1.13+
-                        matches = true;
-                        break;
+        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+            switch (key.getKey()) {
+                case "mapcloning": // 1.12 only
+                case "map_cloning": // 1.13+
+                    matches = true;
+                    break;
 
-                    default:
-                        break;
-                }
-            }
-        } else if (recipe instanceof ShapelessRecipe) {
-            if (recipe.getResult().getType() == Material.AIR && result.getType().equals(Material.MAP) && result.getAmount() > 1) {
-                matches = true;
+                default:
+                    break;
             }
         }
 
@@ -1656,39 +1529,12 @@ public class Vanilla {
         if (recipe instanceof ShapedRecipe) {
             ShapedRecipe shaped = (ShapedRecipe) recipe;
 
-            if (Version.has1_12Support()) {
-                NamespacedKey key = shaped.getKey();
-
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    switch (key.getKey()) {
-                        case "mapextending": // 1.12 only
-                        case "map_extending": // 1.13+
-                            matches = true;
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            } else if (recipe.getResult().equals(Vanilla.RECIPE_MAPEXTEND_1_11)) {
-                matches = true;
-            }
-        }
-
-        return matches;
-    }
-
-    public static boolean recipeMatchesFireworkRocket(Recipe recipe, ItemStack result) {
-        boolean matches = false;
-
-        if (Version.has1_12Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
+            NamespacedKey key = shaped.getKey();
 
             if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
                 switch (key.getKey()) {
-                    case "fireworks": // 1.12 only
-                    case "firework_rocket": // 1.13+
+                    case "mapextending": // 1.12 only
+                    case "map_extending": // 1.13+
                         matches = true;
                         break;
 
@@ -1696,9 +1542,26 @@ public class Vanilla {
                         break;
                 }
             }
-        } else if (recipe instanceof ShapelessRecipe) {
-            if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("FIREWORK")) {
-                matches = true;
+        }
+
+        return matches;
+    }
+
+    public static boolean recipeMatchesFireworkRocket(Recipe recipe) {
+        boolean matches = false;
+
+        Keyed keyedRecipe = (Keyed) recipe;
+        NamespacedKey key = keyedRecipe.getKey();
+
+        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+            switch (key.getKey()) {
+                case "fireworks": // 1.12 only
+                case "firework_rocket": // 1.13+
+                    matches = true;
+                    break;
+
+                default:
+                    break;
             }
         }
 
@@ -1787,27 +1650,21 @@ public class Vanilla {
         return matches;
     }
 
-    public static boolean recipeMatchesBookCloning(Recipe recipe, ItemStack result) {
+    public static boolean recipeMatchesBookCloning(Recipe recipe) {
         boolean matches = false;
 
-        if (Version.has1_12Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
+        Keyed keyedRecipe = (Keyed) recipe;
+        NamespacedKey key = keyedRecipe.getKey();
 
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                switch (key.getKey()) {
-                    case "bookcloning": // 1.12 only
-                    case "book_cloning": // 1.13+
-                        matches = true;
-                        break;
+        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+            switch (key.getKey()) {
+                case "bookcloning": // 1.12 only
+                case "book_cloning": // 1.13+
+                    matches = true;
+                    break;
 
-                    default:
-                        break;
-                }
-            }
-        } else if (recipe instanceof ShapelessRecipe) {
-            if (result.getType().equals(Material.WRITTEN_BOOK)) {
-                matches = true;
+                default:
+                    break;
             }
         }
 
@@ -1815,48 +1672,17 @@ public class Vanilla {
     }
 
     // Replaced by loom recipes in 1.14
-    public static boolean recipeMatchesBannerAddPattern(Recipe recipe, ItemStack result) {
+    public static boolean recipeMatchesBannerAddPattern(Recipe recipe) {
         boolean matches = false;
 
         if (recipe instanceof ShapelessRecipe) {
             ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
-
-            if (Version.has1_12Support()) {
-                NamespacedKey key = shapeless.getKey();
-
-                if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                    switch (key.getKey()) {
-                        case "banneraddpattern": // 1.12 only
-                        case "banner_add_pattern": // 1.13 only
-                            matches = true;
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-            } else if (recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("BANNER") || recipe.getResult().equals(Vanilla.RECIPE_BANNER)) {
-                List<ItemStack> ingredients = shapeless.getIngredientList();
-                if (ingredients.size() == 1 && ingredients.get(0).getType() == Material.getMaterial("BANNER")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    public static boolean recipeMatchesBannerDuplicate(Recipe recipe, ItemStack result) {
-        boolean matches = false;
-
-        if (Version.has1_12Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
+            NamespacedKey key = shapeless.getKey();
 
             if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
                 switch (key.getKey()) {
-                    case "bannerduplicate": // 1.12 only
-                    case "banner_duplicate": // 1.13+
+                    case "banneraddpattern": // 1.12 only
+                    case "banner_add_pattern": // 1.13 only
                         matches = true;
                         break;
 
@@ -1864,15 +1690,26 @@ public class Vanilla {
                         break;
                 }
             }
-        } else if (recipe instanceof ShapelessRecipe) {
-            ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
+        }
 
-             if ((recipe.getResult().getType() == Material.AIR && result.getType() == Material.getMaterial("BANNER")) || recipe.getResult().equals(Vanilla.RECIPE_BANNER)) {
-                List<ItemStack> ingredients = shapeless.getIngredientList();
+        return matches;
+    }
 
-                if (ingredients.size() == 1 && ingredients.get(0).getType() == Material.AIR) {
+    public static boolean recipeMatchesBannerDuplicate(Recipe recipe) {
+        boolean matches = false;
+
+        Keyed keyedRecipe = (Keyed) recipe;
+        NamespacedKey key = keyedRecipe.getKey();
+
+        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+            switch (key.getKey()) {
+                case "bannerduplicate": // 1.12 only
+                case "banner_duplicate": // 1.13+
                     matches = true;
-                }
+                    break;
+
+                default:
+                    break;
             }
         }
 
@@ -1880,27 +1717,21 @@ public class Vanilla {
     }
 
     // 1.9+
-    public static boolean recipeMatchesShieldDecoration(Recipe recipe, ItemStack result) {
+    public static boolean recipeMatchesShieldDecoration(Recipe recipe) {
         boolean matches = false;
 
-        if (Version.has1_12Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
+        Keyed keyedRecipe = (Keyed) recipe;
+        NamespacedKey key = keyedRecipe.getKey();
 
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                switch (key.getKey()) {
-                    case "shielddecoration": // 1.12 only
-                    case "shield_decoration": // 1.13+
-                        matches = true;
-                        break;
+        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+            switch (key.getKey()) {
+                case "shielddecoration": // 1.12 only
+                case "shield_decoration": // 1.13+
+                    matches = true;
+                    break;
 
-                    default:
-                        break;
-                }
-            }
-        } else if (recipe instanceof ShapelessRecipe) {
-            if (result.getType().equals(Material.SHIELD)) {
-                matches = true;
+                default:
+                    break;
             }
         }
 
@@ -1911,24 +1742,18 @@ public class Vanilla {
     public static boolean recipeMatchesTippedArrow(Recipe recipe) {
         boolean matches = false;
 
-        if (Version.has1_12Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
+        Keyed keyedRecipe = (Keyed) recipe;
+        NamespacedKey key = keyedRecipe.getKey();
 
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                switch (key.getKey()) {
-                    case "tippedarrow": // 1.12 only
-                    case "tipped_arrow": // 1.13+
-                        matches = true;
-                        break;
+        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+            switch (key.getKey()) {
+                case "tippedarrow": // 1.12 only
+                case "tipped_arrow": // 1.13+
+                    matches = true;
+                    break;
 
-                    default:
-                        break;
-                }
-            }
-        } else if (recipe instanceof ShapedRecipe) {
-            if (recipe.getResult().equals(Vanilla.RECIPE_TIPPED_ARROW)) {
-                matches = true;
+                default:
+                    break;
             }
         }
 
@@ -1936,27 +1761,21 @@ public class Vanilla {
     }
 
     // 1.11+
-    public static boolean recipeMatchesShulkerDye(Recipe recipe, ItemStack result) {
+    public static boolean recipeMatchesShulkerDye(Recipe recipe) {
         boolean matches = false;
 
-        if (Version.has1_12Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
+        Keyed keyedRecipe = (Keyed) recipe;
+        NamespacedKey key = keyedRecipe.getKey();
 
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                switch (key.getKey()) {
-                    case "shulkerboxcoloring": // 1.12 only
-                    case "shulker_box_coloring": // 1.13+
-                        matches = true;
-                        break;
+        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+            switch (key.getKey()) {
+                case "shulkerboxcoloring": // 1.12 only
+                case "shulker_box_coloring": // 1.13+
+                    matches = true;
+                    break;
 
-                    default:
-                        break;
-                }
-            }
-        } else if (recipe instanceof ShapelessRecipe) {
-            if (ToolsItem.isShulkerBox(result.getType())) {
-                matches = true;
+                default:
+                    break;
             }
         }
 

@@ -44,12 +44,7 @@ public class CreateRecipeCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (sender instanceof Player) {
             Player player = ((Player) sender);
-            ItemStack holdingStack;
-            if (Version.has1_12Support()) {
-                holdingStack = player.getInventory().getItemInMainHand();
-            } else {
-                holdingStack = player.getItemInHand();
-            }
+            ItemStack holdingStack = player.getInventory().getItemInMainHand();
             PlayerInventory inventory = player.getInventory();
 
             if (holdingStack == null || holdingStack.getType() == Material.AIR) {

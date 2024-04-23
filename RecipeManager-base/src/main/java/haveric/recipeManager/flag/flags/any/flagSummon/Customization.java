@@ -157,6 +157,7 @@ public class Customization implements Cloneable {
         num = c.num;
         ocelot = c.ocelot;
         onFire = c.onFire;
+        parrot = c.parrot;
         pet = c.pet;
         pickup = c.pickup;
         pigAnger = c.pigAnger;
@@ -169,17 +170,6 @@ public class Customization implements Cloneable {
         spread = c.spread;
         target = c.target;
         villager = c.villager;
-
-        if (!Version.has1_12Support()) {
-            elder = c.elder;
-            horse = c.horse;
-            skeleton = c.skeleton;
-            zombieVillager = c.zombieVillager;
-        }
-
-        if (Version.has1_12Support()) {
-            parrot = c.parrot;
-        }
 
         if (Version.has1_13Support()) {
             persistent = c.persistent;
@@ -318,7 +308,7 @@ public class Customization implements Cloneable {
                 npc.setTamed(true);
             }
 
-            if (Version.has1_12Support() && ent instanceof Sittable) {
+            if (ent instanceof Sittable) {
                 Sittable npc = (Sittable) ent;
 
                 if (pet && noSit) {
@@ -418,6 +408,15 @@ public class Customization implements Cloneable {
                     if (mount) {
                         npc.addPassenger(player);
                     }
+                } else if (Version.has1_16Support() && ent instanceof Steerable) {
+                    Steerable steerable = (Steerable) ent;
+
+                    steerable.setAdult();
+                    steerable.setSaddle(true);
+
+                    if (mount) {
+                        steerable.addPassenger(player);
+                    }
                 }
             }
 
@@ -426,11 +425,6 @@ public class Customization implements Cloneable {
 
                 if (baby) {
                     npc.setBaby(true);
-                }
-
-                if (!Version.has1_12Support() && zombieVillager) {
-                    //noinspection deprecation
-                    npc.setVillager(true);
                 }
             }
 
@@ -459,19 +453,8 @@ public class Customization implements Cloneable {
                 npc.setColor(color);
             }
 
-            if (!Version.has1_12Support() && skeleton != null && ent instanceof Skeleton) {
-                Skeleton npc = (Skeleton) ent;
-                //noinspection deprecation
-                npc.setSkeletonType(skeleton);
-            }
-
             if (ent instanceof Horse) {
                 Horse npc = (Horse) ent;
-
-                if (!Version.has1_12Support() && horse != null) {
-                    //noinspection deprecation
-                    npc.setVariant(horse);
-                }
 
                 if (horseColor != null) {
                     npc.setColor(horseColor);
@@ -485,14 +468,9 @@ public class Customization implements Cloneable {
                     npc.setAdult();
                     npc.setTamed(true);
 
-                    if (Version.has1_12Support()) {
-                        if (npc instanceof ChestedHorse) {
-                            ChestedHorse chestedHorse = (ChestedHorse) npc;
-                            chestedHorse.setCarryingChest(true);
-                        }
-                    } else {
-                        //noinspection deprecation
-                        npc.setCarryingChest(true);
+                    if (npc instanceof ChestedHorse) {
+                        ChestedHorse chestedHorse = (ChestedHorse) npc;
+                        chestedHorse.setCarryingChest(true);
                     }
                 }
 
@@ -504,12 +482,6 @@ public class Customization implements Cloneable {
             if (rabbit != null && ent instanceof Rabbit) {
                 Rabbit npc = (Rabbit) ent;
                 npc.setRabbitType(rabbit);
-            }
-
-            if (!Version.has1_12Support() && elder && ent instanceof Guardian) {
-                Guardian npc = (Guardian) ent;
-                //noinspection deprecation
-                npc.setElder(true);
             }
 
             if (target && ent instanceof Creature) {
@@ -542,13 +514,11 @@ public class Customization implements Cloneable {
             ent.setInvulnerable(invulnerable);
             ent.setAI(!noAi);
 
-            if (Version.has1_12Support()) {
-                if (ent instanceof Parrot) {
-                    Parrot npc = (Parrot) ent;
+            if (ent instanceof Parrot) {
+                Parrot npc = (Parrot) ent;
 
-                    if (parrot != null) {
-                        npc.setVariant(parrot);
-                    }
+                if (parrot != null) {
+                    npc.setVariant(parrot);
                 }
             }
 
@@ -1055,7 +1025,7 @@ public class Customization implements Cloneable {
                 case WOLF:
                     break;
 
-                case CAT:
+                case CAT: // 1.14
                     break;
 
                 default:
@@ -1247,8 +1217,8 @@ public class Customization implements Cloneable {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'rabbit' argument with invalid entityType: " + lower);
             }
         } else if (lower.startsWith("saddle")) {
-            if (entityType != EntityType.PIG && entityType != EntityType.HORSE ||
-                    (Version.has1_12Support() && entityType != EntityType.SKELETON_HORSE && entityType != EntityType.ZOMBIE_HORSE && entityType != EntityType.MULE && entityType != EntityType.DONKEY)) {
+            if (entityType != EntityType.PIG && entityType != EntityType.HORSE && entityType != EntityType.SKELETON_HORSE
+                    && entityType != EntityType.ZOMBIE_HORSE && entityType != EntityType.MULE && entityType != EntityType.DONKEY || (Version.has1_16Support() && entityType != EntityType.STRIDER)) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'saddle' on non-pig and non-horse entity!");
                 return false;
             }
@@ -1300,49 +1270,7 @@ public class Customization implements Cloneable {
             invulnerable = true;
         } else if (lower.equals("noai")) {
             noAi = true;
-        } else if (!Version.has1_12Support() && lower.equals("elder")) {
-            if (entityType != EntityType.GUARDIAN) {
-                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'elder' on non-guardian entity!");
-                return false;
-            }
-
-            elder = true;
-        } else if (!Version.has1_12Support() && lower.startsWith("horse")) {
-            if (entityType != EntityType.HORSE) {
-                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'horse' argument on non-horse entity!");
-                return false;
-            }
-
-            lower = lower.substring("horse".length()).trim();
-
-            //noinspection deprecation
-            horse = RMCUtil.parseEnum(lower, Horse.Variant.values());
-
-            if (horse == null) {
-                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'horse' argument with invalid entityType: " + lower);
-            }
-        } else if (!Version.has1_12Support() && lower.startsWith("skeleton")) {
-            if (entityType != EntityType.SKELETON) {
-                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'skeleton' argument on non-skeleton entity!");
-                return false;
-            }
-
-            lower = lower.substring("skeleton".length()).trim();
-
-            //noinspection deprecation
-            skeleton = RMCUtil.parseEnum(lower, Skeleton.SkeletonType.values());
-
-            if (skeleton == null) {
-                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'skeleton' argument with invalid entityType: " + lower);
-            }
-        } else if (!Version.has1_12Support() && lower.equals("zombievillager")) {
-            if (entityType != EntityType.ZOMBIE) {
-                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'zombievillager' on non-zombie entity!");
-                return false;
-            }
-
-            zombieVillager = true;
-        } else if (Version.has1_12Support() && lower.startsWith("parrot")) {
+        } else if (lower.startsWith("parrot")) {
             if (entityType != EntityType.PARROT) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'parrot' argument on non-parrot entity!");
                 return false;
@@ -1655,6 +1583,7 @@ public class Customization implements Cloneable {
         toHash += "num: " + num;
         toHash += "ocelot: " + ocelot.toString();
         toHash += "onFire: " + onFire;
+        toHash += "parrot: " + parrot;
         toHash += "pet: " + pet;
         toHash += "pickup: " + pickup.toString();
         toHash += "pigAnger: " + pigAnger;
@@ -1671,17 +1600,6 @@ public class Customization implements Cloneable {
         toHash += "spread: " + spread;
         toHash += "target: " + target;
         toHash += "villager: " + villager.toString();
-
-        if (!Version.has1_12Support()) {
-            toHash += "elder: " + elder;
-            toHash += "horse: " + horse.toString();
-            toHash += "skeleton: " + skeleton.toString();
-            toHash += "zombieVillager: " + zombieVillager;
-        }
-
-        if (Version.has1_12Support()) {
-            toHash += "parrot: " + parrot;
-        }
 
         if (Version.has1_13Support()) {
             toHash += "persistent: " + persistent;

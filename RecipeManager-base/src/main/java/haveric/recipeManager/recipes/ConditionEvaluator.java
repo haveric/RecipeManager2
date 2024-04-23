@@ -9,7 +9,6 @@ import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.flags.recipe.FlagOverride;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -152,13 +151,11 @@ public class ConditionEvaluator {
     }
 
     private RMCRecipeInfo getRecipeFromMap(BaseRecipe recipe, Map<BaseRecipe, RMCRecipeInfo> map) {
-        if (Version.has1_12Support()) {
-            for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : map.entrySet()) {
-                // Let's only use this special logic for recipes where RMCRecipeInfo has the bukkit pointer.
-                if (entry.getValue().getOwner() == RecipeOwner.MINECRAFT && !entry.getKey().isVanillaSpecialRecipe()) {
-                    if (recipe.hashCode() == entry.getKey().hashCode()) {
-                        return entry.getValue();
-                    }
+        for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : map.entrySet()) {
+            // Let's only use this special logic for recipes where RMCRecipeInfo has the bukkit pointer.
+            if (entry.getValue().getOwner() == RecipeOwner.MINECRAFT && !entry.getKey().isVanillaSpecialRecipe()) {
+                if (recipe.hashCode() == entry.getKey().hashCode()) {
+                    return entry.getValue();
                 }
             }
         }

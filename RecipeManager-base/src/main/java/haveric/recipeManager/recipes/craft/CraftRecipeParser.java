@@ -350,8 +350,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
 
                         // no point in adding more ingredients if there are errors
                         if (!ingredientErrors) {
-                            // Minecraft 1.11 required air ingredients to include a data value of 0
-                            if (!Version.has1_12Support() || item.getType() != Material.AIR) {
+                            if (item.getType() != Material.AIR) {
                                 ingredients[(rows * 3) + i] = item;
                                 ingredientsNum++;
                             }
@@ -375,30 +374,26 @@ public class CraftRecipeParser extends BaseRecipeParser {
             }
         }
 
-        if (recipe.hasFlag(FlagType.REMOVE) && !Version.has1_12Support()) { // for mc1.12, matching requires outcome too...
-            reader.nextLine(); // Skip the results line, if it exists
-        } else {
-            // get results
-            List<ItemResult> results = new ArrayList<>();
+        // get results
+        List<ItemResult> results = new ArrayList<>();
 
-            if (!parseResults(recipe, results)) { // results have errors
-                return false;
+        if (!parseResults(recipe, results)) { // results have errors
+            return false;
+        }
+
+        if (recipe instanceof CraftRecipe1_13) {
+            CraftRecipe1_13 craftRecipe = (CraftRecipe1_13) recipe;
+            craftRecipe.setResults(results); // done with results, set 'em
+
+            if (!craftRecipe.hasValidResult()) {
+                return ErrorReporter.getInstance().error("Recipe must have at least one non-air result!");
             }
+        } else {
+            CraftRecipe craftRecipe = (CraftRecipe) recipe;
+            craftRecipe.setResults(results); // done with results, set 'em
 
-            if (recipe instanceof CraftRecipe1_13) {
-                CraftRecipe1_13 craftRecipe = (CraftRecipe1_13) recipe;
-                craftRecipe.setResults(results); // done with results, set 'em
-
-                if (!craftRecipe.hasValidResult()) {
-                    return ErrorReporter.getInstance().error("Recipe must have at least one non-air result!");
-                }
-            } else {
-                CraftRecipe craftRecipe = (CraftRecipe) recipe;
-                craftRecipe.setResults(results); // done with results, set 'em
-
-                if (!craftRecipe.hasValidResult()) {
-                    return ErrorReporter.getInstance().error("Recipe must have at least one non-air result!");
-                }
+            if (!craftRecipe.hasValidResult()) {
+                return ErrorReporter.getInstance().error("Recipe must have at least one non-air result!");
             }
         }
 

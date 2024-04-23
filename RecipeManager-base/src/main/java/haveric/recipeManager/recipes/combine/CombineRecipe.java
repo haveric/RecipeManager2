@@ -14,7 +14,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.RMBukkitTools;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapelessRecipe;
@@ -196,7 +195,6 @@ public class CombineRecipe extends BaseCombineRecipe {
             return null;
         }
 
-        ShapelessRecipe bukkitRecipe;
         ItemStack result;
         if (vanilla) {
             result = getFirstResult();
@@ -214,11 +212,7 @@ public class CombineRecipe extends BaseCombineRecipe {
             }
         }
 
-        if (Version.has1_12Support()) {
-            bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), result);
-        } else {
-            bukkitRecipe = new ShapelessRecipe(result);
-        }
+        ShapelessRecipe bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), result);
 
         for (ItemStack item : ingredients) {
             bukkitRecipe.addIngredient(item.getAmount(), item.getType(), item.getDurability());

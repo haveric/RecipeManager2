@@ -33,20 +33,18 @@ public class DebugCommand implements CommandExecutor {
 
         sendPermissionMessage(sender, "");
 
-        if (Version.has1_12Support()) {
-            MessageSender.getInstance().send(sender, "Gamerule 'doLimitedCrafting':");
-            for (World world : Bukkit.getWorlds()) {
-                String worldName = world.getName();
-                Boolean gamerule = world.getGameRuleValue(GameRule.DO_LIMITED_CRAFTING);
+        MessageSender.getInstance().send(sender, "Gamerule 'doLimitedCrafting':");
+        for (World world : Bukkit.getWorlds()) {
+            String worldName = world.getName();
+            Boolean gamerule = world.getGameRuleValue(GameRule.DO_LIMITED_CRAFTING);
 
-                String gameruleMessage;
-                if (gamerule == Boolean.TRUE) {
-                    gameruleMessage = RMCChatColor.RED + "true";
-                } else {
-                    gameruleMessage = RMCChatColor.GREEN + "false";
-                }
-                MessageSender.getInstance().send(sender, "  " + worldName + ": " + gameruleMessage);
+            String gameruleMessage;
+            if (gamerule == Boolean.TRUE) {
+                gameruleMessage = RMCChatColor.RED + "true";
+            } else {
+                gameruleMessage = RMCChatColor.GREEN + "false";
             }
+            MessageSender.getInstance().send(sender, "  " + worldName + ": " + gameruleMessage);
         }
 
         if (sender instanceof Player) {

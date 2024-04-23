@@ -285,21 +285,17 @@ public class CombineRecipeParser extends BaseRecipeParser {
             }
         }
 
-        if (recipe.hasFlag(FlagType.REMOVE) && !Version.has1_12Support()) { // for mc1.12, matching requires outcome too...
-            reader.nextLine(); // Skip the results line, if it exists
-        } else {
-            // get the results
-            List<ItemResult> results = new ArrayList<>();
+        // get the results
+        List<ItemResult> results = new ArrayList<>();
 
-            if (!parseResults(recipe, results)) {
-                return false;
-            }
+        if (!parseResults(recipe, results)) {
+            return false;
+        }
 
-            recipe.setResults(results);
+        recipe.setResults(results);
 
-            if (!recipe.hasValidResult()) {
-                return ErrorReporter.getInstance().error("Recipe must have at least one non-air result!");
-            }
+        if (!recipe.hasValidResult()) {
+            return ErrorReporter.getInstance().error("Recipe must have at least one non-air result!");
         }
 
         // check if recipe already exists

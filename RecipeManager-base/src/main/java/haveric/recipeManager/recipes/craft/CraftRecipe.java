@@ -290,7 +290,7 @@ public class CraftRecipe extends BaseCraftRecipe {
             return null;
         }
 
-        ShapedRecipe bukkitRecipe;
+
         ItemStack result;
         if (vanilla) {
             result = getFirstResult();
@@ -308,11 +308,7 @@ public class CraftRecipe extends BaseCraftRecipe {
             }
         }
 
-        if (Version.has1_12Support()) {
-            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), result);
-        } else {
-            bukkitRecipe = new ShapedRecipe(result);
-        }
+        ShapedRecipe bukkitRecipe = new ShapedRecipe(getNamespacedKey(), result);
 
         switch (height) {
             case 1:

@@ -73,13 +73,6 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 location = null;
             }
 
-            // Handle repair recipes from 1.11 and before keyed recipes were implemented
-            if (!Version.has1_12Support() && event.isRepair()) {
-                if (prepareRepairRecipe(player, inv, location)) {
-                    return; // if it's a repair recipe we don't need to move on
-                }
-            }
-
             Recipe bukkitRecipe = event.getRecipe();
             if (bukkitRecipe == null) {
                 return; // Bukkit recipe is null ! skip it
@@ -166,7 +159,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialLeatherDye()) {
-                if (Vanilla.recipeMatchesArmorDye(recipe, result)) {
+                if (Vanilla.recipeMatchesArmorDye(recipe)) {
                     Messages.getInstance().sendOnce(player, "craft.special.leatherdye");
                     inv.setResult(null);
                     return true;
@@ -174,7 +167,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialMapCloning()) {
-                if (Vanilla.recipeMatchesMapCloning(recipe, result)) {
+                if (Vanilla.recipeMatchesMapCloning(recipe)) {
                     Messages.getInstance().sendOnce(player, "craft.special.map.cloning");
                     inv.setResult(null);
                     return true;
@@ -190,7 +183,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialFireworks()) {
-                if (Vanilla.recipeMatchesFireworkRocket(recipe, result)) {
+                if (Vanilla.recipeMatchesFireworkRocket(recipe)) {
                     Messages.getInstance().sendOnce(player, "craft.special.fireworks");
                     inv.setResult(null);
                     return true;
@@ -214,7 +207,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialBookCloning()) {
-                if (Vanilla.recipeMatchesBookCloning(recipe, result)) {
+                if (Vanilla.recipeMatchesBookCloning(recipe)) {
                     Messages.getInstance().sendOnce(player, "craft.special.book.cloning");
                     inv.setResult(null);
                     return true;
@@ -222,7 +215,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialBanner()) {
-                if (Vanilla.recipeMatchesBannerAddPattern(recipe, result)) {
+                if (Vanilla.recipeMatchesBannerAddPattern(recipe)) {
                     Messages.getInstance().sendOnce(player, "craft.special.banner");
                     inv.setResult(null);
                     return true;
@@ -230,7 +223,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialBannerDuplicate()) {
-                if (Vanilla.recipeMatchesBannerDuplicate(recipe, result)) {
+                if (Vanilla.recipeMatchesBannerDuplicate(recipe)) {
                     Messages.getInstance().sendOnce(player, "craft.special.bannerduplicate");
                     inv.setResult(null);
                     return true;
@@ -238,7 +231,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialShieldBanner()) {
-                if (Vanilla.recipeMatchesShieldDecoration(recipe, result)) {
+                if (Vanilla.recipeMatchesShieldDecoration(recipe)) {
                     Messages.getInstance().sendOnce(player, "craft.special.shieldbanner");
                     inv.setResult(null);
                     return true;
@@ -254,7 +247,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialShulkerDye()) {
-                if (Vanilla.recipeMatchesShulkerDye(recipe, result)) {
+                if (Vanilla.recipeMatchesShulkerDye(recipe)) {
                     Messages.getInstance().sendOnce(player, "craft.special.shulkerdye");
                     inv.setResult(null);
                     return true;

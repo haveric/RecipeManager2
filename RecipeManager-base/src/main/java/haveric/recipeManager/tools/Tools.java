@@ -1123,7 +1123,7 @@ public class Tools {
     }
 
     public static Sound getSound(String newSound) {
-        Sound sound = null;
+        Sound sound;
 
         if (Version.has1_13BasicSupport()) {
             // set known sounds to make sure Enum isn't changing on us

@@ -1,10 +1,11 @@
 package haveric.recipeManager.commands;
 
-import haveric.recipeManager.messages.Messages;
-import haveric.recipeManager.tools.Version;
 import haveric.recipeManager.common.util.RMCUtil;
+import haveric.recipeManager.messages.Messages;
 import org.bukkit.Material;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -27,13 +28,7 @@ public class FindItemCommand implements TabExecutor {
                 return true;
             }
             Player player = (Player) sender;
-            ItemStack item;
-            if (Version.has1_12Support()) {
-                item = player.getInventory().getItemInMainHand();
-            } else {
-                //noinspection deprecation
-                item = ((Player) sender).getItemInHand();
-            }
+            ItemStack item = player.getInventory().getItemInMainHand();
 
             if (item == null || item.getType() == Material.AIR) {
                 Messages.getInstance().send(sender, "cmd.finditem.invalidhelditem");

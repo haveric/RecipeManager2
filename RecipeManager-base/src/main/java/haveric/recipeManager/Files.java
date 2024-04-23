@@ -629,12 +629,7 @@ public class Files {
             for (Enchantment e : enchantments) {
                 EnchantmentTarget target = e.getItemTarget();
 
-                String targetString;
-                if (target == null) { // Check needed for 1.11
-                    targetString = "any";
-                } else {
-                    targetString = target.toString().toLowerCase();
-                }
+                String targetString = target.toString().toLowerCase();
 
                 s.append(NL).append(String.format(" %-26s %-12s %s", e.getName(), targetString, e.getStartLevel() + " to " + e.getMaxLevel()));
             }
@@ -677,11 +672,7 @@ public class Files {
         addNameIndexHeading(s, "material", "MATERIAL LIST", "Material", "Material");
         s.append("Data/damage/durability values are listed at <a href='https://minecraft.wiki/w/Java_Edition_data_values'>Minecraft Wiki / Data Values</a>");
         s.append(NL);
-        if (Version.has1_12Support()) {
-            s.append(NL).append(String.format("<b> %-34s %-34s %-5s  %-14s  %-5s %-4s</b>", "Name", "Alias", "Stack", "Max durability", "Block", "Item"));
-        } else {
-            s.append(NL).append(String.format("<b> %-34s %-34s %-5s  %-14s</b>", "Name", "Alias", "Stack", "Max durability"));
-        }
+        s.append(NL).append(String.format("<b> %-34s %-34s %-5s  %-14s  %-5s %-4s</b>", "Name", "Alias", "Stack", "Max durability", "Block", "Item"));
 
         for (Material m : Material.values()) {
             String alias = RecipeManager.getSettings().getMaterialPrint(m);
@@ -698,21 +689,17 @@ public class Files {
                 durabilityString += m.getMaxDurability();
             }
 
-            if (Version.has1_12Support()) {
-                String block = "";
-                if (m.isBlock()) {
-                    block = "Block";
-                }
-
-                String item = "";
-                if (m.isItem()) {
-                    item = "Item";
-                }
-
-                s.append(NL).append(String.format(" %-34s %-34s %-5d  %-14s   %-5s %-4s", m, aliasString, m.getMaxStackSize(), durabilityString, block, item));
-            } else {
-                s.append(NL).append(String.format(" %-34s %-34s %-5d  %-14s", m, aliasString, m.getMaxStackSize(), durabilityString));
+            String block = "";
+            if (m.isBlock()) {
+                block = "Block";
             }
+
+            String item = "";
+            if (m.isItem()) {
+                item = "Item";
+            }
+
+            s.append(NL).append(String.format(" %-34s %-34s %-5d  %-14s   %-5s %-4s", m, aliasString, m.getMaxStackSize(), durabilityString, block, item));
         }
 
         s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");

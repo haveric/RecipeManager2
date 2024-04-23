@@ -151,36 +151,34 @@ public class ToolsFlag {
                         recipeString.append(" | delay ").append(delay);
                     }
 
-                    if (Version.has1_12Support()) {
-                        int minDelay = creatureSpawner.getMinSpawnDelay();
-                        if (minDelay != 200) {
-                            recipeString.append(" | mindelay ").append(minDelay);
-                        }
+                    int minDelay = creatureSpawner.getMinSpawnDelay();
+                    if (minDelay != 200) {
+                        recipeString.append(" | mindelay ").append(minDelay);
+                    }
 
-                        int maxDelay = creatureSpawner.getMaxSpawnDelay();
-                        if (maxDelay != 800) {
-                            recipeString.append(" | maxdelay ").append(maxDelay);
-                        }
+                    int maxDelay = creatureSpawner.getMaxSpawnDelay();
+                    if (maxDelay != 800) {
+                        recipeString.append(" | maxdelay ").append(maxDelay);
+                    }
 
-                        int maxNearbyEntities = creatureSpawner.getMaxNearbyEntities();
-                        if (maxNearbyEntities != 6) {
-                            recipeString.append(" | maxnearbyentities ").append(maxNearbyEntities);
-                        }
+                    int maxNearbyEntities = creatureSpawner.getMaxNearbyEntities();
+                    if (maxNearbyEntities != 6) {
+                        recipeString.append(" | maxnearbyentities ").append(maxNearbyEntities);
+                    }
 
-                        int playerRange = creatureSpawner.getRequiredPlayerRange();
-                        if (playerRange != 16) {
-                            recipeString.append(" | playerrange ").append(playerRange);
-                        }
+                    int playerRange = creatureSpawner.getRequiredPlayerRange();
+                    if (playerRange != 16) {
+                        recipeString.append(" | playerrange ").append(playerRange);
+                    }
 
-                        int spawnRange = creatureSpawner.getSpawnRange();
-                        if (spawnRange != 4) {
-                            recipeString.append(" | spawnrange ").append(spawnRange);
-                        }
+                    int spawnRange = creatureSpawner.getSpawnRange();
+                    if (spawnRange != 4) {
+                        recipeString.append(" | spawnrange ").append(spawnRange);
+                    }
 
-                        int spawnCount = creatureSpawner.getSpawnCount();
-                        if (spawnCount != 4) {
-                            recipeString.append(" | spawncount ").append(spawnCount);
-                        }
+                    int spawnCount = creatureSpawner.getSpawnCount();
+                    if (spawnCount != 4) {
+                        recipeString.append(" | spawncount ").append(spawnCount);
                     }
                 }
             }

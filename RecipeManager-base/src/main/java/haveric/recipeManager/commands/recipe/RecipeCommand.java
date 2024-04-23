@@ -31,7 +31,6 @@ import haveric.recipeManager.recipes.smithing.RMSmithingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -83,12 +82,7 @@ public class RecipeCommand implements TabExecutor {
             if (args[0].equalsIgnoreCase("this")) {
                 if (sender instanceof Player) {
                     Player player = (Player) sender;
-                    if (Version.has1_12Support()) {
-                        item = player.getInventory().getItemInMainHand();
-                    } else {
-                        //noinspection deprecation
-                        item = player.getItemInHand();
-                    }
+                    item = player.getInventory().getItemInMainHand();
 
                     if (item == null || item.getType() == Material.AIR) {
                         Messages.getInstance().send(player, "cmd.recipes.nohand");

@@ -629,16 +629,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         ItemStack ingredient = inventory.getSmelting();
         SingleResultRecipe recipe = getSpecificFurnaceRecipe(furnace, ingredient);
 
-        if (recipe == null) {
-            if (!Version.has1_12Support()) {
-                RMFurnaceRecipe removedRecipe = (RMFurnaceRecipe) RecipeManager.getRecipes().getRemovedRecipe(RMCRecipeType.SMELT, ingredient);
-                RMFurnaceRecipe simpleRecipe = (RMFurnaceRecipe) RecipeManager.getRecipes().getSimpleRecipe(RMCRecipeType.SMELT, ingredient);
-
-                if (removedRecipe != null && simpleRecipe == null) {
-                    event.setCancelled(true);
-                }
-            }
-        } else {
+        if (recipe != null) {
             ItemStack recipeFuel;
             if (recipe instanceof RMBaseFurnaceRecipe1_13) {
                 recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel();

@@ -65,7 +65,7 @@ public class ReloadCommand implements CommandExecutor {
     }
     
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (Version.has1_12Support() && !Version.has1_15Support()) {
+        if (!Version.has1_15Support()) {
             if (sender instanceof Conversable) {
                 reloadConversation.buildConversation((Conversable) sender).begin();
                 return true;

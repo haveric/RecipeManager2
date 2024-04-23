@@ -226,14 +226,7 @@ public class RecipeManager extends JavaPlugin {
             }
 
             if (!firstTime && !settings.getClearRecipes()) {
-                if (!Version.has1_12Support()) {
-                    Vanilla.restoreAllButSpecialRecipes();
-                    Recipes.getInstance().index.putAll(Vanilla.initialRecipes);
-                } else {
-                    Vanilla.removeCustomRecipes();
-                    // Basically does server recipe reset and vanilla re-init, but also
-                    // tries to save any other recipes.
-                }
+                Vanilla.removeCustomRecipes();
             }
         }
 

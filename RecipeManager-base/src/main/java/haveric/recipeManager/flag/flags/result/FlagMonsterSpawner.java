@@ -1,7 +1,6 @@
 package haveric.recipeManager.flag.flags.result;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
@@ -31,31 +30,20 @@ public class FlagMonsterSpawner extends Flag {
 
     @Override
     protected String[] getDescription() {
-        String[] description = new String[] {
+        return new String[] {
             "Sets the entity type that will be spawned from the spawner.",
             "",
             "The &lt;entity type&gt; argument must be an entity type name, see " + Files.getNameIndexHashLink("entitytype"),
             "",
             "Optionally you can add more arguments separated by | character in any order:",
+            "  delay             = (default 20) initial delay in ticks, -1 will default to a random value between min delay and max delay",
+            "  mindelay          = (default 200) Sets the min spawn delay (in ticks)",
+            "  maxdelay          = (default 800) Sets the max spawn delay (in ticks)",
+            "  maxnearbyentities = (default 6) Sets the max number of similar entities that are allowed to be within spawning range.",
+            "  playerrange       = (default 16) Sets the maximum distance (squared) a player can be in order for this spawner to be active. (0 is always active if players are online)",
+            "  spawnrange        = (default 4) Sets the radius around which the spawner will attempt to spawn mobs in.",
+            "  spawncount        = (default 4) Sets how many mobs attempt to spawn.",
         };
-
-        if (Version.has1_12Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                "  delay             = (default 20) initial delay in ticks, -1 will default to a random value between min delay and max delay",
-                "  mindelay          = (default 200) Sets the min spawn delay (in ticks)",
-                "  maxdelay          = (default 800) Sets the max spawn delay (in ticks)",
-                "  maxnearbyentities = (default 6) Sets the max number of similar entities that are allowed to be within spawning range.",
-                "  playerrange       = (default 16) Sets the maximum distance (squared) a player can be in order for this spawner to be active. (0 is always active if players are online)",
-                "  spawnrange        = (default 4) Sets the radius around which the spawner will attempt to spawn mobs in.",
-                "  spawncount        = (default 4) Sets how many mobs attempt to spawn.",
-            }, String.class);
-        } else {
-            description = ObjectArrays.concat(description, new String[]{
-                "  delay = delay in ticks, ",
-            }, String.class);
-        }
-
-        return description;
     }
 
     @Override
@@ -156,89 +144,87 @@ public class FlagMonsterSpawner extends Flag {
                 } catch (NumberFormatException e) {
                     ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid delay value: " + s + ". Expecting an integer >= -1.");
                 }
-            } else if (Version.has1_12Support()) {
-                if (s.startsWith("mindelay")) {
-                    s = s.substring("mindelay".length()).trim();
-                    try {
-                        int parsed = Integer.parseInt(s);
+            } else if (s.startsWith("mindelay")) {
+                s = s.substring("mindelay".length()).trim();
+                try {
+                    int parsed = Integer.parseInt(s);
 
-                        if (parsed < 0) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid mindelay value: " + s + ". Expecting an integer >= 0.");
-                        } else {
-                            minDelay = parsed;
-                        }
-                    } catch (NumberFormatException e) {
+                    if (parsed < 0) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid mindelay value: " + s + ". Expecting an integer >= 0.");
+                    } else {
+                        minDelay = parsed;
                     }
-                } else if (s.startsWith("maxdelay")) {
-                    s = s.substring("maxdelay".length()).trim();
-                    try {
-                        int parsed = Integer.parseInt(s);
-
-                        if (parsed < 0) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid maxdelay value: " + s + ". Expecting an integer >= 0.");
-                        } else {
-                            maxDelay = parsed;
-                        }
-                    } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid maxdelay value: " + s + ". Expecting an integer >= 0.");
-                    }
-                } else if (s.startsWith("maxnearbyentities")) {
-                    s = s.substring("maxnearbyentities".length()).trim();
-                    try {
-                        int parsed = Integer.parseInt(s);
-
-                        if (parsed < 0) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid maxnearbyentities value: " + s + ". Expecting an integer >= 0.");
-                        } else {
-                            maxNearbyEntities = parsed;
-                        }
-                    } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid maxnearbyentities value: " + s + ". Expecting an integer >= 0.");
-                    }
-                } else if (s.startsWith("playerrange")) {
-                    s = s.substring("playerrange".length()).trim();
-                    try {
-                        int parsed = Integer.parseInt(s);
-
-                        if (parsed < 0) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid playerrange value: " + s + ". Expecting an integer >= 0.");
-                        } else {
-                            playerRange = parsed;
-                        }
-
-                    } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid playerrange value: " + s + ". Expecting an integer >= 0.");
-                    }
-                } else if (s.startsWith("spawnrange")) {
-                    s = s.substring("spawnrange".length()).trim();
-                    try {
-                        int parsed = Integer.parseInt(s);
-
-                        if (parsed < 0) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid spawnrange value: " + s + ". Expecting an integer >= 0.");
-                        } else {
-                            spawnRange = parsed;
-                        }
-                    } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid spawnrange value: " + s + ". Expecting an integer >= 0.");
-                    }
-                } else if (s.startsWith("spawncount")) {
-                    s = s.substring("spawncount".length()).trim();
-                    try {
-                        int parsed = Integer.parseInt(s);
-
-                        if (parsed < 0) {
-                            ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid spawncount value: " + s + ". Expecting an integer >= 0.");
-                        } else {
-                            spawnCount = parsed;
-                        }
-                    } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid spawncount value: " + s + ". Expecting an integer >= 0.");
-                    }
-                } else {
-                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + s);
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid mindelay value: " + s + ". Expecting an integer >= 0.");
                 }
+            } else if (s.startsWith("maxdelay")) {
+                s = s.substring("maxdelay".length()).trim();
+                try {
+                    int parsed = Integer.parseInt(s);
+
+                    if (parsed < 0) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid maxdelay value: " + s + ". Expecting an integer >= 0.");
+                    } else {
+                        maxDelay = parsed;
+                    }
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid maxdelay value: " + s + ". Expecting an integer >= 0.");
+                }
+            } else if (s.startsWith("maxnearbyentities")) {
+                s = s.substring("maxnearbyentities".length()).trim();
+                try {
+                    int parsed = Integer.parseInt(s);
+
+                    if (parsed < 0) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid maxnearbyentities value: " + s + ". Expecting an integer >= 0.");
+                    } else {
+                        maxNearbyEntities = parsed;
+                    }
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid maxnearbyentities value: " + s + ". Expecting an integer >= 0.");
+                }
+            } else if (s.startsWith("playerrange")) {
+                s = s.substring("playerrange".length()).trim();
+                try {
+                    int parsed = Integer.parseInt(s);
+
+                    if (parsed < 0) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid playerrange value: " + s + ". Expecting an integer >= 0.");
+                    } else {
+                        playerRange = parsed;
+                    }
+
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid playerrange value: " + s + ". Expecting an integer >= 0.");
+                }
+            } else if (s.startsWith("spawnrange")) {
+                s = s.substring("spawnrange".length()).trim();
+                try {
+                    int parsed = Integer.parseInt(s);
+
+                    if (parsed < 0) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid spawnrange value: " + s + ". Expecting an integer >= 0.");
+                    } else {
+                        spawnRange = parsed;
+                    }
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid spawnrange value: " + s + ". Expecting an integer >= 0.");
+                }
+            } else if (s.startsWith("spawncount")) {
+                s = s.substring("spawncount".length()).trim();
+                try {
+                    int parsed = Integer.parseInt(s);
+
+                    if (parsed < 0) {
+                        ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid spawncount value: " + s + ". Expecting an integer >= 0.");
+                    } else {
+                        spawnCount = parsed;
+                    }
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid spawncount value: " + s + ". Expecting an integer >= 0.");
+                }
+            } else {
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + s);
             }
         }
 
@@ -266,14 +252,12 @@ public class FlagMonsterSpawner extends Flag {
 
             spawner.setDelay(delay);
 
-            if (Version.has1_12Support()) {
-                spawner.setMinSpawnDelay(minDelay);
-                spawner.setMaxSpawnDelay(maxDelay);
-                spawner.setMaxNearbyEntities(maxNearbyEntities);
-                spawner.setRequiredPlayerRange(playerRange);
-                spawner.setSpawnRange(spawnRange);
-                spawner.setSpawnCount(spawnCount);
-            }
+            spawner.setMinSpawnDelay(minDelay);
+            spawner.setMaxSpawnDelay(maxDelay);
+            spawner.setMaxNearbyEntities(maxNearbyEntities);
+            spawner.setRequiredPlayerRange(playerRange);
+            spawner.setSpawnRange(spawnRange);
+            spawner.setSpawnCount(spawnCount);
 
             spawner.update();
 

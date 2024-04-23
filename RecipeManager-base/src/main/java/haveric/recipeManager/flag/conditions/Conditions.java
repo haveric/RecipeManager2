@@ -1207,24 +1207,22 @@ public class Conditions implements Cloneable {
             }
         }
 
-        if (Version.has1_12Support()) {
-            if (!checkLocalizedName(meta)) {
-                if (a == null) {
-                    return false;
-                }
+        if (!checkLocalizedName(meta)) {
+            if (a == null) {
+                return false;
+            }
 
-                if (addReasons) {
-                    if (hasLocalizedName()) {
-                        a.addReason("flag.ingredientconditions.nolocalizedname", failMessage, "{item}", ToolsItem.print(item), "{name}", localizedName);
-                    } else {
-                        a.addReason("flag.ingredientconditions.emptylocalizedname", failMessage, "{item}", ToolsItem.print(item));
-                    }
+            if (addReasons) {
+                if (hasLocalizedName()) {
+                    a.addReason("flag.ingredientconditions.nolocalizedname", failMessage, "{item}", ToolsItem.print(item), "{name}", localizedName);
+                } else {
+                    a.addReason("flag.ingredientconditions.emptylocalizedname", failMessage, "{item}", ToolsItem.print(item));
                 }
-                ok = false;
+            }
+            ok = false;
 
-                if (failMessage != null) {
-                    return false;
-                }
+            if (failMessage != null) {
+                return false;
             }
         }
 
