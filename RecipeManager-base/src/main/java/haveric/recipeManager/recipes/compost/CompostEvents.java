@@ -14,6 +14,7 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.compost.data.ComposterData;
 import haveric.recipeManager.recipes.compost.data.Composters;
 import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -98,7 +99,14 @@ public class CompostEvents extends BaseRecipeEvents {
             World world = block.getWorld();
             Location blockLocation = block.getLocation();
             Location particleLocation = new Location(world, blockLocation.getX() + .5, blockLocation.getY() + newLevel / 8.0, blockLocation.getZ() + .5);
-            world.spawnParticle(Particle.VILLAGER_HAPPY, particleLocation, 10, .2, .2, .2);
+
+            Particle particle;
+            if (Version.has1_20_5Support()) {
+                particle = Particle.HAPPY_VILLAGER;
+            } else {
+                particle = Particle.valueOf("VILLAGER_HAPPY");
+            }
+            world.spawnParticle(particle, particleLocation, 10, .2, .2, .2);
         }
     }
 
