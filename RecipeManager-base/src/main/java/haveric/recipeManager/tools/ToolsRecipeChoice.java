@@ -318,6 +318,7 @@ public class ToolsRecipeChoice {
         return choice;
     }
 
+    @SuppressWarnings("removal")
     public static int getIngredientMatchQuality(ItemStack ingredient, RecipeChoice choice, boolean checkExact) {
         Material ingredientType = ingredient.getType();
         if (choice instanceof RecipeChoice.MaterialChoice) {

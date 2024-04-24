@@ -92,16 +92,19 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
 
     }
 
+    @SuppressWarnings("removal")
     @Override
     public String getLocalizedName() {
         return locName;
     }
 
+    @SuppressWarnings("removal")
     @Override
     public void setLocalizedName(String name) {
         this.locName = name;
     }
 
+    @SuppressWarnings("removal")
     @Override
     public boolean hasLocalizedName() {
         return !Strings.isNullOrEmpty(locName);

@@ -644,6 +644,7 @@ public class Conditions implements Cloneable {
         return localizedName != null;
     }
 
+    @SuppressWarnings("removal")
     public boolean checkLocalizedName(ItemMeta meta) {
         if (noMeta || noLocalizedName) {
             return !meta.hasLocalizedName();

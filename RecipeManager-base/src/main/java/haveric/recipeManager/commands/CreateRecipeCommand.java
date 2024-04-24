@@ -170,6 +170,7 @@ public class CreateRecipeCommand implements CommandExecutor {
         return true;
     }
 
+    @SuppressWarnings("removal")
     private void parseIngredientForConditions(ItemStack item, StringBuilder recipeString, Map<Material, Map<String, Integer>> conditions) {
         parseIngredientName(item, recipeString);
 

@@ -94,6 +94,7 @@ public class FlagLocalizedName extends Flag {
         onCrafted(a);
     }
 
+    @SuppressWarnings("removal")
     @Override
     public void onCrafted(Args a) {
         if (canAddMeta(a)) {

@@ -26,6 +26,7 @@ import java.util.Set;
 
 public class ToolsFlag {
 
+    @SuppressWarnings("removal")
     public static void parseItemMeta(ItemStack item, StringBuilder recipeString) {
         if (!item.getEnchantments().isEmpty()) {
             for (Map.Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
