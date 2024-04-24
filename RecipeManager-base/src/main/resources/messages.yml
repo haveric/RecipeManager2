@@ -34,6 +34,8 @@ flag:
     emptybookenchants: "<yellow>{item}<red> cannot have any enchantments"
     noname: "<yellow>{item}<red> needs name: <yellow>{name}"
     emptyname: "<yellow>{item}<red> cannot have custom name"
+    noitemname: "<yellow>{item}<red> needs name: <yellow>{name}"
+    emptyitemname: "<yellow>{item}<red> cannot have custom name"
     nolocalizedname: "<yellow>{item}<red> needs localized name: <yellow>{name}"
     emptylocalizedname: "<yellow>{item}<red> cannot have localized name"
     nocustommodeldata: "<yellow>{item}<red> needs custom model data: <yellow>{data}"

@@ -53,18 +53,18 @@ public class FlagHoldItemTest extends FlagBaseTest {
                 } else if (resultType == Material.GRAVEL) {
                     List<ConditionsHold> conditions = flag.getConditions(new ItemStack(Material.DIAMOND_SHOVEL));
                     ConditionsHold cond = conditions.get(0);
-                    assertEquals(RMCChatColor.COLOR_CHAR + "bHammer", cond.getName());
+                    assertEquals(RMCChatColor.COLOR_CHAR + "bHammer", cond.getDisplayName());
                     assertEquals(RMCChatColor.COLOR_CHAR + "cFoo", cond.getFailMessage());
                 } else if (resultType == Material.COBBLESTONE) {
                     List<ConditionsHold> conditions = flag.getConditions(new ItemStack(Material.DIRT));
                     ConditionsHold cond = conditions.get(0);
-                    assertEquals("One", cond.getName());
+                    assertEquals("One", cond.getDisplayName());
                     assertEquals("Two", cond.getLores().get(0));
                     assertEquals("Three", cond.getFailMessage());
                 } else if (resultType == Material.STONE) {
                     List<ConditionsHold> conditions = flag.getConditions(new ItemStack(Material.DIRT));
                     ConditionsHold cond = conditions.get(0);
-                    assertEquals("   One   ", cond.getName());
+                    assertEquals("   One   ", cond.getDisplayName());
                     assertEquals("   Two   ", cond.getLores().get(0));
                     assertEquals("   Three   ", cond.getFailMessage());
                 }

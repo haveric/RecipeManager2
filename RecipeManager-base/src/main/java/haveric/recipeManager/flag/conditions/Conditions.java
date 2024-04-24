@@ -40,7 +40,8 @@ public class Conditions implements Cloneable {
     private int amount;
     private Map<Enchantment, Map<Integer, Boolean>> enchants = new HashMap<>();
     private Map<Enchantment, Map<Integer, Boolean>> bookEnchants = new HashMap<>();
-    private String name;
+    private String displayName;
+    private String itemName;
     private List<String> lores = new ArrayList<>();
     private Color minColor;
     private Color maxColor;
@@ -54,7 +55,8 @@ public class Conditions implements Cloneable {
     private int customModelData = Integer.MIN_VALUE;
 
     private boolean noMeta = false;
-    private boolean noName = false;
+    private boolean noDisplayName = false;
+    private boolean noItemName = false;
     private boolean noLore = false;
     private boolean noEnchant = false;
     private boolean noBookEnchant = false;
@@ -97,7 +99,8 @@ public class Conditions implements Cloneable {
             bookEnchants.put(e.getKey(), map);
         }
 
-        name = original.name;
+        displayName = original.displayName;
+        itemName = original.itemName;
 
         lores = original.lores;
 
@@ -114,7 +117,8 @@ public class Conditions implements Cloneable {
         customModelData = original.customModelData;
 
         noMeta = original.noMeta;
-        noName = original.noName;
+        noDisplayName = original.noDisplayName;
+        noItemName = original.noItemName;
         noLore = original.noLore;
         noEnchant = original.noEnchant;
         noBookEnchant = original.noBookEnchant;
@@ -586,43 +590,86 @@ public class Conditions implements Cloneable {
         return true;
     }
 
-    public String getName() {
-        return name;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setName(String newName) {
+    public void setDisplayName(String newName) {
         if (newName == null) {
-            name = null;
+            displayName = null;
         } else {
-            name = RMCUtil.parseColors(newName, false);
+            displayName = RMCUtil.parseColors(newName, false);
         }
     }
 
-    public boolean hasName() {
-        return name != null;
+    public boolean hasDisplayName() {
+        return displayName != null;
     }
 
-    public boolean checkName(ItemMeta meta) {
-        if (noMeta || noName) {
+    public boolean checkDisplayName(ItemMeta meta) {
+        if (noMeta || noDisplayName) {
             return !meta.hasDisplayName();
         }
 
-        if (!hasName()) {
+        if (!hasDisplayName()) {
             return true;
         }
 
         if (meta.hasDisplayName()) {
             String nameToCheck = meta.getDisplayName();
-            if (name.startsWith("regex:")) {
+            if (displayName.startsWith("regex:")) {
                 try {
-                    Pattern pattern = Pattern.compile(name.substring("regex:".length()));
+                    Pattern pattern = Pattern.compile(displayName.substring("regex:".length()));
                     return pattern.matcher(nameToCheck).matches();
                 } catch (PatternSyntaxException e) {
                     return ErrorReporter.getInstance().error("Flag " + flagType + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
                 }
             }
 
-            return name.equalsIgnoreCase(nameToCheck);
+            return displayName.equalsIgnoreCase(nameToCheck);
+        }
+
+        return false;
+    }
+
+
+    public String getItemName() {
+        return itemName;
+    }
+
+    public void setItemName(String newName) {
+        if (newName == null) {
+            itemName = null;
+        } else {
+            itemName = RMCUtil.parseColors(newName, false);
+        }
+    }
+
+    public boolean hasItemName() {
+        return itemName != null;
+    }
+
+    public boolean checkItemName(ItemMeta meta) {
+        if (noMeta || noItemName) {
+            return !meta.hasItemName();
+        }
+
+        if (!hasItemName()) {
+            return true;
+        }
+
+        if (meta.hasItemName()) {
+            String nameToCheck = meta.getItemName();
+            if (itemName.startsWith("regex:")) {
+                try {
+                    Pattern pattern = Pattern.compile(itemName.substring("regex:".length()));
+                    return pattern.matcher(nameToCheck).matches();
+                } catch (PatternSyntaxException e) {
+                    return ErrorReporter.getInstance().error("Flag " + flagType + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
+                }
+            }
+
+            return itemName.equalsIgnoreCase(nameToCheck);
         }
 
         return false;
@@ -1144,16 +1191,35 @@ public class Conditions implements Cloneable {
             return false;
         }
 
-        if (!checkName(meta)) {
+        if (!checkDisplayName(meta)) {
             if (a == null) {
                 return false;
             }
 
             if (addReasons) {
-                if (hasName()) {
-                    a.addReason("flag.ingredientconditions.noname", failMessage, "{item}", ToolsItem.print(item), "{name}", name);
+                if (hasDisplayName()) {
+                    a.addReason("flag.ingredientconditions.noname", failMessage, "{item}", ToolsItem.print(item), "{name}", displayName);
                 } else {
                     a.addReason("flag.ingredientconditions.emptyname", failMessage, "{item}", ToolsItem.print(item));
+                }
+            }
+            ok = false;
+
+            if (failMessage != null) {
+                return false;
+            }
+        }
+
+        if (Version.has1_20_5Support() && !checkItemName(meta)) {
+            if (a == null) {
+                return false;
+            }
+
+            if (addReasons) {
+                if (hasItemName()) {
+                    a.addReason("flag.ingredientconditions.noitemname", failMessage, "{item}", ToolsItem.print(item), "{name}", itemName);
+                } else {
+                    a.addReason("flag.ingredientconditions.emptyitemname", failMessage, "{item}", ToolsItem.print(item));
                 }
             }
             ok = false;
@@ -1454,12 +1520,20 @@ public class Conditions implements Cloneable {
         this.noCustomModelData = noCustomModelData;
     }
 
-    public boolean isNoName() {
-        return noName;
+    public boolean isNoDisplayName() {
+        return noDisplayName;
     }
 
-    public void setNoName(boolean noName) {
-        this.noName = noName;
+    public void setNoDisplayName(boolean noDisplayName) {
+        this.noDisplayName = noDisplayName;
+    }
+
+    public boolean isNoItemName() {
+        return noItemName;
+    }
+
+    public void setNoItemName(boolean noItemName) {
+        this.noItemName = noItemName;
     }
 
     public boolean isNoLore() {
@@ -1777,13 +1851,19 @@ public class Conditions implements Cloneable {
                 setColor(dye.getColor(), null);
             }
         } else if (argLower.startsWith("!name") || argLower.startsWith("noname")) {
-            noName = true;
+            noDisplayName = true;
+        } else if (argLower.startsWith("!itemname") || argLower.startsWith("noitemname")) {
+            noItemName = true;
         } else if (argLower.startsWith("!localizedname") || argLower.startsWith("nolocalizedname")) {
             noLocalizedName = true;
         } else if (argLower.startsWith("name")) {
             value = arg.substring("name".length()); // preserve case for regex
 
-            setName(RMCUtil.trimExactQuotes(value));
+            setDisplayName(RMCUtil.trimExactQuotes(value));
+        } else if (argLower.startsWith("itemname")) {
+            value = arg.substring("itemname".length()); // preserve case for regex
+
+            setItemName(RMCUtil.trimExactQuotes(value));
         } else if (argLower.startsWith("localizedname")) {
             value = arg.substring("localizedname".length()); // preserve case for regex
 
@@ -1976,7 +2056,8 @@ public class Conditions implements Cloneable {
             }
         }
 
-        toHash += "name: " + name;
+        toHash += "name: " + displayName;
+        toHash += "itemname: " + itemName;
 
         toHash += "lores: ";
         for (String lore : lores) {
@@ -2019,7 +2100,8 @@ public class Conditions implements Cloneable {
         toHash += "customModelData: " + customModelData;
 
         toHash += "noMeta: " + noMeta;
-        toHash += "noName: " + noName;
+        toHash += "noName: " + noDisplayName;
+        toHash += "noItemName: " + noItemName;
         toHash += "noLore: " + noLore;
         toHash += "noEnchant: " + noEnchant;
         toHash += "noBookEnchant: " + noBookEnchant;

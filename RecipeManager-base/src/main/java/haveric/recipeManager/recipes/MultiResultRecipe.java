@@ -6,7 +6,7 @@ import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.flag.flags.any.FlagItemName;
+import haveric.recipeManager.flag.flags.any.FlagDisplayName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -216,8 +216,8 @@ public abstract class MultiResultRecipe extends BaseRecipe {
 
         s.append('\n').append(RMCChatColor.GRAY).append('=');
 
-        if (result.hasFlag(FlagType.ITEM_NAME)) {
-            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+        if (result.hasFlag(FlagType.DISPLAY_NAME)) {
+            FlagDisplayName flag = (FlagDisplayName)result.getFlag(FlagType.DISPLAY_NAME);
             s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getPrintName(), false));
         } else {
             s.append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null));

@@ -5,7 +5,7 @@ import haveric.recipeManager.Recipes;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.any.FlagItemName;
+import haveric.recipeManager.flag.flags.any.FlagDisplayName;
 import haveric.recipeManager.flag.flags.any.FlagModLevel;
 import haveric.recipeManager.flag.flags.any.FlagNeedLevel;
 import haveric.recipeManager.messages.Messages;
@@ -349,11 +349,11 @@ public class AnvilEvents extends BaseRecipeEvents {
 
 
         if (toRename) {
-            FlagItemName itemName = new FlagItemName();
-            itemName.setResultName(renameText);
+            FlagDisplayName displayName = new FlagDisplayName();
+            displayName.setResultName(renameText);
 
             for (ItemResult result : recipe.getResults()) {
-                result.addFlag(itemName);
+                result.addFlag(displayName);
             }
         }
 

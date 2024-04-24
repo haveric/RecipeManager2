@@ -1,34 +1,34 @@
 package haveric.recipeManager.flag.flags.any;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import org.bukkit.inventory.meta.ItemMeta;
 
-public class FlagItemNBT extends Flag {
+public class FlagDisplayName extends Flag {
 
     @Override
     public String getFlagType() {
-        return FlagType.ITEM_NBT;
+        return FlagType.DISPLAY_NAME;
     }
 
     @Override
     protected String[] getArguments() {
         return new String[] {
-            "{flag} <nbtRaw>",
-            "{flag} <nbtRaw> | display",
-            "{flag} <nbtRaw> | result", };
+            "{flag} <text>",
+            "{flag} <text> | display",
+            "{flag} <text> | result", };
     }
 
     @Override
     protected String[] getDescription() {
         return new String[] {
-            "Sets raw nbt data on the result.",
-            "  WARNING: This exists only to support features that may not exist in the Bukkit/Spigot API yet. Support is NOT GUARANTEED, especially across future versions.",
-            "    If you find you need to use this flag a lot, please consider creating a ticket about adding support for the features you are using. I will do my best to support what I can in better ways.",
-            "  WARNING: There is NO VALIDATION on <nbtRaw> values. Test all outputs carefully before adding to a live server.",
+            "Changes result's display name.",
             "",
-            "Format should include outer brackets: '{}'",
+            "Supports colors (e.g. <red>, <blue>, &4, &F, etc).",
             "",
             "You can also use these variables:",
             "  {player}         = crafter's name or '(nobody)' if not available",
@@ -46,6 +46,8 @@ public class FlagItemNBT extends Flag {
             "  {rand #1-#2, #3} = output a random number between #1 and #2, with decimal places of #3. Example: {rand 1.5-2.5, 2} will output a number from 1.50 to 2.50",
             "  {rand n}         = reuse a random output, where n is the nth {rand} in a recipe used excluding this format",
             "",
+            "Allows quotes to prevent spaces being trimmed.",
+            "",
             "Optional Arguments:",
             "  display          = only show on the displayed item when preparing to craft (only relevant to craft/combine recipes)",
             "  result           = only show on the result, but hide from the prepared result",
@@ -55,46 +57,56 @@ public class FlagItemNBT extends Flag {
     @Override
     protected String[] getExamples() {
         return new String[] {
-            "{flag} {display:{Name: '{\"text\":\"CUSTOM NAME\"}'}} // Basic example, but should use " + FlagType.DISPLAY_NAME + " instead.",
-            "{flag} {MMOITEMS_DURABILITY: {rand 50-100}d, MMOITEMS_MAX_DURABILITY: 67d, MMOITEMS_WILL_BREAK: 1b}", };
+            "{flag} <light_purple>Weird Item",
+            "{flag} <yellow>{player}'s Sword",
+            "{flag} \"  Extra space  \" // Quotes at the beginning and end will be removed, but spaces will be kept.", };
     }
 
-    private String displayNBT;
-    private String resultNBT;
 
-    public FlagItemNBT() {
+    private String displayName;
+    private String resultName;
+
+    public FlagDisplayName() {
     }
 
-    public FlagItemNBT(FlagItemNBT flag) {
+    public FlagDisplayName(FlagDisplayName flag) {
         super(flag);
-        displayNBT = flag.displayNBT;
-        resultNBT = flag.resultNBT;
+        displayName = flag.displayName;
+        resultName = flag.resultName;
     }
 
     @Override
-    public FlagItemNBT clone() {
-        return new FlagItemNBT((FlagItemNBT) super.clone());
+    public FlagDisplayName clone() {
+        return new FlagDisplayName((FlagDisplayName) super.clone());
     }
 
     @Override
     public boolean requiresRecipeManagerModification() {
-        return !displayNBT.equals(resultNBT) || Args.hasVariables(resultNBT);
+        return !displayName.equals(resultName) || Args.hasVariables(resultName);
     }
 
-    public String getDisplayNBT() {
-        return displayNBT;
+    public String getDisplayName() {
+        return displayName;
     }
 
-    public void setDisplayNBT(String nbt) {
-        displayNBT = nbt;
+    public void setDisplayName(String newName) {
+        displayName = newName;
     }
 
-    public String getResultNBT() {
-        return resultNBT;
+    public String getResultName() {
+        return resultName;
     }
 
-    public void setResultNBT(String nbt) {
-        resultNBT = nbt;
+    public void setResultName(String newName) {
+        resultName = newName;
+    }
+
+    public String getPrintName() {
+        if (displayName != null) {
+            return displayName;
+        } else {
+            return resultName;
+        }
     }
 
     @Override
@@ -102,25 +114,27 @@ public class FlagItemNBT extends Flag {
         super.onParse(value, fileName, lineNum, restrictedBit);
         // Match on single pipes '|', but not double '||'
         String[] args = value.split("(?<!\\|)\\|(?!\\|)");
-        String nbt = args[0];
+        String name = args[0];
 
         // Replace double pipes with single pipe: || -> |
-        nbt = nbt.replaceAll("\\|\\|", "|");
+        name = name.replaceAll("\\|\\|", "|");
+        name = RMCUtil.trimExactQuotes(name);
+        name = RMCUtil.parseColors(name, false);
 
         if (args.length > 1) {
             String display = args[1].trim().toLowerCase();
             if (display.equals("display")) {
-                displayNBT = nbt;
+                displayName = name;
             } else if (display.equals("result")) {
-                resultNBT = nbt;
+                resultName = name;
             } else {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid argument: " + args[1] + ". Defaulting to set nbt in both locations.");
-                displayNBT = nbt;
-                resultNBT = nbt;
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid argument: " + args[1] + RMCChatColor.RESET + ". Defaulting to set name in both locations.");
+                displayName = name;
+                resultName = name;
             }
         } else {
-            displayNBT = nbt;
-            resultNBT = nbt;
+            displayName = name;
+            resultName = name;
         }
 
         return true;
@@ -129,14 +143,37 @@ public class FlagItemNBT extends Flag {
     @Override
     public void onPrepare(Args a) {
         if (canAddMeta(a)) {
-            addNBTRaw(a, a.parseVariables(displayNBT));
+            String name;
+            if (displayName == null) {
+                name = null;
+            } else {
+                name = a.parseVariables(displayName, true);
+            }
+
+            setMetaName(a, name);
         }
     }
 
     @Override
     public void onCrafted(Args a) {
         if (canAddMeta(a)) {
-            addNBTRaw(a, a.parseVariables(resultNBT));
+            String name;
+            if (resultName == null) {
+                name = null;
+            } else {
+                name = a.parseVariables(resultName);
+            }
+
+            setMetaName(a, name);
+        }
+    }
+
+    private void setMetaName(Args a, String name) {
+        ItemMeta meta = a.result().getItemMeta();
+        if (meta != null) {
+            meta.setDisplayName(name);
+
+            a.result().setItemMeta(meta);
         }
     }
 
@@ -144,8 +181,8 @@ public class FlagItemNBT extends Flag {
     public int hashCode() {
         String toHash = "" + super.hashCode();
 
-        toHash += "displayNBT: " + displayNBT;
-        toHash += "resultNBT: " + resultNBT;
+        toHash += "displayName: " + displayName;
+        toHash += "resultName: " + resultName;
 
         return toHash.hashCode();
     }

@@ -5,7 +5,7 @@ import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.any.FlagItemName;
+import haveric.recipeManager.flag.flags.any.FlagDisplayName;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
@@ -20,7 +20,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mockStatic;
 
-public class FlagItemNameTest extends FlagBaseTest {
+public class FlagDisplayNameTest extends FlagBaseTest {
 
     @Test
     public void onRecipeParse() {
@@ -42,7 +42,7 @@ public class FlagItemNameTest extends FlagBaseTest {
 
                 Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).build();
 
-                FlagItemName flag = (FlagItemName) result.getFlag(FlagType.ITEM_NAME);
+                FlagDisplayName flag = (FlagDisplayName) result.getFlag(FlagType.DISPLAY_NAME);
 
                 flag.onPrepare(a);
 

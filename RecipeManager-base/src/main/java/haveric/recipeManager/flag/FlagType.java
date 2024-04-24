@@ -7,6 +7,7 @@ public class FlagType {
     public static final String BROADCAST = "@broadcast";
     public static final String COMMAND = "@command";
     public static final String COOLDOWN = "@cooldown";
+    public static final String DISPLAY_NAME = "@displayname";
     public static final String EXPLODE = "@explode";
     public static final String FOR_CHANCE = "@forchance";
     public static final String FOR_DELAY = "@fordelay";

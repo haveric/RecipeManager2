@@ -272,8 +272,8 @@ public class CombineRecipe extends BaseCombineRecipe {
                 if (!conditions.isEmpty()) {
                     ConditionsIngredient condition = conditions.get(0);
 
-                    if (condition.hasName()) {
-                        print = RMCChatColor.BLACK + condition.getName();
+                    if (condition.hasDisplayName()) {
+                        print = RMCChatColor.BLACK + condition.getDisplayName();
                     } else if (condition.hasLore()) {
                         print = RMCChatColor.BLACK + "" + RMCChatColor.ITALIC + condition.getLores().get(0);
                     }

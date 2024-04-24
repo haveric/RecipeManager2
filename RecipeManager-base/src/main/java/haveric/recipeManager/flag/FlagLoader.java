@@ -32,6 +32,7 @@ public class FlagLoader {
         loadFlag(FlagType.BROADCAST, new FlagBroadcast(), RECIPE_OR_RESULT, "announce", "msgall");
         loadFlag(FlagType.COMMAND, new FlagCommand(), RECIPE_OR_RESULT, "cmd", "commands");
         loadFlag(FlagType.COOLDOWN, new FlagCooldown(), RECIPE_OR_RESULT, "cooltime");
+        loadFlag(FlagType.DISPLAY_NAME, new FlagDisplayName(), ANY | FlagBit.NO_DELAY, "name");
         loadFlag(FlagType.EXPLODE, new FlagExplode(), RECIPE_OR_RESULT | FlagBit.NO_VALUE_REQUIRED, "explosion", "boom", "tnt");
         loadFlag(FlagType.FOR_CHANCE, new FlagForChance(), RECIPE_OR_RESULT, "bychance", "chance");
         loadFlag(FlagType.FOR_DELAY, new FlagForDelay(), RECIPE_OR_RESULT, "delay");
@@ -42,7 +43,9 @@ public class FlagLoader {
         loadFlag(FlagType.HEIGHT, new FlagHeight(), RECIPE_OR_RESULT | FlagBit.NO_DELAY, "depth");
         loadFlag(FlagType.HOLD_ITEM, new FlagHoldItem(), RECIPE_OR_RESULT | FlagBit.NO_DELAY, "hold");
         loadFlag(FlagType.ITEM_LORE, new FlagItemLore(), ANY | FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_DELAY, "lore", "itemdesc");
-        loadFlag(FlagType.ITEM_NAME, new FlagItemName(), ANY | FlagBit.NO_DELAY, "name", "displayname");
+        if (Version.has1_20_5Support()) {
+            loadFlag(FlagType.ITEM_NAME, new FlagItemName(), ANY | FlagBit.NO_DELAY);
+        }
         loadFlag(FlagType.ITEM_NBT, new FlagItemNBT(), ANY | FlagBit.NO_DELAY, "nbt");
         loadFlag(FlagType.INGREDIENT_CONDITION, new FlagIngredientCondition(), RECIPE_OR_RESULT | FlagBit.NO_DELAY, "ingrcondition", "ingrcond", "ifingredient", "ifingr");
         loadFlag(FlagType.INVENTORY, new FlagInventory(), RECIPE_OR_RESULT | FlagBit.NO_DELAY);

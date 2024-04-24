@@ -169,7 +169,7 @@ public class FlagIngredientConditionTest extends FlagBaseYamlTest {
                         } else if (resultType == Material.GRAVEL) {
                             List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIAMOND_SHOVEL));
                             ConditionsIngredient cond = conditions.get(0);
-                            assertEquals(RMCChatColor.COLOR_CHAR + "bHammer", cond.getName());
+                            assertEquals(RMCChatColor.COLOR_CHAR + "bHammer", cond.getDisplayName());
                             assertEquals(RMCChatColor.COLOR_CHAR + "cFoo", cond.getFailMessage());
 
                             a.clear();
@@ -177,7 +177,7 @@ public class FlagIngredientConditionTest extends FlagBaseYamlTest {
                         } else if (resultType == Material.COBBLESTONE) {
                             List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIRT));
                             ConditionsIngredient cond = conditions.get(0);
-                            assertEquals("One", cond.getName());
+                            assertEquals("One", cond.getDisplayName());
                             assertEquals("Two", cond.getLores().get(0));
                             assertEquals("Three", cond.getFailMessage());
 
@@ -189,7 +189,7 @@ public class FlagIngredientConditionTest extends FlagBaseYamlTest {
                         } else if (resultType == Material.STONE) {
                             List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIRT));
                             ConditionsIngredient cond = conditions.get(0);
-                            assertEquals("   One   ", cond.getName());
+                            assertEquals("   One   ", cond.getDisplayName());
                             assertEquals("   Two   ", cond.getLores().get(0));
                             assertEquals("   Three   ", cond.getFailMessage());
 
@@ -289,11 +289,11 @@ public class FlagIngredientConditionTest extends FlagBaseYamlTest {
                         } else if (resultType == Material.STONE_SHOVEL) {
                             List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.STONE_SHOVEL));
                             ConditionsIngredient cond = conditions.get(0);
-                            assertEquals("regex:foo", cond.getName());
+                            assertEquals("regex:foo", cond.getDisplayName());
                         } else if (resultType == Material.IRON_SHOVEL) {
                             List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.IRON_SHOVEL));
                             ConditionsIngredient cond = conditions.get(0);
-                            assertEquals("regex:foo|bar", cond.getName());
+                            assertEquals("regex:foo|bar", cond.getDisplayName());
                         }
                     }
                 }

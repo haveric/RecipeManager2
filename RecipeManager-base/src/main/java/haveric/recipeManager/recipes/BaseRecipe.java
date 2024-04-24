@@ -8,7 +8,7 @@ import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.*;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.any.FlagItemName;
+import haveric.recipeManager.flag.flags.any.FlagDisplayName;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -247,8 +247,8 @@ public abstract class BaseRecipe extends AbstractBaseRecipe implements Flaggable
     protected String getResultPrintName(ItemResult result) {
         String print;
 
-        if (result.hasFlag(FlagType.ITEM_NAME)) {
-            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+        if (result.hasFlag(FlagType.DISPLAY_NAME)) {
+            FlagDisplayName flag = (FlagDisplayName)result.getFlag(FlagType.DISPLAY_NAME);
             print = RMCUtil.parseColors(flag.getPrintName(), false);
         } else {
             print = ToolsItem.getName(result);

@@ -10,7 +10,7 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
-import haveric.recipeManager.flag.flags.any.FlagItemName;
+import haveric.recipeManager.flag.flags.any.FlagDisplayName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
@@ -145,8 +145,8 @@ public abstract class SingleResultRecipe extends BaseRecipe {
 
         s.append('\n').append(RMCChatColor.GRAY).append('=');
 
-        if (result.hasFlag(FlagType.ITEM_NAME)) {
-            FlagItemName flag = (FlagItemName)result.getFlag(FlagType.ITEM_NAME);
+        if (result.hasFlag(FlagType.DISPLAY_NAME)) {
+            FlagDisplayName flag = (FlagDisplayName)result.getFlag(FlagType.DISPLAY_NAME);
             s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getPrintName(), false));
         } else {
             s.append(ToolsItem.print(getResult(), RMCChatColor.DARK_GREEN, null));
@@ -167,8 +167,8 @@ public abstract class SingleResultRecipe extends BaseRecipe {
             if (!conditions.isEmpty()) {
                 ConditionsIngredient condition = conditions.get(0);
 
-                if (condition.hasName()) {
-                    print = RMCChatColor.BLACK + condition.getName();
+                if (condition.hasDisplayName()) {
+                    print = RMCChatColor.BLACK + condition.getDisplayName();
                 } else if (condition.hasLore()) {
                     print = RMCChatColor.BLACK + "" + RMCChatColor.ITALIC + condition.getLores().get(0);
                 }
