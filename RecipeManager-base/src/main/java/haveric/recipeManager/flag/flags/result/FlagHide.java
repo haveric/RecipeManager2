@@ -7,6 +7,7 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.tools.Supports;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -30,12 +31,12 @@ public class FlagHide extends Flag {
             "",
             "Replace '<arguments>' with the following arguments separated by | character.",
             "Arguments can be:",
-            "  attributes     = Hide attributes like Damage",
-            "  destroys       = Hide what the item can break/destroy",
-            "  enchants       = Hide enchants",
-            "  placedon       = Hide where this item can be placed on",
-            "  potioneffects  = Hide potion effects, book and firework information, map tooltips, patterns of banners, and enchantments of enchanted books",
-            "  unbreakable    = Hide the unbreakable state",
+            "  attributes         = Hide attributes like Damage",
+            "  destroys           = Hide what the item can break/destroy",
+            "  enchants           = Hide enchants",
+            "  placedon           = Hide where this item can be placed on",
+            "  additionaltooltip  = Hide potion effects, book and firework information, map tooltips, patterns of banners, and enchantments of enchanted books",
+            "  unbreakable        = Hide the unbreakable state",
         };
 
         if (Supports.itemFlagHideDye()) {
@@ -70,7 +71,7 @@ public class FlagHide extends Flag {
     private boolean destroys = false;
     private boolean enchants = false;
     private boolean placedon = false;
-    private boolean potioneffects = false;
+    private boolean additionaltooltip = false;
     private boolean unbreakable = false;
     private boolean dye = false;
     private boolean armortrim = false;
@@ -83,7 +84,7 @@ public class FlagHide extends Flag {
         destroys = flag.destroys;
         enchants = flag.enchants;
         placedon = flag.placedon;
-        potioneffects = flag.potioneffects;
+        additionaltooltip = flag.additionaltooltip;
         unbreakable = flag.unbreakable;
         dye = flag.dye;
         armortrim = flag.armortrim;
@@ -120,7 +121,11 @@ public class FlagHide extends Flag {
             } else if (arg.startsWith("placedon")) {
                 placedon = true;
             } else if (arg.startsWith("potioneffects")) {
-                potioneffects = true;
+                additionaltooltip = true;
+
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + "'s argument of `potioneffects` was renamed to `additionaltooltip`. It will continue to work for now, but you should rename it as soon as you can.");
+            } else if (arg.startsWith("additionaltooltip")) {
+                additionaltooltip = true;
             } else if (arg.startsWith("unbreakable")) {
                 unbreakable = true;
             } else if (arg.startsWith("dye")) {
@@ -132,7 +137,7 @@ public class FlagHide extends Flag {
                 destroys = true;
                 enchants = true;
                 placedon = true;
-                potioneffects = true;
+                additionaltooltip = true;
                 unbreakable = true;
                 dye = true;
                 armortrim = true;
@@ -168,8 +173,12 @@ public class FlagHide extends Flag {
                     meta.addItemFlags(ItemFlag.HIDE_PLACED_ON);
                 }
 
-                if (potioneffects) {
-                    meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                if (additionaltooltip) {
+                    if (Version.has1_20_5Support()) {
+                        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+                    } else {
+                        meta.addItemFlags(ItemFlag.valueOf("HIDE_POTION_EFFECTS"));
+                    }
                 }
 
                 if (unbreakable) {
@@ -197,7 +206,7 @@ public class FlagHide extends Flag {
         toHash += "destroys: " + destroys;
         toHash += "enchants: " + enchants;
         toHash += "placedon: " + placedon;
-        toHash += "potioneffects: " + potioneffects;
+        toHash += "additionaltooltip: " + additionaltooltip;
         toHash += "unbreakable: " + unbreakable;
         toHash += "dye: " + dye;
         toHash += "armortrim: " + armortrim;
