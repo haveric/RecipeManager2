@@ -7,10 +7,10 @@ import haveric.recipeManager.flag.conditions.condition.Condition;
 import haveric.recipeManager.flag.conditions.condition.ConditionBoolean;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class FlagItemUnbreakable extends Flag {
+public class FlagHideTooltip extends Flag {
     @Override
     public String getFlagType() {
-        return FlagType.ITEM_UNBREAKABLE;
+        return FlagType.HIDE_TOOLTIP;
     }
 
     @Override
@@ -22,40 +22,40 @@ public class FlagItemUnbreakable extends Flag {
     @Override
     protected String[] getDescription() {
         return new String[] {
-                "Makes the result unbreakable",
+                "Hides the result's tooltip",
                 "",
-                "Optionally, adding false will make the result breakable again", };
+                "Optionally, adding false will make the result show its tooltip again", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
-                "{flag} // Makes the result unbreakable",
-                "{flag} false // Remove the unbreakable status, allowing for the item to be destroyed", };
+                "{flag} // Hides the result's tooltip",
+                "{flag} false // Disable this flag, allowing the result to have a tooltip again", };
     }
 
-    private boolean unbreakable;
+    private boolean hideTooltip;
 
-    public FlagItemUnbreakable() {
-        unbreakable = true;
+    public FlagHideTooltip() {
+        hideTooltip = true;
     }
 
-    public FlagItemUnbreakable(FlagItemUnbreakable flag) {
+    public FlagHideTooltip(FlagHideTooltip flag) {
         super(flag);
-        unbreakable = flag.unbreakable;
+        hideTooltip = flag.hideTooltip;
     }
 
-    public void setUnbreakable(boolean isUnbreakable) {
-        unbreakable = isUnbreakable;
+    public void setHideTooltip(boolean isHideTooltip) {
+        hideTooltip = isHideTooltip;
     }
 
-    public boolean isUnbreakable() {
-        return unbreakable;
+    public boolean isHideTooltip() {
+        return hideTooltip;
     }
 
     @Override
-    public FlagItemUnbreakable clone() {
-        return new FlagItemUnbreakable((FlagItemUnbreakable) super.clone());
+    public FlagHideTooltip clone() {
+        return new FlagHideTooltip((FlagHideTooltip) super.clone());
     }
 
     @Override
@@ -67,9 +67,9 @@ public class FlagItemUnbreakable extends Flag {
     public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
         super.onParse(value, fileName, lineNum, restrictedBit);
         if (value != null && value.equalsIgnoreCase("false")) {
-            unbreakable = false;
+            hideTooltip = false;
         } else {
-            unbreakable = true;
+            hideTooltip = true;
         }
 
         return true;
@@ -85,7 +85,7 @@ public class FlagItemUnbreakable extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
             if (meta != null) {
-                meta.setUnbreakable(unbreakable);
+                meta.setHideTooltip(hideTooltip);
 
                 a.result().setItemMeta(meta);
             }
@@ -96,7 +96,7 @@ public class FlagItemUnbreakable extends Flag {
     public int hashCode() {
         String toHash = "" + super.hashCode();
 
-        toHash += "unbreakable: " + unbreakable;
+        toHash += "hideTooltip: " + hideTooltip;
 
         return toHash.hashCode();
     }
@@ -104,21 +104,21 @@ public class FlagItemUnbreakable extends Flag {
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
         Boolean condition = null;
-        if (argLower.startsWith("!unbreakable") || argLower.startsWith("nounbreakable")) {
+        if (argLower.startsWith("!hidetooltip") || argLower.startsWith("nohidetooltip")) {
             condition = false;
-        } else if (argLower.startsWith("unbreakable")) {
+        } else if (argLower.startsWith("hidetooltip")) {
             condition = true;
         }
 
         if (!noMeta && condition == null) {
             return null;
         } else {
-            return new ConditionBoolean("unbreakable", condition, (item, meta, hasValue, value) -> {
-                boolean isUnbreakable = meta.isUnbreakable();
+            return new ConditionBoolean("hidetooltip", condition, (item, meta, hasValue, value) -> {
+                boolean isHideTooltip = meta.isHideTooltip();
                 if (noMeta) {
-                    return !isUnbreakable;
+                    return !isHideTooltip;
                 } else {
-                    return !hasValue || isUnbreakable == value;
+                    return !hasValue || isHideTooltip == value;
                 }
             });
         }

@@ -116,6 +116,9 @@ public class FlagLoader {
         loadFlag(FlagType.FIREWORK_ITEM, new FlagFireworkItem(), APPLIED_TO_ITEM, "firework", "fireworkrocket");
         loadFlag(FlagType.FIREWORK_STAR_ITEM, new FlagFireworkStarItem(), APPLIED_TO_ITEM, "fireworkstar", "fireworkchargeitem", "fireworkcharge", "fireworkeffect");
         loadFlag(FlagType.HIDE, new FlagHide(), APPLIED_TO_ITEM);
+        if (Version.has1_20_5Support()) {
+            loadFlag(FlagType.HIDE_TOOLTIP, new FlagHideTooltip(), APPLIED_TO_ITEM | FlagBit.NO_FALSE | FlagBit.NO_VALUE_REQUIRED);
+        }
         if (Version.has1_13BasicSupport()) {
             loadFlag(FlagType.ITEM_ATTRIBUTE, new FlagItemAttribute(), APPLIED_TO_ITEM, "attribute");
         }

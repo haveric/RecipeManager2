@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Perms;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.flag.conditions.condition.Condition;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
@@ -384,5 +385,9 @@ public abstract class Flag implements Cloneable {
 
     protected void addNBTRaw(Args a, String nbtRaw) {
         Bukkit.getUnsafe().modifyItemStack(a.result(), nbtRaw);
+    }
+
+    public Condition parseCondition(String argLower, boolean noMeta) {
+        return null;
     }
 }

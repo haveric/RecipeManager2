@@ -5,8 +5,11 @@ import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.common.util.RMCUtil;
+import haveric.recipeManager.flag.FlagDescriptor;
+import haveric.recipeManager.flag.FlagFactory;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.flag.conditions.condition.Condition;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -45,7 +48,6 @@ public class Conditions implements Cloneable {
     private List<String> lores = new ArrayList<>();
     private Color minColor;
     private Color maxColor;
-    private Boolean unbreakable;
     private PotionType potionType;
     private Map<PotionEffectType, ConditionPotionEffect> potionEffectConditions = new HashMap<>();
     private Map<PotionEffectType, ConditionPotionEffect> suspiciousStewConditions = new HashMap<>();
@@ -66,6 +68,8 @@ public class Conditions implements Cloneable {
 
     private boolean allSet = false;
 
+    Map<String, Condition> conditions = new HashMap<>();
+
     // TODO mark
     // private boolean extinctRecipeBook;
     // private String recipeBook;
@@ -76,6 +80,11 @@ public class Conditions implements Cloneable {
 
     public Conditions(Conditions original) {
         sourceLineNum = original.sourceLineNum;
+
+        for (Entry<String, Condition> entry : original.conditions.entrySet()) {
+            Condition condition = entry.getValue();
+            condition.copy(original.conditions.get(entry.getKey()));
+        }
 
         flagType = original.flagType;
         ingredient = original.ingredient.clone();
@@ -106,7 +115,6 @@ public class Conditions implements Cloneable {
 
         minColor = original.minColor;
         maxColor = original.maxColor;
-        unbreakable = original.unbreakable;
 
         potionType = original.potionType;
         potionEffectConditions.putAll(original.potionEffectConditions);
@@ -132,6 +140,13 @@ public class Conditions implements Cloneable {
     @Override
     public Conditions clone() {
         return new Conditions(this);
+    }
+
+    public Map<String, Condition> getConditions() {
+        return conditions;
+    }
+    public void addCondition(Condition condition) {
+        conditions.put(condition.getName(), condition);
     }
 
     public void setIngredient(ItemStack newIngredient) {
@@ -1073,26 +1088,6 @@ public class Conditions implements Cloneable {
         return meta.getSpawnedType().equals(spawnEggEntityType);
     }
 
-    public Boolean getUnbreakable() {
-        return unbreakable;
-    }
-
-    public void setUnbreakable(Boolean newUnbreakable) {
-        unbreakable = newUnbreakable;
-    }
-
-    public boolean hasUnbreakable() {
-        return unbreakable != null;
-    }
-
-    public boolean checkUnbreakable(boolean unbreakableToCheck) {
-        if (noMeta) {
-            return !unbreakableToCheck;
-        } else {
-            return !hasUnbreakable() || unbreakable == unbreakableToCheck;
-        }
-    }
-
     public boolean hasPotionType() {
         return potionType != null;
     }
@@ -1450,22 +1445,20 @@ public class Conditions implements Cloneable {
             }
         }
 
-        if (!checkUnbreakable(meta.isUnbreakable())) {
-            if (a == null) {
-                return false;
-            }
-
-            if (addReasons) {
-                if (hasUnbreakable() && unbreakable) {
-                    a.addReason("flag.ingredientconditions.nounbreakable", failMessage, "{item}", ToolsItem.print(item));
-                } else {
-                    a.addReason("flag.ingredientconditions.unbreakable", failMessage, "{item}", ToolsItem.print(item));
+        for (Condition condition : conditions.values()) {
+            if (!condition.check(item, meta)) {
+                if (a == null) {
+                    return false;
                 }
-            }
-            ok = false;
 
-            if (failMessage != null) {
-                return false;
+                if (addReasons) {
+                    condition.addReasons(a, item, meta, failMessage);
+                }
+                ok = false;
+
+                if (failMessage != null) {
+                    return false;
+                }
             }
         }
 
@@ -1577,6 +1570,26 @@ public class Conditions implements Cloneable {
         arg = arg.replaceAll("\\|\\|", "|");
 
         String argLower = arg.toLowerCase();
+
+        boolean onlyParseFlags = false;
+        if (argLower.startsWith("!meta") || argLower.startsWith("nometa")) {
+            noMeta = true;
+            onlyParseFlags = true;
+        }
+
+        for (FlagDescriptor flagDescriptor : FlagFactory.getInstance().getFlags().values()) {
+            Condition condition = flagDescriptor.getFlag().parseCondition(argLower, noMeta);
+
+            if (condition != null) {
+                addCondition(condition);
+                onlyParseFlags = true;
+            }
+        }
+
+        if (onlyParseFlags) {
+            return;
+        }
+
         String value;
         if (argLower.startsWith("data")) {
             if (ingredient.getDurability() != RMCVanilla.DATA_WILDCARD) {
@@ -1874,12 +1887,6 @@ public class Conditions implements Cloneable {
             value = arg.substring("lore".length()); // preserve case for regex
 
             addLore(RMCUtil.trimExactQuotes(value));
-        } else if (argLower.startsWith("!unbreakable") || argLower.startsWith("nounbreakable")) {
-            unbreakable = false;
-        } else if (argLower.startsWith("unbreakable")) {
-            unbreakable = true;
-        } else if (argLower.startsWith("!meta") || argLower.startsWith("nometa")) {
-            noMeta = true;
         } else if (argLower.startsWith("failmsg")) {
             value = arg.substring("failmsg".length()); // preserve case because it's a message
 
@@ -2021,6 +2028,10 @@ public class Conditions implements Cloneable {
     public int hashCode() {
         String toHash = "";
 
+        for (Condition condition : conditions.values()) {
+            toHash += condition.getHashString();
+        }
+
         toHash += "flagType: " + flagType;
         if (ingredient != null) {
             toHash += "ingredient: " + ingredient.hashCode();
@@ -2069,9 +2080,6 @@ public class Conditions implements Cloneable {
         }
         if (maxColor != null) {
             toHash += "maxColor: " + maxColor.hashCode();
-        }
-        if (hasUnbreakable()) {
-            toHash += "unbreakable: " + unbreakable.toString();
         }
 
         if (hasPotionType()) {

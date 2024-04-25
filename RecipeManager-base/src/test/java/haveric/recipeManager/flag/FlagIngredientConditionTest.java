@@ -6,6 +6,7 @@ import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
+import haveric.recipeManager.flag.conditions.condition.ConditionBoolean;
 import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.TestMessageSender;
@@ -18,7 +19,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.CraftItemEvent;
-import org.bukkit.inventory.*;
+import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -201,11 +205,13 @@ public class FlagIngredientConditionTest extends FlagBaseYamlTest {
                         } else if (resultType == Material.WOODEN_SWORD) {
                             List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.IRON_SWORD));
                             ConditionsIngredient cond = conditions.get(0);
-                            assertNull(cond.getUnbreakable());
+                            assertFalse(cond.getConditions().containsKey("unbreakable"));
                         } else if (resultType == Material.IRON_SWORD) {
                             List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.IRON_SWORD));
                             ConditionsIngredient cond = conditions.get(0);
-                            assertTrue(cond.getUnbreakable());
+                            assertTrue(cond.getConditions().containsKey("unbreakable"));
+                            ConditionBoolean condition = (ConditionBoolean) cond.getConditions().get("unbreakable");
+                            assertTrue(condition.getValue());
 
                             a.clear();
                             assertTrue(flag.checkIngredientConditions(unbreakableSword, a));
@@ -216,7 +222,9 @@ public class FlagIngredientConditionTest extends FlagBaseYamlTest {
                         } else if (resultType == Material.GOLDEN_SWORD) {
                             List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.IRON_SWORD));
                             ConditionsIngredient cond = conditions.get(0);
-                            assertFalse(cond.getUnbreakable());
+                            assertTrue(cond.getConditions().containsKey("unbreakable"));
+                            ConditionBoolean condition = (ConditionBoolean) cond.getConditions().get("unbreakable");
+                            assertFalse(condition.getValue());
 
                             a.clear();
                             assertFalse(flag.checkIngredientConditions(unbreakableSword, a));
@@ -226,7 +234,9 @@ public class FlagIngredientConditionTest extends FlagBaseYamlTest {
                         } else if (resultType == Material.DIAMOND_SWORD) {
                             List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.IRON_SWORD));
                             ConditionsIngredient cond = conditions.get(0);
-                            assertNull(cond.getUnbreakable());
+                            assertTrue(cond.getConditions().containsKey("unbreakable"));
+                            ConditionBoolean condition = (ConditionBoolean) cond.getConditions().get("unbreakable");
+                            assertNull(condition.getValue());
                             assertTrue(cond.isNoMeta());
 
                             a.clear();
