@@ -64,6 +64,7 @@ public class FlagType {
     public static final String ENCHANTED_BOOK = "@enchantedbook";
     public static final String ENCHANT_ITEM = "@enchantitem";
     public static final String ENCHANTMENT_GLINT_OVERRIDE = "@enchantmentglintoverride";
+    public static final String FIRE_RESISTANT = "@fireresistant";
     public static final String FIREWORK_ITEM = "@fireworkitem";
     public static final String FIREWORK_STAR_ITEM = "@fireworkstaritem";
     public static final String GET_RECIPE_BOOK = "@getrecipebook";

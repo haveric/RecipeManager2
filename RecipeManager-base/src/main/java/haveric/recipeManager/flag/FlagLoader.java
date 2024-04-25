@@ -115,6 +115,7 @@ public class FlagLoader {
         loadFlag(FlagType.ENCHANT_ITEM, new FlagEnchantItem(), APPLIED_TO_ITEM, "enchant", "enchantment");
         if (Version.has1_20_5Support()) {
             loadFlag(FlagType.ENCHANTMENT_GLINT_OVERRIDE, new FlagEnchantmentGlintOverride(), APPLIED_TO_ITEM, "enchantglintoverride", "enchantmentglint", "enchantglint", "glint");
+            loadFlag(FlagType.FIRE_RESISTANT, new FlagFireResistant(), APPLIED_TO_ITEM, "fireimmune");
         }
         loadFlag(FlagType.FIREWORK_ITEM, new FlagFireworkItem(), APPLIED_TO_ITEM, "firework", "fireworkrocket");
         loadFlag(FlagType.FIREWORK_STAR_ITEM, new FlagFireworkStarItem(), APPLIED_TO_ITEM, "fireworkstar", "fireworkchargeitem", "fireworkcharge", "fireworkeffect");
