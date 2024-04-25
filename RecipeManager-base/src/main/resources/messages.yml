@@ -52,6 +52,8 @@ flag:
     nounbreakable: "<yellow>{item}<red> needs to not be unbreakable"
     hidetooltip: "<yellow>{item}<red> needs to have a hidden tooltip"
     nohidetooltip: "<yellow>{item}<red> needs to not have a hidden tooltip"
+    enchantmentglint: "<yellow>{item}<red> needs to have an enchantment glint override"
+    noenchantmentglint: "<yellow>{item}<red> needs to not have an enchantment glint override"
   inventory: "<red> Need inventory: {inventory}"
   lightlevel: <red>Need to be in <yellow>{light}<red> levels of <yellow>{type}<red>.
   modexp:

@@ -15,6 +15,7 @@ This file will be automatically overwritten when a new version is installed.
 * NEW FLAG: 1.20.5+: `@ItemName`: Sets the item's name
     * Item name differs from display name in that it is cannot be edited by an anvil, is not styled with italics, and does not show labels.
 * NEW FLAG: 1.20.5+: `@HideTooltip`: Hides the result's tooltip
+* NEW FLAG: 1.20.5+: `@EnchantmentGlintOverride`: Makes the result glint, even without enchantments
 * FIX: 1.16+: `@Summon`: Add `strider` as allowed saddle argument
 
 ### v2.30.0
