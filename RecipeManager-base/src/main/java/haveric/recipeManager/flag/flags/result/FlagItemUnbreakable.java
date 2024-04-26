@@ -103,22 +103,23 @@ public class FlagItemUnbreakable extends Flag {
 
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
-        Boolean condition = null;
+        Boolean value = null;
         if (argLower.startsWith("!unbreakable") || argLower.startsWith("nounbreakable")) {
-            condition = false;
+            value = false;
         } else if (argLower.startsWith("unbreakable")) {
-            condition = true;
+            value = true;
         }
 
-        if (!noMeta && condition == null) {
+        if (!noMeta && value == null) {
             return null;
         } else {
-            return new ConditionBoolean("unbreakable", condition, (item, meta, hasValue, value) -> {
+            return new ConditionBoolean("unbreakable", value, (item, meta, condition) -> {
+                ConditionBoolean conditionBoolean = (ConditionBoolean) condition;
                 boolean isUnbreakable = meta.isUnbreakable();
                 if (noMeta) {
                     return !isUnbreakable;
                 } else {
-                    return !hasValue || isUnbreakable == value;
+                    return !conditionBoolean.hasValue() || isUnbreakable == conditionBoolean.getValue();
                 }
             });
         }

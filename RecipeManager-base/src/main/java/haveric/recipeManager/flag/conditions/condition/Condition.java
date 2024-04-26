@@ -15,6 +15,7 @@ public abstract class Condition {
         return this.name;
     }
 
+    public abstract boolean hasValue();
     public abstract void copy(Condition condition);
     public abstract boolean check(ItemStack item, ItemMeta meta);
     public abstract String getHashString();

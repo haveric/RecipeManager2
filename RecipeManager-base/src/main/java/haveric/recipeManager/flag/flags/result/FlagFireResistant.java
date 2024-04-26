@@ -103,22 +103,23 @@ public class FlagFireResistant extends Flag {
 
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
-        Boolean condition = null;
+        Boolean value = null;
         if (argLower.startsWith("!fireresistant") || argLower.startsWith("nofireresistant")) {
-            condition = false;
+            value = false;
         } else if (argLower.startsWith("fireresistant")) {
-            condition = true;
+            value = true;
         }
 
-        if (!noMeta && condition == null) {
+        if (!noMeta && value == null) {
             return null;
         } else {
-            return new ConditionBoolean("fireresistant", condition, (item, meta, hasValue, value) -> {
+            return new ConditionBoolean("fireresistant", value, (item, meta, condition) -> {
+                ConditionBoolean conditionBoolean = (ConditionBoolean) condition;
                 boolean isFireResistant = meta.isFireResistant();
                 if (noMeta) {
                     return !isFireResistant;
                 } else {
-                    return !hasValue || isFireResistant == value;
+                    return !conditionBoolean.hasValue() || isFireResistant == conditionBoolean.getValue();
                 }
             });
         }

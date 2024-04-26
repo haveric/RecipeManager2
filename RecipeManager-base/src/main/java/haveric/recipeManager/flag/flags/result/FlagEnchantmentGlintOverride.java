@@ -103,22 +103,23 @@ public class FlagEnchantmentGlintOverride extends Flag {
 
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
-        Boolean condition = null;
+        Boolean value = null;
         if (argLower.startsWith("!enchantmentglint") || argLower.startsWith("noenchantmentglint")) {
-            condition = false;
+            value = false;
         } else if (argLower.startsWith("enchantmentglint")) {
-            condition = true;
+            value = true;
         }
 
-        if (!noMeta && condition == null) {
+        if (!noMeta && value == null) {
             return null;
         } else {
-            return new ConditionBoolean("enchantmentglint", condition, (item, meta, hasValue, value) -> {
+            return new ConditionBoolean("enchantmentglint", value, (item, meta, condition) -> {
+                ConditionBoolean conditionBoolean = (ConditionBoolean) condition;
                 boolean hasGlintOverride = meta.hasEnchantmentGlintOverride();
                 if (noMeta) {
                     return !hasGlintOverride;
                 } else {
-                    return !hasValue || hasGlintOverride == value;
+                    return !conditionBoolean.hasValue() || hasGlintOverride == conditionBoolean.getValue();
                 }
             });
         }

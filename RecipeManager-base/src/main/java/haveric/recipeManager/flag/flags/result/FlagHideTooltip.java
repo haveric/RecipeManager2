@@ -103,22 +103,23 @@ public class FlagHideTooltip extends Flag {
 
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
-        Boolean condition = null;
+        Boolean value = null;
         if (argLower.startsWith("!hidetooltip") || argLower.startsWith("nohidetooltip")) {
-            condition = false;
+            value = false;
         } else if (argLower.startsWith("hidetooltip")) {
-            condition = true;
+            value = true;
         }
 
-        if (!noMeta && condition == null) {
+        if (!noMeta && value == null) {
             return null;
         } else {
-            return new ConditionBoolean("hidetooltip", condition, (item, meta, hasValue, value) -> {
+            return new ConditionBoolean("hidetooltip", value, (item, meta, condition) -> {
+                ConditionBoolean conditionBoolean = (ConditionBoolean) condition;
                 boolean isHideTooltip = meta.isHideTooltip();
                 if (noMeta) {
                     return !isHideTooltip;
                 } else {
-                    return !hasValue || isHideTooltip == value;
+                    return !conditionBoolean.hasValue() || isHideTooltip == conditionBoolean.getValue();
                 }
             });
         }
