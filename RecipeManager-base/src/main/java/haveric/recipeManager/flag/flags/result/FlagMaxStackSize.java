@@ -8,11 +8,11 @@ import haveric.recipeManager.flag.conditions.condition.Condition;
 import haveric.recipeManager.flag.conditions.condition.ConditionInteger;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class FlagCustomModelData extends Flag {
+public class FlagMaxStackSize extends Flag {
 
     @Override
     public String getFlagType() {
-        return FlagType.CUSTOM_MODEL_DATA;
+        return FlagType.MAX_STACK_SIZE;
     }
 
     @Override
@@ -24,31 +24,29 @@ public class FlagCustomModelData extends Flag {
     @Override
     protected String[] getDescription() {
         return new String[] {
-            "Changes result's custom model data.",
-            "Used with custom datapacks", };
+            "Changes result's stack size (from 1 to 99)", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
-            "{flag} 7",
-            "{flag} 1234567", };
+            "{flag} 99", };
     }
 
 
-    private Integer customModelData;
+    private Integer maxStackSize = null;
 
-    public FlagCustomModelData() {
+    public FlagMaxStackSize() {
     }
 
-    public FlagCustomModelData(FlagCustomModelData flag) {
+    public FlagMaxStackSize(FlagMaxStackSize flag) {
         super(flag);
-        customModelData = flag.customModelData;
+        maxStackSize = flag.maxStackSize;
     }
 
     @Override
-    public FlagCustomModelData clone() {
-        return new FlagCustomModelData((FlagCustomModelData) super.clone());
+    public FlagMaxStackSize clone() {
+        return new FlagMaxStackSize((FlagMaxStackSize) super.clone());
     }
 
     @Override
@@ -56,19 +54,24 @@ public class FlagCustomModelData extends Flag {
         return false;
     }
 
-    public int getCustomModelData() {
-        return customModelData;
+    public int getStackSize() {
+        return maxStackSize;
     }
 
-    public void setCustomModelData(int newData) {
-        customModelData = newData;
+    public void setStackSize(int newStackSize) {
+        maxStackSize = newStackSize;
     }
 
     @Override
     public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
         super.onParse(value, fileName, lineNum, restrictedBit);
         try {
-            customModelData = Integer.parseInt(value);
+            maxStackSize = Integer.parseInt(value);
+
+            if (maxStackSize < 1 || maxStackSize > 99) {
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid stack size: " + value, "Stack size is limited from 1 - 99.");
+                return false;
+            }
         } catch(NumberFormatException e) {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has invalid number: " + value);
             return false;
@@ -86,8 +89,9 @@ public class FlagCustomModelData extends Flag {
     public void onCrafted(Args a) {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
-            if (meta != null && customModelData != null) {
-                meta.setCustomModelData(customModelData);
+            if (meta != null && maxStackSize != null) {
+                meta.setMaxStackSize(maxStackSize);
+
                 a.result().setItemMeta(meta);
             }
         }
@@ -97,7 +101,7 @@ public class FlagCustomModelData extends Flag {
     public int hashCode() {
         String toHash = "" + super.hashCode();
 
-        toHash += "customModelData: " + customModelData;
+        toHash += "maxStackSize: " + maxStackSize;
 
         return toHash.hashCode();
     }
@@ -105,15 +109,15 @@ public class FlagCustomModelData extends Flag {
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
         Integer value = null;
-        if (argLower.startsWith("!custommodeldata") || argLower.startsWith("nocustommodeldata")) {
+        if (argLower.startsWith("!maxstacksize") || argLower.startsWith("nomaxstacksize")) {
             value = Integer.MIN_VALUE;
-        } else if (argLower.startsWith("custommodeldata")) {
-            String argTrimmed = argLower.substring("custommodeldata".length()).trim();
+        } else if (argLower.startsWith("maxstacksize")) {
+            String argTrimmed = argLower.substring("maxstacksize".length()).trim();
 
             try {
                 value = Integer.parseInt(argTrimmed);
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'custommodeldata' argument with invalid number: " + value);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'maxstacksize' argument with invalid number: " + value);
             }
         }
 
@@ -121,18 +125,18 @@ public class FlagCustomModelData extends Flag {
             return null;
         } else {
             Integer finalValue = value;
-            return new ConditionInteger("custommodeldata", finalValue, (item, meta, condition) -> {
+            return new ConditionInteger("maxstacksize", finalValue, (item, meta, condition) -> {
                 ConditionInteger conditionInteger = (ConditionInteger) condition;
                 if (noMeta || finalValue == Integer.MIN_VALUE) {
-                    return !meta.hasCustomModelData();
+                    return !meta.hasMaxStackSize();
                 }
 
                 if (condition.hasValue()) {
                     return true;
                 }
 
-                if (meta.hasCustomModelData()) {
-                    return !conditionInteger.hasValue() || meta.getCustomModelData() == conditionInteger.getValue();
+                if (meta.hasMaxStackSize()) {
+                    return !conditionInteger.hasValue() || meta.getMaxStackSize() == conditionInteger.getValue();
                 }
 
                 return false;

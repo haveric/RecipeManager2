@@ -18,7 +18,7 @@ public class ConditionInteger extends Condition {
 
     @Override
     public boolean hasValue() {
-        return value != null;
+        return value != null && value != Integer.MIN_VALUE;
     }
 
     public Integer getValue() {

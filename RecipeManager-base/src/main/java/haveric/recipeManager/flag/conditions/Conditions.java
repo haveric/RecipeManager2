@@ -54,7 +54,6 @@ public class Conditions implements Cloneable {
     private Map<PatternType, DyeColor> bannerPatterns = new EnumMap<>(PatternType.class);
     private EntityType spawnEggEntityType;
     private String localizedName;
-    private int customModelData = Integer.MIN_VALUE;
 
     private boolean noMeta = false;
     private boolean noDisplayName = false;
@@ -64,7 +63,6 @@ public class Conditions implements Cloneable {
     private boolean noBookEnchant = false;
     private boolean noColor = false;
     private boolean noLocalizedName = false;
-    private boolean noCustomModelData = false;
 
     private boolean allSet = false;
 
@@ -122,7 +120,6 @@ public class Conditions implements Cloneable {
         bannerPatterns.putAll(original.bannerPatterns);
         spawnEggEntityType = original.spawnEggEntityType;
         localizedName = original.localizedName;
-        customModelData = original.customModelData;
 
         noMeta = original.noMeta;
         noDisplayName = original.noDisplayName;
@@ -132,7 +129,6 @@ public class Conditions implements Cloneable {
         noBookEnchant = original.noBookEnchant;
         noColor = original.noColor;
         noLocalizedName = original.noLocalizedName;
-        noCustomModelData = original.noCustomModelData;
 
         allSet = original.allSet;
     }
@@ -370,34 +366,6 @@ public class Conditions implements Cloneable {
 
     public boolean checkAmount(int amountToCheck) {
         return amountToCheck >= amount;
-    }
-
-    public int getCustomModelData() {
-        return customModelData;
-    }
-
-    public void setCustomModelData(int newData) {
-        customModelData = newData;
-    }
-
-    public boolean hasCustomModelData() {
-        return customModelData > Integer.MIN_VALUE;
-    }
-
-    public boolean checkCustomModelData(ItemMeta meta) {
-        if (noMeta || noCustomModelData) {
-            return !meta.hasCustomModelData();
-        }
-
-        if (!hasCustomModelData()) {
-            return true;
-        }
-
-        if (meta.hasCustomModelData()) {
-            return meta.getCustomModelData() == customModelData;
-        }
-
-        return false;
     }
 
     /**
@@ -1243,27 +1211,6 @@ public class Conditions implements Cloneable {
             }
         }
 
-        if (Version.has1_14Support()) {
-            if (!checkCustomModelData(meta)) {
-                if (a == null) {
-                    return false;
-                }
-
-                if (addReasons) {
-                    if (hasCustomModelData()) {
-                        a.addReason("flag.ingredientconditions.nocustommodeldata", failMessage, "{item}", ToolsItem.print(item), "{data}", customModelData);
-                    } else {
-                        a.addReason("flag.ingredientconditions.emptycustommodeldata", failMessage, "{item}", ToolsItem.print(item));
-                    }
-                }
-                ok = false;
-
-                if (failMessage != null) {
-                    return false;
-                }
-            }
-        }
-
         if (!checkLore(meta.getLore())) {
             if (a == null) {
                 return false;
@@ -1505,14 +1452,6 @@ public class Conditions implements Cloneable {
         return noLocalizedName;
     }
 
-    public boolean isNoCustomModelData() {
-        return noCustomModelData;
-    }
-
-    public void setNoCustomModelData(boolean noCustomModelData) {
-        this.noCustomModelData = noCustomModelData;
-    }
-
     public boolean isNoDisplayName() {
         return noDisplayName;
     }
@@ -1677,16 +1616,6 @@ public class Conditions implements Cloneable {
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'amount' argument with invalid number: " + value);
             }
-        } else if (argLower.startsWith("custommodeldata")) {
-            value = arg.substring("custommodeldata".length()).trim();
-
-            try {
-                customModelData = Integer.parseInt(value);
-            } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'custommodeldata' argument with invalid number: " + value);
-            }
-        } else if (argLower.startsWith("!custommodeldata") || argLower.startsWith("nocustommodeldata")) {
-            noCustomModelData = true;
         } else if (argLower.startsWith("!enchant") || argLower.startsWith("noenchant")) {
             noEnchant = true;
         } else if (argLower.startsWith("enchant")) {
@@ -2105,7 +2034,6 @@ public class Conditions implements Cloneable {
             toHash += "spawnEggEntityType: " + spawnEggEntityType.toString();
         }
         toHash += "localizedName: " + localizedName;
-        toHash += "customModelData: " + customModelData;
 
         toHash += "noMeta: " + noMeta;
         toHash += "noName: " + noDisplayName;
@@ -2115,7 +2043,6 @@ public class Conditions implements Cloneable {
         toHash += "noBookEnchant: " + noBookEnchant;
         toHash += "noColor: " + noColor;
         toHash += "noLocalizedName: " + noLocalizedName;
-        toHash += "noCustomModelData: " + noCustomModelData;
         toHash += "allSet: " + allSet;
 
         return toHash.hashCode();
