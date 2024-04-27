@@ -5,12 +5,11 @@ import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-public class ConditionBoolean extends Condition {
-    private Boolean value;
+public class ConditionString extends Condition {
+    private String value;
 
-    public ConditionBoolean(String name, Boolean value, CheckCallback checkCallback) {
+    public ConditionString(String name, String value, CheckCallback checkCallback) {
         super(name, checkCallback);
-
         this.value = value;
     }
 
@@ -19,23 +18,23 @@ public class ConditionBoolean extends Condition {
         return value != null;
     }
 
-    public Boolean getValue() {
+    public String getValue() {
         return value;
     }
 
     @Override
     public void copy(Condition condition) {
-        if (condition instanceof ConditionBoolean) {
-            value = ((ConditionBoolean) condition).value;
+        if (condition instanceof ConditionString) {
+            value = ((ConditionString) condition).value;
         }
     }
 
     @Override
     public void addReasons(Args a, ItemStack item, ItemMeta meta, String failMessage) {
-        if (hasValue() && value) {
-            a.addReason("flag.ingredientconditions.no" + name, failMessage, "{item}", ToolsItem.print(item));
+        if (hasValue()) {
+            a.addReason("flag.ingredientconditions.no" + name, failMessage, "{item}", ToolsItem.print(item), "{data}", value);
         } else {
-            a.addReason("flag.ingredientconditions." + name, failMessage, "{item}", ToolsItem.print(item));
+            a.addReason("flag.ingredientconditions.empty" + name, failMessage, "{item}", ToolsItem.print(item));
         }
     }
 

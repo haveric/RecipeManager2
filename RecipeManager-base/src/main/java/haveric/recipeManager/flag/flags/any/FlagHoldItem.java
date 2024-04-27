@@ -16,6 +16,7 @@ import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.DyeColor;
+import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -155,10 +156,14 @@ public class FlagHoldItem extends Flag {
             "  maxstacksize = Ingredient must have a custom max stack size",
             "  nomaxstacksize or !maxstacksize = Ingredient must not have a custom max stack size",
             "",
+            "  rarity <rarity> = Ingredient must have a specific rarity",
+            "    Rarity values: " + RMCUtil.collectionToString(Arrays.asList(ItemRarity.values())).toLowerCase(),
+            "  norarity or !rarity = Ingredient must not have a rarity",
+            "",
             "  nometa or !meta",
-            "    Ingredient must have no metadata (enchants, bookenchants, name, itemname, lore, color, unbreakable, hidetooltip, enchantmentglint, fireresistant, localizedname, custommodeldata, maxstacksize)",
-            "    Overrides enchant, name, itemname, lore, color, unbreakable, hidetooltip, enchantmentglint, fireresistant, localizedname, custommodeldata, maxstacksize conditions if set",
-            "    Equivalent to noenchant | nobookenchant | noname | noitemname | nolore | nocolor | nounbreakable | nohidetooltip | noenchantmentglint | nofireresistant | nolocalizedname | nocustommodeldata | nomaxstacksize",
+            "    Ingredient must have no metadata (enchants, bookenchants, name, itemname, lore, color, unbreakable, hidetooltip, enchantmentglint, fireresistant, localizedname, custommodeldata, maxstacksize, rarity)",
+            "    Overrides enchant, name, itemname, lore, color, unbreakable, hidetooltip, enchantmentglint, fireresistant, localizedname, custommodeldata, maxstacksize, rarity conditions if set",
+            "    Equivalent to noenchant | nobookenchant | noname | noitemname | nolore | nocolor | nounbreakable | nohidetooltip | noenchantmentglint | nofireresistant | nolocalizedname | nocustommodeldata | nomaxstacksize | norarity",
             "",
             "  potion <condition>, [...]",
             "    type &lt;potiontype&gt;      = Type of potion, see " + Files.getNameIndexHashLink("potiontype"),

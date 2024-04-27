@@ -5,10 +5,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public abstract class Condition {
+    protected CheckCallback checkCallback;
     protected String name;
 
-    public Condition(String name) {
+    public Condition(String name, CheckCallback checkCallback) {
         this.name = name;
+        this.checkCallback = checkCallback;
     }
 
     public String getName() {
@@ -17,8 +19,10 @@ public abstract class Condition {
 
     public abstract boolean hasValue();
     public abstract void copy(Condition condition);
-    public abstract boolean check(ItemStack item, ItemMeta meta);
     public abstract String getHashString();
     public abstract void addReasons(Args a, ItemStack item, ItemMeta meta, String failMessage);
 
+    public boolean check(ItemStack item, ItemMeta meta) {
+        return this.checkCallback.checkCondition(item, meta, this);
+    }
 }

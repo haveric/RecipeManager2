@@ -137,6 +137,9 @@ public class FlagLoader {
         loadFlag(FlagType.MAP_ITEM, new FlagMapItem(), APPLIED_TO_ITEM, "map");
         loadFlag(FlagType.MONSTER_SPAWNER, new FlagMonsterSpawner(), APPLIED_TO_ITEM, "spawner", "mobspawner");
         loadFlag(FlagType.POTION_ITEM, new FlagPotionItem(), APPLIED_TO_ITEM, "potion");
+        if (Version.has1_20_5Support()) {
+            loadFlag(FlagType.RARITY, new FlagRarity(), APPLIED_TO_ITEM);
+        }
         loadFlag(FlagType.REPAIR_COST, new FlagRepairCost(), APPLIED_TO_ITEM);
         loadFlag(FlagType.SKULL_OWNER, new FlagSkullOwner(), APPLIED_TO_ITEM, "skullitem, skull, head");
         if (!Version.has1_13BasicSupport() || force) {

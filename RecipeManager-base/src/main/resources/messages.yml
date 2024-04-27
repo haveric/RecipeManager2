@@ -54,6 +54,12 @@ flag:
     nohidetooltip: "<yellow>{item}<red> needs to not have a hidden tooltip"
     enchantmentglint: "<yellow>{item}<red> needs to have an enchantment glint override"
     noenchantmentglint: "<yellow>{item}<red> needs to not have an enchantment glint override"
+    fireresistant: "<yellow>{item}<red> needs to be fire resistant"
+    nofireresistant: "<yellow>{item}<red> needs to not be fire resistant"
+    maxstacksize: "<yellow>{item}<red> needs to have a max stack size"
+    nomaxstacksize: "<yellow>{item}<red> needs to not have a max stack size"
+    rarity: "<yellow>{item}<red> needs to have a rarity"
+    norarity: "<yellow>{item}<red> needs to not have a rarity"
   inventory: "<red> Need inventory: {inventory}"
   lightlevel: <red>Need to be in <yellow>{light}<red> levels of <yellow>{type}<red>.
   modexp:

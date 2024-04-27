@@ -79,6 +79,7 @@ public class FlagType {
     public static final String MAX_STACK_SIZE = "@maxstacksize";
     public static final String MONSTER_SPAWNER = "@monsterspawner";
     public static final String POTION_ITEM = "@potionitem";
+    public static final String RARITY = "@rarity";
     public static final String REPAIR_COST = "@repaircost";
     public static final String SKULL_OWNER = "@skullowner";
     public static final String SPAWN_EGG = "@spawnegg";
