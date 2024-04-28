@@ -188,6 +188,16 @@ public class RMSmithing1_19_4TransformRecipe extends RMSmithingRecipe {
     }
 
     @Override
+    public String getInvalidErrorMessage() {
+        return super.getInvalidErrorMessage() + " Needs a result, and two ingredients! Must also have a base ingredient that is not air.";
+    }
+
+    @Override
+    public boolean isValid() {
+        return hasIngredients() && hasResults() && !ToolsRecipeChoice.isMaterialChoiceAir(getPrimaryIngredient());
+    }
+
+    @Override
     public String printBookResult(ItemResult result) {
         StringBuilder s = getHeaderResult("smithing", result);
 

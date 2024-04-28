@@ -646,14 +646,20 @@ public class ToolsRecipeChoice {
     }
 
     public static RecipeChoice convertAirMaterialChoiceToNull(RecipeChoice choice) {
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-            List<Material> materials = materialChoice.getChoices();
-            if (materials.size() == 1 && materials.get(0) == Material.AIR) {
-                return null;
-            }
+        if (isMaterialChoiceAir(choice)) {
+            return null;
         }
 
         return choice;
+    }
+
+    public static boolean isMaterialChoiceAir(RecipeChoice choice) {
+        if (choice instanceof RecipeChoice.MaterialChoice) {
+            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            List<Material> materials = materialChoice.getChoices();
+            return materials.size() == 1 && materials.get(0) == Material.AIR;
+        }
+
+        return false;
     }
 }

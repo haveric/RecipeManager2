@@ -130,6 +130,11 @@ public class RMSmithingRecipeParser extends BaseRecipeParser {
             }
         }
 
+        RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
+        if (primaryChoice == null || ToolsRecipeChoice.isMaterialChoiceAir(primaryChoice)) {
+            return ErrorReporter.getInstance().error("Base ingredient is empty or air.", "Smithing recipes require a base ingredient.");
+        }
+
         List<ItemResult> results = new ArrayList<>();
         boolean hasResults = parseResults(recipe, results);
 
