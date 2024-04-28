@@ -142,6 +142,11 @@ public class TestSettings extends BaseSettings {
     }
 
     @Override
+    public boolean getSpecialSmithingArmorTrimBolt() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
     public boolean getSpecialSmithingArmorTrimCoast() {
         return SPECIAL_RECIPE_DEFAULT;
     }
@@ -153,6 +158,11 @@ public class TestSettings extends BaseSettings {
 
     @Override
     public boolean getSpecialSmithingArmorTrimEye() {
+        return SPECIAL_RECIPE_DEFAULT;
+    }
+
+    @Override
+    public boolean getSpecialSmithingArmorTrimFlow() {
         return SPECIAL_RECIPE_DEFAULT;
     }
 

@@ -126,9 +126,11 @@ public abstract class BaseSettings {
         MessageSender.getInstance().log("    special-recipes.repair-metadata: " + getSpecialRepairMetadata());
         MessageSender.getInstance().log("    special-recipes.shield-banner: " + getSpecialShieldBanner());
         MessageSender.getInstance().log("    special-recipes.shulker-dye: " + getSpecialShulkerDye());
+        MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.bolt: " + getSpecialSmithingArmorTrimBolt());
         MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.coast: " + getSpecialSmithingArmorTrimCoast());
         MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.dune: " + getSpecialSmithingArmorTrimDune());
         MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.eye: " + getSpecialSmithingArmorTrimEye());
+        MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.flow: " + getSpecialSmithingArmorTrimFlow());
         MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.host: " + getSpecialSmithingArmorTrimHost());
         MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.raiser: " + getSpecialSmithingArmorTrimRaiser());
         MessageSender.getInstance().log("    special-recipes.smithing.armor-trim.rib: " + getSpecialSmithingArmorTrimRib());
@@ -278,9 +280,11 @@ public abstract class BaseSettings {
 
     public abstract boolean getSpecialDecoratedPot();
 
+    public abstract boolean getSpecialSmithingArmorTrimBolt();
     public abstract boolean getSpecialSmithingArmorTrimCoast();
     public abstract boolean getSpecialSmithingArmorTrimDune();
     public abstract boolean getSpecialSmithingArmorTrimEye();
+    public abstract boolean getSpecialSmithingArmorTrimFlow();
     public abstract boolean getSpecialSmithingArmorTrimHost();
     public abstract boolean getSpecialSmithingArmorTrimRaiser();
     public abstract boolean getSpecialSmithingArmorTrimRib();

@@ -546,6 +546,10 @@ public class SettingsYaml extends BaseSettings {
         return fileConfig.getBoolean("special-recipes.decorated-pot", SPECIAL_RECIPE_DEFAULT);
     }
 
+    public boolean getSpecialSmithingArmorTrimBolt() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.bolt", SPECIAL_RECIPE_DEFAULT);
+    }
+
     public boolean getSpecialSmithingArmorTrimCoast() {
         return fileConfig.getBoolean("special-recipes.smithing.armor-trim.coast", SPECIAL_RECIPE_DEFAULT);
     }
@@ -556,6 +560,10 @@ public class SettingsYaml extends BaseSettings {
 
     public boolean getSpecialSmithingArmorTrimEye() {
         return fileConfig.getBoolean("special-recipes.smithing.armor-trim.eye", SPECIAL_RECIPE_DEFAULT);
+    }
+
+    public boolean getSpecialSmithingArmorTrimFlow() {
+        return fileConfig.getBoolean("special-recipes.smithing.armor-trim.flow", SPECIAL_RECIPE_DEFAULT);
     }
 
     public boolean getSpecialSmithingArmorTrimHost() {

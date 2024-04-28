@@ -59,9 +59,11 @@ special-recipes:
   shulker-dye: true          # shulker dying recipes
   smithing:
     armor-trim:              # Armor trim recipes
+      bolt: true
       coast: true
       dune: true
       eye: true
+      flow: true
       host: true
       raiser: true
       rib: true

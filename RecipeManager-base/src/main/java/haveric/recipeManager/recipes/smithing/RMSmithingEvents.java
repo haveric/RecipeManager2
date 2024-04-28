@@ -106,6 +106,14 @@ public class RMSmithingEvents extends BaseRecipeEvents {
             ItemStack recipeResult = recipe.getResult();
 
             if (!result.equals(recipeResult)) {
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimBolt()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimBolt(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.bolt");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimCoast()) {
                     if (Vanilla.recipeMatchesSmithingArmorTrimCoast(recipe)) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.coast");
@@ -125,6 +133,14 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimEye()) {
                     if (Vanilla.recipeMatchesSmithingArmorTrimEye(recipe)) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.eye");
+                        inv.setResult(null);
+                        return true;
+                    }
+                }
+
+                if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimFlow()) {
+                    if (Vanilla.recipeMatchesSmithingArmorTrimFlow(recipe)) {
+                        Messages.getInstance().sendOnce(player, "craft.special.armortrim.flow");
                         inv.setResult(null);
                         return true;
                     }

@@ -1452,6 +1452,10 @@ public class Vanilla {
                     case "shaper_armor_trim_smithing_template_smithing_trim":
                     case "silence_armor_trim_smithing_template_smithing_trim":
                     case "wayfinder_armor_trim_smithing_template_smithing_trim":
+
+                    // 1.20.5
+                    case "bolt_armor_trim_smithing_template_smithing_trim":
+                    case "flow_armor_trim_smithing_template_smithing_trim":
                         isSpecial = true;
                         break;
 
@@ -1818,6 +1822,24 @@ public class Vanilla {
         return matches;
     }
 
+    // 1.20.5
+    public static boolean recipeMatchesSmithingArmorTrimBolt(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_20_5Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("bolt_armor_trim_smithing_template_smithing_trim")) {
+                    matches = true;
+                }
+            }
+        }
+
+        return matches;
+    }
+
     // 1.19.4 (1.20 experimental)
     public static boolean recipeMatchesSmithingArmorTrimCoast(Recipe recipe) {
         boolean matches = false;
@@ -1864,6 +1886,24 @@ public class Vanilla {
 
             if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
                 if (key.getKey().equals("eye_armor_trim_smithing_template_smithing_trim")) {
+                    matches = true;
+                }
+            }
+        }
+
+        return matches;
+    }
+
+    // 1.20.5
+    public static boolean recipeMatchesSmithingArmorTrimFlow(Recipe recipe) {
+        boolean matches = false;
+
+        if (Version.has1_20_5Support()) {
+            Keyed keyedRecipe = (Keyed) recipe;
+            NamespacedKey key = keyedRecipe.getKey();
+
+            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+                if (key.getKey().equals("flow_armor_trim_smithing_template_smithing_trim")) {
                     matches = true;
                 }
             }
