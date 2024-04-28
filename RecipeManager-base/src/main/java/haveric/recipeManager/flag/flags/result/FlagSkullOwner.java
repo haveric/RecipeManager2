@@ -309,7 +309,11 @@ public class FlagSkullOwner extends Flag {
             String texture = "";
 
             if (hasTextureBase64()) {
-                texture = "Properties:{textures:[{Value:\"" + textureBase64 + "\"}]}";
+                if (Version.has1_20_5Support()) {
+                    texture = "properties:[{name:\"textures\",value:\"" + textureBase64 + "\"}]";
+                } else {
+                    texture = "Properties:{textures:[{Value:\"" + textureBase64 + "\"}]}";
+                }
                 uuid = new UUID(textureBase64.hashCode(), textureBase64.hashCode());
             }
 
@@ -317,7 +321,13 @@ public class FlagSkullOwner extends Flag {
                 uuid = offlinePlayer.getUniqueId();
             }
 
-            if (Version.has1_16Support()) {
+            if (Version.has1_20_5Support()) {
+                if (uuid != null) {
+                    long most = uuid.getMostSignificantBits();
+                    long least = uuid.getLeastSignificantBits();
+                    id = "id:[I;" + (int) least + "," + (int) (least >> 32) + "," + (int) most + "," + (int) (most >> 32) + "],";
+                }
+            } else if (Version.has1_16Support()) {
                 if (uuid != null) {
                     long most = uuid.getMostSignificantBits();
                     long least = uuid.getLeastSignificantBits();
@@ -330,10 +340,18 @@ public class FlagSkullOwner extends Flag {
             }
 
             if (ownerString != null) {
-                name = "Name:\"" + ownerString + "\",";
+                if (Version.has1_20_5Support()) {
+                    name = "name:\"" + ownerString + "\",";
+                } else {
+                    name = "Name:\"" + ownerString + "\",";
+                }
             }
 
-            addNBTRaw(a, "{SkullOwner:{" + id + name + texture + "}}");
+            if (Version.has1_20_5Support()) {
+                addNBTRaw(a, "minecraft:player_head[minecraft:profile={" + id + name + texture + "}]");
+            } else {
+                addNBTRaw(a, "{SkullOwner:{" + id + name + texture + "}}");
+            }
         }
     }
 
