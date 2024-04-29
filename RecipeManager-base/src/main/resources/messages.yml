@@ -60,6 +60,8 @@ flag:
     nomaxstacksize: "<yellow>{item}<red> needs to not have a max stack size"
     rarity: "<yellow>{item}<red> needs to have a rarity"
     norarity: "<yellow>{item}<red> needs to not have a rarity"
+    ominousbottleamplifier: "<yellow>{item}<red> needs to have an ominous bottle amplifier"
+    noominousbottleamplifier: "<yellow>{item}<red> needs to not have an ominous bottle amplifier"
   inventory: "<red> Need inventory: {inventory}"
   lightlevel: <red>Need to be in <yellow>{light}<red> levels of <yellow>{type}<red>.
   modexp:
