@@ -37,8 +37,8 @@ public class Files {
 
     private final CommandSender sender;
 
-    public static final String LASTCHANGED_CONFIG = "2.30.0";
-    public static final String LASTCHANGED_MESSAGES = "2.30.0";
+    public static final String LASTCHANGED_CONFIG = "2.30.0-dev1";
+    public static final String LASTCHANGED_MESSAGES = "2.30.0-dev1";
     public static final String LASTCHANGED_CHOICE_ALIASES = "2.17.0";
     public static final String LASTCHANGED_ITEM_DATAS = "2.7";
     public static final String LASTCHANGED_ITEM_ALIASES = "2.28.0";
@@ -601,7 +601,22 @@ public class Files {
 
         s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "enchantment", "ENCHANTMENTS LIST", "enchantments/Enchantment", "Enchantment");
-        if (Version.has1_13Support()) {
+        if (Version.has1_20_5Support()) {
+            s.append(NL).append(String.format("<b> %-26s %s</b>", "Key", "Level range"));
+
+            List<Enchantment> enchantmentsList = new ArrayList<>();
+            for (Enchantment enchantment : Registry.ENCHANTMENT) {
+                enchantmentsList.add(enchantment);
+            }
+
+            enchantmentsList.sort(Comparator.comparing(e -> e.getKey().getKey()));
+
+            for (Enchantment e : enchantmentsList) {
+                // TODO: Figure out the replacement for Enchantment.getItemTarget()
+
+                s.append(NL).append(String.format(" %-26s %s", e.getKey().getKey(), e.getStartLevel() + " to " + e.getMaxLevel()));
+            }
+        } else if (Version.has1_13Support()) {
             s.append(NL).append(String.format("<b> %-26s %-12s %s</b>", "Key", "Item type", "Level range"));
 
             List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
