@@ -117,7 +117,7 @@ public class FlagMaxStackSize extends Flag {
             try {
                 value = Integer.parseInt(argTrimmed);
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'maxstacksize' argument with invalid number: " + value);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'maxstacksize' argument with invalid number: " + argTrimmed);
             }
         }
 

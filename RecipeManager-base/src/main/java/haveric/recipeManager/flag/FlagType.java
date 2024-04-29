@@ -80,6 +80,7 @@ public class FlagType {
     public static final String MAP_ITEM = "@mapitem";
     public static final String MAX_STACK_SIZE = "@maxstacksize";
     public static final String MONSTER_SPAWNER = "@monsterspawner";
+    public static final String OMINOUS_BOTTLE_ITEM = "@ominousbottleitem";
     public static final String POTION_ITEM = "@potionitem";
     public static final String RARITY = "@rarity";
     public static final String REPAIR_COST = "@repaircost";

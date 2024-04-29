@@ -140,6 +140,9 @@ public class FlagLoader {
         }
         loadFlag(FlagType.MAP_ITEM, new FlagMapItem(), APPLIED_TO_ITEM, "map");
         loadFlag(FlagType.MONSTER_SPAWNER, new FlagMonsterSpawner(), APPLIED_TO_ITEM, "spawner", "mobspawner");
+        if (Version.has1_20_5Support()) {
+            loadFlag(FlagType.OMINOUS_BOTTLE_ITEM, new FlagOminousBottleItem(), APPLIED_TO_ITEM, "ominousbottle");
+        }
         loadFlag(FlagType.POTION_ITEM, new FlagPotionItem(), APPLIED_TO_ITEM, "potion");
         if (Version.has1_20_5Support()) {
             loadFlag(FlagType.RARITY, new FlagRarity(), APPLIED_TO_ITEM);
