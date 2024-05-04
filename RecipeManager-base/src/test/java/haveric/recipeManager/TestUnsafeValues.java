@@ -1,10 +1,7 @@
 package haveric.recipeManager;
 
 import com.google.common.collect.Multimap;
-import org.bukkit.FeatureFlag;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.UnsafeValues;
+import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -136,6 +133,16 @@ public class TestUnsafeValues implements UnsafeValues {
 
     @Override
     public DamageSource.Builder createDamageSourceBuilder(DamageType damageType) {
+        return null;
+    }
+
+    @Override
+    public String get(Class<?> aClass, String s) {
+        return "";
+    }
+
+    @Override
+    public <B extends Keyed> B get(Registry<B> registry, NamespacedKey namespacedKey) {
         return null;
     }
 }
