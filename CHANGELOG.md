@@ -1,5 +1,28 @@
 ## Change log
 
+### v2.31.0
+* REMOVED support for Minecraft 1.8 - 1.11
+* REMOVED: 1.20.5+: `@LocalizedName` flag
+* REMOVED `@Summon` arguments: `elder`, `horse`, `skeleton`, `zombievillager`
+* REMOVED `@PotionItem` arguments: `level`, `extended`
+  * The type argument is also now required
+* REMOVED `@IngredientCondition`, `@HoldItem` argument: `potion` options for `level`, `extended`
+* REMOVED `@IngredientCondition`, `@HoldItem` argument: `banner` color option
+* UPDATED: `messages.yml`: `nopotion` replaced with `nopotiontype`
+* REMOVED: `messages.yml`: Removed `nobannercolor`
+* RENAMED: `@ItemName` to `@DisplayName`. Alias `@Name` is still recommended.
+* NEW FLAG: 1.20.5+: `@ItemName`: Sets the item's name
+  * Item name differs from display name in that it is cannot be edited by an anvil, is not styled with italics, and does not show labels.
+* NEW FLAG: 1.20.5+: `@HideTooltip`: Hides the result's tooltip
+* NEW FLAG: 1.20.5+: `@EnchantmentGlintOverride`: Makes the result glint, even without enchantments
+* NEW FLAG: 1.20.5+: `@FireResistant`: Makes the result immune to burning in fire
+* NEW FLAG: 1.20.5+: `@MaxStackSize`: Changes result's stack size (from 1 to 99)
+* NEW FLAG: 1.20.5+: `@Rarity`: Sets the item's rarity, which affects the name's default color
+* NEW FLAG: 1.20.5+: `@Food <nutrition> | [arguments]`: Adds a food component to an item, making it consumable
+* NEW FLAG: 1.20.5+: `@FoodPotionEffect <chance> | <potionEffect>`: Adds a potion effect as a food component to an item
+* NEW FLAG: 1.20.5+: `@OminousBottleItem <amplifier>`: Sets the amplifier amount for an Ominous Bottle's bad omen effect
+* FIX: 1.16+: `@Summon`: Add `strider` as allowed saddle argument
+
 ### v2.30.0
 * FIX: Fixed duplicate lores on brewing recipes
 * FIX: Fixed repair and repair-metadata special recipes
