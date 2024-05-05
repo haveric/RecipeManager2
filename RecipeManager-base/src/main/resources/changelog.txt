@@ -1,14 +1,16 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-### v2.31.1
+### v2.32.0
+* REMOVED support for Minecraft 1.12 - 1.15
+* REMOVED FLAG: `SpawnEgg`
+* REMOVED: `@Summon`: `ocelot` option
 * NEW: `@Food` convertsto argument to change food once eaten
 * FIXED: 1.20.4-: `@IngredientCondition`, `@HoldItem` NoClassDefFoundError for ItemRarity
 * FIXED: 1.20.1-: `@PotionItem` NoClassDefFoundError for getBasePotionType
 * RE-ADD: 1.20.1-: `@PotionItem` arguments: `level`, `extended`
 * RE-ADD: 1.20.1-: `@IngredientCondition` argument: `potion` options for `level`, `extended`
 * FIX: 1.16: `@BlockPowered` for soul campfires
-* FIX: 1.12: NoSuchFieldError for PLAYER_HEAD
 * FIX: `@Summon`: `angry` option for Zombified Piglins
 * FIX: `@Summon`: `skeletonhorsetrappedticks` option
 * FIX: `@IngredientCondition` matching for `@CustomModelData`, `@MaxStackSize`, `@OminousBottleItem`, `@Rarity`

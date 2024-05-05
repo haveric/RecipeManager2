@@ -3,7 +3,6 @@ package haveric.recipeManager.flag.flags.result.applyEnchantment;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
@@ -215,7 +214,7 @@ public abstract class BaseFlagApplyStoreEnchantment extends Flag {
             FurnaceInventory inv = (FurnaceInventory) a.inventory();
 
             enchantments = copyEnchantments(inv.getSmelting());
-        } else if (a.inventory() instanceof AnvilInventory || (Version.has1_14Support() && (a.inventory() instanceof CartographyInventory || a.inventory() instanceof GrindstoneInventory)) || (Version.has1_16Support() && a.inventory() instanceof SmithingInventory)) {
+        } else if (a.inventory() instanceof AnvilInventory || a.inventory() instanceof CartographyInventory || a.inventory() instanceof GrindstoneInventory || a.inventory() instanceof SmithingInventory) {
             ItemStack[] anvilIngredients = new ItemStack[2];
             anvilIngredients[0] = a.inventory().getItem(0);
             anvilIngredients[1] = a.inventory().getItem(1);

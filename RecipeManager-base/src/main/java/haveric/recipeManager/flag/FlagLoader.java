@@ -105,12 +105,8 @@ public class FlagLoader {
         if (Supports.compassMeta()) {
             loadFlag(FlagType.COMPASS_ITEM, new FlagCompassItem(), APPLIED_TO_ITEM, "compass");
         }
-        if (Version.has1_16Support()) {
-            loadFlag(FlagType.CROSSBOW_ITEM, new FlagCrossbowItem(), APPLIED_TO_ITEM, "crossbow");
-        }
-        if (Version.has1_14Support()) {
-            loadFlag(FlagType.CUSTOM_MODEL_DATA, new FlagCustomModelData(), APPLIED_TO_ITEM, "modeldata");
-        }
+        loadFlag(FlagType.CROSSBOW_ITEM, new FlagCrossbowItem(), APPLIED_TO_ITEM, "crossbow");
+        loadFlag(FlagType.CUSTOM_MODEL_DATA, new FlagCustomModelData(), APPLIED_TO_ITEM, "modeldata");
         loadFlag(FlagType.ENCHANTED_BOOK, new FlagEnchantedBook(), APPLIED_TO_ITEM, "enchantbook", "enchantingbook");
         loadFlag(FlagType.ENCHANT_ITEM, new FlagEnchantItem(), APPLIED_TO_ITEM, "enchant", "enchantment");
         if (Version.has1_20_5Support()) {
@@ -127,13 +123,9 @@ public class FlagLoader {
         if (Version.has1_20_5Support()) {
             loadFlag(FlagType.HIDE_TOOLTIP, new FlagHideTooltip(), APPLIED_TO_ITEM | FlagBit.NO_FALSE | FlagBit.NO_VALUE_REQUIRED);
         }
-        if (Version.has1_13BasicSupport()) {
-            loadFlag(FlagType.ITEM_ATTRIBUTE, new FlagItemAttribute(), APPLIED_TO_ITEM, "attribute");
-        }
+        loadFlag(FlagType.ITEM_ATTRIBUTE, new FlagItemAttribute(), APPLIED_TO_ITEM, "attribute");
         loadFlag(FlagType.ITEM_UNBREAKABLE, new FlagItemUnbreakable(), APPLIED_TO_ITEM | FlagBit.NO_FALSE | FlagBit.NO_VALUE_REQUIRED, "unbreakable");
-        if (Supports.knowledgeBookMeta()) {
-            loadFlag(FlagType.KNOWLEDGE_BOOK_ITEM, new FlagKnowledgeBookItem(), APPLIED_TO_ITEM, "knowledgebook");
-        }
+        loadFlag(FlagType.KNOWLEDGE_BOOK_ITEM, new FlagKnowledgeBookItem(), APPLIED_TO_ITEM, "knowledgebook");
         loadFlag(FlagType.LEATHER_COLOR, new FlagLeatherColor(), APPLIED_TO_ITEM, "leathercolour", "color", "colour");
         if (!Version.has1_20_5Support()) {
             loadFlag(FlagType.LOCALIZED_NAME, new FlagLocalizedName(), APPLIED_TO_ITEM);
@@ -149,16 +141,9 @@ public class FlagLoader {
         }
         loadFlag(FlagType.REPAIR_COST, new FlagRepairCost(), APPLIED_TO_ITEM);
         loadFlag(FlagType.SKULL_OWNER, new FlagSkullOwner(), APPLIED_TO_ITEM, "skullitem, skull, head");
-        if (!Version.has1_13BasicSupport() || force) {
-            loadFlag(FlagType.SPAWN_EGG, new FlagSpawnEgg(), APPLIED_TO_ITEM, "monsteregg", "egg");
-        }
         loadFlag(FlagType.STORE_ENCHANTMENT, new FlagStoreEnchantment(), FlagBit.RESULT | FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_DELAY, "storeenchant", "storeenchantments", "storeenchants");
-        if (Supports.suspiciousStewMeta()) {
-            loadFlag(FlagType.SUSPICIOUS_STEW_ITEM, new FlagSuspiciousStewItem(), APPLIED_TO_ITEM, "suspicioussoupitem", "suspiciousstew", "suspicioussoup");
-        }
-        if (Supports.tropicalFishBucketMeta()) {
-            loadFlag(FlagType.TROPICAL_FISH_BUCKET_ITEM, new FlagTropicalFishBucketItem(), APPLIED_TO_ITEM, "tropicalfishbucket", "fishbucket");
-        }
+        loadFlag(FlagType.SUSPICIOUS_STEW_ITEM, new FlagSuspiciousStewItem(), APPLIED_TO_ITEM, "suspicioussoupitem", "suspiciousstew", "suspicioussoup");
+        loadFlag(FlagType.TROPICAL_FISH_BUCKET_ITEM, new FlagTropicalFishBucketItem(), APPLIED_TO_ITEM, "tropicalfishbucket", "fishbucket");
     }
 
     public void loadFlag(String mainAlias, Flag newFlag, String aliases) {

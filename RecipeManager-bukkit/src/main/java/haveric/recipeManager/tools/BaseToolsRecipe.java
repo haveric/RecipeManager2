@@ -13,19 +13,11 @@ public abstract class BaseToolsRecipe {
         return false;
     }
 
-    public boolean matchesShapedLegacy(Recipe bukkitRecipe, ItemStack[] matrix, ItemStack[] matrixMirror) {
-        return false;
-    }
-
     public boolean matchesShaped(Recipe bukkitRecipe, String[] shape, Map<Character, RecipeChoice> materialChoiceMap) {
         return false;
     }
 
     public boolean matchesShapeless(Recipe bukkitRecipe, List<List<Material>> materialsList) {
-        return false;
-    }
-
-    public boolean matchesShapelessLegacy(Recipe bukkitRecipe, List<ItemStack> itemsList) {
         return false;
     }
 

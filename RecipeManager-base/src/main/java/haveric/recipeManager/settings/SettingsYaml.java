@@ -518,10 +518,6 @@ public class SettingsYaml extends BaseSettings {
         return fileConfig.getBoolean("special-recipes.cartography.lock", SPECIAL_RECIPE_DEFAULT);
     }
 
-    public boolean getSpecialBanner() {
-        return fileConfig.getBoolean("special-recipes.banner", SPECIAL_RECIPE_DEFAULT);
-    }
-
     public boolean getSpecialBannerDuplicate() {
         return fileConfig.getBoolean("special-recipes.banner-duplicate", SPECIAL_RECIPE_DEFAULT);
     }

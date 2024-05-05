@@ -1,11 +1,10 @@
 package haveric.recipeManager.flag.flags.any;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.tools.Version;
-import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
@@ -106,18 +105,9 @@ public class FlagBlockPowered extends Flag {
 
         Block block = a.location().getBlock();
         Material blockType = block.getType();
-
-        Material craftingTableMaterial;
-        if (Version.has1_13BasicSupport()) {
-            craftingTableMaterial = Material.CRAFTING_TABLE;
-        } else {
-            craftingTableMaterial = Material.getMaterial("WORKBENCH");
-        }
-
-        if (blockType == Material.FURNACE || blockType == Material.BREWING_STAND || blockType == craftingTableMaterial ||
-                (!Version.has1_13BasicSupport() && blockType == Material.getMaterial("BURNING_FURNACE")) ||
-                (Version.has1_14Support() && (blockType == Material.BLAST_FURNACE || blockType == Material.SMOKER || blockType == Material.STONECUTTER || blockType == Material.CAMPFIRE)) ||
-                (Version.has1_16Support() && blockType == Material.SOUL_CAMPFIRE)) {
+        if (blockType == Material.FURNACE || blockType == Material.BREWING_STAND || blockType == Material.CRAFTING_TABLE
+                || (blockType == Material.BLAST_FURNACE || blockType == Material.SMOKER || blockType == Material.STONECUTTER
+                || blockType == Material.CAMPFIRE || blockType == Material.SOUL_CAMPFIRE)) {
 
             boolean valid;
             if (indirect) {
@@ -128,30 +118,22 @@ public class FlagBlockPowered extends Flag {
 
             if (!valid) {
                 String blockName = null;
-                if (blockType == craftingTableMaterial) {
+                if (blockType == Material.CRAFTING_TABLE) {
                     blockName = "workbench";
                 } else if (blockType == Material.BREWING_STAND) {
                     blockName = "brewing stand";
-                } else if (blockType == Material.FURNACE || (!Version.has1_13BasicSupport() && blockType == Material.getMaterial("BURNING_FURNACE"))) {
+                } else if (blockType == Material.FURNACE) {
                     blockName = "furnace";
-                }
-
-                if (Version.has1_14Support()) {
-                    if (blockType == Material.BLAST_FURNACE) {
-                        blockName = "blast furnace";
-                    } else if (blockType == Material.SMOKER) {
-                        blockName = "smoker";
-                    } else if (blockType == Material.STONECUTTER) {
-                        blockName = "stonecutter";
-                    } else if (blockType == Material.CAMPFIRE) {
-                        blockName = "campfire";
-                    }
-                }
-
-                if (Version.has1_16Support()) {
-                    if (blockType == Material.SOUL_CAMPFIRE) {
-                        blockName = "soul campfire";
-                    }
+                } else if (blockType == Material.BLAST_FURNACE) {
+                    blockName = "blast furnace";
+                } else if (blockType == Material.SMOKER) {
+                    blockName = "smoker";
+                } else if (blockType == Material.STONECUTTER) {
+                    blockName = "stonecutter";
+                } else if (blockType == Material.CAMPFIRE) {
+                    blockName = "campfire";
+                } else if (blockType == Material.SOUL_CAMPFIRE) {
+                    blockName = "soul campfire";
                 }
 
                 if (blockName == null) {

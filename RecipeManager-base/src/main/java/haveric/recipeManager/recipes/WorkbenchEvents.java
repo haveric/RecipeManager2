@@ -214,14 +214,6 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 }
             }
 
-            if (!RecipeManager.getSettings().getSpecialBanner()) {
-                if (Vanilla.recipeMatchesBannerAddPattern(recipe)) {
-                    Messages.getInstance().sendOnce(player, "craft.special.banner");
-                    inv.setResult(null);
-                    return true;
-                }
-            }
-
             if (!RecipeManager.getSettings().getSpecialBannerDuplicate()) {
                 if (Vanilla.recipeMatchesBannerDuplicate(recipe)) {
                     Messages.getInstance().sendOnce(player, "craft.special.bannerduplicate");
@@ -283,11 +275,11 @@ public class WorkbenchEvents extends BaseRecipeEvents {
         }
 
         ItemStack result;
-        // 1.15 and 1.16 do not handle repair recipes well, so use the inventory instead of the recipe
-        if (!Version.has1_17Support() && Version.has1_15Support()) {
-            result = inv.getResult();
-        } else {
+        if (Version.has1_17Support()) {
             result = inv.getRecipe().getResult();
+        } else {
+            // 1.15 and 1.16 do not handle repair recipes well, so use the inventory instead of the recipe
+            result = inv.getResult();
         }
 
         if (RecipeManager.getSettings().getSpecialRepairMetadata()) {
@@ -480,14 +472,10 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                     a.setResult(result);
 
                     int originalDamage = -1;
-                    if (Version.has1_13BasicSupport()) {
-                        ItemMeta meta = result.getItemMeta();
-                        if (meta instanceof Damageable) {
-                            originalDamage = ((Damageable) meta).getDamage();
+                        ItemMeta metaOne = result.getItemMeta(); // TODO: Rename metaOne and metaTwo
+                        if (metaOne instanceof Damageable) {
+                            originalDamage = ((Damageable) metaOne).getDamage();
                         }
-                    } else {
-                        originalDamage = result.getDurability();
-                    }
 
                     boolean recipeCraftSuccess = false;
                     boolean resultCraftSuccess = false;
@@ -497,15 +485,11 @@ public class WorkbenchEvents extends BaseRecipeEvents {
 
                         // We're handling durability on the result line outside of flags, so it needs to be reset after clearing the metadata
                         if (originalDamage != -1) {
-                            if (Version.has1_13BasicSupport()) {
-                                ItemMeta meta = result.getItemMeta();
+                            ItemMeta metaTwo = result.getItemMeta();
 
-                                if (meta instanceof Damageable) {
-                                    ((Damageable) meta).setDamage(originalDamage);
-                                    result.setItemMeta(meta);
-                                }
-                            } else {
-                                result.setDurability((short) originalDamage);
+                            if (metaTwo instanceof Damageable) {
+                                ((Damageable) metaTwo).setDamage(originalDamage);
+                                result.setItemMeta(metaTwo);
                             }
                         }
 
@@ -566,13 +550,9 @@ public class WorkbenchEvents extends BaseRecipeEvents {
 
                                             if (itemType != Material.AIR) {
                                                 Material returnedMaterial;
-                                                if (Version.has1_15Support()) {
-                                                    try {
-                                                        returnedMaterial = itemType.getCraftingRemainingItem();
-                                                    } catch (NoSuchMethodError e) {
-                                                        returnedMaterial = ToolsItem.getCraftingRemainingItem(itemType);
-                                                    }
-                                                } else {
+                                                try {
+                                                    returnedMaterial = itemType.getCraftingRemainingItem();
+                                                } catch (NoSuchMethodError e) {
                                                     returnedMaterial = ToolsItem.getCraftingRemainingItem(itemType);
                                                 }
 
@@ -668,14 +648,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             case RIGHT_CLICK_BLOCK:
                 Block block = event.getClickedBlock();
 
-                Material craftingTableMaterial;
-                if (Version.has1_13Support()) {
-                    craftingTableMaterial = Material.CRAFTING_TABLE;
-                } else {
-                    craftingTableMaterial = Material.getMaterial("WORKBENCH");
-                }
-
-                if (block.getType() == craftingTableMaterial) {
+                if (block != null && block.getType() == Material.CRAFTING_TABLE) {
                     if (!RecipeManager.getPlugin().canCraft(event.getPlayer())) {
                         event.setCancelled(true);
                         return;

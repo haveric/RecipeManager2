@@ -10,7 +10,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.item.ItemRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.CrossbowMeta;
@@ -88,12 +87,9 @@ public class FlagCrossbowItem extends Flag {
         }
 
         boolean validFlaggable = false;
-        if (Version.has1_13BasicSupport()) {
-            FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
-
-            if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), CrossbowMeta.class)) {
-                validFlaggable = true;
-            }
+        FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
+        if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), CrossbowMeta.class)) {
+            validFlaggable = true;
         }
 
         if (!validResult && !validFlaggable) {

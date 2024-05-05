@@ -8,7 +8,6 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.TropicalFish;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -117,12 +116,9 @@ public class FlagTropicalFishBucketItem extends Flag {
         }
 
         boolean validFlaggable = false;
-        if (Version.has1_13BasicSupport()) {
-            FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
-
-            if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), TropicalFishBucketMeta.class)) {
-                validFlaggable = true;
-            }
+        FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
+        if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), TropicalFishBucketMeta.class)) {
+            validFlaggable = true;
         }
 
         if (!validResult && !validFlaggable) {

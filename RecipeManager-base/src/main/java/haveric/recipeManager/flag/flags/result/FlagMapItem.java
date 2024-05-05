@@ -1,6 +1,5 @@
 package haveric.recipeManager.flag.flags.result;
 
-import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
@@ -10,7 +9,6 @@ import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.World;
@@ -34,7 +32,7 @@ public class FlagMapItem extends Flag {
 
     @Override
     protected String[] getDescription() {
-        String[] description = new String[]{
+        return new String[]{
             "Create a custom map item",
             "",
             "Replace <arguments> with the following arguments separated by | character:",
@@ -42,23 +40,16 @@ public class FlagMapItem extends Flag {
             "",
             "  locationname <name>        = Sets the location name.",
             "  color <red> <green> <blue> = Sets the map color. Colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.",
+            "",
+            "  world <worldName>          = Sets the world this map is associated with.",
+            "  centerx <x>                = Sets the center x position of the map. Must be an integer.",
+            "  centerz <z>                = Sets the center z position of the map. Must be an integer.",
+            "  scale <scale>              = Sets the scale of the map.",
+            "    <scale> values: " + RMCUtil.collectionToString(Arrays.asList(MapView.Scale.values())).toLowerCase(),
+            "  locked [false]             = Sets the locked status of the map. Locked maps can not be explored further.",
+            "  trackingposition [false]   = Sets whether a position cursor should be shown when the map is near its center.",
+            "  unlimitedtracking [false]  = Whether the map will show a smaller position cursor (true), or no position cursor (false) when cursor is outside of map's range.",
         };
-
-        if (Version.has1_13Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                "",
-                "  world <worldName>          = Sets the world this map is associated with.",
-                "  centerx <x>                = Sets the center x position of the map. Must be an integer.",
-                "  centerz <z>                = Sets the center z position of the map. Must be an integer.",
-                "  scale <scale>              = Sets the scale of the map.",
-                "    <scale> values: " + RMCUtil.collectionToString(Arrays.asList(MapView.Scale.values())).toLowerCase(),
-                "  locked [false]             = Sets the locked status of the map. Locked maps can not be explored further.",
-                "  trackingposition [false]   = Sets whether a position cursor should be shown when the map is near its center.",
-                "  unlimitedtracking [false]  = Whether the map will show a smaller position cursor (true), or no position cursor (false) when cursor is outside of map's range.",
-            }, String.class);
-        }
-
-        return description;
     }
 
     @Override
@@ -220,12 +211,9 @@ public class FlagMapItem extends Flag {
         }
 
         boolean validFlaggable = false;
-        if (Version.has1_13BasicSupport()) {
-            FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
-
-            if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), MapMeta.class)) {
-                validFlaggable = true;
-            }
+        FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
+        if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), MapMeta.class)) {
+            validFlaggable = true;
         }
 
         if (!validResult && !validFlaggable) {
@@ -351,34 +339,32 @@ public class FlagMapItem extends Flag {
                 mapMeta.setColor(mapColor);
             }
 
-            if (Version.has1_13Support()) {
-                if (mapMeta.hasMapView()) {
-                    MapView mapView = mapMeta.getMapView();
-                    if (mapView != null) {
-                        if (hasWorld()) {
-                            mapView.setWorld(world);
-                        }
-
-                        if (hasCenterX()) {
-                            mapView.setCenterX(centerX);
-                        }
-
-                        if (hasCenterZ()) {
-                            mapView.setCenterZ(centerZ);
-                        }
-
-                        if (hasScale()) {
-                            MapView.Scale mapScale = MapView.Scale.valueOf(scale);
-                            mapView.setScale(mapScale);
-                        }
-
-                        mapView.setLocked(isLocked);
-                        mapView.setTrackingPosition(isTrackingPosition);
-                        mapView.setUnlimitedTracking(isUnlimitedTracking);
+            if (mapMeta.hasMapView()) {
+                MapView mapView = mapMeta.getMapView();
+                if (mapView != null) {
+                    if (hasWorld()) {
+                        mapView.setWorld(world);
                     }
 
-                    mapMeta.setMapView(mapView);
+                    if (hasCenterX()) {
+                        mapView.setCenterX(centerX);
+                    }
+
+                    if (hasCenterZ()) {
+                        mapView.setCenterZ(centerZ);
+                    }
+
+                    if (hasScale()) {
+                        MapView.Scale mapScale = MapView.Scale.valueOf(scale);
+                        mapView.setScale(mapScale);
+                    }
+
+                    mapView.setLocked(isLocked);
+                    mapView.setTrackingPosition(isTrackingPosition);
+                    mapView.setUnlimitedTracking(isUnlimitedTracking);
                 }
+
+                mapMeta.setMapView(mapView);
             }
 
             a.result().setItemMeta(mapMeta);

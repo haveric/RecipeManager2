@@ -1,8 +1,8 @@
 package haveric.recipeManager.api.events;
 
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.fuel.FuelRecipe;
-import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe1_13;
+import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
 import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -18,12 +18,12 @@ import org.bukkit.inventory.ItemStack;
 public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     private static HandlerList handlers = new HandlerList();
     private boolean cancelled = false;
-    private RMFurnaceRecipe recipe;
-    private FuelRecipe fuelRecipe;
+    private RMFurnaceRecipe1_13 recipe;
+    private FuelRecipe1_13 fuelRecipe;
     private ItemResult result;
     private Block block;
 
-    public RecipeManagerSmeltEvent(RMFurnaceRecipe newRecipe, FuelRecipe newFuelRecipe, ItemResult newResult, Block newBlock/*,, String newSmelter String newFueler*/) {
+    public RecipeManagerSmeltEvent(RMFurnaceRecipe1_13 newRecipe, FuelRecipe1_13 newFuelRecipe, ItemResult newResult, Block newBlock/*,, String newSmelter String newFueler*/) {
         recipe = newRecipe;
         fuelRecipe = newFuelRecipe;
         result = newResult;
@@ -33,7 +33,7 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
     /**
      * @return RecipeManager's Smelt class recipe, never null
      */
-    public RMFurnaceRecipe getRecipe() {
+    public RMFurnaceRecipe1_13 getRecipe() {
         return recipe;
     }
 
@@ -42,7 +42,7 @@ public class RecipeManagerSmeltEvent extends Event implements Cancellable {
      *
      * @return RecipeManager's Fuel class recipe or null if not found
      */
-    public FuelRecipe getFuelRecipe() {
+    public FuelRecipe1_13 getFuelRecipe() {
         return fuelRecipe;
     }
 

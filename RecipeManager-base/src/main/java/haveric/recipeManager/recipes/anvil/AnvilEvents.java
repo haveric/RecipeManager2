@@ -17,13 +17,11 @@ import haveric.recipeManager.recipes.anvil.data.Anvil;
 import haveric.recipeManager.recipes.anvil.data.Anvils;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
@@ -318,7 +316,7 @@ public class AnvilEvents extends BaseRecipeEvents {
         }
 
         // Clone the recipe, so we can add custom flags to it
-        AnvilRecipe recipe = new AnvilRecipe(anvil.getRecipe());
+        AnvilRecipe1_13 recipe = new AnvilRecipe1_13(anvil.getRecipe());
         Args a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).build();
 
         String renameText = anvil.getRenameText();
@@ -451,13 +449,9 @@ public class AnvilEvents extends BaseRecipeEvents {
                 a.setResult(result);
 
                 int originalDamage = -1;
-                if (Version.has1_13BasicSupport()) {
-                    ItemMeta meta = result.getItemMeta();
-                    if (meta instanceof Damageable) {
-                        originalDamage = ((Damageable) meta).getDamage();
-                    }
-                } else {
-                    originalDamage = result.getDurability();
+                ItemMeta metaOne = result.getItemMeta(); // TODO: Rename metaOne and metaTwo
+                if (metaOne instanceof Damageable) {
+                    originalDamage = ((Damageable) metaOne).getDamage();
                 }
 
                 boolean recipeCraftSuccess = false;
@@ -468,15 +462,11 @@ public class AnvilEvents extends BaseRecipeEvents {
 
                     // We're handling durability on the result line outside of flags, so it needs to be reset after clearing the metadata
                     if (originalDamage != -1) {
-                        if (Version.has1_13BasicSupport()) {
-                            ItemMeta meta = result.getItemMeta();
+                        ItemMeta metaTwo = result.getItemMeta();
 
-                            if (meta instanceof Damageable) {
-                                ((Damageable) meta).setDamage(originalDamage);
-                                result.setItemMeta(meta);
-                            }
-                        } else {
-                            result.setDurability((short) originalDamage);
+                        if (metaTwo instanceof Damageable) {
+                            ((Damageable) metaTwo).setDamage(originalDamage);
+                            result.setItemMeta(metaTwo);
                         }
                     }
 
@@ -549,28 +539,14 @@ public class AnvilEvents extends BaseRecipeEvents {
                 if (random < damageChance) {
                     Block block = location.getBlock();
 
-                    if (Version.has1_13BasicSupport()) {
-                        Material blockType = block.getType();
-                        if (blockType == Material.ANVIL) {
-                            block.setType(Material.CHIPPED_ANVIL);
-                        } else if (blockType == Material.CHIPPED_ANVIL) {
-                            block.setType(Material.DAMAGED_ANVIL);
-                        } else if (blockType == Material.DAMAGED_ANVIL) {
-                            block.setType(Material.AIR);
-                            broken = true;
-                        }
-                    } else {
-                        //noinspection deprecation
-                        byte blockData = block.getData();
-                        if (blockData < 8) {
-                            BlockState state = block.getState();
-                            //noinspection deprecation
-                            state.setRawData((byte) (blockData + 4));
-                            state.update();
-                        } else {
-                            block.setType(Material.AIR);
-                            broken = true;
-                        }
+                    Material blockType = block.getType();
+                    if (blockType == Material.ANVIL) {
+                        block.setType(Material.CHIPPED_ANVIL);
+                    } else if (blockType == Material.CHIPPED_ANVIL) {
+                        block.setType(Material.DAMAGED_ANVIL);
+                    } else if (blockType == Material.DAMAGED_ANVIL) {
+                        block.setType(Material.AIR);
+                        broken = true;
                     }
                 }
 
@@ -605,7 +581,7 @@ public class AnvilEvents extends BaseRecipeEvents {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Material blockType = event.getClickedBlock().getType();
 
-            if (blockType == Material.ANVIL || (Version.has1_13BasicSupport() && (blockType == Material.CHIPPED_ANVIL || blockType == Material.DAMAGED_ANVIL))) {
+            if (blockType == Material.ANVIL || blockType == Material.CHIPPED_ANVIL || blockType == Material.DAMAGED_ANVIL) {
                 if (!RecipeManager.getPlugin().canCraft(event.getPlayer())) {
                     event.setCancelled(true);
                 }

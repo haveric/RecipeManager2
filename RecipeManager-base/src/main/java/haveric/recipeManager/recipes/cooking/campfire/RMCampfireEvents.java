@@ -10,7 +10,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.cooking.campfire.data.RMCampfireData;
 import haveric.recipeManager.recipes.cooking.campfire.data.RMCampfires;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Campfire;
@@ -36,7 +35,7 @@ public class RMCampfireEvents extends BaseRecipeEvents {
             if (item != null && item.getType() != Material.AIR) {
                 Block block = event.getClickedBlock();
 
-                if (block != null && (block.getType() == Material.CAMPFIRE || (Version.has1_16Support() && block.getType() == Material.SOUL_CAMPFIRE))) {
+                if (block != null && (block.getType() == Material.CAMPFIRE || block.getType() == Material.SOUL_CAMPFIRE)) {
                     Campfire campfire = (Campfire) block.getState();
 
                     int slot = -1;
@@ -64,7 +63,7 @@ public class RMCampfireEvents extends BaseRecipeEvents {
     public void rmCampfireCookEvent(BlockCookEvent event) {
         Block block = event.getBlock();
         Material blockType = block.getType();
-        if (blockType == Material.CAMPFIRE || (Version.has1_16Support() && blockType == Material.SOUL_CAMPFIRE)) {
+        if (blockType == Material.CAMPFIRE || blockType == Material.SOUL_CAMPFIRE) {
             ItemStack ingredient = event.getSource();
 
             BaseRecipe baseRecipe = RecipeManager.getRecipes().getRecipe(RMCRecipeType.CAMPFIRE, ingredient);
@@ -132,7 +131,7 @@ public class RMCampfireEvents extends BaseRecipeEvents {
         Block block = event.getBlock();
         Material blockType = block.getType();
 
-        if (blockType == Material.CAMPFIRE || (Version.has1_16Support() && blockType == Material.SOUL_CAMPFIRE)) {
+        if (blockType == Material.CAMPFIRE || blockType == Material.SOUL_CAMPFIRE) {
             RMCampfires.remove(block.getLocation());
         }
     }

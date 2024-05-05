@@ -2,7 +2,6 @@ package haveric.recipeManager.recipes.cooking.furnace;
 
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagBit;
@@ -14,7 +13,6 @@ import haveric.recipeManager.recipes.*;
 import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -35,17 +33,13 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
 
     @Override
     public boolean parseRecipe(int directiveLine) {
-        SingleResultRecipe recipe;
+        RMBaseFurnaceRecipe1_13 recipe;
         if (recipeType == RMCRecipeType.BLASTING) {
             recipe = new RMBlastingRecipe(fileFlags); // create recipe and copy flags from file
         } else if (recipeType == RMCRecipeType.SMOKING) {
             recipe = new RMSmokingRecipe(fileFlags); // create recipe and copy flags from file
         } else {
-            if (Version.has1_13Support()) {
-                recipe = new RMFurnaceRecipe1_13(fileFlags); // create recipe and copy flags from file
-            } else {
-                recipe = new RMFurnaceRecipe(fileFlags); // create recipe and copy flags from file
-            }
+            recipe = new RMFurnaceRecipe1_13(fileFlags); // create recipe and copy flags from file
         }
 
         reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // check for @flags
@@ -54,83 +48,57 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
 
         boolean isRemove = recipe.hasFlag(FlagType.REMOVE);
 
-        if (recipe instanceof RMBaseFurnaceRecipe1_13) {
-            RMBaseFurnaceRecipe1_13 furnaceRecipe1_13 = (RMBaseFurnaceRecipe1_13) recipe;
-            while (!reader.lineIsResult() && !reader.lineIsFuel()) {
-                String[] splitIngredient = reader.getLine().split("%");
+        while (!reader.lineIsResult() && !reader.lineIsFuel()) {
+            String[] splitIngredient = reader.getLine().split("%");
 
-                String materialsValue = splitIngredient[0].trim();
+            String materialsValue = splitIngredient[0].trim();
 
-                // There's no needed logic for shapes here, so trim the shape declaration
-                if (materialsValue.startsWith("a ")) {
-                    materialsValue = materialsValue.substring(2);
-                }
-
-                RecipeChoice choice = Tools.parseRecipeChoice(materialsValue, ParseBit.NONE);
-                if (choice == null || choice instanceof AirChoice) {
-                    return false;
-                }
-
-                FlaggableRecipeChoice flaggable = new FlaggableRecipeChoice();
-                flaggable.setChoice(choice);
-                Flags ingredientFlags = flaggable.getFlags();
-
-                reader.parseFlags(ingredientFlags, FlagBit.INGREDIENT);
-
-                if (ingredientFlags.hasFlags()) {
-                    List<ItemStack> items = new ArrayList<>();
-                    if (choice instanceof RecipeChoice.MaterialChoice) {
-                        RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-                        List<Material> materials = materialChoice.getChoices();
-
-                        for (Material material : materials) {
-                            Args a = ArgBuilder.create().result(new ItemStack(material)).build();
-                            ingredientFlags.sendCrafted(a, true);
-
-                            items.add(a.result().getItemStack());
-                        }
-                    } else if (choice instanceof RecipeChoice.ExactChoice) {
-                        RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
-                        List<ItemStack> exactItems = exactChoice.getChoices();
-
-                        for (ItemStack exactItem : exactItems) {
-                            Args a = ArgBuilder.create().result(exactItem).build();
-                            ingredientFlags.sendCrafted(a, true);
-
-                            items.add(a.result().getItemStack());
-                        }
-                    }
-
-                    furnaceRecipe1_13.addIngredientChoiceItems(items);
-                } else {
-                    furnaceRecipe1_13.setIngredientChoice(ToolsRecipeChoice.mergeRecipeChoices(furnaceRecipe1_13.getIngredientChoice(), choice));
-                }
-
-                if (!parseArgs(recipe, splitIngredient, isRemove)) {
-                    return false;
-                }
-            }
-        } else {
-            // get the ingredient and smelting time
-            String[] split = reader.getLine().split("%");
-            if (split.length == 0) {
-                return ErrorReporter.getInstance().error("Smelting recipe doesn't have an ingredient!");
+            // There's no needed logic for shapes here, so trim the shape declaration
+            if (materialsValue.startsWith("a ")) {
+                materialsValue = materialsValue.substring(2);
             }
 
-            ItemStack ingredient = Tools.parseItem(split[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
-
-            if (ingredient == null) {
+            RecipeChoice choice = Tools.parseRecipeChoice(materialsValue, ParseBit.NONE);
+            if (choice == null || choice instanceof AirChoice) {
                 return false;
             }
 
-            if (ingredient.getType() == Material.AIR) {
-                return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");
+            FlaggableRecipeChoice flaggable = new FlaggableRecipeChoice();
+            flaggable.setChoice(choice);
+            Flags ingredientFlags = flaggable.getFlags();
+
+            reader.parseFlags(ingredientFlags, FlagBit.INGREDIENT);
+
+            if (ingredientFlags.hasFlags()) {
+                List<ItemStack> items = new ArrayList<>();
+                if (choice instanceof RecipeChoice.MaterialChoice) {
+                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                    List<Material> materials = materialChoice.getChoices();
+
+                    for (Material material : materials) {
+                        Args a = ArgBuilder.create().result(new ItemStack(material)).build();
+                        ingredientFlags.sendCrafted(a, true);
+
+                        items.add(a.result().getItemStack());
+                    }
+                } else if (choice instanceof RecipeChoice.ExactChoice) {
+                    RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                    List<ItemStack> exactItems = exactChoice.getChoices();
+
+                    for (ItemStack exactItem : exactItems) {
+                        Args a = ArgBuilder.create().result(exactItem).build();
+                        ingredientFlags.sendCrafted(a, true);
+
+                        items.add(a.result().getItemStack());
+                    }
+                }
+
+                recipe.addIngredientChoiceItems(items);
+            } else {
+                recipe.setIngredientChoice(ToolsRecipeChoice.mergeRecipeChoices(recipe.getIngredientChoice(), choice));
             }
 
-            ((RMFurnaceRecipe) recipe).setIngredient(ingredient);
-            reader.nextLine();
-
-            if (!parseArgs(recipe, split, isRemove)) {
+            if (!parseArgs(recipe, splitIngredient, isRemove)) {
                 return false;
             }
         }
@@ -147,13 +115,8 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
                     return ErrorReporter.getInstance().error("Fuel can not be air!");
                 }
 
-                if (recipe instanceof RMBaseFurnaceRecipe1_13) {
-                    ((RMBaseFurnaceRecipe1_13) recipe).setFuel(fuelItem);
-                    reader.parseFlags(((RMBaseFurnaceRecipe1_13) recipe).getFuel().getFlags(), FlagBit.INGREDIENT);
-                } else {
-                    ((RMFurnaceRecipe) recipe).setFuel(fuelItem);
-                    reader.parseFlags(((RMFurnaceRecipe) recipe).getFuel().getFlags(), FlagBit.INGREDIENT);
-                }
+                recipe.setFuel(fuelItem);
+                reader.parseFlags(recipe.getFuel().getFlags(), FlagBit.INGREDIENT);
             }
         }
 
@@ -193,7 +156,7 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
         return true;
     }
 
-    private void checkForArgs(SingleResultRecipe recipe) {
+    private void checkForArgs(RMBaseFurnaceRecipe1_13 recipe) {
         String argLine = reader.getLine();
 
         String argLower = argLine.toLowerCase();
@@ -201,18 +164,14 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
             if (argLower.startsWith("group ")) {
                 argLine = argLine.substring("group ".length()).trim();
 
-                if (recipe instanceof RMBaseFurnaceRecipe1_13) {
-                    ((RMBaseFurnaceRecipe1_13) recipe).setGroup(argLine);
-                } else {
-                    ErrorReporter.getInstance().warning("Group is supported on 1.13 or newer only. Group: " + argLine + " ignored.");
-                }
+                recipe.setGroup(argLine);
             } else if (argLower.startsWith("category ")) {
                 argLine = argLine.substring("category ".length()).trim();
 
-                if (recipe instanceof RMBaseFurnaceRecipe1_13 && Supports.categories()) {
+                if (Supports.categories()) {
                     try {
                         CookingBookCategory category = CookingBookCategory.valueOf(argLine);
-                        ((RMBaseFurnaceRecipe1_13) recipe).setCategory(category.name());
+                        recipe.setCategory(category.name());
                     } catch (IllegalArgumentException e) {
                         ErrorReporter.getInstance().warning("Category is invalid. Category: " + argLine + " ignored. Valid values: " + Arrays.toString(CookingBookCategory.values()));
                     }
@@ -222,15 +181,11 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
             } else if (argLower.startsWith("xp ")) {
                 argLine = argLine.substring("xp ".length()).trim();
 
-                if (recipe instanceof RMBaseFurnaceRecipe1_13) {
-                    try {
-                        float experience = Float.parseFloat(argLine);
-                        ((RMBaseFurnaceRecipe1_13) recipe).setExperience(experience);
-                    } catch (NumberFormatException e) {
-                        ErrorReporter.getInstance().warning("Xp is not a valid float. Xp: " + argLine + " ignored and defaulted to 0.");
-                    }
-                } else {
-                    ErrorReporter.getInstance().warning("Xp is supported on 1.13 or newer only. Xp: " + argLine + " ignored.");
+                try {
+                    float experience = Float.parseFloat(argLine);
+                    recipe.setExperience(experience);
+                } catch (NumberFormatException e) {
+                    ErrorReporter.getInstance().warning("Xp is not a valid float. Xp: " + argLine + " ignored and defaulted to 0.");
                 }
             }
 
@@ -242,7 +197,7 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
     }
 
     // get min-max or fixed smelting time
-    private boolean parseArgs(SingleResultRecipe recipe, String[] split, boolean isRemove) {
+    private boolean parseArgs(RMBaseFurnaceRecipe1_13 recipe, String[] split, boolean isRemove) {
         if (!isRemove) { // if it's got @remove we don't care about burn time or fuel
             float minTime;
             float maxTime = -1;
@@ -278,13 +233,8 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
                     return ErrorReporter.getInstance().error("Smelting recipe has the min-time less or equal to max-time!", "Use a single number if you want a fixed value.");
                 }
 
-                if (recipe instanceof RMBaseFurnaceRecipe1_13) {
-                    ((RMBaseFurnaceRecipe1_13) recipe).setMinTime(minTime);
-                    ((RMBaseFurnaceRecipe1_13) recipe).setMaxTime(maxTime);
-                } else {
-                    ((RMFurnaceRecipe) recipe).setMinTime(minTime);
-                    ((RMFurnaceRecipe) recipe).setMaxTime(maxTime);
-                }
+                recipe.setMinTime(minTime);
+                recipe.setMaxTime(maxTime);
             }
         }
 

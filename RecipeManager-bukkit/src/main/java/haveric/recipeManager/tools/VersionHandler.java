@@ -1,34 +1,13 @@
-package haveric.recipeManager.nms;
+package haveric.recipeManager.tools;
 
-import haveric.recipeManager.tools.*;
 import org.bukkit.Bukkit;
 
-public class NMSVersionHandler {
+public class VersionHandler {
 
     private static BaseToolsRecipe toolsRecipe;
 
     public static BaseRecipeIterator getRecipeIterator() {
-        BaseRecipeIterator recipeIterator;
-
-        String serverVersion = getServerVersion();
-
-        switch (serverVersion) {
-            case "v1_14_R1":
-                recipeIterator = new RecipeIteratorV1_14_R1();
-                break;
-            case "v1_13_R2":
-                recipeIterator = new RecipeIteratorV1_13_2();
-                break;
-            case "v1_12_R1":
-                recipeIterator = new RecipeIteratorV1_12();
-                break;
-            case "v1_15_R1":
-            default:
-                recipeIterator = new RecipeIteratorOld();
-                break;
-        }
-
-        return recipeIterator;
+        return new RecipeIteratorOld();
     }
 
     public static BaseToolsRecipe getToolsRecipe() {
@@ -39,14 +18,8 @@ public class NMSVersionHandler {
             int patchVersion = getPatchVersion(serverVersion);
             if (minorVersion > 19 || (minorVersion == 19 && patchVersion >= 4)) {
                 toolsRecipe = new ToolsRecipeV1_19_4();
-            } else if (minorVersion >= 16) {
-                toolsRecipe = new ToolsRecipeV1_16_1();
-            } else if (minorVersion >= 14) {
-                toolsRecipe = new ToolsRecipeV1_14_R1();
-            } else if (minorVersion == 13 && patchVersion == 2) {
-                toolsRecipe = new ToolsRecipeV1_13_2();
             } else {
-                toolsRecipe = new ToolsRecipeOld();
+                toolsRecipe = new ToolsRecipeV1_16_1();
             }
         }
 

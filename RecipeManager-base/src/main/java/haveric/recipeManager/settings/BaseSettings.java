@@ -106,7 +106,6 @@ public abstract class BaseSettings {
         MessageSender.getInstance().log("    special-recipes.anvil.combine-item.enabled: " + getSpecialAnvilCombineItem());
         MessageSender.getInstance().log("    special-recipes.anvil.repair-material.enabled: " + getSpecialAnvilRepairMaterial());
         MessageSender.getInstance().log("    special-recipes.anvil.renaming.enabled: " + getSpecialAnvilRenaming());
-        MessageSender.getInstance().log("    special-recipes.banner: " + getSpecialBanner());
         MessageSender.getInstance().log("    special-recipes.banner-duplicate: " + getSpecialBannerDuplicate());
         MessageSender.getInstance().log("    special-recipes.book-cloning: " + getSpecialBookCloning());
         MessageSender.getInstance().log("    special-recipes.cartography.clone: " + getSpecialCartographyClone());
@@ -265,8 +264,6 @@ public abstract class BaseSettings {
     public abstract boolean getSpecialCartographyExtend();
 
     public abstract boolean getSpecialCartographyLock();
-
-    public abstract boolean getSpecialBanner();
 
     public abstract boolean getSpecialBannerDuplicate();
 

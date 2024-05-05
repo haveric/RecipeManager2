@@ -1,12 +1,10 @@
 package haveric.recipeManager.flag.flags.any;
 
-import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.potion.PotionEffect;
 
 import java.util.ArrayList;
@@ -28,7 +26,7 @@ public class FlagPotionEffect extends Flag {
 
     @Override
     protected String[] getDescription() {
-        String[] description = new String[]{
+        return new String[]{
             "Adds potion effects to crafter.",
             "This flag can be used more than once to add more effects.",
             "",
@@ -42,16 +40,10 @@ public class FlagPotionEffect extends Flag {
             "  ambient [false]     = (default true) makes the effect produce more, translucent, particles.",
             "  !ambient            = equivalent to 'ambient false'",
             "  particles [false]   = (defaults true) display particles.",
-            "  !particles          = equivalent to 'particles false'", };
-
-        if (Version.has1_13BasicSupport()) {
-            description = ObjectArrays.concat(description, new String[]{
+            "  !particles          = equivalent to 'particles false'",
             "  icon [false]        = (defaults true) show the effect icon.",
             "  !icon               = equivalent to 'icon false'",
-            }, String.class);
-        }
-
-        return description;
+        };
     }
 
     @Override

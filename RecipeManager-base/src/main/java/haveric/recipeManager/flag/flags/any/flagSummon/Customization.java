@@ -48,7 +48,6 @@ public class Customization implements Cloneable {
     private float chance = 100.0f;
     private DyeColor color = null;
     private float[] drop = new float[6];
-    private boolean elder = false;
     private ItemRecipe[] equip = new ItemRecipe[6];
     private Fox.Type fox = null;
     private boolean foxCrouching = false;
@@ -65,8 +64,6 @@ public class Customization implements Cloneable {
     private boolean goatScreaming = false;
     private boolean hasChest = false;
     private boolean hit = false;
-    @SuppressWarnings("deprecation")
-    private Horse.Variant horse = null;
     private Horse.Color horseColor = null;
     private Horse.Style horseStyle = null;
     private int hp = 0;
@@ -85,8 +82,7 @@ public class Customization implements Cloneable {
     private boolean noRemove = false;
     private boolean noSit = false;
     private int num = 1;
-    @SuppressWarnings("deprecation")
-    private Ocelot.Type ocelot = null;
+
     private float onFire = 0;
     private Panda.Gene pandaHiddenGene = null;
     private Panda.Gene pandaMainGene = null;
@@ -101,8 +97,7 @@ public class Customization implements Cloneable {
     private Rabbit.Type rabbit = null;
     private boolean saddle = false;
     private boolean shearedSheep = false;
-    @SuppressWarnings("deprecation")
-    private Skeleton.SkeletonType skeleton = null;
+
     private boolean skeletonHorseTrapped = false;
     private int skeletonHorseTrappedTicks = 0;
     private int spread = 0;
@@ -116,7 +111,6 @@ public class Customization implements Cloneable {
     private Integer wanderingTraderDespawnDelay = null;
     private Integer wardenAnger = null;
     private Boolean zombieCanBreakDoors = null;
-    private boolean zombieVillager = false;
 
     public Customization(String newFlagType, EntityType newType) {
         flagType = newFlagType;
@@ -130,17 +124,31 @@ public class Customization implements Cloneable {
         adult = c.adult;
         ageLock = c.ageLock;
         angry = c.angry;
+        arrowCooldown = c.arrowCooldown;
+        arrowsInBody = c.arrowsInBody;
         baby = c.baby;
+        beeAnger = c.beeAnger;
+        beeCannotEnterHiveTicks = c.beeCannotEnterHiveTicks;
+        beeHasNectar = c.beeHasNectar;
+        beeHasStung = c.beeHasStung;
         cat = c.cat;
         chance = c.chance;
         color = c.color;
         System.arraycopy(c.drop, 0, drop, 0, c.drop.length);
         System.arraycopy(c.equip, 0, equip, 0, c.equip.length);
+        fox = c.fox;
+        foxCrouching = c.foxCrouching;
+        foxFirstTrustedPlayer = c.foxFirstTrustedPlayer;
+        foxFirstTrustedPlayerUUID = c.foxFirstTrustedPlayerUUID;
+        foxSecondTrustedPlayer = c.foxSecondTrustedPlayer;
+        foxSecondTrustedPlayerUUID = c.foxSecondTrustedPlayerUUID;
+        foxSleeping = c.foxSleeping;
         hasChest = c.hasChest;
         hit = c.hit;
         horseColor = c.horseColor;
         horseStyle = c.horseStyle;
         hp = c.hp;
+        invisible = c.invisible;
         invulnerable = c.invulnerable;
         jumpStrength = c.jumpStrength;
         maxHp = c.maxHp;
@@ -155,9 +163,11 @@ public class Customization implements Cloneable {
         noRemove = c.noRemove;
         noSit = c.noSit;
         num = c.num;
-        ocelot = c.ocelot;
         onFire = c.onFire;
+        pandaHiddenGene = c.pandaHiddenGene;
+        pandaMainGene = c.pandaMainGene;
         parrot = c.parrot;
+        persistent = c.persistent;
         pet = c.pet;
         pickup = c.pickup;
         pigAnger = c.pigAnger;
@@ -169,40 +179,11 @@ public class Customization implements Cloneable {
         shearedSheep = c.shearedSheep;
         spread = c.spread;
         target = c.target;
+        tropicalFishColor = c.tropicalFishColor;
+        tropicalFishPattern = c.tropicalFishPattern;
+        tropicalFishPatternColor = c.tropicalFishPatternColor;
         villager = c.villager;
-
-        if (Version.has1_13Support()) {
-            persistent = c.persistent;
-            tropicalFishColor = c.tropicalFishColor;
-            tropicalFishPattern = c.tropicalFishPattern;
-            tropicalFishPatternColor = c.tropicalFishPatternColor;
-        }
-
-        if (Version.has1_14Support()) {
-            pandaHiddenGene = c.pandaHiddenGene;
-            pandaMainGene = c.pandaMainGene;
-            fox = c.fox;
-            foxCrouching = c.foxCrouching;
-            foxFirstTrustedPlayer = c.foxFirstTrustedPlayer;
-            foxFirstTrustedPlayerUUID = c.foxFirstTrustedPlayerUUID;
-            foxSecondTrustedPlayer = c.foxSecondTrustedPlayer;
-            foxSecondTrustedPlayerUUID = c.foxSecondTrustedPlayerUUID;
-            foxSleeping = c.foxSleeping;
-            wanderingTraderDespawnDelay = c.wanderingTraderDespawnDelay;
-        }
-
-        if (Version.has1_15Support()) {
-            beeAnger = c.beeAnger;
-            beeCannotEnterHiveTicks = c.beeCannotEnterHiveTicks;
-            beeHasNectar = c.beeHasNectar;
-            beeHasStung = c.beeHasStung;
-        }
-
-        if (Version.has1_16Support()) {
-            arrowCooldown = c.arrowCooldown;
-            arrowsInBody = c.arrowsInBody;
-            invisible = c.invisible;
-        }
+        wanderingTraderDespawnDelay = c.wanderingTraderDespawnDelay;
 
         if (Version.has1_17Support()) {
             axolotl = c.axolotl;
@@ -340,15 +321,7 @@ public class Customization implements Cloneable {
                 }
             }
 
-            if (ent instanceof Ocelot) {
-                Ocelot npc = (Ocelot) ent;
-
-                if (ocelot != null) {
-                    npc.setCatType(ocelot);
-                }
-            }
-
-            if (Version.has1_14Support() && ent instanceof Cat) {
+            if (ent instanceof Cat) {
                 Cat npc = (Cat) ent;
 
                 if (cat != null) {
@@ -379,48 +352,20 @@ public class Customization implements Cloneable {
                     npc.setAdult();
                 }
 
-                if (Version.has1_16Support()) {
-                    if (ent instanceof Breedable) {
-                        Breedable breedable = (Breedable) ent;
-                        if (ageLock) {
-                            breedable.setAgeLock(true);
-                        }
-
-                        if (noBreed) {
-                            breedable.setBreed(false);
-                        }
-                    }
-                } else {
+                if (ent instanceof Breedable) {
+                    Breedable breedable = (Breedable) ent;
                     if (ageLock) {
-                        npc.setAgeLock(true);
+                        breedable.setAgeLock(true);
                     }
 
                     if (noBreed) {
-                        npc.setBreed(false);
+                        breedable.setBreed(false);
                     }
                 }
             }
 
             if (saddle) {
-                if (ent instanceof Pig) {
-                    Pig npc = (Pig) ent;
-
-                    npc.setAdult();
-                    npc.setSaddle(true);
-
-                    if (mount) {
-                        npc.addPassenger(player);
-                    }
-                } else if (ent instanceof Horse) {
-                    Horse npc = (Horse) ent;
-
-                    npc.setAdult();
-                    npc.getInventory().setSaddle(new ItemStack(Material.SADDLE));
-
-                    if (mount) {
-                        npc.addPassenger(player);
-                    }
-                } else if (Version.has1_16Support() && ent instanceof Steerable) {
+                if (ent instanceof Steerable) {
                     Steerable steerable = (Steerable) ent;
 
                     steerable.setAdult();
@@ -428,6 +373,15 @@ public class Customization implements Cloneable {
 
                     if (mount) {
                         steerable.addPassenger(player);
+                    }
+                } else if (ent instanceof Horse) {
+                    Horse horse = (Horse) ent;
+
+                    horse.setAdult();
+                    horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
+
+                    if (mount) {
+                        horse.addPassenger(player);
                     }
                 }
             }
@@ -529,93 +483,85 @@ public class Customization implements Cloneable {
                 }
             }
 
-            if (Version.has1_13Support()) {
-                ent.setPersistent(persistent);
+            ent.setPersistent(persistent);
 
-                if (ent instanceof TropicalFish) {
-                    TropicalFish fish = (TropicalFish) ent;
-                    // Set pattern before body color in order to set correctly
-                    if (tropicalFishPattern != null) {
-                        fish.setPattern(tropicalFishPattern);
-                    }
+            if (ent instanceof TropicalFish) {
+                TropicalFish fish = (TropicalFish) ent;
+                // Set pattern before body color in order to set correctly
+                if (tropicalFishPattern != null) {
+                    fish.setPattern(tropicalFishPattern);
+                }
 
-                    if (tropicalFishPatternColor != null) {
-                        fish.setPatternColor(tropicalFishPatternColor);
-                    }
+                if (tropicalFishPatternColor != null) {
+                    fish.setPatternColor(tropicalFishPatternColor);
+                }
 
-                    if (tropicalFishColor != null) {
-                        fish.setBodyColor(tropicalFishColor);
-                    }
+                if (tropicalFishColor != null) {
+                    fish.setBodyColor(tropicalFishColor);
                 }
             }
 
-            if (Version.has1_14Support()) {
-                if (ent instanceof Fox) {
-                    Fox npc = (Fox) ent;
+            if (ent instanceof Fox) {
+                Fox npc = (Fox) ent;
 
-                    if (fox != null) {
-                        npc.setFoxType(fox);
-                    }
-
-                    if (foxCrouching) {
-                        npc.setCrouching(true);
-                    }
-
-                    if (foxFirstTrustedPlayerUUID != null) {
-                        OfflinePlayer firstPlayer = Bukkit.getOfflinePlayer(foxFirstTrustedPlayerUUID);
-                        npc.setFirstTrustedPlayer(firstPlayer);
-                    } else if (foxFirstTrustedPlayer) {
-                        npc.setFirstTrustedPlayer(player);
-                    }
-
-                    if (foxSecondTrustedPlayerUUID != null) {
-                        OfflinePlayer secondPlayer = Bukkit.getOfflinePlayer(foxSecondTrustedPlayerUUID);
-                        npc.setFirstTrustedPlayer(secondPlayer);
-                    } else if (foxSecondTrustedPlayer) {
-                        npc.setSecondTrustedPlayer(player);
-                    }
-
-                    if (foxSleeping) {
-                        npc.setSleeping(true);
-                    }
+                if (fox != null) {
+                    npc.setFoxType(fox);
                 }
 
-                if (ent instanceof Panda) {
-                    Panda npc = (Panda) ent;
-
-                    if (pandaMainGene != null) {
-                        npc.setMainGene(pandaMainGene);
-                    }
-                    if (pandaHiddenGene != null) {
-                        npc.setHiddenGene(pandaHiddenGene);
-                    }
+                if (foxCrouching) {
+                    npc.setCrouching(true);
                 }
 
-                if (ent instanceof WanderingTrader) {
-                    WanderingTrader trader = (WanderingTrader) ent;
-                    if (wanderingTraderDespawnDelay != null) {
-                        trader.setDespawnDelay(wanderingTraderDespawnDelay);
-                    }
+                if (foxFirstTrustedPlayerUUID != null) {
+                    OfflinePlayer firstPlayer = Bukkit.getOfflinePlayer(foxFirstTrustedPlayerUUID);
+                    npc.setFirstTrustedPlayer(firstPlayer);
+                } else if (foxFirstTrustedPlayer) {
+                    npc.setFirstTrustedPlayer(player);
+                }
+
+                if (foxSecondTrustedPlayerUUID != null) {
+                    OfflinePlayer secondPlayer = Bukkit.getOfflinePlayer(foxSecondTrustedPlayerUUID);
+                    npc.setFirstTrustedPlayer(secondPlayer);
+                } else if (foxSecondTrustedPlayer) {
+                    npc.setSecondTrustedPlayer(player);
+                }
+
+                if (foxSleeping) {
+                    npc.setSleeping(true);
                 }
             }
 
-            if (Version.has1_15Support()) {
-                if (ent instanceof Bee) {
-                    Bee bee = (Bee) ent;
-                    bee.setAnger(beeAnger);
-                    bee.setCannotEnterHiveTicks(beeCannotEnterHiveTicks);
-                    bee.setHasNectar(beeHasNectar);
-                    bee.setHasStung(beeHasStung);
+            if (ent instanceof Panda) {
+                Panda npc = (Panda) ent;
+
+                if (pandaMainGene != null) {
+                    npc.setMainGene(pandaMainGene);
+                }
+                if (pandaHiddenGene != null) {
+                    npc.setHiddenGene(pandaHiddenGene);
                 }
             }
 
-            if (Version.has1_16Support()) {
-                if (arrowCooldown != null) {
-                    ent.setArrowCooldown(arrowCooldown);
+            if (ent instanceof WanderingTrader) {
+                WanderingTrader trader = (WanderingTrader) ent;
+                if (wanderingTraderDespawnDelay != null) {
+                    trader.setDespawnDelay(wanderingTraderDespawnDelay);
                 }
-                ent.setArrowsInBody(arrowsInBody);
-                ent.setInvisible(invisible);
             }
+
+            if (ent instanceof Bee) {
+                Bee bee = (Bee) ent;
+                bee.setAnger(beeAnger);
+                bee.setCannotEnterHiveTicks(beeCannotEnterHiveTicks);
+                bee.setHasNectar(beeHasNectar);
+                bee.setHasStung(beeHasStung);
+            }
+
+            if (arrowCooldown != null) {
+                ent.setArrowCooldown(arrowCooldown);
+            }
+            ent.setArrowsInBody(arrowsInBody);
+            ent.setInvisible(invisible);
 
             if (Version.has1_17Support()) {
                 if (ent instanceof Axolotl) {
@@ -964,19 +910,13 @@ public class Customization implements Cloneable {
             ageLock = true;
         } else if (lower.equals("angry")) {
             boolean error = false;
-            if (Version.has1_16Support()) {
-                switch (entityType) {
-                    case WOLF:
-                    case ZOMBIFIED_PIGLIN:
-                        break;
+            switch (entityType) {
+                case WOLF:
+                case ZOMBIFIED_PIGLIN:
+                    break;
 
-                    default:
-                        error = true;
-                }
-            } else {
-                if (entityType != EntityType.WOLF && entityType != EntityType.valueOf("PIG_ZOMBIE")) {
+                default:
                     error = true;
-                }
             }
 
             if (error) {
@@ -990,29 +930,15 @@ public class Customization implements Cloneable {
         } else if (lower.startsWith("cat")) {
             lower = lower.substring("cat".length()).trim();
 
-            if (Version.has1_14Support()) {
-                if (entityType != EntityType.CAT) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'cat' argument on non-cat entity!");
-                    return false;
-                }
+            if (entityType != EntityType.CAT) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'cat' argument on non-cat entity!");
+                return false;
+            }
 
-                cat = RMCUtil.parseEnum(lower, Cat.Type.values());
+            cat = RMCUtil.parseEnum(lower, Cat.Type.values());
 
-                if (cat == null) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'cat' argument with invalid entityType: " + lower);
-                }
-            } else {
-                if (entityType != EntityType.OCELOT) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'cat' argument on non-ocelot entity!");
-                    return false;
-                }
-
-                //noinspection deprecation
-                ocelot = RMCUtil.parseEnum(lower, Ocelot.Type.values());
-
-                if (ocelot == null) {
-                    ErrorReporter.getInstance().warning("Flag " + flagType + " has 'cat' argument with invalid entityType: " + lower);
-                }
+            if (cat == null) {
+                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'cat' argument with invalid entityType: " + lower);
             }
         } else if (lower.startsWith("chance")) {
             lower = lower.substring("chance".length()).trim();
@@ -1030,9 +956,7 @@ public class Customization implements Cloneable {
             switch (entityType) {
                 case SHEEP:
                 case WOLF:
-                    break;
-
-                case CAT: // 1.14
+                case CAT:
                     break;
 
                 default:
@@ -1225,7 +1149,7 @@ public class Customization implements Cloneable {
             }
         } else if (lower.startsWith("saddle")) {
             if (entityType != EntityType.PIG && entityType != EntityType.HORSE && entityType != EntityType.SKELETON_HORSE
-                    && entityType != EntityType.ZOMBIE_HORSE && entityType != EntityType.MULE && entityType != EntityType.DONKEY || (Version.has1_16Support() && entityType != EntityType.STRIDER)) {
+                    && entityType != EntityType.ZOMBIE_HORSE && entityType != EntityType.MULE && entityType != EntityType.DONKEY && entityType != EntityType.STRIDER) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'saddle' on non-pig and non-horse entity!");
                 return false;
             }
@@ -1290,9 +1214,9 @@ public class Customization implements Cloneable {
             if (parrot == null) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'parrot' argument with invalid entityType: " + lower);
             }
-        } else if (Version.has1_13Support() && lower.equals("persistent")) {
+        } else if (lower.equals("persistent")) {
             persistent = true;
-        } else if (Version.has1_13Support() && lower.startsWith("tropicalfish")) {
+        } else if (lower.startsWith("tropicalfish")) {
             if (lower.startsWith("tropicalfishpatterncolor")) {
                 lower = lower.substring("tropicalfishpatterncolor".length()).trim();
 
@@ -1315,7 +1239,7 @@ public class Customization implements Cloneable {
                     ErrorReporter.getInstance().warning("Flag " + flagType + " has 'tropicalfishcolor' argument with invalid dye color: " + lower);
                 }
             }
-        } else if (Version.has1_14Support() && lower.startsWith("pandahiddengene")) {
+        } else if (lower.startsWith("pandahiddengene")) {
             if (entityType != EntityType.PANDA) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandahiddengene' argument on non-panda entity!");
                 return false;
@@ -1328,7 +1252,7 @@ public class Customization implements Cloneable {
             if (pandaHiddenGene == null) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandahiddengene' argument with invalid entityType: " + lower);
             }
-        } else if (Version.has1_14Support() && lower.startsWith("pandamaingene")) {
+        } else if (lower.startsWith("pandamaingene")) {
             if (entityType != EntityType.PANDA) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandamaingene' argument on non-panda entity!");
                 return false;
@@ -1341,7 +1265,7 @@ public class Customization implements Cloneable {
             if (pandaMainGene == null) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'pandamaingene' argument with invalid entityType: " + lower);
             }
-        } else if (Version.has1_14Support() && lower.startsWith("fox")) {
+        } else if (lower.startsWith("fox")) {
             String[] foxSplit = lower.split(" ");
             if (entityType != EntityType.FOX) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has '" + foxSplit[0] + "' argument on non-fox entity!");
@@ -1384,7 +1308,7 @@ public class Customization implements Cloneable {
                     ErrorReporter.getInstance().warning("Flag " + flagType + " has 'fox' argument with invalid entityType: " + lower);
                 }
             }
-        } else if (Version.has1_14Support() && lower.startsWith("wanderingtraderdespawndelay")) {
+        } else if (lower.startsWith("wanderingtraderdespawndelay")) {
             lower = lower.substring("wanderingtraderdespawndelay".length()).trim();
 
             try {
@@ -1392,7 +1316,7 @@ public class Customization implements Cloneable {
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'wanderingtraderdespawndelay' argument with invalid value number: " + lower);
             }
-        } else if (Version.has1_15Support() && lower.startsWith("bee")) {
+        } else if (lower.startsWith("bee")) {
             if (lower.startsWith("beeanger")) {
                 lower = lower.substring("beeanger".length()).trim();
 
@@ -1414,7 +1338,7 @@ public class Customization implements Cloneable {
             } else if (lower.equals("beehasstung")) {
                 beeHasStung = true;
             }
-        } else if (Version.has1_16Support() && lower.startsWith("arrowcooldown")) {
+        } else if (lower.startsWith("arrowcooldown")) {
             lower = lower.substring("arrowcooldown".length()).trim();
 
             try {
@@ -1422,7 +1346,7 @@ public class Customization implements Cloneable {
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'arrowcooldown' argument with invalid value number: " + lower);
             }
-        } else if (Version.has1_16Support() && lower.startsWith("arrowsinbody")) {
+        } else if (lower.startsWith("arrowsinbody")) {
             lower = lower.substring("arrowsinbody".length()).trim();
 
             try {
@@ -1430,7 +1354,7 @@ public class Customization implements Cloneable {
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'arrowsinbody' argument with invalid value number: " + lower);
             }
-        } else if (Version.has1_16Support() && lower.equals("invisible")) {
+        } else if (lower.equals("invisible")) {
             invisible = true;
         } else if (Version.has1_17Support() && lower.equals("axolotlplayingdead")) {
             axolotlPlayingDead = true;
@@ -1555,7 +1479,13 @@ public class Customization implements Cloneable {
         toHash += "adult: " + adult;
         toHash += "ageLock: " + ageLock;
         toHash += "angry: " + angry;
+        toHash += "arrowCooldown: " + arrowCooldown;
+        toHash += "arrowsInBody: " + arrowsInBody;
         toHash += "baby: " + baby;
+        toHash += "beeAnger: " + beeAnger;
+        toHash += "beeCannotEnterHiveTicks: " + beeCannotEnterHiveTicks;
+        toHash += "beeHasNectar: " + beeHasNectar;
+        toHash += "beeHasStung: " + beeHasStung;
         toHash += "cat: " + cat.toString();
         toHash += "chance: " + chance;
         toHash += "color: " + color.toString();
@@ -1569,11 +1499,19 @@ public class Customization implements Cloneable {
             toHash += "equip: " + itemRecipe.getResult().hashCode();
         }
 
+        toHash += "fox: " + fox;
+        toHash += "foxCrouching: " + foxCrouching;
+        toHash += "foxFirstTrustedPlayer: " + foxFirstTrustedPlayer;
+        toHash += "foxFirstTrustedPlayerUUID: " + foxFirstTrustedPlayerUUID;
+        toHash += "foxSecondTrustedPlayer: " + foxSecondTrustedPlayer;
+        toHash += "foxSecondTrustedPlayerUUID: " + foxSecondTrustedPlayerUUID;
+        toHash += "foxSleeping: " + foxSleeping;
         toHash += "hasChest: " + hasChest;
         toHash += "horseColor: " + horseColor.toString();
         toHash += "horseStyle: " + horseStyle.toString();
         toHash += "hit: " + hit;
         toHash += "hp: " + hp;
+        toHash += "invisible: " + invisible;
         toHash += "invulnerable: " + invulnerable;
         toHash += "jumpStrength: " + jumpStrength.toString();
         toHash += "maxHp: " + maxHp;
@@ -1588,9 +1526,11 @@ public class Customization implements Cloneable {
         toHash += "noRemove: " + noRemove;
         toHash += "noSit: " + noSit;
         toHash += "num: " + num;
-        toHash += "ocelot: " + ocelot.toString();
         toHash += "onFire: " + onFire;
+        toHash += "pandaHiddenGene: " + pandaHiddenGene;
+        toHash += "pandaMainGene: " + pandaMainGene;
         toHash += "parrot: " + parrot;
+        toHash += "persistent: " + persistent;
         toHash += "pet: " + pet;
         toHash += "pickup: " + pickup.toString();
         toHash += "pigAnger: " + pigAnger;
@@ -1606,40 +1546,11 @@ public class Customization implements Cloneable {
         toHash += "shearedSheep: " + shearedSheep;
         toHash += "spread: " + spread;
         toHash += "target: " + target;
+        toHash += "tropicalFishColor: " + tropicalFishColor;
+        toHash += "tropicalFishPattern: " + tropicalFishPattern;
+        toHash += "tropicalFishPatternColor: " + tropicalFishPatternColor;
         toHash += "villager: " + villager.toString();
-
-        if (Version.has1_13Support()) {
-            toHash += "persistent: " + persistent;
-            toHash += "tropicalFishColor: " + tropicalFishColor;
-            toHash += "tropicalFishPattern: " + tropicalFishPattern;
-            toHash += "tropicalFishPatternColor: " + tropicalFishPatternColor;
-        }
-
-        if (Version.has1_14Support()) {
-            toHash += "pandaHiddenGene: " + pandaHiddenGene;
-            toHash += "pandaMainGene: " + pandaMainGene;
-            toHash += "fox: " + fox;
-            toHash += "foxCrouching: " + foxCrouching;
-            toHash += "foxFirstTrustedPlayer: " + foxFirstTrustedPlayer;
-            toHash += "foxFirstTrustedPlayerUUID: " + foxFirstTrustedPlayerUUID;
-            toHash += "foxSecondTrustedPlayer: " + foxSecondTrustedPlayer;
-            toHash += "foxSecondTrustedPlayerUUID: " + foxSecondTrustedPlayerUUID;
-            toHash += "foxSleeping: " + foxSleeping;
-            toHash += "wanderingTraderDespawnDelay: " + wanderingTraderDespawnDelay;
-        }
-
-        if (Version.has1_15Support()) {
-            toHash += "beeAnger: " + beeAnger;
-            toHash += "beeCannotEnterHiveTicks: " + beeCannotEnterHiveTicks;
-            toHash += "beeHasNectar: " + beeHasNectar;
-            toHash += "beeHasStung: " + beeHasStung;
-        }
-
-        if (Version.has1_16Support()) {
-            toHash += "arrowCooldown: " + arrowCooldown;
-            toHash += "arrowsInBody: " + arrowsInBody;
-            toHash += "invisible: " + invisible;
-        }
+        toHash += "wanderingTraderDespawnDelay: " + wanderingTraderDespawnDelay;
 
         if (Version.has1_17Support()) {
             toHash += "axolotl: " + axolotl;

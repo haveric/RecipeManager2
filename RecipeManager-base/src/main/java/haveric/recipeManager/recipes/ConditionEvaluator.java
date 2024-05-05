@@ -8,7 +8,6 @@ import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
 import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.flags.recipe.FlagOverride;
-import haveric.recipeManager.recipes.craft.CraftRecipe;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -160,15 +159,6 @@ public class ConditionEvaluator {
             }
         }
 
-        RMCRecipeInfo info = map.get(recipe);
-
-        if (info == null && recipe instanceof CraftRecipe) {
-            CraftRecipe cr = (CraftRecipe) recipe;
-            cr.setMirrorShape(true);
-
-            info = map.get(recipe);
-        }
-
-        return info;
+        return map.get(recipe);
     }
 }

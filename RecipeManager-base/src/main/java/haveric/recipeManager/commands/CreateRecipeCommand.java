@@ -10,7 +10,6 @@ import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.RMBukkitTools;
 import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.ToolsFlag;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -21,7 +20,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -195,7 +193,7 @@ public class CreateRecipeCommand implements CommandExecutor {
 
                 // TODO: Add FlagHide support to Conditions
 
-                if (Version.has1_14Support() && meta.hasCustomModelData()) {
+                if (meta.hasCustomModelData()) {
                     ingredientCondition.append(" | custommodeldata ").append(meta.getCustomModelData());
                 }
 
@@ -296,15 +294,7 @@ public class CreateRecipeCommand implements CommandExecutor {
                 // TODO: Add FlagRepairCost support to Conditions
                 // TODO: Add FlagSkullOwner support to Conditions
 
-                if (!Version.has1_13BasicSupport() && meta instanceof SpawnEggMeta) {
-                    SpawnEggMeta spawnEggMeta = (SpawnEggMeta) meta;
-                    EntityType spawnedType = spawnEggMeta.getSpawnedType();
-                    if (spawnedType != null) {
-                        ingredientCondition.append(Files.NL).append("| spawnegg ").append(spawnedType.name());
-                    }
-                }
-
-                if (Supports.suspiciousStewMeta() && meta instanceof SuspiciousStewMeta) {
+                if (meta instanceof SuspiciousStewMeta) {
                     SuspiciousStewMeta stewMeta = (SuspiciousStewMeta) meta;
                     if (stewMeta.hasCustomEffects()) {
                         List<PotionEffect> potionEffects = stewMeta.getCustomEffects();
@@ -366,11 +356,8 @@ public class CreateRecipeCommand implements CommandExecutor {
         if (!effect.hasParticles()) {
             ingredientCondition.append(", !particles");
         }
-
-        if (Version.has1_13BasicSupport()) {
-            if (!effect.hasIcon()) {
-                ingredientCondition.append(", !icon");
-            }
+        if (!effect.hasIcon()) {
+            ingredientCondition.append(", !icon");
         }
     }
 

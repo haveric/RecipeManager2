@@ -85,7 +85,6 @@ public class FlagType {
     public static final String RARITY = "@rarity";
     public static final String REPAIR_COST = "@repaircost";
     public static final String SKULL_OWNER = "@skullowner";
-    public static final String SPAWN_EGG = "@spawnegg";
     public static final String STORE_ENCHANTMENT = "@storeenchantment";
     public static final String SUSPICIOUS_STEW_ITEM = "@suspiciousstewitem";
     public static final String TROPICAL_FISH_BUCKET_ITEM = "@tropicalfishbucketitem";

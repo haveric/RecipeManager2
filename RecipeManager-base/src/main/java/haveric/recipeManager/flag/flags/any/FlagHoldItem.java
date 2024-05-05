@@ -195,27 +195,15 @@ public class FlagHoldItem extends Flag {
             "    amplify <num or min-max>  = Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
             "    ambient or !ambient       = Check effect's extra visual particles setting",
             "    particles or !particles   = Check effect's particles setting",
-        }, String.class);
-
-        if (Version.has1_13BasicSupport()) {
-            description = ObjectArrays.concat(description, new String[]{
-                "    icon or !icon             = Check effect's icon setting",
-            }, String.class);
-        }
-
-        if (Supports.suspiciousStewMeta()) {
-            description = ObjectArrays.concat(description, new String[]{
-                "  suspiciousstew <condition>, [...]",
-                "    type &lt;effecttype&gt;         = Type of potion effect, see " + Files.getNameIndexHashLink("potioneffect"),
-                "    duration <num or min-max> = Duration of the potion effect in seconds, default 1 (does not work on HEAL and HARM)",
-                "    amplify <num or min-max>  = Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
-                "    ambient or !ambient       = Check effect's extra visual particles setting",
-                "    particles or !particles   = Check effect's particles setting",
-                "    icon or !icon             = Check effect's icon setting",
-            }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[]{
+            "    icon or !icon             = Check effect's icon setting",
+            "",
+            "  suspiciousstew <condition>, [...]",
+            "    type &lt;effecttype&gt;         = Type of potion effect, see " + Files.getNameIndexHashLink("potioneffect"),
+            "    duration <num or min-max> = Duration of the potion effect in seconds, default 1 (does not work on HEAL and HARM)",
+            "    amplify <num or min-max>  = Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
+            "    ambient or !ambient       = Check effect's extra visual particles setting",
+            "    particles or !particles   = Check effect's particles setting",
+            "    icon or !icon             = Check effect's icon setting",
             "",
             "  banner <condition>, [...]",
             "    pattern <pattern> [dyecolor]",

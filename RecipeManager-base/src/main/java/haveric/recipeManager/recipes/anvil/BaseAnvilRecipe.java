@@ -4,7 +4,6 @@ import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.PreparableResultRecipe;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 
 public abstract class BaseAnvilRecipe extends PreparableResultRecipe {
@@ -59,7 +58,7 @@ public abstract class BaseAnvilRecipe extends PreparableResultRecipe {
     public boolean isValidBlockMaterial(Material material) {
         boolean valid = material == Material.ANVIL;
 
-        if (!valid && Version.has1_13BasicSupport()) {
+        if (!valid) {
             valid = material == Material.CHIPPED_ANVIL;
 
             if (!valid) {

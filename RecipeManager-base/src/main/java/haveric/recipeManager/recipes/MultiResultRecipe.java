@@ -9,7 +9,6 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.flags.any.FlagDisplayName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 
@@ -114,7 +113,7 @@ public abstract class MultiResultRecipe extends BaseRecipe {
 
                 s.append(result.getType().toString().toLowerCase());
 
-                if (!Version.has1_13BasicSupport() || result instanceof Damageable) {
+                if (result instanceof Damageable) {
                     if (result.getDurability() != 0) {
                         s.append(':').append(result.getDurability());
                     }

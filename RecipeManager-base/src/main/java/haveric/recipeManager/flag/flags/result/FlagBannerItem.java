@@ -9,7 +9,6 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -86,12 +85,9 @@ public class FlagBannerItem extends Flag {
         }
 
         boolean validFlaggable = false;
-        if (Version.has1_13BasicSupport()) {
-            FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
-
-            if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), BannerMeta.class)) {
-                validFlaggable = true;
-            }
+        FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
+        if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), BannerMeta.class)) {
+            validFlaggable = true;
         }
 
         if (!validResult && !validFlaggable) {

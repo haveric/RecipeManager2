@@ -47,7 +47,6 @@ subprojects {
             name 'Alt2 source for Spigot'
             url 'https://maven.elmakers.com/repository/'
         }
-        // For 1.12-1.14, adding NMS package; Spigot's BuildTools will do a local Maven install. Let's look there.
         mavenLocal()
     }
 

@@ -57,15 +57,10 @@ public class FlagSummon extends Flag {
         }
 
         description = ObjectArrays.concat(description, new String[]{
-            String.format(argFormat, "angry", "makes entity angry, only works for wolves and pigzombies; you can't use 'pet' with this.")
+            String.format(argFormat, "angry", "makes entity angry, only works for wolves and pigzombies; you can't use 'pet' with this."),
+            String.format(argFormat, "arrowcooldown <ticks>", "sets the ticks until the next arrow leaves the entity's body."),
+            String.format(argFormat, "arrowsinbody <amount>", "sets the number of arrows in the entity's body."),
         }, String.class);
-
-        if (Version.has1_16Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                String.format(argFormat, "arrowcooldown <ticks>", "sets the ticks until the next arrow leaves the entity's body."),
-                String.format(argFormat, "arrowsinbody <amount>", "sets the number of arrows in the entity's body."),
-            }, String.class);
-        }
 
         if (Version.has1_17Support()) {
             description = ObjectArrays.concat(description, new String[]{
@@ -76,37 +71,25 @@ public class FlagSummon extends Flag {
 
         description = ObjectArrays.concat(description, new String[]{
             String.format(argFormat, "baby", "spawn entity as a baby, works with animals, villagers and zombies (works opposite of adult)."),
+            String.format(argFormat, "beeanger <ticks>", "sets the anger level to the number of ticks the bee will remain angry for."),
+            String.format(argFormat, "beecannotenterhiveticks <ticks>", "sets the ticks the bee cannot enter a hive for."),
+            String.format(argFormat, "beehasnectar", "sets the bee to have nectar."),
+            String.format(argFormat, "beehasstung", "sets if the bee has stung."),
         }, String.class);
 
-        if (Version.has1_15Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                String.format(argFormat, "beeanger <ticks>", "sets the anger level to the number of ticks the bee will remain angry for."),
-                String.format(argFormat, "beecannotenterhiveticks <ticks>", "sets the ticks the bee cannot enter a hive for."),
-                String.format(argFormat, "beehasnectar", "sets the bee to have nectar."),
-                String.format(argFormat, "beehasstung", "sets if the bee has stung."),
-            }, String.class);
-        }
-
-        if (Version.has1_14Support()) {
-            if (!Cat.Type.class.isEnum()) {
-                try {
-                    if (Registry.CAT_VARIANT != null) {
-                        description = ObjectArrays.concat(description, new String[]{
+        if (!Cat.Type.class.isEnum()) {
+            try {
+                if (Registry.CAT_VARIANT != null) {
+                    description = ObjectArrays.concat(description, new String[]{
                             String.format(argFormat, "cat <type>", "cat type, available values: " + RMBukkitTools.registryToString(Registry.CAT_VARIANT)),
-                        }, String.class);
-                    }
-                } catch (ExceptionInInitializerError | NoClassDefFoundError e) {
-                    // Handle missing registry for testing
+                    }, String.class);
                 }
-            } else {
-                description = ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "cat <type>", "cat type, available values: " + RMCUtil.collectionToString(Arrays.asList(Cat.Type.values())).toLowerCase()),
-                }, String.class);
+            } catch (ExceptionInInitializerError | NoClassDefFoundError e) {
+                // Handle missing registry for testing
             }
         } else {
-            //noinspection deprecation
             description = ObjectArrays.concat(description, new String[]{
-                String.format(argFormat, "cat <type>", "ocelot type, available values: " + RMCUtil.collectionToString(Arrays.asList(Ocelot.Type.values())).toLowerCase()),
+                    String.format(argFormat, "cat <type>", "cat type, available values: " + RMCUtil.collectionToString(Arrays.asList(Cat.Type.values())).toLowerCase()),
             }, String.class);
         }
 
@@ -116,17 +99,12 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "color <dye>", "sets the color of animal, only works for sheep and pet wolf/cats."),
             String.format(argFormatExtra, "", "Values: " + Files.getNameIndexHashLink("dyecolor")),
             String.format(argFormat, "feet <item> [drop%]", "equip an item on the entity's feet with optional drop chance."),
+            String.format(argFormat, "fox <type>", "set the fox type, values: " + RMCUtil.collectionToString(Arrays.asList(Fox.Type.values())).toLowerCase()),
+            String.format(argFormat, "foxcrouching", "set the fox to be crouching"),
+            String.format(argFormat, "foxfirsttrustedplayer <uuid or player>", "set the fox's first trusted player. If set to 'player', the crafter will be used."),
+            String.format(argFormat, "foxsecondtrustedplayer <uuid or player>", "set the fox's second trusted player. If set to 'player', the crafter will be used."),
+            String.format(argFormat, "foxsleeping", "set the fox to be sleeping"),
         }, String.class);
-
-        if (Version.has1_14Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "fox <type>", "set the fox type, values: " + RMCUtil.collectionToString(Arrays.asList(Fox.Type.values())).toLowerCase()),
-                    String.format(argFormat, "foxcrouching", "set the fox to be crouching"),
-                    String.format(argFormat, "foxfirsttrustedplayer <uuid or player>", "set the fox's first trusted player. If set to 'player', the crafter will be used."),
-                    String.format(argFormat, "foxsecondtrustedplayer <uuid or player>", "set the fox's second trusted player. If set to 'player', the crafter will be used."),
-                    String.format(argFormat, "foxsleeping", "set the fox to be sleeping"),
-            }, String.class);
-        }
 
         if (Version.has1_17Support()) {
             description = ObjectArrays.concat(description, new String[]{
@@ -182,15 +160,7 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "hp <health> [max]", "set entity's health and optionally max health."),
             String.format(argFormat, "offhand <item> [drop%]", "equip an item on the entity's offhand with optional drop chance."),
             String.format(argFormat, "invulnerable", "makes the entity invulnerable."),
-        }, String.class);
-
-        if (Version.has1_16Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                String.format(argFormat, "invisible", "makes the entity invisible."),
-            }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[]{
+            String.format(argFormat, "invisible", "makes the entity invisible."),
             String.format(argFormat, "jumpstrength <0.0-2.0>", "sets the entity's jump strength (Only works for horses). 0 = no jump"),
             String.format(argFormat, "legs <item> [drop%]", "equip an item on the entity's legs with optional drop chance."),
             String.format(argFormat, "mountnext", "this entity will mount the next entity definition that triggers after it."),
@@ -203,26 +173,10 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "noremove", "prevents entity from being removed if nobody is near it."),
             String.format(argFormat, "num <number>", "spawn more cloned entities."),
             String.format(argFormat, "onfire <time>", "spawn entity on fire for <time> amount of seconds, value can be float."),
-        }, String.class);
-
-        if (Version.has1_14Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "pandahiddengene <type>", "set the panda's hidden gene, values: " + RMCUtil.collectionToString(Arrays.asList(Panda.Gene.values())).toLowerCase()),
-                    String.format(argFormat, "pandamaingene <type>", "set the panda's main gene, values: " + RMCUtil.collectionToString(Arrays.asList(Panda.Gene.values())).toLowerCase()),
-            }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[]{
-                String.format(argFormat, "parrot <type>", "set the parrot type, values: " + RMCUtil.collectionToString(Arrays.asList(Parrot.Variant.values())).toLowerCase()),
-        }, String.class);
-
-        if (Version.has1_13Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "persistent", "Makes the entity persistent"),
-            }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[]{
+            String.format(argFormat, "pandahiddengene <type>", "set the panda's hidden gene, values: " + RMCUtil.collectionToString(Arrays.asList(Panda.Gene.values())).toLowerCase()),
+            String.format(argFormat, "pandamaingene <type>", "set the panda's main gene, values: " + RMCUtil.collectionToString(Arrays.asList(Panda.Gene.values())).toLowerCase()),
+            String.format(argFormat, "parrot <type>", "set the parrot type, values: " + RMCUtil.collectionToString(Arrays.asList(Parrot.Variant.values())).toLowerCase()),
+            String.format(argFormat, "persistent", "Makes the entity persistent"),
             String.format(argFormat, "pet [nosit]", "makes entity owned by crafter, only works for tameable entities, optionally specify 'nosit' to not spawn entity in sit stance."),
             String.format(argFormat, "pickup [true/false]", "change if entity can pick-up dropped items."),
             String.format(argFormat, "playerirongolem", "marks iron golem as player-made."),
@@ -246,20 +200,12 @@ public class FlagSummon extends Flag {
         description = ObjectArrays.concat(description, new String[] {
             String.format(argFormat, "spread <range>", "spawns entities spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)"),
             String.format(argFormat, "target", "entity targets crafter, that means monsters attack and animals follow and the rest do nothing"),
-        }, String.class);
-
-        if (Version.has1_13Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                String.format(argFormat, "tropicalfishcolor <dye>", "sets the tropical fish's body color."),
-                String.format(argFormatExtra, "", "Values: " + Files.getNameIndexHashLink("dyecolor")),
-                String.format(argFormat, "tropicalfishpattern <pattern>", "sets the tropical fish's pattern."),
-                String.format(argFormatExtra, "", "Values: " + RMCUtil.collectionToString(Arrays.asList(TropicalFish.Pattern.values())).toLowerCase()),
-                String.format(argFormat, "tropicalfishpatterncolor <dye>", "sets the color of the tropical fish's pattern."),
-                String.format(argFormatExtra, "", "Values: " + Files.getNameIndexHashLink("dyecolor")),
-            }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[] {
+            String.format(argFormat, "tropicalfishcolor <dye>", "sets the tropical fish's body color."),
+            String.format(argFormatExtra, "", "Values: " + Files.getNameIndexHashLink("dyecolor")),
+            String.format(argFormat, "tropicalfishpattern <pattern>", "sets the tropical fish's pattern."),
+            String.format(argFormatExtra, "", "Values: " + RMCUtil.collectionToString(Arrays.asList(TropicalFish.Pattern.values())).toLowerCase()),
+            String.format(argFormat, "tropicalfishpatterncolor <dye>", "sets the color of the tropical fish's pattern."),
+            String.format(argFormatExtra, "", "Values: " + Files.getNameIndexHashLink("dyecolor")),
             String.format(argFormat, "villager <type>", "set the villager profession"),
         }, String.class);
 
@@ -289,10 +235,9 @@ public class FlagSummon extends Flag {
                 String.format(argFormat, "visualfire", "sets if the entity has visual fire (it will always appear to be on fire).") }, String.class);
         }
 
-        if (Version.has1_14Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                String.format(argFormat, "wanderingtraderdespawndelay <ticks>", "sets if the despawn delay (in ticks) of a wandering trader. If ticks is less than or equal to zero, the trader will not be despawned.") }, String.class);
-        }
+        description = ObjectArrays.concat(description, new String[]{
+            String.format(argFormat, "wanderingtraderdespawndelay <ticks>", "sets if the despawn delay (in ticks) of a wandering trader. If ticks is less than or equal to zero, the trader will not be despawned.")
+        }, String.class);
 
         if (Version.has1_19Support()) {
             description = ObjectArrays.concat(description, new String[]{
@@ -315,7 +260,7 @@ public class FlagSummon extends Flag {
             "{flag} skeleton | hand bow // skeletons spawn without weapons, you need to give it one",
             "{flag} zombie | baby | chest chainmail_chestplate 25% | legs chainmail_leggings 25% | hand iron_sword 50% // baby zombie warrior",
             "{flag} sheep | color pink | name <light_purple>Pony",
-            "{flag} ocelot | cat redcat | pet | potion speed 30 5",
+            "{flag} cat | cat redcat | pet | potion speed 30 5",
             "// chicken on a villager and villager on a cow:",
             "{flag} chicken | mountnext",
             "{flag} villager | mountnext",

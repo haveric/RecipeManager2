@@ -11,7 +11,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -37,14 +36,14 @@ public class FlagPotionItem extends Flag {
     @Override
     protected String[] getDescription() {
         String[] description = new String[]{
-            "Builds a potion item, only works with POTION item.",
-            "",
-            "There are 2 types of potions... basic potions which have 1 effect and custom potions which can have multiple effects.",
-            "",
-            "Building a basic potion:",
-            "",
-            "Instead of <basic effect> argument you must enter a series of arguments separated by | character, in any order.",
-            "Arguments for basic effect:",
+                "Builds a potion item, only works with POTION item.",
+                "",
+                "There are 2 types of potions... basic potions which have 1 effect and custom potions which can have multiple effects.",
+                "",
+                "Building a basic potion:",
+                "",
+                "Instead of <basic effect> argument you must enter a series of arguments separated by | character, in any order.",
+                "Arguments for basic effect:",
         };
 
         if (Supports.basePotionType()) {
@@ -93,14 +92,9 @@ public class FlagPotionItem extends Flag {
             "  !ambient            = equivalent to 'ambient false'",
             "  particles [false]   = (defaults true) display particles.",
             "  !particles          = equivalent to 'particles false'",
+            "  icon [false]        = (defaults true) show the effect icon.",
+            "  !icon               = equivalent to 'icon false'",
         }, String.class);
-
-        if (Version.has1_13BasicSupport()) {
-            description = ObjectArrays.concat(description, new String[]{
-                "  icon [false]        = (defaults true) show the effect icon.",
-                "  !icon               = equivalent to 'icon false'",
-            }, String.class);
-        }
 
         return description;
     }
@@ -200,12 +194,9 @@ public class FlagPotionItem extends Flag {
         }
 
         boolean validFlaggable = false;
-        if (Version.has1_13BasicSupport()) {
-            FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
-
-            if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), PotionMeta.class)) {
-                validFlaggable = true;
-            }
+        FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
+        if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), PotionMeta.class)) {
+            validFlaggable = true;
         }
 
         if (!validResult && !validFlaggable) {

@@ -99,15 +99,9 @@ public class FlagLaunchFirework extends Flag {
     @Override
     public boolean onParse(String value, String fileName, int lineNum, int restrictedBit) {
         super.onParse(value, fileName, lineNum, restrictedBit);
-        Material fireworkMaterial;
-        if (Version.has1_13BasicSupport()) {
-            fireworkMaterial = Material.FIREWORK_ROCKET;
-        } else {
-            fireworkMaterial = Material.getMaterial("FIREWORK");
-        }
 
         if (firework == null) {
-            firework = (FireworkMeta) Bukkit.getItemFactory().getItemMeta(fireworkMaterial);
+            firework = (FireworkMeta) Bukkit.getItemFactory().getItemMeta(Material.FIREWORK_ROCKET);
         }
 
         firework.setPower(DEFAULT_POWER);
