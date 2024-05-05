@@ -15,9 +15,6 @@ import static org.bukkit.Tag.REGISTRY_BLOCKS;
 
 public class Supports {
     static boolean axolotlBucketMeta = false;
-    static boolean tropicalFishBucketMeta = false;
-    static boolean knowledgeBookMeta = false;
-    static boolean suspiciousStewMeta = false;
     static boolean compassMeta = false;
     static boolean itemFlagHideDye = false;
     static boolean itemFlagHideArmorTrim = false;
@@ -30,9 +27,6 @@ public class Supports {
 
     public static void init() {
         checkAxolotlBucketMeta();
-        checkTropicalFishBucketMeta();
-        checkKnowledgeBookMeta();
-        checkSuspiciousStewMeta();
         checkCompassMetaSupport();
         checkItemFlagHideDyeSupport();
         checkItemFlagHideArmorTrimSupport();
@@ -42,42 +36,6 @@ public class Supports {
         checkExperimental1_20();
         checkPlayerProfile();
         checkShortGrassMaterial();
-    }
-
-    // 1.12
-    private static void checkKnowledgeBookMeta() {
-        try {
-            ItemStack book = new ItemStack(Material.KNOWLEDGE_BOOK);
-            @SuppressWarnings("unused")
-            KnowledgeBookMeta bookMeta = (KnowledgeBookMeta) book.getItemMeta();
-            knowledgeBookMeta = true;
-        } catch (NoSuchFieldError | NoClassDefFoundError e) {
-            knowledgeBookMeta = false;
-        }
-    }
-
-    // 1.13
-    private static void checkTropicalFishBucketMeta() {
-        try {
-            ItemStack fishBucket = new ItemStack(Material.TROPICAL_FISH_BUCKET);
-            @SuppressWarnings("unused")
-            TropicalFishBucketMeta fishBucketMeta = (TropicalFishBucketMeta) fishBucket.getItemMeta();
-            tropicalFishBucketMeta = true;
-        } catch (NoSuchFieldError | NoClassDefFoundError e) {
-            tropicalFishBucketMeta = false;
-        }
-    }
-
-    // 1.14.? (Added sometime after initial 1.14 release)
-    private static void checkSuspiciousStewMeta() {
-        try {
-            ItemStack stew = new ItemStack(Material.SUSPICIOUS_STEW);
-            @SuppressWarnings("unused")
-            SuspiciousStewMeta stewMeta = (SuspiciousStewMeta) stew.getItemMeta();
-            suspiciousStewMeta = true;
-        } catch (NoSuchFieldError | NoClassDefFoundError e) {
-            suspiciousStewMeta = false;
-        }
     }
 
     // 1.16.1
@@ -204,18 +162,6 @@ public class Supports {
 
     public static boolean axolotlBucketMeta() {
         return axolotlBucketMeta;
-    }
-
-    public static boolean tropicalFishBucketMeta() {
-        return tropicalFishBucketMeta;
-    }
-
-    public static boolean knowledgeBookMeta() {
-        return knowledgeBookMeta;
-    }
-
-    public static boolean suspiciousStewMeta() {
-        return suspiciousStewMeta;
     }
 
     public static boolean compassMeta() {

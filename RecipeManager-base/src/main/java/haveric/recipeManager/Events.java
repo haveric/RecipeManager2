@@ -2,7 +2,6 @@ package haveric.recipeManager;
 
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -39,14 +38,7 @@ public class Events extends BaseRecipeEvents {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
             Block block = event.getClickedBlock();
 
-            Material enchantingTableMaterial;
-            if (Version.has1_13Support()) {
-                enchantingTableMaterial = Material.ENCHANTING_TABLE;
-            } else {
-                enchantingTableMaterial = Material.getMaterial("ENCHANTMENT_TABLE");
-            }
-
-            if (block.getType() == enchantingTableMaterial) {
+            if (block != null && block.getType() == Material.ENCHANTING_TABLE) {
                 if (!RecipeManager.getPlugin().canCraft(event.getPlayer())) {
                     event.setCancelled(true);
                 }

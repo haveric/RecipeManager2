@@ -1,7 +1,6 @@
 package haveric.recipeManager.recipes.fuel;
 
 import haveric.recipeManager.ErrorReporter;
-import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
@@ -12,7 +11,6 @@ import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -29,12 +27,7 @@ public class FuelRecipeParser extends BaseRecipeParser {
 
     @Override
     public boolean parseRecipe(int directiveLine) {
-        BaseFuelRecipe recipe;
-        if (Version.has1_13Support()) {
-            recipe = new FuelRecipe1_13(fileFlags); // create recipe and copy flags from file
-        } else {
-            recipe = new FuelRecipe(fileFlags); // create recipe and copy flags from file
-        }
+        FuelRecipe1_13 recipe = new FuelRecipe1_13(fileFlags); // create recipe and copy flags from file
         reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // check for @flags
         int added = 0;
 
@@ -43,11 +36,7 @@ public class FuelRecipeParser extends BaseRecipeParser {
                 break;
             }
 
-            if (Version.has1_13Support()) {
-                recipe = new FuelRecipe1_13(fileFlags);
-            } else {
-                recipe = new FuelRecipe(fileFlags);
-            }
+            recipe = new FuelRecipe1_13(fileFlags);
 
             String[] split = reader.getLine().split("%");
 
@@ -87,63 +76,44 @@ public class FuelRecipeParser extends BaseRecipeParser {
                 recipe.setMaxTime(maxTime);
             }
 
-            if (recipe instanceof FuelRecipe1_13) {
-                FuelRecipe1_13 fuelRecipe1_13 = (FuelRecipe1_13) recipe;
-                RecipeChoice choice = Tools.parseRecipeChoice(split[0], ParseBit.NONE);
-                if (choice == null) {
-                    return false;
-                }
+            RecipeChoice choice = Tools.parseRecipeChoice(split[0], ParseBit.NONE);
+            if (choice == null) {
+                return false;
+            }
 
-                FlaggableRecipeChoice flaggable = new FlaggableRecipeChoice();
-                flaggable.setChoice(choice);
-                Flags ingredientFlags = flaggable.getFlags();
+            FlaggableRecipeChoice flaggable = new FlaggableRecipeChoice();
+            flaggable.setChoice(choice);
+            Flags ingredientFlags = flaggable.getFlags();
 
-                reader.parseFlags(ingredientFlags, FlagBit.INGREDIENT);
+            reader.parseFlags(ingredientFlags, FlagBit.INGREDIENT);
 
-                if (ingredientFlags.hasFlags()) {
-                    List<ItemStack> items = new ArrayList<>();
-                    if (choice instanceof RecipeChoice.MaterialChoice) {
-                        RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-                        List<Material> materials = materialChoice.getChoices();
+            if (ingredientFlags.hasFlags()) {
+                List<ItemStack> items = new ArrayList<>();
+                if (choice instanceof RecipeChoice.MaterialChoice) {
+                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                    List<Material> materials = materialChoice.getChoices();
 
-                        for (Material material : materials) {
-                            Args a = ArgBuilder.create().result(new ItemStack(material)).build();
-                            ingredientFlags.sendCrafted(a, true);
+                    for (Material material : materials) {
+                        Args a = ArgBuilder.create().result(new ItemStack(material)).build();
+                        ingredientFlags.sendCrafted(a, true);
 
-                            items.add(a.result());
-                        }
-                    } else if (choice instanceof RecipeChoice.ExactChoice) {
-                        RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
-                        List<ItemStack> exactItems = exactChoice.getChoices();
-
-                        for (ItemStack exactItem : exactItems) {
-                            Args a = ArgBuilder.create().result(exactItem).build();
-                            ingredientFlags.sendCrafted(a, true);
-
-                            items.add(a.result());
-                        }
+                        items.add(a.result());
                     }
+                } else if (choice instanceof RecipeChoice.ExactChoice) {
+                    RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                    List<ItemStack> exactItems = exactChoice.getChoices();
 
-                    fuelRecipe1_13.addIngredientChoiceItems(items);
-                } else {
-                    fuelRecipe1_13.setIngredientChoice(ToolsRecipeChoice.mergeRecipeChoices(fuelRecipe1_13.getIngredientChoice(), choice));
+                    for (ItemStack exactItem : exactItems) {
+                        Args a = ArgBuilder.create().result(exactItem).build();
+                        ingredientFlags.sendCrafted(a, true);
+
+                        items.add(a.result());
+                    }
                 }
+
+                recipe.addIngredientChoiceItems(items);
             } else {
-                // set ingredient
-                ItemStack ingredient = Tools.parseItem(split[0], RMCVanilla.DATA_WILDCARD, ParseBit.NO_AMOUNT | ParseBit.NO_META);
-
-                if (ingredient == null) {
-                    break;
-                }
-
-                if (ingredient.getType() == Material.AIR) {
-                    ErrorReporter.getInstance().error("Can not use AIR as ingredient!");
-                    break;
-                }
-
-                ((FuelRecipe) recipe).setIngredient(ingredient);
-
-                reader.nextLine();
+                recipe.setIngredientChoice(ToolsRecipeChoice.mergeRecipeChoices(recipe.getIngredientChoice(), choice));
             }
 
             // check if the recipe already exists
@@ -179,5 +149,4 @@ public class FuelRecipeParser extends BaseRecipeParser {
 
         return added > 0;
     }
-
 }

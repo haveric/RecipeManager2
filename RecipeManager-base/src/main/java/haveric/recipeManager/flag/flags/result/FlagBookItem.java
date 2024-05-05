@@ -9,7 +9,6 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -150,12 +149,9 @@ public class FlagBookItem extends Flag {
         }
 
         boolean validFlaggable = false;
-        if (Version.has1_13BasicSupport()) {
-            FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
-
-            if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), BookMeta.class)) {
-                validFlaggable = true;
-            }
+        FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
+        if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), BookMeta.class)) {
+            validFlaggable = true;
         }
 
         if (!validResult && !validFlaggable) {
@@ -185,18 +181,8 @@ public class FlagBookItem extends Flag {
 
         String trimmed = RMCUtil.trimExactQuotes(value);
         if (setTitle || setAuthor) {
-            String bookType;
-            Material writableBookMaterial;
-            if (Version.has1_13BasicSupport()) {
-                writableBookMaterial = Material.WRITABLE_BOOK;
-                bookType = "WRITABLE_BOOK";
-            } else {
-                writableBookMaterial = Material.getMaterial("BOOK_AND_QUILL");
-                bookType = "BOOK_AND_QUILL";
-            }
-
-            if (result.getType() == writableBookMaterial) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " can not have title or author set on " + bookType + ", only WRITTEN_BOOK.");
+            if (result.getType() == Material.WRITABLE_BOOK) {
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " can not have title or author set on WRITABLE_BOOK, only WRITTEN_BOOK.");
                 return true;
             }
 

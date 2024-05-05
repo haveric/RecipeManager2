@@ -1,6 +1,5 @@
 package haveric.recipeManager.flag.flags.result;
 
-import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.flag.Flag;
@@ -10,7 +9,6 @@ import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -35,50 +33,43 @@ public class FlagPotionItem extends Flag {
 
     @Override
     protected String[] getDescription() {
-        String[] description = new String[] {
-                "Builds a potion item, only works with POTION item.",
-                "",
-                "There are 2 types of potions... basic potions which have 1 effect and custom potions which can have multiple effects.",
-                "",
-                "Building a basic potion:",
-                "",
-                "Instead of <basic effect> argument you must enter a series of arguments separated by | character, in any order.",
-                "Arguments for basic effect:",
-                "  type &lt;potion type&gt;   = Type of potion, see " + Files.getNameIndexHashLink("potiontype"),
-                "  color <red> <green> <blue> = (optional) Sets the base color. Colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.",
-                "  splash                     = (optional) Throwable/breakable potion instead of drinkable",
-                "  lingering                  = (optional) Lingering potion instead of drinkable",
-                "",
-                "",
-                "Building a custom potion requires adding individual effects:",
-                "",
-                "A basic potion still affects the custom potion like the following:",
-                "- If no basic potion is defined the bottle will look like 'water bottle' with no effects listed, effects still apply when drank",
-                "- Basic potion's type affects bottle liquid color",
-                "- Basic potion's splash still affects if the bottle is throwable instead of drinkable",
-                "- The first custom effect added is the potion's name, rest of effects are in description (of course you can use @name to change the item name)",
-                "",
-                "Once you understand that, you may use @potion custom as many times to add as many effects you want.",
-                "",
-                "Similar syntax to basic effect, arguments separated by | character, can be in any order after the effect type.",
-                "Arguments for custom effect:",
-                "  &lt;effect type&gt;       = (REQUIRED) Type of potion effect, see " + Files.getNameIndexHashLink("potioneffect"),
-                "  duration <float>    = (default 1.0) Duration of the potion effect in seconds (does not work on instant potions effects such as HEAL and HARM)",
-                "  amplifier <number>  = (default 0) Amplify the effects of the potion (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
-                "  ambient [false]     = (default true) makes the effect produce more, translucent, particles.",
-                "  !ambient            = equivalent to 'ambient false'",
-                "  particles [false]   = (defaults true) display particles.",
-                "  !particles          = equivalent to 'particles false'",
+        return new String[] {
+            "Builds a potion item, only works with POTION item.",
+            "",
+            "There are 2 types of potions... basic potions which have 1 effect and custom potions which can have multiple effects.",
+            "",
+            "Building a basic potion:",
+            "",
+            "Instead of <basic effect> argument you must enter a series of arguments separated by | character, in any order.",
+            "Arguments for basic effect:",
+            "  type &lt;potion type&gt;   = Type of potion, see " + Files.getNameIndexHashLink("potiontype"),
+            "  color <red> <green> <blue> = (optional) Sets the base color. Colors must be 3 numbers ranged from 0 to 255, the red, green and blue channels.",
+            "  splash                     = (optional) Throwable/breakable potion instead of drinkable",
+            "  lingering                  = (optional) Lingering potion instead of drinkable",
+            "",
+            "",
+            "Building a custom potion requires adding individual effects:",
+            "",
+            "A basic potion still affects the custom potion like the following:",
+            "- If no basic potion is defined the bottle will look like 'water bottle' with no effects listed, effects still apply when drank",
+            "- Basic potion's type affects bottle liquid color",
+            "- Basic potion's splash still affects if the bottle is throwable instead of drinkable",
+            "- The first custom effect added is the potion's name, rest of effects are in description (of course you can use @name to change the item name)",
+            "",
+            "Once you understand that, you may use @potion custom as many times to add as many effects you want.",
+            "",
+            "Similar syntax to basic effect, arguments separated by | character, can be in any order after the effect type.",
+            "Arguments for custom effect:",
+            "  &lt;effect type&gt;       = (REQUIRED) Type of potion effect, see " + Files.getNameIndexHashLink("potioneffect"),
+            "  duration <float>    = (default 1.0) Duration of the potion effect in seconds (does not work on instant potions effects such as HEAL and HARM)",
+            "  amplifier <number>  = (default 0) Amplify the effects of the potion (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
+            "  ambient [false]     = (default true) makes the effect produce more, translucent, particles.",
+            "  !ambient            = equivalent to 'ambient false'",
+            "  particles [false]   = (defaults true) display particles.",
+            "  !particles          = equivalent to 'particles false'",
+            "  icon [false]        = (defaults true) show the effect icon.",
+            "  !icon               = equivalent to 'icon false'",
         };
-
-        if (Version.has1_13BasicSupport()) {
-            description = ObjectArrays.concat(description, new String[]{
-                    "  icon [false]        = (defaults true) show the effect icon.",
-                    "  !icon               = equivalent to 'icon false'",
-            }, String.class);
-        }
-
-        return description;
     }
 
     @Override
@@ -162,12 +153,9 @@ public class FlagPotionItem extends Flag {
         }
 
         boolean validFlaggable = false;
-        if (Version.has1_13BasicSupport()) {
-            FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
-
-            if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), PotionMeta.class)) {
-                validFlaggable = true;
-            }
+        FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
+        if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), PotionMeta.class)) {
+            validFlaggable = true;
         }
 
         if (!validResult && !validFlaggable) {

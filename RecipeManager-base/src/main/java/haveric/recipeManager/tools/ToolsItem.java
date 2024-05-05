@@ -381,12 +381,7 @@ public class ToolsItem {
             // Re-get the furnace to make sure we are only updating the cook time state. Probably should be passing the block in instead.
             Block block = furnace.getBlock();
             Furnace updatedFurnace = (Furnace) block.getState();
-            if (Version.has1_14Support()) {
-                updatedFurnace.setCookTimeTotal(time);
-            } else {
-                updatedFurnace.setCookTime(time);
-            }
-
+            updatedFurnace.setCookTimeTotal(time);
 
             updatedFurnace.update();
         });
@@ -403,6 +398,7 @@ public class ToolsItem {
             case GRAY_SHULKER_BOX:
             case GREEN_SHULKER_BOX:
             case LIGHT_BLUE_SHULKER_BOX:
+            case LIGHT_GRAY_SHULKER_BOX:
             case LIME_SHULKER_BOX:
             case MAGENTA_SHULKER_BOX:
             case ORANGE_SHULKER_BOX:
@@ -418,16 +414,6 @@ public class ToolsItem {
                 break;
         }
 
-        Material grayShulkerMaterial;
-        if (Version.has1_13BasicSupport()) {
-            grayShulkerMaterial = Material.LIGHT_GRAY_SHULKER_BOX;
-        } else {
-            grayShulkerMaterial = Material.getMaterial("SILVER_SHULKER_BOX");
-        }
-        if (material == grayShulkerMaterial) {
-            isShulkerBox = true;
-        }
-
         return isShulkerBox;
     }
 
@@ -441,24 +427,15 @@ public class ToolsItem {
     public static Material getCraftingRemainingItem(Material itemType) {
         Material returnedMaterial = null;
 
-        if (Version.has1_15Support()) {
-            if (itemType == Material.HONEY_BOTTLE) {
-                returnedMaterial = Material.GLASS_BOTTLE;
-            }
-        }
-
-        if (Version.has1_13BasicSupport()) {
-            if (itemType == Material.DRAGON_BREATH) {
-                returnedMaterial = Material.GLASS_BOTTLE;
-            }
-        }
-
         switch (itemType) {
             case WATER_BUCKET:
             case LAVA_BUCKET:
             case MILK_BUCKET:
                 returnedMaterial = Material.BUCKET;
                 break;
+            case HONEY_BOTTLE:
+            case DRAGON_BREATH:
+                returnedMaterial = Material.GLASS_BOTTLE;
             default:
                 break;
         }

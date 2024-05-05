@@ -7,7 +7,6 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.*;
@@ -377,7 +376,7 @@ public class FlagCloneIngredient extends Flag {
             if (i != null && allTypes.contains(i.getType())) {
                 ingredient = i.clone();
             }
-        } else if (a.inventory() instanceof AnvilInventory || (Version.has1_14Support() && (a.inventory() instanceof CartographyInventory || a.inventory() instanceof GrindstoneInventory)) || (Version.has1_16Support() && a.inventory() instanceof SmithingInventory)) {
+        } else if (a.inventory() instanceof AnvilInventory || a.inventory() instanceof CartographyInventory || a.inventory() instanceof GrindstoneInventory || a.inventory() instanceof SmithingInventory) {
             ItemStack first = a.inventory().getItem(0);
             ItemStack second = a.inventory().getItem(1);
             if (first != null && allTypes.contains(first.getType())) {
@@ -393,23 +392,6 @@ public class FlagCloneIngredient extends Flag {
         if (ingredient == null) {
             a.addCustomReason("Couldn't find target ingredient!");
             return false;
-        }
-
-        // 1.12 version of handling data
-        if (!Version.has1_13BasicSupport() && hasCopyBit(Bit.DATA)) {
-            //noinspection deprecation
-            int data = ingredient.getDurability();
-            int[] mod = getDataModifier();
-
-            data = modValue(data, mod);
-
-            //noinspection deprecation
-            result.setDurability((short) data);
-
-            if (hasCopyBit(Bit.SPECIAL)) {
-                //noinspection deprecation
-                ingredient.setDurability((short) data);
-            }
         }
 
         if (hasCopyBit(Bit.AMOUNT)) {
@@ -428,8 +410,7 @@ public class FlagCloneIngredient extends Flag {
             return true;
         }
 
-        // 1.13+ version of handling data
-        if (Version.has1_13BasicSupport() && hasCopyBit(Bit.DATA) && ingredientMeta instanceof Damageable && resultMeta instanceof Damageable) {
+        if (hasCopyBit(Bit.DATA) && ingredientMeta instanceof Damageable && resultMeta instanceof Damageable) {
             Damageable ingredientDamageable = (Damageable) ingredientMeta;
             int data = ingredientDamageable.getDamage();
             int[] mod = getDataModifier();

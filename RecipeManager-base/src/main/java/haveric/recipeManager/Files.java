@@ -37,7 +37,7 @@ public class Files {
 
     private final CommandSender sender;
 
-    public static final String LASTCHANGED_CONFIG = "2.31.0";
+    public static final String LASTCHANGED_CONFIG = "2.32.0";
     public static final String LASTCHANGED_MESSAGES = "2.31.0";
     public static final String LASTCHANGED_CHOICE_ALIASES = "2.17.0";
     public static final String LASTCHANGED_ITEM_DATAS = "2.7";
@@ -556,17 +556,13 @@ public class Files {
         s.append(NL).append("- <a href='#entitytype'><b>ENTITY TYPE LIST</b></a>");
         s.append(NL).append("- <a href='#fireworkeffect'><b>FIREWORK EFFECT TYPE LIST</b></a>");
         s.append(NL).append("- <a href='#inventory'><b>INVENTORY LIST</b></a>");
-        if (Version.has1_13BasicSupport()) {
-            s.append(NL).append("- <a href='#itemattribute'><b>ITEM ATTRIBUTE LIST</b></a>");
-        }
+        s.append(NL).append("- <a href='#itemattribute'><b>ITEM ATTRIBUTE LIST</b></a>");
         s.append(NL).append("- <a href='#material'><b>MATERIAL LIST</b></a>");
         s.append(NL).append("- <a href='#particle'><b>PARTICLE LIST</b></a>");
         s.append(NL).append("- <a href='#potioneffect'><b>POTION EFFECT TYPE LIST</b></a>");
         s.append(NL).append("- <a href='#potiontype'><b>POTION TYPE LIST</b></a>");
         s.append(NL).append("- <a href='#sound'><b>SOUND LIST</b></a>");
-        if (Version.has1_13Support()) {
-            s.append(NL).append("- <a href='#tag'><b>TAG LIST</b></a>");
-        }
+        s.append(NL).append("- <a href='#tag'><b>TAG LIST</b></a>");
 
         s.append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "bannerpattern", "BANNER PATTERN LIST", "block/banner/PatternType", "PatternType");
@@ -616,7 +612,7 @@ public class Files {
 
                 s.append(NL).append(String.format(" %-26s %s", e.getKey().getKey(), e.getStartLevel() + " to " + e.getMaxLevel()));
             }
-        } else if (Version.has1_13Support()) {
+        } else {
             s.append(NL).append(String.format("<b> %-26s %-12s %s</b>", "Key", "Item type", "Level range"));
 
             List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
@@ -633,20 +629,6 @@ public class Files {
                     targetString = target.toString().toLowerCase();
                 }
                 s.append(NL).append(String.format(" %-26s %-14s %s", e.getKey().getKey(), targetString, e.getStartLevel() + " to " + e.getMaxLevel()));
-            }
-        } else { // Key didn't exist yet in 1.12
-            s.append(NL).append(String.format(" %-26s %-14s %s", "Name", "Item type", "Level range"));
-
-            List<Enchantment> enchantments = Arrays.asList(Enchantment.values());
-
-            enchantments.sort(Comparator.comparing(Enchantment::getName));
-
-            for (Enchantment e : enchantments) {
-                EnchantmentTarget target = e.getItemTarget();
-
-                String targetString = target.toString().toLowerCase();
-
-                s.append(NL).append(String.format(" %-26s %-12s %s", e.getName(), targetString, e.getStartLevel() + " to " + e.getMaxLevel()));
             }
         }
 
@@ -674,13 +656,11 @@ public class Files {
             s.append(NL).append(' ').append(t.toString());
         }
 
-        if (Version.has1_13BasicSupport()) {
-            s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
-            addNameIndexHeading(s, "itemattribute", "ITEM ATTRIBUTE LIST", "attribute/Attribute", "Attribute Type");
+        s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
+        addNameIndexHeading(s, "itemattribute", "ITEM ATTRIBUTE LIST", "attribute/Attribute", "Attribute Type");
 
-            for (Attribute a : Attribute.values()) {
-                s.append(NL).append(' ').append(a.toString());
-            }
+        for (Attribute a : Attribute.values()) {
+            s.append(NL).append(' ').append(a.toString());
         }
 
         s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
@@ -778,14 +758,12 @@ public class Files {
             s.append(NL).append(String.format(" %-46s%-46s%-46s%s", sounds[i].name(), sounds1, sounds2, sounds3));
         }
 
-        if (Version.has1_13Support()) {
-            s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
-            addNameIndexHeading(s, "tag", "TAG LIST", "Tag", "Tag");
+        s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
+        addNameIndexHeading(s, "tag", "TAG LIST", "Tag", "Tag");
 
-            displayTags(s, "Blocks", REGISTRY_BLOCKS);
-            s.append(NL);
-            displayTags(s, "Items", REGISTRY_ITEMS);
-        }
+        displayTags(s, "Blocks", REGISTRY_BLOCKS);
+        s.append(NL);
+        displayTags(s, "Items", REGISTRY_ITEMS);
 
         s.append(NL).append("</pre>");
         s.append(NL).append("</div></div>");

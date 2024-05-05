@@ -244,12 +244,7 @@ public class Tools {
         }
 
         RecipeChoice choice = null;
-        String[] args = value.split(";");
-        if (args.length > 1) {
-            ErrorReporter.getInstance().warning("Inline name, lore, enchant no longer supported in 1.13 or newer. Ignoring them.");
-        }
-
-        String[] split = args[0].split(",");
+        String[] split = value.split(",");
         if (split.length == 0 || split[0].isEmpty()) {
             return null;
         }
@@ -425,14 +420,7 @@ public class Tools {
             return null;
         }
 
-        String[] args = value.split(";");
-        if (args.length > 1) {
-            if ((settings & ParseBit.NO_ERRORS) != ParseBit.NO_ERRORS) {
-                ErrorReporter.getInstance().warning("Inline name, lore, enchant no longer supported in 1.13 or newer. Ignoring them.");
-            }
-        }
-
-        String[] split = args[0].split(",");
+        String[] split = value.split(",");
         if (split.length == 0 || split[0].isEmpty()) {
             return null;
         }
@@ -584,7 +572,7 @@ public class Tools {
 
         ItemStack item;
 
-        if (Version.has1_13BasicSupport() && data == RMCVanilla.DATA_WILDCARD) {
+        if (data == RMCVanilla.DATA_WILDCARD) {
             item = new ItemStack(material, amount);
             ItemMeta meta = item.getItemMeta();
             if (meta instanceof Damageable) {
@@ -841,14 +829,7 @@ public class Tools {
             ErrorReporter.getInstance().warning("Flag " + flagType + " can't have duration on instant effect: " + effectType);
         }
 
-        PotionEffect effect;
-        if (Version.has1_13BasicSupport()) {
-            effect = new PotionEffect(effectType, (int) Math.ceil(duration * 20.0), amplifier, ambient, particles, icon);
-        } else {
-            effect = new PotionEffect(effectType, (int) Math.ceil(duration * 20.0), amplifier, ambient, particles);
-        }
-
-        return effect;
+        return new PotionEffect(effectType, (int) Math.ceil(duration * 20.0), amplifier, ambient, particles, icon);
     }
 
     public static FireworkEffect parseFireworkEffect(String value, String type) {
@@ -1086,32 +1067,17 @@ public class Tools {
     public static Sound getSound(String newSound) {
         Sound sound;
 
-        if (Version.has1_13BasicSupport()) {
-            // set known sounds to make sure Enum isn't changing on us
-            switch (newSound) {
-                case "BLOCK_NOTE_BASS":
-                    sound = Sound.BLOCK_NOTE_BLOCK_BASS;
-                    break;
-                case "BLOCK_NOTE_PLING":
-                    sound = Sound.BLOCK_NOTE_BLOCK_PLING;
-                    break;
-                default:
-                    sound = Sound.valueOf(newSound);
-                    break;
-            }
-        } else {
-            // set known sounds to make sure Enum isn't changing on us
-            switch (newSound) {
-                case "BLOCK_ANVIL_USE":
-                    sound = Sound.BLOCK_ANVIL_USE;
-                    break;
-                case "ENTITY_ITEM_BREAK":
-                    sound = Sound.ENTITY_ITEM_BREAK;
-                    break;
-                default:
-                    sound = Sound.valueOf(newSound);
-                    break;
-            }
+        // set known sounds to make sure Enum isn't changing on us
+        switch (newSound) {
+            case "BLOCK_NOTE_BASS":
+                sound = Sound.BLOCK_NOTE_BLOCK_BASS;
+                break;
+            case "BLOCK_NOTE_PLING":
+                sound = Sound.BLOCK_NOTE_BLOCK_PLING;
+                break;
+            default:
+                sound = Sound.valueOf(newSound);
+                break;
         }
 
         return sound;

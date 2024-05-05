@@ -10,7 +10,6 @@ import org.bukkit.block.CreatureSpawner;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.TropicalFish;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
@@ -64,7 +63,7 @@ public class ToolsFlag {
                 }
             }
 
-            if (Version.has1_14Support() && meta.hasCustomModelData()) {
+            if (meta.hasCustomModelData()) {
                 recipeString.append(Files.NL).append("@custommodeldata ").append(meta.getCustomModelData());
             }
 
@@ -76,7 +75,7 @@ public class ToolsFlag {
                 recipeString.append(Files.NL).append("@itemunbreakable");
             }
 
-            if (Version.has1_13BasicSupport() && meta.hasAttributeModifiers()) {
+            if (meta.hasAttributeModifiers()) {
                 Multimap<Attribute, AttributeModifier> attributeModifiers = meta.getAttributeModifiers();
                 if (attributeModifiers != null) {
                     for (Map.Entry<Attribute, AttributeModifier> entry : attributeModifiers.entries()) {
@@ -350,7 +349,7 @@ public class ToolsFlag {
                 }
             }
 
-            if (Supports.knowledgeBookMeta() && meta instanceof KnowledgeBookMeta) {
+            if (meta instanceof KnowledgeBookMeta) {
                 KnowledgeBookMeta knowledgeBookMeta = (KnowledgeBookMeta) meta;
                 if (knowledgeBookMeta.hasRecipes()) {
                     List<NamespacedKey> recipes = knowledgeBookMeta.getRecipes();
@@ -402,42 +401,40 @@ public class ToolsFlag {
                     }
                 }
 
-                if (Version.has1_13Support()) {
-                    MapView mapView = mapMeta.getMapView();
-                    if (mapView != null) {
-                        World world = mapView.getWorld();
-                        if (world != null) {
-                            recipeString.append(" | world ").append(world.getName());
-                        }
-
-                        int centerX = mapView.getCenterX();
-                        recipeString.append(" | centerx ").append(centerX);
-
-                        int centerZ = mapView.getCenterZ();
-                        recipeString.append(" | centerz ").append(centerZ);
-
-                        MapView.Scale scale = mapView.getScale();
-                        recipeString.append(" | scale ").append(scale.name());
-
-
-                        if (mapView.isLocked()) {
-                            recipeString.append(" | locked");
-                        }
-
-                        if (mapView.isTrackingPosition()) {
-                            recipeString.append(" | trackingposition");
-                        }
-
-                        if (mapView.isUnlimitedTracking()) {
-                            recipeString.append(" | unlimitedtracking");
-                        }
-
-                        /* TODO: Custom renderer, warn user?
-                        if (mapView.isVirtual()) {
-
-                        }
-                        */
+                MapView mapView = mapMeta.getMapView();
+                if (mapView != null) {
+                    World world = mapView.getWorld();
+                    if (world != null) {
+                        recipeString.append(" | world ").append(world.getName());
                     }
+
+                    int centerX = mapView.getCenterX();
+                    recipeString.append(" | centerx ").append(centerX);
+
+                    int centerZ = mapView.getCenterZ();
+                    recipeString.append(" | centerz ").append(centerZ);
+
+                    MapView.Scale scale = mapView.getScale();
+                    recipeString.append(" | scale ").append(scale.name());
+
+
+                    if (mapView.isLocked()) {
+                        recipeString.append(" | locked");
+                    }
+
+                    if (mapView.isTrackingPosition()) {
+                        recipeString.append(" | trackingposition");
+                    }
+
+                    if (mapView.isUnlimitedTracking()) {
+                        recipeString.append(" | unlimitedtracking");
+                    }
+
+                    /* TODO: Custom renderer, warn user?
+                    if (mapView.isVirtual()) {
+
+                    }
+                    */
                 }
             }
 
@@ -483,15 +480,7 @@ public class ToolsFlag {
                 // TODO: Handle texture somehow
             }
 
-            if (!Version.has1_13BasicSupport() && meta instanceof SpawnEggMeta) {
-                SpawnEggMeta spawnEggMeta = (SpawnEggMeta) meta;
-                EntityType spawnedType = spawnEggMeta.getSpawnedType();
-                if (spawnedType != null) {
-                    recipeString.append(Files.NL).append("@spawnegg ").append(spawnedType.name());
-                }
-            }
-
-            if (Supports.suspiciousStewMeta() && meta instanceof SuspiciousStewMeta) {
+            if (meta instanceof SuspiciousStewMeta) {
                 SuspiciousStewMeta stewMeta = (SuspiciousStewMeta) meta;
                 if (stewMeta.hasCustomEffects()) {
                     List<PotionEffect> potionEffects = stewMeta.getCustomEffects();
@@ -503,7 +492,7 @@ public class ToolsFlag {
                 }
             }
 
-            if (Supports.tropicalFishBucketMeta() && meta instanceof TropicalFishBucketMeta) {
+            if (meta instanceof TropicalFishBucketMeta) {
                 TropicalFishBucketMeta tropicalFishBucketMeta = (TropicalFishBucketMeta) meta;
                 if (tropicalFishBucketMeta.hasVariant()) {
                     DyeColor bodyColor = tropicalFishBucketMeta.getBodyColor();
@@ -536,11 +525,8 @@ public class ToolsFlag {
         if (!effect.hasParticles()) {
             recipeString.append(" | !particles");
         }
-
-        if (Version.has1_13BasicSupport()) {
-            if (!effect.hasIcon()) {
-                recipeString.append(" | !icon");
-            }
+        if (!effect.hasIcon()) {
+            recipeString.append(" | !icon");
         }
     }
 }

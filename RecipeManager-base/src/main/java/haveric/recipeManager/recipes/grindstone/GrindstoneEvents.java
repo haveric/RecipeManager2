@@ -16,7 +16,6 @@ import haveric.recipeManager.recipes.grindstone.data.Grindstones;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsInventory;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -439,13 +438,9 @@ public class GrindstoneEvents extends BaseRecipeEvents {
                 a.setResult(result);
 
                 int originalDamage = -1;
-                if (Version.has1_13BasicSupport()) {
-                    ItemMeta meta = result.getItemMeta();
-                    if (meta instanceof Damageable) {
-                        originalDamage = ((Damageable) meta).getDamage();
-                    }
-                } else {
-                    originalDamage = result.getDurability();
+                ItemMeta metaOne = result.getItemMeta(); // TODO: Change metaOne and metaTwo
+                if (metaOne instanceof Damageable) {
+                    originalDamage = ((Damageable) metaOne).getDamage();
                 }
 
                 boolean recipeCraftSuccess = false;
@@ -456,15 +451,11 @@ public class GrindstoneEvents extends BaseRecipeEvents {
 
                     // We're handling durability on the result line outside of flags, so it needs to be reset after clearing the metadata
                     if (originalDamage != -1) {
-                        if (Version.has1_13BasicSupport()) {
-                            ItemMeta meta = result.getItemMeta();
+                        ItemMeta metaTwo = result.getItemMeta();
 
-                            if (meta instanceof Damageable) {
-                                ((Damageable) meta).setDamage(originalDamage);
-                                result.setItemMeta(meta);
-                            }
-                        } else {
-                            result.setDurability((short) originalDamage);
+                        if (metaTwo instanceof Damageable) {
+                            ((Damageable) metaTwo).setDamage(originalDamage);
+                            result.setItemMeta(metaTwo);
                         }
                     }
 

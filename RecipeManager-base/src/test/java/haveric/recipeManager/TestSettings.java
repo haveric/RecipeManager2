@@ -107,11 +107,6 @@ public class TestSettings extends BaseSettings {
     }
 
     @Override
-    public boolean getSpecialBanner() {
-        return SPECIAL_RECIPE_DEFAULT;
-    }
-
-    @Override
     public boolean getSpecialBannerDuplicate() {
         return SPECIAL_RECIPE_DEFAULT;
     }

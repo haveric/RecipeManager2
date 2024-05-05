@@ -10,11 +10,9 @@ import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.compost.CompostRecipe;
-import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
 import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.ToolsFlag;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -91,58 +89,35 @@ public class ExtractCommand implements TabExecutor {
                     ShapedRecipe recipe = (ShapedRecipe) r;
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.CRAFT.getDirective());
 
-                    if (Version.has1_13Support()) {
-                        appendNamespacedKey(recipeString, recipe.getKey());
+                    appendNamespacedKey(recipeString, recipe.getKey());
 
-                        if (!recipe.getGroup().isEmpty()) {
-                            recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
-                        }
+                    if (!recipe.getGroup().isEmpty()) {
+                        recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
+                    }
 
-                        if (Supports.categories()) {
-                            recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
-                        }
+                    if (Supports.categories()) {
+                        recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
+                    }
 
-                        Map<Character, RecipeChoice> choices = recipe.getChoiceMap();
-                        char[] cols;
-                        RecipeChoice choice;
+                    Map<Character, RecipeChoice> choices = recipe.getChoiceMap();
+                    char[] cols;
+                    RecipeChoice choice;
 
-                        for (String element : recipe.getShape()) {
-                            cols = element.toCharArray();
+                    for (String element : recipe.getShape()) {
+                        cols = element.toCharArray();
 
-                            int colsLength = cols.length;
-                            for (int c = 0; c < colsLength; c++) {
-                                choice = choices.get(cols[c]);
+                        int colsLength = cols.length;
+                        for (int c = 0; c < colsLength; c++) {
+                            choice = choices.get(cols[c]);
 
-                                parseChoice(choice, recipeString);
+                            parseChoice(choice, recipeString);
 
-                                if (c + 1 < colsLength) {
-                                    recipeString.append(" + ");
-                                }
+                            if (c + 1 < colsLength) {
+                                recipeString.append(" + ");
                             }
-
-                            recipeString.append(Files.NL);
                         }
-                    } else {
-                        Map<Character, ItemStack> items = recipe.getIngredientMap();
-                        char[] cols;
-                        ItemStack item;
 
-                        for (String element : recipe.getShape()) {
-                            cols = element.toCharArray();
-
-                            int colsLength = cols.length;
-                            for (int c = 0; c < colsLength; c++) {
-                                item = items.get(cols[c]);
-
-                                recipeString.append(parseIngredient(item));
-
-                                if (c + 1 < colsLength) {
-                                    recipeString.append(" + ");
-                                }
-                            }
-
-                            recipeString.append(Files.NL);
-                        }
+                        recipeString.append(Files.NL);
                     }
 
                     parseResult(recipe.getResult(), recipeString);
@@ -152,37 +127,24 @@ public class ExtractCommand implements TabExecutor {
                     ShapelessRecipe recipe = (ShapelessRecipe) r;
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.COMBINE.getDirective());
 
-                    if (Version.has1_13Support()) {
-                        appendNamespacedKey(recipeString, recipe.getKey());
+                    appendNamespacedKey(recipeString, recipe.getKey());
 
-                        if (!recipe.getGroup().isEmpty()) {
-                            recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
-                        }
+                    if (!recipe.getGroup().isEmpty()) {
+                        recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
+                    }
 
-                        if (Supports.categories()) {
-                            recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
-                        }
+                    if (Supports.categories()) {
+                        recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
+                    }
 
-                        List<RecipeChoice> ingredientChoices = recipe.getChoiceList();
+                    List<RecipeChoice> ingredientChoices = recipe.getChoiceList();
 
-                        int size = ingredientChoices.size();
-                        for (int i = 0; i < size; i++) {
-                            parseChoice(ingredientChoices.get(i), recipeString);
+                    int size = ingredientChoices.size();
+                    for (int i = 0; i < size; i++) {
+                        parseChoice(ingredientChoices.get(i), recipeString);
 
-                            if (i + 1 < size) {
-                                recipeString.append(" + ");
-                            }
-                        }
-                    } else {
-                        List<ItemStack> ingredients = recipe.getIngredientList();
-
-                        int size = ingredients.size();
-                        for (int i = 0; i < size; i++) {
-                            recipeString.append(parseIngredient(ingredients.get(i)));
-
-                            if (i + 1 < size) {
-                                recipeString.append(" + ");
-                            }
+                        if (i + 1 < size) {
+                            recipeString.append(" + ");
                         }
                     }
 
@@ -194,140 +156,128 @@ public class ExtractCommand implements TabExecutor {
                     FurnaceRecipe recipe = (FurnaceRecipe) r;
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMELT.getDirective());
 
-                    if (Version.has1_13Support()) {
-                        appendNamespacedKey(recipeString, recipe.getKey());
+                    appendNamespacedKey(recipeString, recipe.getKey());
 
-                        if (!recipe.getGroup().isEmpty()) {
-                            recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
-                        }
-
-                        if (Supports.categories()) {
-                            recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
-                        }
-
-                        recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
-
-                        parseChoice(recipe.getInputChoice(), recipeString);
-                    } else {
-                        recipeString.append(parseIngredient(recipe.getInput()));
+                    if (!recipe.getGroup().isEmpty()) {
+                        recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                     }
+
+                    if (Supports.categories()) {
+                        recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
+                    }
+
+                    recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
+
+                    parseChoice(recipe.getInputChoice(), recipeString);
 
                     recipeString.append(Files.NL);
                     parseResult(recipe.getResult(), recipeString);
 
                     parsedSmeltRecipes.add(recipeString.toString());
-                }
+                } else if (r instanceof BlastingRecipe) {
+                    BlastingRecipe recipe = (BlastingRecipe) r;
+                    StringBuilder recipeString = new StringBuilder(RMCRecipeType.BLASTING.getDirective());
 
-                if (Version.has1_14Support()) {
-                    if (r instanceof BlastingRecipe) {
-                        BlastingRecipe recipe = (BlastingRecipe) r;
-                        StringBuilder recipeString = new StringBuilder(RMCRecipeType.BLASTING.getDirective());
+                    appendNamespacedKey(recipeString, recipe.getKey());
 
-                        appendNamespacedKey(recipeString, recipe.getKey());
-
-                        if (!recipe.getGroup().isEmpty()) {
-                            recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
-                        }
-
-                        if (Supports.categories()) {
-                            recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
-                        }
-
-                        recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
-
-                        parseChoice(recipe.getInputChoice(), recipeString);
-
-                        recipeString.append(Files.NL);
-                        parseResult(recipe.getResult(), recipeString);
-
-                        parsedBlastingRecipes.add(recipeString.toString());
-                    } else if (r instanceof SmokingRecipe) {
-                        SmokingRecipe recipe = (SmokingRecipe) r;
-                        StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMOKING.getDirective());
-
-                        appendNamespacedKey(recipeString, recipe.getKey());
-
-                        if (!recipe.getGroup().isEmpty()) {
-                            recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
-                        }
-
-                        if (Supports.categories()) {
-                            recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
-                        }
-
-                        recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
-
-                        parseChoice(recipe.getInputChoice(), recipeString);
-
-                        recipeString.append(Files.NL);
-                        parseResult(recipe.getResult(), recipeString);
-
-                        parsedSmokingRecipes.add(recipeString.toString());
-                    } else if (r instanceof CampfireRecipe) {
-                        CampfireRecipe recipe = (CampfireRecipe) r;
-                        StringBuilder recipeString = new StringBuilder(RMCRecipeType.CAMPFIRE.getDirective());
-
-                        appendNamespacedKey(recipeString, recipe.getKey());
-
-                        if (!recipe.getGroup().isEmpty()) {
-                            recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
-                        }
-
-                        if (Supports.categories()) {
-                            recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
-                        }
-
-                        recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
-
-                        parseChoice(recipe.getInputChoice(), recipeString);
-
-                        recipeString.append(Files.NL);
-                        parseResult(recipe.getResult(), recipeString);
-
-                        parsedCampfireRecipes.add(recipeString.toString());
-                    } else if (r instanceof StonecuttingRecipe) {
-                        StonecuttingRecipe recipe = (StonecuttingRecipe) r;
-                        StringBuilder recipeString = new StringBuilder(RMCRecipeType.STONECUTTING.getDirective());
-
-                        appendNamespacedKey(recipeString, recipe.getKey());
-
-                        if (!recipe.getGroup().isEmpty()) {
-                            recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
-                        }
-
-                        parseChoice(recipe.getInputChoice(), recipeString);
-
-                        recipeString.append(Files.NL);
-                        parseResult(recipe.getResult(), recipeString);
-
-                        parsedStonecuttingRecipes.add(recipeString.toString());
+                    if (!recipe.getGroup().isEmpty()) {
+                        recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
                     }
-                }
 
-                if (Version.has1_16Support()) {
-                    if (r instanceof SmithingRecipe) {
-                        SmithingRecipe recipe = (SmithingRecipe) r;
-                        StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMITHING.getDirective());
-                        appendNamespacedKey(recipeString, recipe.getKey());
-
-                        if (Supports.experimental1_20()) {
-                            if (r instanceof SmithingTransformRecipe) {
-                                SmithingTransformRecipe transformRecipe = (SmithingTransformRecipe) r;
-
-                                parseChoice(transformRecipe.getTemplate(), recipeString);
-                                recipeString.append(" + ");
-                            }
-                        }
-
-                        parseChoice(recipe.getBase(), recipeString);
-                        recipeString.append(" + ");
-                        parseChoice(recipe.getAddition(), recipeString);
-
-                        recipeString.append(Files.NL);
-                        parseResult(recipe.getResult(), recipeString);
-
-                        parsedSmithingRecipes.add(recipeString.toString());
+                    if (Supports.categories()) {
+                        recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
                     }
+
+                    recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
+
+                    parseChoice(recipe.getInputChoice(), recipeString);
+
+                    recipeString.append(Files.NL);
+                    parseResult(recipe.getResult(), recipeString);
+
+                    parsedBlastingRecipes.add(recipeString.toString());
+                } else if (r instanceof SmokingRecipe) {
+                    SmokingRecipe recipe = (SmokingRecipe) r;
+                    StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMOKING.getDirective());
+
+                    appendNamespacedKey(recipeString, recipe.getKey());
+
+                    if (!recipe.getGroup().isEmpty()) {
+                        recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
+                    }
+
+                    if (Supports.categories()) {
+                        recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
+                    }
+
+                    recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
+
+                    parseChoice(recipe.getInputChoice(), recipeString);
+
+                    recipeString.append(Files.NL);
+                    parseResult(recipe.getResult(), recipeString);
+
+                    parsedSmokingRecipes.add(recipeString.toString());
+                } else if (r instanceof CampfireRecipe) {
+                    CampfireRecipe recipe = (CampfireRecipe) r;
+                    StringBuilder recipeString = new StringBuilder(RMCRecipeType.CAMPFIRE.getDirective());
+
+                    appendNamespacedKey(recipeString, recipe.getKey());
+
+                    if (!recipe.getGroup().isEmpty()) {
+                        recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
+                    }
+
+                    if (Supports.categories()) {
+                        recipeString.append("category ").append(recipe.getCategory().name()).append(Files.NL);
+                    }
+
+                    recipeString.append("xp ").append(recipe.getExperience()).append(Files.NL);
+
+                    parseChoice(recipe.getInputChoice(), recipeString);
+
+                    recipeString.append(Files.NL);
+                    parseResult(recipe.getResult(), recipeString);
+
+                    parsedCampfireRecipes.add(recipeString.toString());
+                } else if (r instanceof StonecuttingRecipe) {
+                    StonecuttingRecipe recipe = (StonecuttingRecipe) r;
+                    StringBuilder recipeString = new StringBuilder(RMCRecipeType.STONECUTTING.getDirective());
+
+                    appendNamespacedKey(recipeString, recipe.getKey());
+
+                    if (!recipe.getGroup().isEmpty()) {
+                        recipeString.append("group ").append(recipe.getGroup()).append(Files.NL);
+                    }
+
+                    parseChoice(recipe.getInputChoice(), recipeString);
+
+                    recipeString.append(Files.NL);
+                    parseResult(recipe.getResult(), recipeString);
+
+                    parsedStonecuttingRecipes.add(recipeString.toString());
+                } else if (r instanceof SmithingRecipe) {
+                    SmithingRecipe recipe = (SmithingRecipe) r;
+                    StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMITHING.getDirective());
+                    appendNamespacedKey(recipeString, recipe.getKey());
+
+                    if (Supports.experimental1_20()) {
+                        if (r instanceof SmithingTransformRecipe) {
+                            SmithingTransformRecipe transformRecipe = (SmithingTransformRecipe) r;
+
+                            parseChoice(transformRecipe.getTemplate(), recipeString);
+                            recipeString.append(" + ");
+                        }
+                    }
+
+                    parseChoice(recipe.getBase(), recipeString);
+                    recipeString.append(" + ");
+                    parseChoice(recipe.getAddition(), recipeString);
+
+                    recipeString.append(Files.NL);
+                    parseResult(recipe.getResult(), recipeString);
+
+                    parsedSmithingRecipes.add(recipeString.toString());
                 }
 
                 recipesNum++;
@@ -348,16 +298,6 @@ public class ExtractCommand implements TabExecutor {
                 StringBuilder recipeString = new StringBuilder(RMCRecipeType.FUEL.getDirective()).append(Files.NL);
 
                 parseChoice(fuelRecipe.getIngredientChoice(), recipeString);
-                recipeString.append(" % ").append(fuelRecipe.getMinTime());
-
-                recipeString.append(Files.NL).append(Files.NL);
-
-                parsedFuelRecipes.add(recipeString.toString());
-            } else if (recipe instanceof FuelRecipe) {
-                FuelRecipe fuelRecipe = (FuelRecipe) recipe;
-                StringBuilder recipeString = new StringBuilder(RMCRecipeType.FUEL.getDirective()).append(Files.NL);
-
-                recipeString.append(parseIngredient(fuelRecipe.getIngredient()));
                 recipeString.append(" % ").append(fuelRecipe.getMinTime());
 
                 recipeString.append(Files.NL).append(Files.NL);
@@ -394,19 +334,12 @@ public class ExtractCommand implements TabExecutor {
                 writeRecipes(stream, parsedCraftRecipes, "Craft");
                 writeRecipes(stream, parsedCombineRecipes, "Combine");
                 writeRecipes(stream, parsedSmeltRecipes, "Smelt");
-
-                if (Version.has1_14Support()) {
-                    writeRecipes(stream, parsedBlastingRecipes, "Blasting");
-                    writeRecipes(stream, parsedSmokingRecipes, "Smoking");
-                    writeRecipes(stream, parsedCampfireRecipes, "Campfire");
-                    writeRecipes(stream, parsedStonecuttingRecipes, "Stonecutting");
-                    writeRecipes(stream, parsedCompostRecipes, "Compost");
-                }
-
-                if (Version.has1_16Support()) {
-                    writeRecipes(stream, parsedSmithingRecipes, "Smithing");
-                }
-
+                writeRecipes(stream, parsedBlastingRecipes, "Blasting");
+                writeRecipes(stream, parsedSmokingRecipes, "Smoking");
+                writeRecipes(stream, parsedCampfireRecipes, "Campfire");
+                writeRecipes(stream, parsedStonecuttingRecipes, "Stonecutting");
+                writeRecipes(stream, parsedCompostRecipes, "Compost");
+                writeRecipes(stream, parsedSmithingRecipes, "Smithing");
                 writeRecipes(stream, parsedFuelRecipes, "Fuel");
 
                 stream.close();

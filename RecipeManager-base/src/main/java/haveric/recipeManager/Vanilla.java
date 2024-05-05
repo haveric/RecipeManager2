@@ -4,20 +4,16 @@ import com.google.common.collect.ImmutableMap;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
-import haveric.recipeManager.nms.NMSVersionHandler;
+import haveric.recipeManager.tools.VersionHandler;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
 import haveric.recipeManager.recipes.compost.CompostRecipe;
 import haveric.recipeManager.recipes.cooking.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.cooking.furnace.RMBlastingRecipe;
-import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.cooking.furnace.RMSmokingRecipe;
-import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
-import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
 import haveric.recipeManager.recipes.smithing.RMSmithing1_19_4TransformRecipe;
 import haveric.recipeManager.recipes.smithing.RMSmithingRecipe;
@@ -39,12 +35,6 @@ public class Vanilla {
     protected static Map<BaseRecipe, RMCRecipeInfo> initialRecipes = new HashMap<>();
 
     /**
-     * Fireworks' special recipe result, you can use it to identify vanilla recipes.
-     */
-    public static ItemStack RECIPE_FIREWORKS;
-
-
-    /**
      * Default time a furnace recipe burns for.<br>
      * This is a game constant.
      */
@@ -61,7 +51,6 @@ public class Vanilla {
 
         initFuels();
         initCompostRecipes();
-        initSpecialRecipes();
         initVanillaRecipes();
         indexInitialRecipes();
     }
@@ -103,246 +92,184 @@ public class Vanilla {
         addFuelRecipe(Material.FISHING_ROD, 15);
         addFuelRecipe(Material.BOWL, 5);
 
-        if (!Version.has1_13BasicSupport()) {
-            addFuelRecipe("LOG", 15);
-            addFuelRecipe("LOG_2", 15);
-            addFuelRecipe("WOOD", 15);
-            addFuelRecipe("WOOD_STEP", 7.5f);
-            addFuelRecipe("SAPLING", 5);
-            addFuelRecipe("WOOD_AXE", 10);
-            addFuelRecipe("WOOD_HOE", 10);
-            addFuelRecipe("WOOD_PICKAXE", 10);
-            addFuelRecipe("WOOD_SPADE", 10);
-            addFuelRecipe("WOOD_SWORD", 10);
-            addFuelRecipe("WOOD_PLATE", 15);
-            addFuelRecipe("FENCE", 15);
-            addFuelRecipe("FENCE_GATE", 15);
-            addFuelRecipe("WOOD_STAIRS", 15);
-            addFuelRecipe("BIRCH_WOOD_STAIRS", 15);
-            addFuelRecipe("SPRUCE_WOOD_STAIRS", 15);
-            addFuelRecipe("JUNGLE_WOOD_STAIRS", 15);
-            addFuelRecipe("TRAP_DOOR", 15);
-            addFuelRecipe("WORKBENCH", 15);
-            addFuelRecipe("HUGE_MUSHROOM_1", 15);
-            addFuelRecipe("HUGE_MUSHROOM_2", 15);
-            addFuelRecipe("BANNER", 15);
-            addFuelRecipe("WOOL", 5);
-            addFuelRecipe("CARPET", 3.35f);
-            addFuelRecipe("WOOD_BUTTON", 5);
-            addFuelRecipe("WOOD_DOOR", 10);
-            addFuelRecipe("DARK_OAK_DOOR_ITEM", 10);
-            addFuelRecipe("ACACIA_DOOR_ITEM", 10);
-            addFuelRecipe("BIRCH_DOOR_ITEM", 10);
-            addFuelRecipe("JUNGLE_DOOR_ITEM", 10);
-            addFuelRecipe("SPRUCE_DOOR_ITEM", 10);
-            addFuelRecipe("BOAT", 20);
-            addFuelRecipe("BOAT_ACACIA", 20);
-            addFuelRecipe("BOAT_BIRCH", 20);
-            addFuelRecipe("BOAT_DARK_OAK", 20);
-            addFuelRecipe("BOAT_JUNGLE", 20);
-            addFuelRecipe("BOAT_SPRUCE", 20);
+        // Updated old fuels that got renamed in 1.13
+        addFuelRecipe(Material.ACACIA_LOG, 15);
+        addFuelRecipe(Material.BIRCH_LOG, 15);
+        addFuelRecipe(Material.DARK_OAK_LOG, 15);
+        addFuelRecipe(Material.JUNGLE_LOG, 15);
+        addFuelRecipe(Material.OAK_LOG, 15);
+        addFuelRecipe(Material.SPRUCE_LOG, 15);
+        addFuelRecipe(Material.STRIPPED_ACACIA_LOG, 15);
+        addFuelRecipe(Material.STRIPPED_BIRCH_LOG, 15);
+        addFuelRecipe(Material.STRIPPED_DARK_OAK_LOG, 15);
+        addFuelRecipe(Material.STRIPPED_JUNGLE_LOG, 15);
+        addFuelRecipe(Material.STRIPPED_OAK_LOG, 15);
+        addFuelRecipe(Material.STRIPPED_SPRUCE_LOG, 15);
+
+        addFuelRecipe(Material.ACACIA_WOOD, 15);
+        addFuelRecipe(Material.BIRCH_WOOD, 15);
+        addFuelRecipe(Material.DARK_OAK_WOOD, 15);
+        addFuelRecipe(Material.JUNGLE_WOOD, 15);
+        addFuelRecipe(Material.OAK_WOOD, 15);
+        addFuelRecipe(Material.SPRUCE_WOOD, 15);
+        addFuelRecipe(Material.STRIPPED_ACACIA_WOOD, 15);
+        addFuelRecipe(Material.STRIPPED_BIRCH_WOOD, 15);
+        addFuelRecipe(Material.STRIPPED_DARK_OAK_WOOD, 15);
+        addFuelRecipe(Material.STRIPPED_JUNGLE_WOOD, 15);
+        addFuelRecipe(Material.STRIPPED_OAK_WOOD, 15);
+        addFuelRecipe(Material.STRIPPED_SPRUCE_WOOD, 15);
+
+        addFuelRecipe(Material.ACACIA_SLAB, 7.5f);
+        addFuelRecipe(Material.BIRCH_SLAB, 7.5f);
+        addFuelRecipe(Material.DARK_OAK_SLAB, 7.5f);
+        addFuelRecipe(Material.JUNGLE_SLAB, 7.5f);
+        addFuelRecipe(Material.OAK_SLAB, 7.5f);
+        addFuelRecipe(Material.SPRUCE_SLAB, 7.5f);
+        //addFuelRecipe(Material.PETRIFIED_OAK_SLAB, 7.5f);  // Maybe?
+
+        addFuelRecipe(Material.ACACIA_SAPLING, 5);
+        addFuelRecipe(Material.BIRCH_SAPLING, 5);
+        addFuelRecipe(Material.DARK_OAK_SAPLING, 5);
+        addFuelRecipe(Material.JUNGLE_SAPLING, 5);
+        addFuelRecipe(Material.OAK_SAPLING, 5);
+        addFuelRecipe(Material.SPRUCE_SAPLING, 5);
+
+        addFuelRecipe(Material.WOODEN_AXE, 10);
+        addFuelRecipe(Material.WOODEN_HOE, 10);
+        addFuelRecipe(Material.WOODEN_PICKAXE, 10);
+        addFuelRecipe(Material.WOODEN_SHOVEL, 10);
+        addFuelRecipe(Material.WOODEN_SWORD, 10);
+
+        addFuelRecipe(Material.ACACIA_PRESSURE_PLATE, 15);
+        addFuelRecipe(Material.BIRCH_PRESSURE_PLATE, 15);
+        addFuelRecipe(Material.DARK_OAK_PRESSURE_PLATE, 15);
+        addFuelRecipe(Material.JUNGLE_PRESSURE_PLATE, 15);
+        addFuelRecipe(Material.OAK_PRESSURE_PLATE, 15);
+        addFuelRecipe(Material.SPRUCE_PRESSURE_PLATE, 15);
+
+        addFuelRecipe(Material.OAK_FENCE, 15);
+        addFuelRecipe(Material.OAK_FENCE_GATE, 15);
+
+        addFuelRecipe(Material.ACACIA_STAIRS, 15);
+        addFuelRecipe(Material.BIRCH_STAIRS, 15);
+        addFuelRecipe(Material.DARK_OAK_STAIRS, 15);
+        addFuelRecipe(Material.JUNGLE_STAIRS, 15);
+        addFuelRecipe(Material.OAK_STAIRS, 15);
+        addFuelRecipe(Material.SPRUCE_STAIRS, 15);
+
+        addFuelRecipe(Material.ACACIA_TRAPDOOR, 15);
+        addFuelRecipe(Material.BIRCH_TRAPDOOR, 15);
+        addFuelRecipe(Material.DARK_OAK_TRAPDOOR, 15);
+        addFuelRecipe(Material.JUNGLE_TRAPDOOR, 15);
+        addFuelRecipe(Material.OAK_TRAPDOOR, 15);
+        addFuelRecipe(Material.SPRUCE_TRAPDOOR, 15);
+
+        addFuelRecipe(Material.CRAFTING_TABLE, 15);
+
+        addFuelRecipe(Material.BROWN_MUSHROOM_BLOCK, 15);
+        addFuelRecipe(Material.RED_MUSHROOM_BLOCK, 15);
+
+        addFuelRecipe(Material.BLACK_BANNER, 15);
+        addFuelRecipe(Material.BLUE_BANNER, 15);
+        addFuelRecipe(Material.BROWN_BANNER, 15);
+        addFuelRecipe(Material.CYAN_BANNER, 15);
+        addFuelRecipe(Material.GRAY_BANNER, 15);
+        addFuelRecipe(Material.GREEN_BANNER, 15);
+        addFuelRecipe(Material.LIGHT_BLUE_BANNER, 15);
+        addFuelRecipe(Material.LIGHT_GRAY_BANNER, 15);
+        addFuelRecipe(Material.LIME_BANNER, 15);
+        addFuelRecipe(Material.MAGENTA_BANNER, 15);
+        addFuelRecipe(Material.ORANGE_BANNER, 15);
+        addFuelRecipe(Material.PINK_BANNER, 15);
+        addFuelRecipe(Material.PURPLE_BANNER, 15);
+        addFuelRecipe(Material.RED_BANNER, 15);
+        addFuelRecipe(Material.WHITE_BANNER, 15);
+        addFuelRecipe(Material.YELLOW_BANNER, 15);
+
+        addFuelRecipe(Material.BLACK_WOOL, 5);
+        addFuelRecipe(Material.BLUE_WOOL, 5);
+        addFuelRecipe(Material.BROWN_WOOL, 5);
+        addFuelRecipe(Material.CYAN_WOOL, 5);
+        addFuelRecipe(Material.GRAY_WOOL, 5);
+        addFuelRecipe(Material.GREEN_WOOL, 5);
+        addFuelRecipe(Material.LIGHT_BLUE_WOOL, 5);
+        addFuelRecipe(Material.LIGHT_GRAY_WOOL, 5);
+        addFuelRecipe(Material.LIME_WOOL, 5);
+        addFuelRecipe(Material.MAGENTA_WOOL, 5);
+        addFuelRecipe(Material.ORANGE_WOOL, 5);
+        addFuelRecipe(Material.PINK_WOOL, 5);
+        addFuelRecipe(Material.PURPLE_WOOL, 5);
+        addFuelRecipe(Material.RED_WOOL, 5);
+        addFuelRecipe(Material.WHITE_WOOL, 5);
+        addFuelRecipe(Material.YELLOW_WOOL, 5);
+
+        addFuelRecipe(Material.BLACK_CARPET, 3.35f);
+        addFuelRecipe(Material.BLUE_CARPET, 3.35f);
+        addFuelRecipe(Material.BROWN_CARPET, 3.35f);
+        addFuelRecipe(Material.CYAN_CARPET, 3.35f);
+        addFuelRecipe(Material.GRAY_CARPET, 3.35f);
+        addFuelRecipe(Material.GREEN_CARPET, 3.35f);
+        addFuelRecipe(Material.LIGHT_BLUE_CARPET, 3.35f);
+        addFuelRecipe(Material.LIGHT_GRAY_CARPET, 3.35f);
+        addFuelRecipe(Material.LIME_CARPET, 3.35f);
+        addFuelRecipe(Material.MAGENTA_CARPET, 3.35f);
+        addFuelRecipe(Material.ORANGE_CARPET, 3.35f);
+        addFuelRecipe(Material.PINK_CARPET, 3.35f);
+        addFuelRecipe(Material.PURPLE_CARPET, 3.35f);
+        addFuelRecipe(Material.RED_CARPET, 3.35f);
+        addFuelRecipe(Material.WHITE_CARPET, 3.35f);
+        addFuelRecipe(Material.YELLOW_CARPET, 3.35f);
+
+        addFuelRecipe(Material.ACACIA_BUTTON, 5);
+        addFuelRecipe(Material.BIRCH_BUTTON, 5);
+        addFuelRecipe(Material.DARK_OAK_BUTTON, 5);
+        addFuelRecipe(Material.JUNGLE_BUTTON, 5);
+        addFuelRecipe(Material.OAK_BUTTON, 5);
+        addFuelRecipe(Material.SPRUCE_BUTTON, 5);
+
+        addFuelRecipe(Material.ACACIA_DOOR, 10);
+        addFuelRecipe(Material.BIRCH_DOOR, 10);
+        addFuelRecipe(Material.DARK_OAK_DOOR, 10);
+        addFuelRecipe(Material.JUNGLE_DOOR, 10);
+        addFuelRecipe(Material.OAK_DOOR, 10);
+        addFuelRecipe(Material.SPRUCE_DOOR, 10);
+
+        addFuelRecipe(Material.ACACIA_PLANKS, 15);
+        addFuelRecipe(Material.BIRCH_PLANKS, 15);
+        addFuelRecipe(Material.DARK_OAK_PLANKS, 15);
+        addFuelRecipe(Material.JUNGLE_PLANKS, 15);
+        addFuelRecipe(Material.OAK_PLANKS, 15);
+        addFuelRecipe(Material.SPRUCE_PLANKS, 15);
+
+        // New fuels in 1.13
+        addFuelRecipe(Material.DRIED_KELP_BLOCK, 200);
+
+        addFuelRecipe(Material.ACACIA_SIGN, 10);
+        addFuelRecipe(Material.BIRCH_SIGN, 10);
+        addFuelRecipe(Material.JUNGLE_SIGN, 10);
+        addFuelRecipe(Material.OAK_SIGN, 10);
+        addFuelRecipe(Material.SPRUCE_SIGN, 10);
+        addFuelRecipe(Material.DARK_OAK_SIGN, 10);
+
+        // New fuels in 1.14
+        addFuelRecipe(Material.CARTOGRAPHY_TABLE, 15);
+        addFuelRecipe(Material.FLETCHING_TABLE, 15);
+        addFuelRecipe(Material.SMITHING_TABLE, 15);
+        addFuelRecipe(Material.LECTERN, 15);
+        addFuelRecipe(Material.COMPOSTER, 15);
+        addFuelRecipe(Material.BARREL, 15);
+        addFuelRecipe(Material.BAMBOO, 2.5f);
+        addFuelRecipe(Material.DEAD_BUSH, 5);
+
+        if (!Version.has1_19Support()) {
+            addFuelRecipe(Material.SCAFFOLDING, 20);
         }
-
-        if (!Version.has1_14Support()) {
-            addFuelRecipe("SIGN", 10);
-        }
-
-        if (Version.has1_13BasicSupport()) {
-            // Updated old fuels that got renamed in 1.13
-            addFuelRecipe(Material.ACACIA_LOG, 15);
-            addFuelRecipe(Material.BIRCH_LOG, 15);
-            addFuelRecipe(Material.DARK_OAK_LOG, 15);
-            addFuelRecipe(Material.JUNGLE_LOG, 15);
-            addFuelRecipe(Material.OAK_LOG, 15);
-            addFuelRecipe(Material.SPRUCE_LOG, 15);
-            addFuelRecipe(Material.STRIPPED_ACACIA_LOG, 15);
-            addFuelRecipe(Material.STRIPPED_BIRCH_LOG, 15);
-            addFuelRecipe(Material.STRIPPED_DARK_OAK_LOG, 15);
-            addFuelRecipe(Material.STRIPPED_JUNGLE_LOG, 15);
-            addFuelRecipe(Material.STRIPPED_OAK_LOG, 15);
-            addFuelRecipe(Material.STRIPPED_SPRUCE_LOG, 15);
-
-            addFuelRecipe(Material.ACACIA_WOOD, 15);
-            addFuelRecipe(Material.BIRCH_WOOD, 15);
-            addFuelRecipe(Material.DARK_OAK_WOOD, 15);
-            addFuelRecipe(Material.JUNGLE_WOOD, 15);
-            addFuelRecipe(Material.OAK_WOOD, 15);
-            addFuelRecipe(Material.SPRUCE_WOOD, 15);
-            addFuelRecipe(Material.STRIPPED_ACACIA_WOOD, 15);
-            addFuelRecipe(Material.STRIPPED_BIRCH_WOOD, 15);
-            addFuelRecipe(Material.STRIPPED_DARK_OAK_WOOD, 15);
-            addFuelRecipe(Material.STRIPPED_JUNGLE_WOOD, 15);
-            addFuelRecipe(Material.STRIPPED_OAK_WOOD, 15);
-            addFuelRecipe(Material.STRIPPED_SPRUCE_WOOD, 15);
-
-            addFuelRecipe(Material.ACACIA_SLAB, 7.5f);
-            addFuelRecipe(Material.BIRCH_SLAB, 7.5f);
-            addFuelRecipe(Material.DARK_OAK_SLAB, 7.5f);
-            addFuelRecipe(Material.JUNGLE_SLAB, 7.5f);
-            addFuelRecipe(Material.OAK_SLAB, 7.5f);
-            addFuelRecipe(Material.SPRUCE_SLAB, 7.5f);
-            //addFuelRecipe(Material.PETRIFIED_OAK_SLAB, 7.5f);  // Maybe?
-
-            addFuelRecipe(Material.ACACIA_SAPLING, 5);
-            addFuelRecipe(Material.BIRCH_SAPLING, 5);
-            addFuelRecipe(Material.DARK_OAK_SAPLING, 5);
-            addFuelRecipe(Material.JUNGLE_SAPLING, 5);
-            addFuelRecipe(Material.OAK_SAPLING, 5);
-            addFuelRecipe(Material.SPRUCE_SAPLING, 5);
-
-            addFuelRecipe(Material.WOODEN_AXE, 10);
-            addFuelRecipe(Material.WOODEN_HOE, 10);
-            addFuelRecipe(Material.WOODEN_PICKAXE, 10);
-            addFuelRecipe(Material.WOODEN_SHOVEL, 10);
-            addFuelRecipe(Material.WOODEN_SWORD, 10);
-
-            addFuelRecipe(Material.ACACIA_PRESSURE_PLATE, 15);
-            addFuelRecipe(Material.BIRCH_PRESSURE_PLATE, 15);
-            addFuelRecipe(Material.DARK_OAK_PRESSURE_PLATE, 15);
-            addFuelRecipe(Material.JUNGLE_PRESSURE_PLATE, 15);
-            addFuelRecipe(Material.OAK_PRESSURE_PLATE, 15);
-            addFuelRecipe(Material.SPRUCE_PRESSURE_PLATE, 15);
-
-            addFuelRecipe(Material.OAK_FENCE, 15);
-            addFuelRecipe(Material.OAK_FENCE_GATE, 15);
-
-            addFuelRecipe(Material.ACACIA_STAIRS, 15);
-            addFuelRecipe(Material.BIRCH_STAIRS, 15);
-            addFuelRecipe(Material.DARK_OAK_STAIRS, 15);
-            addFuelRecipe(Material.JUNGLE_STAIRS, 15);
-            addFuelRecipe(Material.OAK_STAIRS, 15);
-            addFuelRecipe(Material.SPRUCE_STAIRS, 15);
-
-            addFuelRecipe(Material.ACACIA_TRAPDOOR, 15);
-            addFuelRecipe(Material.BIRCH_TRAPDOOR, 15);
-            addFuelRecipe(Material.DARK_OAK_TRAPDOOR, 15);
-            addFuelRecipe(Material.JUNGLE_TRAPDOOR, 15);
-            addFuelRecipe(Material.OAK_TRAPDOOR, 15);
-            addFuelRecipe(Material.SPRUCE_TRAPDOOR, 15);
-
-            addFuelRecipe(Material.CRAFTING_TABLE, 15);
-
-            addFuelRecipe(Material.BROWN_MUSHROOM_BLOCK, 15);
-            addFuelRecipe(Material.RED_MUSHROOM_BLOCK, 15);
-
-            addFuelRecipe(Material.BLACK_BANNER, 15);
-            addFuelRecipe(Material.BLUE_BANNER, 15);
-            addFuelRecipe(Material.BROWN_BANNER, 15);
-            addFuelRecipe(Material.CYAN_BANNER, 15);
-            addFuelRecipe(Material.GRAY_BANNER, 15);
-            addFuelRecipe(Material.GREEN_BANNER, 15);
-            addFuelRecipe(Material.LIGHT_BLUE_BANNER, 15);
-            addFuelRecipe(Material.LIGHT_GRAY_BANNER, 15);
-            addFuelRecipe(Material.LIME_BANNER, 15);
-            addFuelRecipe(Material.MAGENTA_BANNER, 15);
-            addFuelRecipe(Material.ORANGE_BANNER, 15);
-            addFuelRecipe(Material.PINK_BANNER, 15);
-            addFuelRecipe(Material.PURPLE_BANNER, 15);
-            addFuelRecipe(Material.RED_BANNER, 15);
-            addFuelRecipe(Material.WHITE_BANNER, 15);
-            addFuelRecipe(Material.YELLOW_BANNER, 15);
-
-            addFuelRecipe(Material.BLACK_WOOL, 5);
-            addFuelRecipe(Material.BLUE_WOOL, 5);
-            addFuelRecipe(Material.BROWN_WOOL, 5);
-            addFuelRecipe(Material.CYAN_WOOL, 5);
-            addFuelRecipe(Material.GRAY_WOOL, 5);
-            addFuelRecipe(Material.GREEN_WOOL, 5);
-            addFuelRecipe(Material.LIGHT_BLUE_WOOL, 5);
-            addFuelRecipe(Material.LIGHT_GRAY_WOOL, 5);
-            addFuelRecipe(Material.LIME_WOOL, 5);
-            addFuelRecipe(Material.MAGENTA_WOOL, 5);
-            addFuelRecipe(Material.ORANGE_WOOL, 5);
-            addFuelRecipe(Material.PINK_WOOL, 5);
-            addFuelRecipe(Material.PURPLE_WOOL, 5);
-            addFuelRecipe(Material.RED_WOOL, 5);
-            addFuelRecipe(Material.WHITE_WOOL, 5);
-            addFuelRecipe(Material.YELLOW_WOOL, 5);
-
-            addFuelRecipe(Material.BLACK_CARPET, 3.35f);
-            addFuelRecipe(Material.BLUE_CARPET, 3.35f);
-            addFuelRecipe(Material.BROWN_CARPET, 3.35f);
-            addFuelRecipe(Material.CYAN_CARPET, 3.35f);
-            addFuelRecipe(Material.GRAY_CARPET, 3.35f);
-            addFuelRecipe(Material.GREEN_CARPET, 3.35f);
-            addFuelRecipe(Material.LIGHT_BLUE_CARPET, 3.35f);
-            addFuelRecipe(Material.LIGHT_GRAY_CARPET, 3.35f);
-            addFuelRecipe(Material.LIME_CARPET, 3.35f);
-            addFuelRecipe(Material.MAGENTA_CARPET, 3.35f);
-            addFuelRecipe(Material.ORANGE_CARPET, 3.35f);
-            addFuelRecipe(Material.PINK_CARPET, 3.35f);
-            addFuelRecipe(Material.PURPLE_CARPET, 3.35f);
-            addFuelRecipe(Material.RED_CARPET, 3.35f);
-            addFuelRecipe(Material.WHITE_CARPET, 3.35f);
-            addFuelRecipe(Material.YELLOW_CARPET, 3.35f);
-
-            addFuelRecipe(Material.ACACIA_BUTTON, 5);
-            addFuelRecipe(Material.BIRCH_BUTTON, 5);
-            addFuelRecipe(Material.DARK_OAK_BUTTON, 5);
-            addFuelRecipe(Material.JUNGLE_BUTTON, 5);
-            addFuelRecipe(Material.OAK_BUTTON, 5);
-            addFuelRecipe(Material.SPRUCE_BUTTON, 5);
-
-            addFuelRecipe(Material.ACACIA_DOOR, 10);
-            addFuelRecipe(Material.BIRCH_DOOR, 10);
-            addFuelRecipe(Material.DARK_OAK_DOOR, 10);
-            addFuelRecipe(Material.JUNGLE_DOOR, 10);
-            addFuelRecipe(Material.OAK_DOOR, 10);
-            addFuelRecipe(Material.SPRUCE_DOOR, 10);
-
-            addFuelRecipe(Material.ACACIA_PLANKS, 15);
-            addFuelRecipe(Material.BIRCH_PLANKS, 15);
-            addFuelRecipe(Material.DARK_OAK_PLANKS, 15);
-            addFuelRecipe(Material.JUNGLE_PLANKS, 15);
-            addFuelRecipe(Material.OAK_PLANKS, 15);
-            addFuelRecipe(Material.SPRUCE_PLANKS, 15);
-
-            if (!Version.has1_15Support()) {
-                addFuelRecipe(Material.ACACIA_BOAT, 20);
-                addFuelRecipe(Material.BIRCH_BOAT, 20);
-                addFuelRecipe(Material.DARK_OAK_BOAT, 20);
-                addFuelRecipe(Material.JUNGLE_BOAT, 20);
-                addFuelRecipe(Material.OAK_BOAT, 20);
-                addFuelRecipe(Material.SPRUCE_BOAT, 20);
-            }
-
-            // New fuels in 1.13
-            addFuelRecipe(Material.DRIED_KELP_BLOCK, 200);
-        }
-
-        if (Version.has1_14Support()) {
-            addFuelRecipe(Material.ACACIA_SIGN, 10);
-            addFuelRecipe(Material.BIRCH_SIGN, 10);
-            addFuelRecipe(Material.JUNGLE_SIGN, 10);
-            addFuelRecipe(Material.OAK_SIGN, 10);
-            addFuelRecipe(Material.SPRUCE_SIGN, 10);
-            addFuelRecipe(Material.DARK_OAK_SIGN, 10);
-
-            // New fuels in 1.14
-            if (!Version.has1_15Support()) {
-                addFuelRecipe(Material.SCAFFOLDING, 2.5f);
-            }
-            addFuelRecipe(Material.CARTOGRAPHY_TABLE, 15);
-            addFuelRecipe(Material.FLETCHING_TABLE, 15);
-            addFuelRecipe(Material.SMITHING_TABLE, 15);
-            addFuelRecipe(Material.LECTERN, 15);
-            addFuelRecipe(Material.COMPOSTER, 15);
-            addFuelRecipe(Material.BARREL, 15);
-            addFuelRecipe(Material.BAMBOO, 2.5f);
-            addFuelRecipe(Material.DEAD_BUSH, 5);
-        }
-
-        if (Version.has1_15Support()) {
-            if (!Version.has1_19Support()) {
-                addFuelRecipe(Material.SCAFFOLDING, 20);
-            }
-            addFuelRecipe(Material.ACACIA_BOAT, 60);
-            addFuelRecipe(Material.BIRCH_BOAT, 60);
-            addFuelRecipe(Material.DARK_OAK_BOAT, 60);
-            addFuelRecipe(Material.JUNGLE_BOAT, 60);
-            addFuelRecipe(Material.OAK_BOAT, 60);
-            addFuelRecipe(Material.SPRUCE_BOAT, 60);
-        }
+        addFuelRecipe(Material.ACACIA_BOAT, 60);
+        addFuelRecipe(Material.BIRCH_BOAT, 60);
+        addFuelRecipe(Material.DARK_OAK_BOAT, 60);
+        addFuelRecipe(Material.JUNGLE_BOAT, 60);
+        addFuelRecipe(Material.OAK_BOAT, 60);
+        addFuelRecipe(Material.SPRUCE_BOAT, 60);
 
         if (Version.has1_17Support()) {
             addFuelRecipe(Material.AZALEA, 5);
@@ -445,110 +372,102 @@ public class Vanilla {
     }
 
     private static void addFuelRecipe(Material material, float burnTime) {
-        if (Version.has1_13Support()) {
-            initialRecipes.put(new FuelRecipe1_13(material, burnTime), info);
-        } else {
-            initialRecipes.put(new FuelRecipe(material, burnTime), info);
-        }
+        initialRecipes.put(new FuelRecipe1_13(material, burnTime), info);
     }
 
     private static void initCompostRecipes() {
-        if (Version.has1_14Support()) {
-            addCompostRecipe(Material.BEETROOT_SEEDS, 30);
-            addCompostRecipe(Material.DRIED_KELP, 30);
+        addCompostRecipe(Material.BEETROOT_SEEDS, 30);
+        addCompostRecipe(Material.DRIED_KELP, 30);
 
-            if (Supports.shortGrassMaterial()) {
-                addCompostRecipe(Material.SHORT_GRASS, 30);
-            } else {
-                addCompostRecipe(Material.getMaterial("GRASS"), 30);
-            }
-            addCompostRecipe(Material.KELP, 30);
-            addCompostRecipe(Material.ACACIA_LEAVES, 30);
-            addCompostRecipe(Material.BIRCH_LEAVES, 30);
-            addCompostRecipe(Material.DARK_OAK_LEAVES, 30);
-            addCompostRecipe(Material.JUNGLE_LEAVES, 30);
-            addCompostRecipe(Material.OAK_LEAVES, 30);
-            addCompostRecipe(Material.SPRUCE_LEAVES, 30);
-            addCompostRecipe(Material.MELON_SEEDS, 30);
-            addCompostRecipe(Material.PUMPKIN_SEEDS, 30);
-            addCompostRecipe(Material.ACACIA_SAPLING, 30);
-            addCompostRecipe(Material.BIRCH_SAPLING, 30);
-            addCompostRecipe(Material.DARK_OAK_SAPLING, 30);
-            addCompostRecipe(Material.JUNGLE_SAPLING, 30);
-            addCompostRecipe(Material.OAK_SAPLING, 30);
-            addCompostRecipe(Material.SPRUCE_SAPLING, 30);
-            addCompostRecipe(Material.SEAGRASS, 30);
-            addCompostRecipe(Material.SWEET_BERRIES, 30);
-            addCompostRecipe(Material.WHEAT_SEEDS, 30);
-
-            addCompostRecipe(Material.CACTUS, 50);
-            addCompostRecipe(Material.DRIED_KELP_BLOCK, 50);
-            addCompostRecipe(Material.MELON_SLICE, 50);
-            addCompostRecipe(Material.SUGAR_CANE, 50);
-            addCompostRecipe(Material.TALL_GRASS, 50);
-            addCompostRecipe(Material.VINE, 50);
-
-            addCompostRecipe(Material.APPLE, 65);
-            addCompostRecipe(Material.BEETROOT, 65);
-            addCompostRecipe(Material.CARROT, 65);
-            addCompostRecipe(Material.COCOA_BEANS, 65);
-            addCompostRecipe(Material.FERN, 65);
-            addCompostRecipe(Material.LARGE_FERN, 65);
-            addCompostRecipe(Material.DANDELION, 65);
-            addCompostRecipe(Material.POPPY, 65);
-            addCompostRecipe(Material.BLUE_ORCHID, 65);
-            addCompostRecipe(Material.ALLIUM, 65);
-            addCompostRecipe(Material.AZURE_BLUET, 65);
-            addCompostRecipe(Material.RED_TULIP, 65);
-            addCompostRecipe(Material.ORANGE_TULIP, 65);
-            addCompostRecipe(Material.WHITE_TULIP, 65);
-            addCompostRecipe(Material.PINK_TULIP, 65);
-            addCompostRecipe(Material.OXEYE_DAISY, 65);
-            addCompostRecipe(Material.CORNFLOWER, 65);
-            addCompostRecipe(Material.LILY_OF_THE_VALLEY, 65);
-            addCompostRecipe(Material.WITHER_ROSE, 65);
-            addCompostRecipe(Material.SUNFLOWER, 65);
-            addCompostRecipe(Material.LILAC, 65);
-            addCompostRecipe(Material.ROSE_BUSH, 65);
-            addCompostRecipe(Material.PEONY, 65);
-            addCompostRecipe(Material.LILY_PAD, 65);
-            addCompostRecipe(Material.MELON, 65);
-            addCompostRecipe(Material.BROWN_MUSHROOM, 65);
-            addCompostRecipe(Material.RED_MUSHROOM, 65);
-            addCompostRecipe(Material.MUSHROOM_STEM, 65);
-            addCompostRecipe(Material.POTATO, 65);
-            addCompostRecipe(Material.PUMPKIN, 65);
-            addCompostRecipe(Material.CARVED_PUMPKIN, 65);
-            addCompostRecipe(Material.SEA_PICKLE, 65);
-            addCompostRecipe(Material.WHEAT, 65);
-
-            addCompostRecipe(Material.BAKED_POTATO, 85);
-            addCompostRecipe(Material.BREAD, 85);
-            addCompostRecipe(Material.COOKIE, 85);
-            addCompostRecipe(Material.HAY_BLOCK, 85);
-            addCompostRecipe(Material.BROWN_MUSHROOM_BLOCK, 85);
-            addCompostRecipe(Material.RED_MUSHROOM_BLOCK, 85);
-
-            addCompostRecipe(Material.CAKE, 100);
-            addCompostRecipe(Material.PUMPKIN_PIE, 100);
+        if (Supports.shortGrassMaterial()) {
+            addCompostRecipe(Material.SHORT_GRASS, 30);
+        } else {
+            addCompostRecipe(Material.getMaterial("GRASS"), 30);
         }
+        addCompostRecipe(Material.KELP, 30);
+        addCompostRecipe(Material.ACACIA_LEAVES, 30);
+        addCompostRecipe(Material.BIRCH_LEAVES, 30);
+        addCompostRecipe(Material.DARK_OAK_LEAVES, 30);
+        addCompostRecipe(Material.JUNGLE_LEAVES, 30);
+        addCompostRecipe(Material.OAK_LEAVES, 30);
+        addCompostRecipe(Material.SPRUCE_LEAVES, 30);
+        addCompostRecipe(Material.MELON_SEEDS, 30);
+        addCompostRecipe(Material.PUMPKIN_SEEDS, 30);
+        addCompostRecipe(Material.ACACIA_SAPLING, 30);
+        addCompostRecipe(Material.BIRCH_SAPLING, 30);
+        addCompostRecipe(Material.DARK_OAK_SAPLING, 30);
+        addCompostRecipe(Material.JUNGLE_SAPLING, 30);
+        addCompostRecipe(Material.OAK_SAPLING, 30);
+        addCompostRecipe(Material.SPRUCE_SAPLING, 30);
+        addCompostRecipe(Material.SEAGRASS, 30);
+        addCompostRecipe(Material.SWEET_BERRIES, 30);
+        addCompostRecipe(Material.WHEAT_SEEDS, 30);
 
-        if (Version.has1_16Support()) {
-            addCompostRecipe(Material.WEEPING_VINES, 50);
-            addCompostRecipe(Material.TWISTING_VINES, 50);
-            addCompostRecipe(Material.NETHER_SPROUTS, 50);
+        addCompostRecipe(Material.CACTUS, 50);
+        addCompostRecipe(Material.DRIED_KELP_BLOCK, 50);
+        addCompostRecipe(Material.MELON_SLICE, 50);
+        addCompostRecipe(Material.SUGAR_CANE, 50);
+        addCompostRecipe(Material.TALL_GRASS, 50);
+        addCompostRecipe(Material.VINE, 50);
 
-            addCompostRecipe(Material.CRIMSON_ROOTS, 65);
-            addCompostRecipe(Material.WARPED_ROOTS, 65);
+        addCompostRecipe(Material.APPLE, 65);
+        addCompostRecipe(Material.BEETROOT, 65);
+        addCompostRecipe(Material.CARROT, 65);
+        addCompostRecipe(Material.COCOA_BEANS, 65);
+        addCompostRecipe(Material.FERN, 65);
+        addCompostRecipe(Material.LARGE_FERN, 65);
+        addCompostRecipe(Material.DANDELION, 65);
+        addCompostRecipe(Material.POPPY, 65);
+        addCompostRecipe(Material.BLUE_ORCHID, 65);
+        addCompostRecipe(Material.ALLIUM, 65);
+        addCompostRecipe(Material.AZURE_BLUET, 65);
+        addCompostRecipe(Material.RED_TULIP, 65);
+        addCompostRecipe(Material.ORANGE_TULIP, 65);
+        addCompostRecipe(Material.WHITE_TULIP, 65);
+        addCompostRecipe(Material.PINK_TULIP, 65);
+        addCompostRecipe(Material.OXEYE_DAISY, 65);
+        addCompostRecipe(Material.CORNFLOWER, 65);
+        addCompostRecipe(Material.LILY_OF_THE_VALLEY, 65);
+        addCompostRecipe(Material.WITHER_ROSE, 65);
+        addCompostRecipe(Material.SUNFLOWER, 65);
+        addCompostRecipe(Material.LILAC, 65);
+        addCompostRecipe(Material.ROSE_BUSH, 65);
+        addCompostRecipe(Material.PEONY, 65);
+        addCompostRecipe(Material.LILY_PAD, 65);
+        addCompostRecipe(Material.MELON, 65);
+        addCompostRecipe(Material.BROWN_MUSHROOM, 65);
+        addCompostRecipe(Material.RED_MUSHROOM, 65);
+        addCompostRecipe(Material.MUSHROOM_STEM, 65);
+        addCompostRecipe(Material.POTATO, 65);
+        addCompostRecipe(Material.PUMPKIN, 65);
+        addCompostRecipe(Material.CARVED_PUMPKIN, 65);
+        addCompostRecipe(Material.SEA_PICKLE, 65);
+        addCompostRecipe(Material.WHEAT, 65);
 
-            addCompostRecipe(Material.CRIMSON_FUNGUS, 65);
-            addCompostRecipe(Material.WARPED_FUNGUS, 65);
-            addCompostRecipe(Material.NETHER_WART, 65);
-            addCompostRecipe(Material.SHROOMLIGHT, 65);
+        addCompostRecipe(Material.BAKED_POTATO, 85);
+        addCompostRecipe(Material.BREAD, 85);
+        addCompostRecipe(Material.COOKIE, 85);
+        addCompostRecipe(Material.HAY_BLOCK, 85);
+        addCompostRecipe(Material.BROWN_MUSHROOM_BLOCK, 85);
+        addCompostRecipe(Material.RED_MUSHROOM_BLOCK, 85);
 
-            addCompostRecipe(Material.NETHER_WART_BLOCK, 85);
-            addCompostRecipe(Material.WARPED_WART_BLOCK, 85);
-        }
+        addCompostRecipe(Material.CAKE, 100);
+        addCompostRecipe(Material.PUMPKIN_PIE, 100);
+
+        addCompostRecipe(Material.WEEPING_VINES, 50);
+        addCompostRecipe(Material.TWISTING_VINES, 50);
+        addCompostRecipe(Material.NETHER_SPROUTS, 50);
+
+        addCompostRecipe(Material.CRIMSON_ROOTS, 65);
+        addCompostRecipe(Material.WARPED_ROOTS, 65);
+
+        addCompostRecipe(Material.CRIMSON_FUNGUS, 65);
+        addCompostRecipe(Material.WARPED_FUNGUS, 65);
+        addCompostRecipe(Material.NETHER_WART, 65);
+        addCompostRecipe(Material.SHROOMLIGHT, 65);
+
+        addCompostRecipe(Material.NETHER_WART_BLOCK, 85);
+        addCompostRecipe(Material.WARPED_WART_BLOCK, 85);
 
         if (Version.has1_17Support()) {
             addCompostRecipe(Material.AZALEA_LEAVES, 30);
@@ -595,12 +514,6 @@ public class Vanilla {
         RecipeManager.getRecipes().addRecipeToQuickfindIndex(RMCRecipeType.COMPOST.getDirective(), recipe);
     }
 
-    private static void initSpecialRecipes() {
-        if (!Version.has1_13BasicSupport()) {
-            RECIPE_FIREWORKS = new ItemStack(Material.getMaterial("FIREWORK"), 0, (short) 0);
-        }
-    }
-
     private static void initVanillaRecipes() {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe r;
@@ -616,23 +529,11 @@ public class Vanilla {
                 BaseRecipe recipe = null;
 
                 if (r instanceof ShapedRecipe) {
-                    if (Version.has1_13Support()) {
-                        recipe = new CraftRecipe1_13((ShapedRecipe) r);
-                    } else {
-                        recipe = new CraftRecipe((ShapedRecipe) r);
-                    }
+                    recipe = new CraftRecipe1_13((ShapedRecipe) r);
                 } else if (r instanceof ShapelessRecipe) {
-                    if (Version.has1_13Support()) {
-                        recipe = new CombineRecipe1_13((ShapelessRecipe) r);
-                    } else {
-                        recipe = new CombineRecipe((ShapelessRecipe) r);
-                    }
+                    recipe = new CombineRecipe1_13((ShapelessRecipe) r);
                 } else if (r instanceof FurnaceRecipe) {
-                    if (Version.has1_13Support()) {
-                        recipe = new RMFurnaceRecipe1_13((FurnaceRecipe) r);
-                    } else {
-                        recipe = new RMFurnaceRecipe((FurnaceRecipe) r);
-                    }
+                    recipe = new RMFurnaceRecipe1_13((FurnaceRecipe) r);
                 } else if (r instanceof BlastingRecipe) {
                     recipe = new RMBlastingRecipe((BlastingRecipe) r);
                 } else if (r instanceof SmokingRecipe) {
@@ -643,7 +544,7 @@ public class Vanilla {
                     recipe = new RMStonecuttingRecipe((StonecuttingRecipe) r);
                 } else if (Supports.experimental1_20() && r instanceof SmithingTransformRecipe) {
                     recipe = new RMSmithing1_19_4TransformRecipe((SmithingTransformRecipe) r);
-                } else if (Version.has1_16Support() && r instanceof SmithingRecipe) {
+                } else if (r instanceof SmithingRecipe) {
                     recipe = new RMSmithingRecipe((SmithingRecipe) r);
                 }
 
@@ -683,16 +584,8 @@ public class Vanilla {
             return replaceCraftRecipeV1_13((CraftRecipe1_13) recipe, true);
         }
 
-        if (recipe instanceof CraftRecipe) {
-            return replaceCraftRecipeLegacy((CraftRecipe) recipe, true);
-        }
-
         if (recipe instanceof CombineRecipe1_13) {
             return replaceCombineRecipeV1_13((CombineRecipe1_13) recipe, true);
-        }
-
-        if (recipe instanceof CombineRecipe) {
-            return replaceCombineRecipeLegacy((CombineRecipe) recipe, true);
         }
 
         if (recipe instanceof RMFurnaceRecipe1_13) {
@@ -705,10 +598,6 @@ public class Vanilla {
 
         if (recipe instanceof RMSmokingRecipe) {
             return removeSmokingRecipe((RMSmokingRecipe) recipe);
-        }
-
-        if (recipe instanceof RMFurnaceRecipe) {
-            return removeSmeltLegacyRecipe((RMFurnaceRecipe) recipe);
         }
 
         if (recipe instanceof RMCampfireRecipe) {
@@ -737,17 +626,6 @@ public class Vanilla {
      *            RecipeManager recipe
      * @return removed recipe or null if not found
      */
-    private static Recipe removeSmeltLegacyRecipe(RMFurnaceRecipe recipe) {
-        return removeFurnaceRecipe(recipe.getIngredient());
-    }
-
-    /**
-     * Removes a RecipeManager smelt recipe from the <b>server</b>
-     *
-     * @param recipe
-     *            RecipeManager recipe
-     * @return removed recipe or null if not found
-     */
     private static Recipe removeSmeltRecipe(RMFurnaceRecipe1_13 recipe) {
         RecipeChoice choice = recipe.getIngredientChoice();
         if (choice instanceof RecipeChoice.MaterialChoice) {
@@ -762,8 +640,8 @@ public class Vanilla {
     }
 
     private static Recipe removeFurnaceRecipe(ItemStack ingredient) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
-        BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
+        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
+        BaseToolsRecipe toolsRecipe = VersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         Recipe r;
 
@@ -804,8 +682,8 @@ public class Vanilla {
     }
 
     private static Recipe removeBlastingRecipe(ItemStack ingredient) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
-        BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
+        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
+        BaseToolsRecipe toolsRecipe = VersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         Recipe r;
 
@@ -846,8 +724,8 @@ public class Vanilla {
     }
 
     private static Recipe removeSmokingRecipe(ItemStack ingredient) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
-        BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
+        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
+        BaseToolsRecipe toolsRecipe = VersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         Recipe r;
 
@@ -888,8 +766,8 @@ public class Vanilla {
     }
 
     private static Recipe removeCampfireRecipe(ItemStack ingredient) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
-        BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
+        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
+        BaseToolsRecipe toolsRecipe = VersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         Recipe r;
 
@@ -930,8 +808,8 @@ public class Vanilla {
     }
 
     private static Recipe removeStonecuttingRecipe(ItemStack ingredient, ItemStack result) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
-        BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
+        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
+        BaseToolsRecipe toolsRecipe = VersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         Recipe r;
 
@@ -1000,8 +878,8 @@ public class Vanilla {
     }
 
     private static Recipe removeSmithingTransformRecipe(ItemStack templateIngredient, ItemStack baseIngredient, ItemStack addIngredient) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
-        BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
+        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
+        BaseToolsRecipe toolsRecipe = VersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         Recipe r;
 
@@ -1058,8 +936,8 @@ public class Vanilla {
     }
 
     private static Recipe removeSmithingRecipe(ItemStack baseIngredient, ItemStack addIngredient) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
-        BaseToolsRecipe toolsRecipe = NMSVersionHandler.getToolsRecipe();
+        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
+        BaseToolsRecipe toolsRecipe = VersionHandler.getToolsRecipe();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         Recipe r;
 
@@ -1086,29 +964,6 @@ public class Vanilla {
         return null;
     }
 
-    // 1.12 replacement support
-    
-    /**
-     * Replaces a recipe with a RecipeManager recipe. V1_12 support only!
-     *
-     * @param recipe RecipeManager recipe
-     */
-    public static void replaceCustomRecipe(BaseRecipe recipe) {
-        if (recipe instanceof CraftRecipe1_13) {
-            replaceCraftRecipeV1_13((CraftRecipe1_13) recipe, false);
-        }
-        if (recipe instanceof CraftRecipe) {
-            replaceCraftRecipeLegacy((CraftRecipe) recipe, false);
-        }
-
-        if (recipe instanceof CombineRecipe1_13) {
-            replaceCombineRecipeV1_13((CombineRecipe1_13) recipe, false);
-        }
-        if (recipe instanceof CombineRecipe) {
-            replaceCombineRecipeLegacy((CombineRecipe) recipe, false);
-        }
-    }
-
     /**
      * V1_13 or newer only.
      * Replaces/Removes a RecipeManager craft recipe on the <b>server</b>
@@ -1119,7 +974,7 @@ public class Vanilla {
      * @return replaced recipe or null if not found
      */
     public static Recipe replaceCraftRecipeV1_13(CraftRecipe1_13 recipe, boolean remove) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         ShapedRecipe sr;
         Recipe r;
@@ -1131,7 +986,7 @@ public class Vanilla {
                 if (r instanceof ShapedRecipe) {
                     sr = (ShapedRecipe) r;
 
-                    if (NMSVersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoicePattern(), recipe.getIngredientsChoiceMap())) {
+                    if (VersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoicePattern(), recipe.getIngredientsChoiceMap())) {
                         if (remove) {
                             iterator.remove();
                         } else {
@@ -1139,58 +994,6 @@ public class Vanilla {
                             baseRecipeIterator.replace(overrideItem);
                         }
 
-                        baseRecipeIterator.finish();
-                        return sr;
-                    }
-                }
-            } catch (NullPointerException e) {
-                // Catch any invalid Bukkit recipes
-            } catch (NoSuchElementException e) {
-                // Vanilla datapack is disabled
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * V1_12 only.
-     * Replaces/Removes a RecipeManager craft recipe on the <b>server</b>
-     *
-     * @param recipe RecipeManager recipe
-     * @param remove Whether the recipe should be removed
-     *
-     * @return replaced recipe or null if not found
-     */
-    public static Recipe replaceCraftRecipeLegacy(CraftRecipe recipe, boolean remove) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
-        ShapedRecipe sr;
-        Recipe r;
-
-        String[] sh;
-
-        ItemStack[] matrix = recipe.getIngredients();
-        RMBukkitTools.trimItemMatrix(matrix);
-        ItemStack[] matrixMirror = Tools.mirrorItemMatrix(matrix);
-        int height = recipe.getHeight();
-        int width = recipe.getWidth();
-
-        while (iterator.hasNext()) {
-            try {
-                r = iterator.next();
-
-                if (r instanceof ShapedRecipe) {
-                    sr = (ShapedRecipe) r;
-                    sh = sr.getShape();
-
-                    if (sh.length == height && sh[0].length() == width && NMSVersionHandler.getToolsRecipe().matchesShapedLegacy(sr, matrix, matrixMirror)) {
-                        if (remove) {
-                            iterator.remove();
-                        } else {
-                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
-                            baseRecipeIterator.replace(overrideItem);
-                        }
                         baseRecipeIterator.finish();
                         return sr;
                     }
@@ -1215,7 +1018,7 @@ public class Vanilla {
      * @return replaced recipe or null if not found
      */
     public static Recipe replaceCombineRecipeV1_13(CombineRecipe1_13 recipe, boolean remove) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
+        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         Recipe r;
 
@@ -1243,7 +1046,7 @@ public class Vanilla {
                 r = iterator.next();
 
                 if (r instanceof ShapelessRecipe) {
-                    if (NMSVersionHandler.getToolsRecipe().matchesShapeless(r, ingredientChoiceList)) {
+                    if (VersionHandler.getToolsRecipe().matchesShapeless(r, ingredientChoiceList)) {
                         if (remove) {
                             iterator.remove();
                         } else {
@@ -1264,49 +1067,6 @@ public class Vanilla {
 
         return null;
     }
-
-    /**
-     * V1_12 only.
-     * Replaces/Removes a RecipeManager combine recipe from the <b>server</b>
-     *
-     * @param recipe RecipeManager recipe
-     * @param remove Whether the recipe should be removed
-     *
-     * @return replaced recipe or null if not found
-     */
-    public static Recipe replaceCombineRecipeLegacy(CombineRecipe recipe, boolean remove) {
-        BaseRecipeIterator baseRecipeIterator = NMSVersionHandler.getRecipeIterator();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
-        Recipe r;
-
-        List<ItemStack> items = recipe.getIngredients();
-
-        while (iterator.hasNext()) {
-            try {
-                r = iterator.next();
-
-                if (r instanceof ShapelessRecipe) {
-                    if (NMSVersionHandler.getToolsRecipe().matchesShapelessLegacy(r, items)) {
-                        if (remove) {
-                            iterator.remove();
-                        } else {
-                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
-                            baseRecipeIterator.replace(overrideItem);
-                        }
-
-                        baseRecipeIterator.finish();
-                        return r;
-                    }
-                }
-            } catch (NullPointerException e) {
-                // Catch any invalid Bukkit recipes
-            }
-        }
-
-        return null;
-    }
-
-    // 1.12 replacement support end
     
     /**
      * Remove all RecipeManager recipes from the server.
@@ -1321,10 +1081,6 @@ public class Vanilla {
         Iterator<Recipe> iterator = Bukkit.recipeIterator();
         Recipe recipe;
 
-        // In 1.12, we don't use the special iterator here, because "remove" is actually suppressed.
-        //  Since we really want to remove, we instead catalogue the non-custom, in case
-        //  other plugins have added recipes. Then, when done, we clear all, and re-add just those
-        //  discovered recipes, in the order we found them, to limit disruption.
         while (iterator.hasNext()) {
             try {
                 recipe = iterator.next();
@@ -1347,7 +1103,9 @@ public class Vanilla {
                 if (!Vanilla.isSpecialRecipe(newRecipe)) {
                     Bukkit.addRecipe(newRecipe);
                 }
-            } catch (Exception e) { /* for v1.12, we'll reload to preserve ordering, then blindly try to reapply recipes. */ }
+            } catch (Exception e) {
+
+            }
         }
     }
 
@@ -1355,7 +1113,7 @@ public class Vanilla {
      * Remove all recipes from the server except special ones
      */
     public static void removeAllButSpecialRecipes() {
-        Iterator<Recipe> iterator = NMSVersionHandler.getRecipeIterator().getIterator();
+        Iterator<Recipe> iterator = VersionHandler.getRecipeIterator().getIterator();
         Recipe recipe;
 
         while (iterator.hasNext()) {
@@ -1373,8 +1131,6 @@ public class Vanilla {
                 // Catch any invalid Bukkit recipes
             }
         }
-
-        // In 1.12, special iterator will automatically clean up when it runs out of recipes to remove.
     }
 
     /**
@@ -1393,41 +1149,18 @@ public class Vanilla {
 
             if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
                 switch (key.getKey()) {
-                    case "mapextending": // 1.12 only
                     case "map_extending": // 1.13+
-
-                    case "tippedarrow": // 1.12 only
                     case "tipped_arrow": // 1.13+
-
-                    case "armordye": // 1.12 only
                     case "armor_dye": // 1.13+
-
-                    case "bannerduplicate": // 1.12 only
                     case "banner_duplicate": // 1.13+
-
-                    case "bookcloning": // 1.12 only
                     case "book_cloning": // 1.13+
-
                     case "firework_star": // 1.13+
-
                     case "firework_star_fade": // 1.13+
-
-                    case "fireworks": // 1.12 only
                     case "firework_rocket": // 1.13+
-
-                    case "mapcloning": // 1.12 only
                     case "map_cloning": // 1.13+
-
-                    case "repairitem": // 1.12 only
                     case "repair_item": // 1.13+
-
-                    case "shulkerboxcoloring": // 1.12 only
                     case "shulker_box_coloring": // 1.13+
-
-                    case "shielddecoration": // 1.12 only
                     case "shield_decoration": // 1.13+
-
-                    case "banneraddpattern": // 1.12 only
                     case "banner_add_pattern": // 1.13 only
 
                     case "suspicious_stew": // 1.14
@@ -1474,14 +1207,8 @@ public class Vanilla {
         Keyed keyedRecipe = (Keyed) recipe;
         NamespacedKey key = keyedRecipe.getKey();
 
-        switch (key.getKey()) {
-            case "repairitem": // 1.12 only
-            case "repair_item": // 1.13+
-                matches = true;
-                break;
-
-            default:
-                break;
+        if (key.getKey().equals("repair_item")) { // 1.13+
+            matches = true;
         }
 
         return matches;
@@ -1493,14 +1220,8 @@ public class Vanilla {
         Keyed keyedRecipe = (Keyed) recipe;
         NamespacedKey key = keyedRecipe.getKey();
 
-        switch (key.getKey()) {
-            case "armordye": // 1.12 only
-            case "armor_dye": // 1.13+
-                matches = true;
-                break;
-
-            default:
-                break;
+        if (key.getKey().equals("armor_dye")) { // 1.13+
+            matches = true;
         }
 
         return matches;
@@ -1513,14 +1234,8 @@ public class Vanilla {
         NamespacedKey key = keyedRecipe.getKey();
 
         if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            switch (key.getKey()) {
-                case "mapcloning": // 1.12 only
-                case "map_cloning": // 1.13+
-                    matches = true;
-                    break;
-
-                default:
-                    break;
+            if (key.getKey().equals("map_cloning")) { // 1.13+
+                matches = true;
             }
         }
 
@@ -1536,14 +1251,8 @@ public class Vanilla {
             NamespacedKey key = shaped.getKey();
 
             if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                switch (key.getKey()) {
-                    case "mapextending": // 1.12 only
-                    case "map_extending": // 1.13+
-                        matches = true;
-                        break;
-
-                    default:
-                        break;
+                if (key.getKey().equals("map_extending")) { // 1.13+
+                    matches = true;
                 }
             }
         }
@@ -1558,14 +1267,8 @@ public class Vanilla {
         NamespacedKey key = keyedRecipe.getKey();
 
         if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            switch (key.getKey()) {
-                case "fireworks": // 1.12 only
-                case "firework_rocket": // 1.13+
-                    matches = true;
-                    break;
-
-                default:
-                    break;
+            if (key.getKey().equals("firework_rocket")) { // 1.13+
+                matches = true;
             }
         }
 
@@ -1575,38 +1278,12 @@ public class Vanilla {
     public static boolean recipeMatchesFireworkStar(Recipe recipe, ItemStack result, ItemStack[] matrix) {
         boolean matches = false;
 
-        if (Version.has1_13BasicSupport()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
+        Keyed keyedRecipe = (Keyed) recipe;
+        NamespacedKey key = keyedRecipe.getKey();
 
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("firework_star")) {
-                    matches = true;
-                }
-            }
-        } else if (recipe instanceof ShapelessRecipe) {
-            if (result.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
-                if (recipe.getResult().getType() == Material.AIR) {
-                    matches = true;
-                }
-
-                if (recipe.getResult().equals(Vanilla.RECIPE_FIREWORKS)) {
-                    matches = true;
-                }
-            }
-
-            if (matches) {
-                // Unmatch on firework star fade recipe
-                boolean hasFireworkStar = false;
-                for (ItemStack item : matrix) {
-                    if (item != null && item.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
-                        hasFireworkStar = true;
-                        break;
-                    }
-                }
-                if (hasFireworkStar) {
-                    matches = false;
-                }
+        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+            if (key.getKey().equals("firework_star")) {
+                matches = true;
             }
         }
 
@@ -1616,38 +1293,12 @@ public class Vanilla {
     public static boolean recipeMatchesFireworkStarFade(Recipe recipe, ItemStack result, ItemStack[] matrix) {
         boolean matches = false;
 
-        if (Version.has1_13BasicSupport()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
+        Keyed keyedRecipe = (Keyed) recipe;
+        NamespacedKey key = keyedRecipe.getKey();
 
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if ("firework_star_fade".equals(key.getKey())) { // 1.13+
-                    matches = true;
-                }
-            }
-        } else if (recipe instanceof ShapelessRecipe) {
-            if (result.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
-                if (recipe.getResult().getType() == Material.AIR) {
-                    matches = true;
-                }
-
-                if (recipe.getResult().equals(Vanilla.RECIPE_FIREWORKS)) {
-                    matches = true;
-                }
-            }
-
-            if (matches) {
-                // Unmatch on firework star recipe
-                boolean hasFireworkStar = false;
-                for (ItemStack item : matrix) {
-                    if (item != null && item.getType() == Material.getMaterial("FIREWORK_CHARGE")) {
-                        hasFireworkStar = true;
-                        break;
-                    }
-                }
-                if (!hasFireworkStar) {
-                    matches = false;
-                }
+        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+            if ("firework_star_fade".equals(key.getKey())) { // 1.13+
+                matches = true;
             }
         }
 
@@ -1661,38 +1312,8 @@ public class Vanilla {
         NamespacedKey key = keyedRecipe.getKey();
 
         if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            switch (key.getKey()) {
-                case "bookcloning": // 1.12 only
-                case "book_cloning": // 1.13+
-                    matches = true;
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-        return matches;
-    }
-
-    // Replaced by loom recipes in 1.14
-    public static boolean recipeMatchesBannerAddPattern(Recipe recipe) {
-        boolean matches = false;
-
-        if (recipe instanceof ShapelessRecipe) {
-            ShapelessRecipe shapeless = (ShapelessRecipe) recipe;
-            NamespacedKey key = shapeless.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                switch (key.getKey()) {
-                    case "banneraddpattern": // 1.12 only
-                    case "banner_add_pattern": // 1.13 only
-                        matches = true;
-                        break;
-
-                    default:
-                        break;
-                }
+            if (key.getKey().equals("book_cloning")) { // 1.13+
+                matches = true;
             }
         }
 
@@ -1706,14 +1327,8 @@ public class Vanilla {
         NamespacedKey key = keyedRecipe.getKey();
 
         if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            switch (key.getKey()) {
-                case "bannerduplicate": // 1.12 only
-                case "banner_duplicate": // 1.13+
-                    matches = true;
-                    break;
-
-                default:
-                    break;
+            if (key.getKey().equals("banner_duplicate")) { // 1.13+
+                matches = true;
             }
         }
 
@@ -1728,14 +1343,8 @@ public class Vanilla {
         NamespacedKey key = keyedRecipe.getKey();
 
         if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            switch (key.getKey()) {
-                case "shielddecoration": // 1.12 only
-                case "shield_decoration": // 1.13+
-                    matches = true;
-                    break;
-
-                default:
-                    break;
+            if (key.getKey().equals("shield_decoration")) { // 1.13+
+                matches = true;
             }
         }
 
@@ -1750,14 +1359,8 @@ public class Vanilla {
         NamespacedKey key = keyedRecipe.getKey();
 
         if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            switch (key.getKey()) {
-                case "tippedarrow": // 1.12 only
-                case "tipped_arrow": // 1.13+
-                    matches = true;
-                    break;
-
-                default:
-                    break;
+            if (key.getKey().equals("tipped_arrow")) { // 1.13+
+                matches = true;
             }
         }
 
@@ -1772,14 +1375,8 @@ public class Vanilla {
         NamespacedKey key = keyedRecipe.getKey();
 
         if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            switch (key.getKey()) {
-                case "shulkerboxcoloring": // 1.12 only
-                case "shulker_box_coloring": // 1.13+
-                    matches = true;
-                    break;
-
-                default:
-                    break;
+            if (key.getKey().equals("shulker_box_coloring")) { // 1.13+
+                matches = true;
             }
         }
 
@@ -1790,14 +1387,12 @@ public class Vanilla {
     public static boolean recipeMatchesSuspiciousStew(Recipe recipe) {
         boolean matches = false;
 
-        if (Version.has1_14Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
+        Keyed keyedRecipe = (Keyed) recipe;
+        NamespacedKey key = keyedRecipe.getKey();
 
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("suspicious_stew")) {
-                    matches = true;
-                }
+        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
+            if (key.getKey().equals("suspicious_stew")) {
+                matches = true;
             }
         }
 

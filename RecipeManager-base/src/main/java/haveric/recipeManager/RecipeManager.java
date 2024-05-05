@@ -28,7 +28,6 @@ import haveric.recipeManager.recipes.cooking.furnace.data.Furnaces;
 import haveric.recipeManager.settings.BaseSettings;
 import haveric.recipeManager.settings.SettingsYaml;
 import haveric.recipeManager.tools.Supports;
-import haveric.recipeManager.tools.Version;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.Bukkit;
@@ -83,11 +82,8 @@ public class RecipeManager extends JavaPlugin {
         FurnaceData.init(); // dummy caller to initialize Serialization class
         BrewingStandData.init();
         CooldownData.init();
-
-        if (Version.has1_14Support()) {
-            RMCampfireData.init(); // dummy caller to initialize Serialization class
-            ComposterData.init();
-        }
+        RMCampfireData.init(); // dummy caller to initialize Serialization class
+        ComposterData.init();
 
         events = new Events();
         recipeTypeLoader = new RecipeTypeLoader();
@@ -197,22 +193,16 @@ public class RecipeManager extends JavaPlugin {
             Cooldowns.save();
             Furnaces.save();
             BrewingStands.save();
-
-            if (Version.has1_14Support()) {
-                RMCampfires.save();
-                Composters.save();
-            }
+            RMCampfires.save();
+            Composters.save();
         }
 
         // Load saved datas
         Cooldowns.load();
         Furnaces.load();
         BrewingStands.load();
-
-        if (Version.has1_14Support()) {
-            RMCampfires.load();
-            Composters.load();
-        }
+        RMCampfires.load();
+        Composters.load();
 
         Messages.getInstance().reload(sender); // (re)load messages from messages.yml
         Files.reload(sender); // (re)generate info files if they do not exist
@@ -304,13 +294,11 @@ public class RecipeManager extends JavaPlugin {
             Cooldowns.save();
             Cooldowns.clean();
 
-            if (Version.has1_14Support()) {
-                RMCampfires.save();
-                RMCampfires.clean();
+            RMCampfires.save();
+            RMCampfires.clean();
 
-                Composters.save();
-                Composters.clean();
-            }
+            Composters.save();
+            Composters.clean();
 
             Workbenches.clean();
             Anvils.clean();

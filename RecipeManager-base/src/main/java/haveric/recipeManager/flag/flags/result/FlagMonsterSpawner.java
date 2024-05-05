@@ -7,7 +7,6 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.CreatureSpawner;
@@ -101,13 +100,7 @@ public class FlagMonsterSpawner extends Flag {
     public boolean onValidate() {
         ItemResult result = getResult();
 
-        Material spawnerMaterial;
-        if (Version.has1_13BasicSupport()) {
-            spawnerMaterial = Material.SPAWNER;
-        } else {
-            spawnerMaterial = Material.getMaterial("MOB_SPAWNER");
-        }
-
+        Material spawnerMaterial = Material.SPAWNER;
         if (result == null || !result.getType().equals(spawnerMaterial)) {
             return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a " + spawnerMaterial + " to work!");
         }

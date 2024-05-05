@@ -926,7 +926,7 @@ public class Conditions implements Cloneable {
                         }
                     }
 
-                    if (Version.has1_13BasicSupport() && cond.hasIcon()) {
+                    if (cond.hasIcon()) {
                         if (!cond.getIcon().equals(effect.hasIcon())) {
                             success = false;
                         }
@@ -992,7 +992,7 @@ public class Conditions implements Cloneable {
                         }
                     }
 
-                    if (Version.has1_13BasicSupport() && cond.hasIcon()) {
+                    if (cond.hasIcon()) {
                         if (!cond.getIcon().equals(effect.hasIcon())) {
                             success = false;
                         }

@@ -25,7 +25,6 @@ special-recipes:
     renaming:
       enabled: true          # ability to rename items in an anvil
       materials: false       #   false or comma separated list of materials to allow/disallow. Ex: iron_sword, wooden_sword. Supports a:<aliasname> and tag:<tagname>
-  banner: true               # banner pattern recipes (Only affects 1.13 or earlier. Replaced with loom recipes in 1.14)
   banner-duplicate: true     # banner duplicate/cloning recipes
   book-cloning: true         # clone books recipes
   cartography:

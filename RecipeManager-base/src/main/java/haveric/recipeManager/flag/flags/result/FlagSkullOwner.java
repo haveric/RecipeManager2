@@ -184,17 +184,9 @@ public class FlagSkullOwner extends Flag {
         }
 
         boolean validFlaggable = false;
-        if (Version.has1_13Support()) {
-            FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
-
-            if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), SkullMeta.class)) {
-                validFlaggable = true;
-            }
-        } else {
-            //noinspection deprecation
-            if (result == null || !(result.getItemMeta() instanceof SkullMeta) || result.getDurability() != 3) {
-                return ErrorReporter.getInstance().error("Flag " + getFlagType() + " needs a SKULL_ITEM with data value 3 to work!");
-            }
+        FlaggableRecipeChoice flaggableRecipeChoice = getFlaggableRecipeChoice();
+        if (flaggableRecipeChoice != null && ToolsRecipeChoice.isValidMetaType(flaggableRecipeChoice.getChoice(), SkullMeta.class)) {
+            validFlaggable = true;
         }
 
         if (!validResult && !validFlaggable) {
@@ -327,15 +319,11 @@ public class FlagSkullOwner extends Flag {
                     long least = uuid.getLeastSignificantBits();
                     id = "id:[I;" + (int) least + "," + (int) (least >> 32) + "," + (int) most + "," + (int) (most >> 32) + "],";
                 }
-            } else if (Version.has1_16Support()) {
+            } else {
                 if (uuid != null) {
                     long most = uuid.getMostSignificantBits();
                     long least = uuid.getLeastSignificantBits();
                     id = "Id:[I;" + (int) least + "," + (int) (least >> 32) + "," + (int) most + "," + (int) (most >> 32) + "],";
-                }
-            } else {
-                if (uuid != null) {
-                    id = "Id:\"" + uuid + "\",";
                 }
             }
 

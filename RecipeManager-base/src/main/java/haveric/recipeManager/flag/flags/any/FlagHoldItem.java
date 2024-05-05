@@ -1,7 +1,6 @@
 package haveric.recipeManager.flag.flags.any;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.common.RMCVanilla;
@@ -12,9 +11,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsHold;
 import haveric.recipeManager.flag.conditions.ConditionsHold.ConditionsSlot;
-import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.DyeColor;
 import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
@@ -38,7 +35,7 @@ public class FlagHoldItem extends Flag {
 
     @Override
     protected String[] getDescription() {
-        String[] description = new String[] {
+        return new String[] {
             "Makes the recipe require crafter to hold an item.",
             "",
             "This flag can be used more than once to add more items, the player will need to hold one to craft.",
@@ -177,27 +174,15 @@ public class FlagHoldItem extends Flag {
             "    amplify <num or min-max>  = Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
             "    ambient or !ambient       = Check effect's extra visual particles setting",
             "    particles or !particles   = Check effect's particles setting",
-        };
-
-        if (Version.has1_13BasicSupport()) {
-            description = ObjectArrays.concat(description, new String[]{
-                "    icon or !icon             = Check effect's icon setting",
-            }, String.class);
-        }
-
-        if (Supports.suspiciousStewMeta()) {
-            description = ObjectArrays.concat(description, new String[]{
-                "  suspiciousstew <condition>, [...]",
-                "    type &lt;effecttype&gt;         = Type of potion effect, see " + Files.getNameIndexHashLink("potioneffect"),
-                "    duration <num or min-max> = Duration of the potion effect in seconds, default 1 (does not work on HEAL and HARM)",
-                "    amplify <num or min-max>  = Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
-                "    ambient or !ambient       = Check effect's extra visual particles setting",
-                "    particles or !particles   = Check effect's particles setting",
-                "    icon or !icon             = Check effect's icon setting",
-            }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[]{
+            "    icon or !icon             = Check effect's icon setting",
+            "",
+            "  suspiciousstew <condition>, [...]",
+            "    type &lt;effecttype&gt;         = Type of potion effect, see " + Files.getNameIndexHashLink("potioneffect"),
+            "    duration <num or min-max> = Duration of the potion effect in seconds, default 1 (does not work on HEAL and HARM)",
+            "    amplify <num or min-max>  = Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
+            "    ambient or !ambient       = Check effect's extra visual particles setting",
+            "    particles or !particles   = Check effect's particles setting",
+            "    icon or !icon             = Check effect's icon setting",
             "",
             "  banner <condition>, [...]",
             "    pattern <pattern> [dyecolor]",
@@ -205,9 +190,8 @@ public class FlagHoldItem extends Flag {
             "    Patterns: " + Files.getNameIndexHashLink("bannerpattern"),
             "    Dye Colors: " + RMCUtil.collectionToString(Arrays.asList(DyeColor.values())).toLowerCase(),
             "",
-            "  spawnegg &lt;entitytype&gt; = Type of entity contained in a spawn egg, see " + Files.getNameIndexHashLink("entitytype"), }, String.class);
-
-        return description;
+            "  spawnegg &lt;entitytype&gt; = Type of entity contained in a spawn egg, see " + Files.getNameIndexHashLink("entitytype"),
+        };
     }
 
     @Override

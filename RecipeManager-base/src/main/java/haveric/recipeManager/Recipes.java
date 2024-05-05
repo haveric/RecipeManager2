@@ -7,9 +7,6 @@ import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.recipes.*;
-import haveric.recipeManager.recipes.combine.BaseCombineRecipe;
-import haveric.recipeManager.recipes.craft.BaseCraftRecipe;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.*;
@@ -125,16 +122,12 @@ public class Recipes {
         }
 
         if (recipe instanceof FurnaceRecipe) {
-            if (Version.has1_13Support()) {
-                RecipeChoice choice = ((FurnaceRecipe) recipe).getInputChoice();
+            RecipeChoice choice = ((FurnaceRecipe) recipe).getInputChoice();
 
-                if (choice instanceof RecipeChoice.MaterialChoice) {
-                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
 
-                    return (getRecipe(RMCRecipeType.SMELT, new ItemStack(materialChoice.getChoices().get(0))) != null);
-                }
-            } else {
-                return (getRecipe(RMCRecipeType.SMELT, ((FurnaceRecipe) recipe).getInput()) != null);
+                return (getRecipe(RMCRecipeType.SMELT, new ItemStack(materialChoice.getChoices().get(0))) != null);
             }
         }
 
@@ -226,7 +219,7 @@ public class Recipes {
 
         if (potentialRecipes.isEmpty()) {
             return null;
-        } else if (Version.has1_13BasicSupport()) {
+        } else {
             int matchQuality = 0;
             BaseRecipe closestRecipe = null;
 
@@ -239,8 +232,6 @@ public class Recipes {
             }
 
             return closestRecipe;
-        } else {
-            return potentialRecipes.get(0);
         }
     }
 
@@ -366,46 +357,20 @@ public class Recipes {
             recipe.onRegister();
         }
 
-        // Remove original recipe - Special case for 1.12 below
-        if (recipe.hasFlag(FlagType.REMOVE) || (Version.has1_15Support() && recipe.hasFlag(FlagType.OVERRIDE))) {
+        // Remove original recipe
+        if (recipe.hasFlag(FlagType.REMOVE) || recipe.hasFlag(FlagType.OVERRIDE)) {
             recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
-        }
-
-        boolean isBasicRecipe = recipe instanceof BaseCraftRecipe || recipe instanceof BaseCombineRecipe;
-        if (!Version.has1_15Support()) {
-            // For 1.12 AND NEWER, we'll use replacement instead; we never remove, just alter the result to point to our recipe.
-            if (recipe.hasFlag(FlagType.OVERRIDE)) {
-                if (isBasicRecipe) {
-                    Vanilla.replaceCustomRecipe(recipe);
-                } else { // except for this.
-                    recipe.setBukkitRecipe(Vanilla.removeCustomRecipe(recipe));
-                }
-            }
-
-            // For 1.12 AND NEWER, we don't actually _remove_ the recipe. So, we nullify the Bukkit binding to
-            //  ensure the RM recipe is added.
-            if (recipe.hasFlag(FlagType.OVERRIDE)) {
-                recipe.setBukkitRecipe(null);
-            }
         }
 
         // Add to server if applicable
         if (!recipe.hasFlag(FlagType.REMOVE)) {
             Recipe bukkitRecipe = recipe.getBukkitRecipe(false);
 
-            // For 1.12, we don't actually add our overrides, they exist in the index. The replaceCustomRecipe
-            //  handler puts as the recipe result the ID index "special item" that RM uses to tell itself that
-            //  this is a recipe to manage.
             if (bukkitRecipe != null) {
-                // 1.12 AND NEWER
-
-                // Note that since we don't "replace" smelt recipes, we need special handling here.
-                if (Version.has1_15Support() || !(recipe.hasFlag(FlagType.OVERRIDE) && isBasicRecipe)) {
-                    try {
-                        Bukkit.addRecipe(bukkitRecipe);
-                    } catch (IllegalStateException e) {
-                        ErrorReporter.getInstance().warning("Duplicate recipe found while adding. Cannot add: " + recipe);
-                    }
+                try {
+                    Bukkit.addRecipe(bukkitRecipe);
+                } catch (IllegalStateException e) {
+                    ErrorReporter.getInstance().warning("Duplicate recipe found while adding. Cannot add: " + recipe);
                 }
             }
         }
@@ -473,7 +438,7 @@ public class Recipes {
      * @return removed recipe or null if not found
      */
     public Recipe removeRecipe(BaseRecipe recipe) {
-        if (Version.has1_15Support() && recipe.hasFlag(FlagType.OVERRIDE)) {
+        if (recipe.hasFlag(FlagType.OVERRIDE)) {
             Bukkit.addRecipe(recipe.getBukkitRecipe(false));
         }
 

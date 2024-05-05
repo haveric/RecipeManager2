@@ -1,4 +1,4 @@
-lastchanged: 2.31.0 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
+lastchanged: 2.32.0 # Please do not edit this value - it is used by the plugin to notify you when a newer version of this file is available
 #-------------------------------------------------------------------------------------------------------------------------
 # RecipeManager configuration
 # This file is for settings.
@@ -25,7 +25,6 @@ special-recipes:
     renaming:
       enabled: true          # ability to rename items in an anvil
       materials: false       #   false or comma separated list of materials to allow/disallow. Ex: iron_sword, wooden_sword. Supports a:<aliasname> and tag:<tagname>
-  banner: true               # banner pattern recipes (Only affects 1.13 or earlier. Replaced with loom recipes in 1.14)
   banner-duplicate: true     # banner duplicate/cloning recipes
   book-cloning: true         # clone books recipes
   cartography:
