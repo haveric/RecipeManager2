@@ -58,8 +58,8 @@ public class AnvilEvents extends BaseRecipeEvents {
         ingredients.add(right);
 
         BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.ANVIL, ingredients, null);
-        if (baseRecipe instanceof BaseAnvilRecipe) {
-            BaseAnvilRecipe recipe = (BaseAnvilRecipe) baseRecipe;
+        if (baseRecipe instanceof AnvilRecipe1_13) {
+            AnvilRecipe1_13 recipe = (AnvilRecipe1_13) baseRecipe;
 
             Location location = inventory.getLocation();
 

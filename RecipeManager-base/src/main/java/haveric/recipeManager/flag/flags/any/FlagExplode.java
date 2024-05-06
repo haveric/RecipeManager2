@@ -5,7 +5,7 @@ import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -177,7 +177,7 @@ public class FlagExplode extends Flag {
                     ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'power' argument with invalid number: " + value);
                 }
             } else if (arg.startsWith("fuel")) {
-                if (getFlaggable() instanceof BaseFuelRecipe) {
+                if (getFlaggable() instanceof FuelRecipe1_13) {
                     value = arg.substring("fuel".length()).trim().toLowerCase();
 
                     if (value.equals("start") || value.equals("end") || value.equals("random")) {

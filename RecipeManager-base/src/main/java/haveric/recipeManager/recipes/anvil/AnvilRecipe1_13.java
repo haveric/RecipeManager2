@@ -1,11 +1,13 @@
 package haveric.recipeManager.recipes.anvil;
 
 import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -14,7 +16,10 @@ import org.bukkit.inventory.RecipeChoice;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnvilRecipe1_13 extends BaseAnvilRecipe {
+public class AnvilRecipe1_13 extends PreparableResultRecipe {
+    private int repairCost = 0;
+    private boolean renamingAllowed = false;
+    private double anvilDamageChance = 12;
     private RecipeChoice primaryIngredient;
     private RecipeChoice secondaryIngredient;
 
@@ -27,6 +32,11 @@ public class AnvilRecipe1_13 extends BaseAnvilRecipe {
 
         if (recipe instanceof AnvilRecipe1_13) {
             AnvilRecipe1_13 r = (AnvilRecipe1_13) recipe;
+
+            repairCost = r.repairCost;
+
+            renamingAllowed = r.renamingAllowed;
+            anvilDamageChance = r.anvilDamageChance;
 
             if (r.primaryIngredient != null) {
                 primaryIngredient = r.primaryIngredient.clone();
@@ -41,6 +51,35 @@ public class AnvilRecipe1_13 extends BaseAnvilRecipe {
 
     public AnvilRecipe1_13(Flags flags) {
         super(flags);
+    }
+
+    @Override
+    public RMCRecipeType getType() {
+        return RMCRecipeType.ANVIL;
+    }
+
+    public int getRepairCost() {
+        return repairCost;
+    }
+
+    public void setRepairCost(int newCost) {
+        repairCost = newCost;
+    }
+
+    public boolean isRenamingAllowed() {
+        return renamingAllowed;
+    }
+
+    public void setRenamingAllowed(boolean allowRenaming) {
+        this.renamingAllowed = allowRenaming;
+    }
+
+    public double getAnvilDamageChance() {
+        return anvilDamageChance;
+    }
+
+    public void setAnvilDamageChance(double anvilDamageChance) {
+        this.anvilDamageChance = anvilDamageChance;
     }
 
     public boolean hasIngredient(char character) {
@@ -239,5 +278,29 @@ public class AnvilRecipe1_13 extends BaseAnvilRecipe {
         }
 
         return totalQuality;
+    }
+
+    public boolean isValidBlockMaterial(Material material) {
+        boolean valid = material == Material.ANVIL;
+
+        if (!valid) {
+            valid = material == Material.CHIPPED_ANVIL;
+
+            if (!valid) {
+                valid = material == Material.DAMAGED_ANVIL;
+            }
+        }
+
+        return valid;
+    }
+
+    @Override
+    public String getInvalidErrorMessage() {
+        return super.getInvalidErrorMessage() + " Needs a result and two ingredients!";
+    }
+
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return true;
     }
 }

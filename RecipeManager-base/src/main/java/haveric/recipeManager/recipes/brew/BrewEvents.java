@@ -338,10 +338,10 @@ public class BrewEvents extends BaseRecipeEvents {
             }
 
             BaseRecipe baseRecipe = RecipeManager.getRecipes().getRecipe(RMCRecipeType.BREW, ingredients);
-            if (baseRecipe instanceof BaseBrewRecipe) {
+            if (baseRecipe instanceof BrewRecipe1_13) {
                 BrewingStand holder = inventory.getHolder();
                 if (holder != null) {
-                    BaseBrewRecipe recipe = (BaseBrewRecipe) baseRecipe;
+                    BrewRecipe1_13 recipe = (BrewRecipe1_13) baseRecipe;
                     Location location = holder.getLocation();
                     BrewingStandData data = BrewingStands.get(location);
 
@@ -441,8 +441,8 @@ public class BrewEvents extends BaseRecipeEvents {
 
             boolean anyCrafted = false;
             boolean hasKeepItem = false;
-            List<BaseBrewRecipe> recipesWithCondition = new ArrayList<>();
-            Map<BaseBrewRecipe, List<Integer>> recipeSlots = new HashMap<>();
+            List<BrewRecipe1_13> recipesWithCondition = new ArrayList<>();
+            Map<BrewRecipe1_13, List<Integer>> recipeSlots = new HashMap<>();
             for (int i = 0; i <= 2; i++) {
                 List<ItemStack> ingredients = new ArrayList<>();
                 ItemStack ingredient = inventory.getIngredient();
@@ -454,8 +454,8 @@ public class BrewEvents extends BaseRecipeEvents {
                     if (potion != null) {
                         ingredients.add(potion);
                         BaseRecipe baseRecipe = RecipeManager.getRecipes().getRecipe(RMCRecipeType.BREW, ingredients);
-                        if (baseRecipe instanceof BaseBrewRecipe) {
-                            BaseBrewRecipe recipe = (BaseBrewRecipe) baseRecipe;
+                        if (baseRecipe instanceof BrewRecipe1_13) {
+                            BrewRecipe1_13 recipe = (BrewRecipe1_13) baseRecipe;
 
                             if (!recipeSlots.containsKey(recipe)) {
                                 recipeSlots.put(recipe, new ArrayList<>());
@@ -467,8 +467,8 @@ public class BrewEvents extends BaseRecipeEvents {
                 }
             }
 
-            for (Map.Entry<BaseBrewRecipe, List<Integer>> entry : recipeSlots.entrySet()) {
-                BaseBrewRecipe recipe = entry.getKey();
+            for (Map.Entry<BrewRecipe1_13, List<Integer>> entry : recipeSlots.entrySet()) {
+                BrewRecipe1_13 recipe = entry.getKey();
                 Args a = Args.create().inventory(inventory).location(location).player(data.getFuelerUUID()).recipe(recipe).build();
                 a.setFirstRun(true);
 
@@ -521,7 +521,7 @@ public class BrewEvents extends BaseRecipeEvents {
 
             if (anyCrafted) {
                 int amountToSubtract = 1;
-                for (BaseBrewRecipe brewRecipe : recipesWithCondition) {
+                for (BrewRecipe1_13 brewRecipe : recipesWithCondition) {
                     List<ItemResult> results = brewRecipe.getResults();
                     if (!results.isEmpty()) {
                         ItemResult result = results.get(0);

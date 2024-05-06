@@ -1,6 +1,7 @@
 package haveric.recipeManager.recipes.combine;
 
 import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -8,6 +9,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
@@ -23,7 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CombineRecipe1_13 extends BaseCombineRecipe {
+public class CombineRecipe1_13 extends PreparableResultRecipe {
     private String choicePattern = "";
     private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
 
@@ -58,6 +60,11 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
 
     public CombineRecipe1_13(Flags flags) {
         super(flags);
+    }
+
+    @Override
+    public RMCRecipeType getType() {
+        return RMCRecipeType.COMBINE;
     }
 
     public void setChoicePattern(String pattern) {
@@ -267,6 +274,16 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
         }
 
         return found;
+    }
+
+    @Override
+    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
+        List<String> recipeIndexes = new ArrayList<>();
+        if (result != null) {
+            recipeIndexes.add(Tools.getRecipeIdFromItem(result));
+        }
+
+        return recipeIndexes;
     }
 
     @Override
