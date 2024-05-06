@@ -18,7 +18,6 @@ import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.potion.PotionEffect;
@@ -52,7 +51,6 @@ public class Conditions implements Cloneable {
     private Map<PotionEffectType, ConditionPotionEffect> potionEffectConditions = new HashMap<>();
     private Map<PotionEffectType, ConditionPotionEffect> suspiciousStewConditions = new HashMap<>();
     private Map<PatternType, DyeColor> bannerPatterns = new EnumMap<>(PatternType.class);
-    private EntityType spawnEggEntityType;
     private String localizedName;
 
     private boolean noMeta = false;
@@ -118,7 +116,6 @@ public class Conditions implements Cloneable {
         potionEffectConditions.putAll(original.potionEffectConditions);
         suspiciousStewConditions.putAll(original.suspiciousStewConditions);
         bannerPatterns.putAll(original.bannerPatterns);
-        spawnEggEntityType = original.spawnEggEntityType;
         localizedName = original.localizedName;
 
         noMeta = original.noMeta;
@@ -1044,18 +1041,6 @@ public class Conditions implements Cloneable {
         return conditionsMet == bannerPatterns.entrySet().size();
     }
 
-    public void setSpawnEggEntityType(EntityType entityType) {
-        spawnEggEntityType = entityType;
-    }
-
-    public boolean hasSpawnEggEntityType() {
-        return spawnEggEntityType != null;
-    }
-
-    public boolean checkSpawnEggEntityType(SpawnEggMeta meta) {
-        return meta.getSpawnedType().equals(spawnEggEntityType);
-    }
-
     public boolean hasPotionType() {
         return potionType != null;
     }
@@ -1356,33 +1341,6 @@ public class Conditions implements Cloneable {
 
                 if (addReasons) {
                     a.addReason("flag.ingredientconditions.nobannerpatterns", failMessage, "{item}", ToolsItem.print(item), "{patterns)", bannerPatterns); // TODO: Check if these messages are actually being used and if so probably fix bannerPatterns output
-                }
-                ok = false;
-
-                if (failMessage != null) {
-                    return false;
-                }
-            }
-        }
-
-        if (hasSpawnEggEntityType()) {
-            boolean failed = true;
-
-            if (meta instanceof SpawnEggMeta) {
-                SpawnEggMeta spawnEggMeta = (SpawnEggMeta) meta;
-
-                if (checkSpawnEggEntityType(spawnEggMeta)) {
-                    failed = false;
-                }
-            }
-
-            if (failed) {
-                if (a == null) {
-                    return false;
-                }
-
-                if (addReasons) {
-                    a.addReason("flag.ingredientconditions.nospawneggentitytype", failMessage, "{item}", ToolsItem.print(item), "{entitytype)", spawnEggEntityType);
                 }
                 ok = false;
 
@@ -2022,9 +1980,6 @@ public class Conditions implements Cloneable {
             toHash += entry.getKey().toString() + entry.getValue().toString();
         }
 
-        if (hasSpawnEggEntityType()) {
-            toHash += "spawnEggEntityType: " + spawnEggEntityType.toString();
-        }
         toHash += "localizedName: " + localizedName;
 
         toHash += "noMeta: " + noMeta;
