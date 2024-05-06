@@ -8,9 +8,11 @@ import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.common.util.RMCUtil;
+import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.flag.flags.result.FlagDamage;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.item.ItemRecipe;
@@ -24,7 +26,9 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.*;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -101,11 +105,7 @@ public class Tools {
         return material;
     }
 
-    public static ItemResult parseItemResult(String string, int defaultData) {
-        return parseItemResult(string, defaultData, 0);
-    }
-
-    public static ItemResult parseItemResult(String string, int defaultData, int settings) {
+    public static ItemResult parseItemResult(String string) {
         String[] split = string.substring(1).trim().split("%");
         ItemResult result = new ItemResult();
         result.setChance(-1);
@@ -126,7 +126,7 @@ public class Tools {
 
             result = new ItemResult(itemRecipe.getResult(), true);
         } else {
-            ItemStack item = parseItem(string, defaultData, settings);
+            ItemStack item = parseItemWithDataFlag(result, string);
             if (item == null) {
                 return null;
             }
@@ -413,7 +413,7 @@ public class Tools {
         return choice;
     }
 
-    public static List<Material> parseChoice(String value, int settings) {
+    public static List<Material> parseChoice(String value) {
         value = value.trim();
 
         if (value.isEmpty()) {
@@ -584,72 +584,105 @@ public class Tools {
         }
 
         if (args.length > 1) {
-            ItemMeta meta = item.getItemMeta();
-
-            if (meta == null && (settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
-                ErrorReporter.getInstance().warning("The " + material + " material doesn't support item meta, name/lore/enchants ignored.");
-                return item;
-            }
-
-            String original;
-
             int argsLength = args.length;
             for (int i = 1; i < argsLength; i++) {
-                original = args[i].trim();
-                value = original.toLowerCase();
+                value = args[i].trim().toLowerCase();
 
-                if (value.startsWith("name")) {
-                    value = original.substring("name".length()).trim();
-
-                    meta.setDisplayName(RMCUtil.parseColors(value, false));
-                } else if (value.startsWith("lore")) {
-                    value = original.substring("lore".length()).trim();
-
-                    List<String> lore = meta.getLore();
-
-                    if (lore == null) {
-                        lore = new ArrayList<>();
-                    }
-
-                    lore.add(RMCUtil.parseColors(value, false));
-                    meta.setLore(lore);
-                } else if (value.startsWith("enchant")) {
-                    split = value.substring("enchant".length()).trim().split(" ");
-                    value = split[0].trim();
-
-                    Enchantment enchant = Tools.parseEnchant(value);
-
-                    if (enchant == null) {
-                        if ((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
-                            ErrorReporter.getInstance().error("Invalid enchantment: " + value, "Read '" + Files.FILE_INFO_NAMES + "' for enchantment names.");
-                        }
-                        continue;
-                    }
-
-                    int level = enchant.getStartLevel();
-
-                    if (split.length > 1) {
-                        value = split[1].trim();
-
-                        if (value.equals("max")) {
-                            level = enchant.getMaxLevel();
-                        } else {
-                            try {
-                                level = Integer.parseInt(value);
-                            } catch (NumberFormatException e) {
-                                if ((settings & ParseBit.NO_WARNINGS) != ParseBit.NO_WARNINGS) {
-                                    ErrorReporter.getInstance().error("Invalid enchantment level number: " + value);
-                                    continue;
-                                }
-                            }
-                        }
-                    }
-
-                    item.addUnsafeEnchantment(enchant, level);
+                if (value.startsWith("name") || value.startsWith("lore") || value.startsWith("enchant")) {
+                    ErrorReporter.getInstance().error("Name, lore, and enchant shorthands are no longer supported.", "Flags should be used instead.");
+                    return null;
                 }
             }
+        }
 
-            item.setItemMeta(meta);
+        return item;
+    }
+
+    public static ItemStack parseItemWithDataFlag(ItemResult result, String value) {
+        value = value.trim();
+
+        if (value.isEmpty()) {
+            return null;
+        }
+
+        String[] args = value.split(";");
+        String[] split = args[0].trim().split(":");
+
+        if (split.length == 0 || split[0].isEmpty()) {
+            return new ItemStack(Material.AIR);
+        }
+
+        value = split[0].trim();
+
+        Material material = parseMaterial(value);
+        if (material == null) {
+            reportMaterialDoesNotExist(value);
+
+            return null;
+        }
+
+        int defaultData = 0;
+        int data = defaultData;
+
+        if (split.length > 1) {
+            value = split[1].toLowerCase().trim();
+
+            if (value.charAt(0) == '*' || value.equals("any")) {
+                data = RMCVanilla.DATA_WILDCARD;
+            } else {
+                Map<String, Short> dataMap = RecipeManager.getSettings().getMaterialDataNames(material);
+                Short dataValue;
+                if (dataMap == null) {
+                    dataValue = null;
+                } else {
+                    dataValue = dataMap.get(RMCUtil.parseAliasName(value));
+                }
+
+                if (dataValue == null) {
+                    try {
+                        data = Integer.parseInt(value);
+                    } catch (NumberFormatException e) {
+                        ErrorReporter.getInstance().warning("Item '" + material + " has unknown data number/alias: '" + value + "', defaulting to " + defaultData);
+                    }
+                } else {
+                    data = dataValue;
+                }
+
+                if (data == -1) {
+                    ErrorReporter.getInstance().warning("Item '" + material + "' has data value -1, use * instead!", "The -1 value no longer works since Minecraft 1.5, for future compatibility use * instead or don't define a data value.");
+                }
+            }
+        }
+
+        int amount = 1;
+
+        if (split.length > 2) {
+            value = split[2].trim();
+
+            try {
+                amount = Integer.parseInt(value);
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Item '" + material + "' has amount value that is not a number: " + value + ", defaulting to 1");
+            }
+        }
+
+        ItemStack item = new ItemStack(material, amount);
+        if (data != defaultData && item.getItemMeta() instanceof Damageable) {
+            FlagDamage flag = new FlagDamage();
+            flag.setDamage(data);
+            result.getFlags().addFlag(flag, FlagBit.RESULT);
+        }
+
+        if (args.length > 1) {
+            int argsLength = args.length;
+            for (int i = 1; i < argsLength; i++) {
+                value = args[i].trim().toLowerCase();
+
+                if (value.startsWith("name") || value.startsWith("lore") || value.startsWith("enchant")) {
+                    ErrorReporter.getInstance().error("Name, lore, and enchant shorthands are no longer supported.", "Flags should be used instead.");
+                    return null;
+                }
+            }
         }
 
         return item;

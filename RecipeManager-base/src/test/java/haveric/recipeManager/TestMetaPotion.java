@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
@@ -62,6 +63,16 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
             clone.customEffects = new ArrayList<>(this.customEffects);
         }
         return clone;
+    }
+
+    @Override
+    public void setBasePotionData(PotionData potionData) {
+
+    }
+
+    @Override
+    public PotionData getBasePotionData() {
+        return null;
     }
 
     public void setBasePotionType(PotionType potionType) {

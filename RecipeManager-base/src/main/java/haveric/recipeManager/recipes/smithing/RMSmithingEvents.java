@@ -11,7 +11,10 @@ import haveric.recipeManager.messages.SoundNotifier;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.*;
+import haveric.recipeManager.tools.Supports;
+import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.ToolsInventory;
+import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -23,8 +26,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.PrepareSmithingEvent;
 import org.bukkit.event.inventory.SmithItemEvent;
 import org.bukkit.inventory.*;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -408,27 +409,11 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                         }
                         a.setResult(result);
 
-                        int originalDamage = -1;
-                        ItemMeta metaOne = result.getItemMeta(); // TODO: Rename metaOne and metaTwo
-                        if (metaOne instanceof Damageable) {
-                            originalDamage = ((Damageable) metaOne).getDamage();
-                        }
-
                         boolean recipeCraftSuccess = false;
                         boolean resultCraftSuccess = false;
                         if (!skipCraft) {
                             // Reset result's metadata for each craft
                             result.clearMetadata();
-
-                            // We're handling durability on the result line outside of flags, so it needs to be reset after clearing the metadata
-                            if (originalDamage != -1) {
-                                ItemMeta metaTwo = result.getItemMeta();
-
-                                if (metaTwo instanceof Damageable) {
-                                    ((Damageable) metaTwo).setDamage(originalDamage);
-                                    result.setItemMeta(metaTwo);
-                                }
-                            }
 
                             a.setFirstRun(firstRun); // TODO: Remove and create onCraftComplete
                             a.clear();
@@ -667,27 +652,11 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                         }
                         a.setResult(result);
 
-                        int originalDamage = -1;
-                        ItemMeta metaOne = result.getItemMeta(); // TODO: Rename metaOne and metaTwo
-                        if (metaOne instanceof Damageable) {
-                            originalDamage = ((Damageable) metaOne).getDamage();
-                        }
-
                         boolean recipeCraftSuccess = false;
                         boolean resultCraftSuccess = false;
                         if (!skipCraft) {
                             // Reset result's metadata for each craft
                             result.clearMetadata();
-
-                            // We're handling durability on the result line outside of flags, so it needs to be reset after clearing the metadata
-                            if (originalDamage != -1) {
-                                ItemMeta meta = result.getItemMeta();
-
-                                if (meta instanceof Damageable) {
-                                    ((Damageable) meta).setDamage(originalDamage);
-                                    result.setItemMeta(meta);
-                                }
-                            }
 
                             a.setFirstRun(firstRun); // TODO: Remove and create onCraftComplete
                             a.clear();
