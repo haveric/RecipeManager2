@@ -26,7 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class CraftRecipe1_13 extends PreparableResultRecipe {
+public class CraftRecipe extends PreparableResultRecipe {
     private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
     private String[] choicePattern;
     private String group;
@@ -35,21 +35,21 @@ public class CraftRecipe1_13 extends PreparableResultRecipe {
     private int width;
     private int height;
 
-    public CraftRecipe1_13() {
+    public CraftRecipe() {
     }
 
-    public CraftRecipe1_13(ShapedRecipe recipe) {
+    public CraftRecipe(ShapedRecipe recipe) {
         setBukkitRecipe(recipe);
         setChoicePattern(recipe.getShape());
         setIngredientsChoiceMap(recipe);
         setResult(recipe.getResult());
     }
 
-    public CraftRecipe1_13(BaseRecipe recipe) {
+    public CraftRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof CraftRecipe1_13) {
-            CraftRecipe1_13 r = (CraftRecipe1_13) recipe;
+        if (recipe instanceof CraftRecipe) {
+            CraftRecipe r = (CraftRecipe) recipe;
 
             if (!r.ingredientsChoiceMap.isEmpty()) {
                 ingredientsChoiceMap.putAll(r.ingredientsChoiceMap);
@@ -64,7 +64,7 @@ public class CraftRecipe1_13 extends PreparableResultRecipe {
         }
     }
 
-    public CraftRecipe1_13(Flags flags) {
+    public CraftRecipe(Flags flags) {
         super(flags);
     }
 

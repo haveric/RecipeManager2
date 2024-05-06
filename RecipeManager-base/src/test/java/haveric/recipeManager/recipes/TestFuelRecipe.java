@@ -3,7 +3,7 @@ package haveric.recipeManager.recipes;
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.FlagBaseTest;
-import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
+import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -30,7 +30,7 @@ public class TestFuelRecipe extends FlagBaseTest {
 
         int numRecipesChecked = 0;
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            FuelRecipe1_13 recipe = (FuelRecipe1_13) entry.getKey();
+            FuelRecipe recipe = (FuelRecipe) entry.getKey();
 
             String name = recipe.getName();
             if (name.equals("default")) {

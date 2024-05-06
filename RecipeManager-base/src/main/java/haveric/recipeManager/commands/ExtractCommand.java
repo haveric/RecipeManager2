@@ -10,7 +10,7 @@ import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.compost.CompostRecipe;
-import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
+import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.ToolsFlag;
 import org.bukkit.Bukkit;
@@ -293,8 +293,8 @@ public class ExtractCommand implements TabExecutor {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : initialRecipes.entrySet()) {
             BaseRecipe recipe = entry.getKey();
 
-            if (recipe instanceof FuelRecipe1_13) {
-                FuelRecipe1_13 fuelRecipe = (FuelRecipe1_13) recipe;
+            if (recipe instanceof FuelRecipe) {
+                FuelRecipe fuelRecipe = (FuelRecipe) recipe;
                 StringBuilder recipeString = new StringBuilder(RMCRecipeType.FUEL.getDirective()).append(Files.NL);
 
                 parseChoice(fuelRecipe.getIngredientChoice(), recipeString);

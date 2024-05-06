@@ -3,7 +3,7 @@ package haveric.recipeManager.recipes;
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.FlagBaseTest;
-import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe1_13;
+import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -33,7 +33,7 @@ public class TestFurnaceRecipe extends FlagBaseTest {
 
         int numRecipesChecked = 0;
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            RMFurnaceRecipe1_13 recipe = (RMFurnaceRecipe1_13) entry.getKey();
+            RMFurnaceRecipe recipe = (RMFurnaceRecipe) entry.getKey();
 
             try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
                 mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);

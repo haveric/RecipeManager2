@@ -8,7 +8,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.result.FlagFireworkItem;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -32,7 +32,7 @@ public class FlagFireworkItemTest extends FlagBaseTest {
         assertEquals(5, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
+            CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
             try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
                 mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);

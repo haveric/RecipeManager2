@@ -28,7 +28,7 @@ public class FuelRecipeParser extends BaseRecipeParser {
 
     @Override
     public boolean parseRecipe(int directiveLine) {
-        FuelRecipe1_13 recipe = new FuelRecipe1_13(fileFlags); // create recipe and copy flags from file
+        FuelRecipe recipe = new FuelRecipe(fileFlags); // create recipe and copy flags from file
         reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // check for @flags
         int added = 0;
 
@@ -37,7 +37,7 @@ public class FuelRecipeParser extends BaseRecipeParser {
                 break;
             }
 
-            recipe = new FuelRecipe1_13(fileFlags);
+            recipe = new FuelRecipe(fileFlags);
 
             String[] split = reader.getLine().split("%");
 

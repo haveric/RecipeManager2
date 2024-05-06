@@ -10,7 +10,7 @@ import haveric.recipeManager.messages.TestMessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.WorkbenchEvents;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -40,7 +40,7 @@ public class FlagItemLoreTest extends FlagBaseTest {
 
         assertEquals(2, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
+            CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
             try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
                 mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
@@ -155,7 +155,7 @@ public class FlagItemLoreTest extends FlagBaseTest {
         assertEquals(1, indexedRecipes.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : indexedRecipes.entrySet()) {
-            CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
+            CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
             try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
                 mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);

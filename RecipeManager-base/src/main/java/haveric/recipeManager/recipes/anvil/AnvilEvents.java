@@ -58,8 +58,8 @@ public class AnvilEvents extends BaseRecipeEvents {
         ingredients.add(right);
 
         BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.ANVIL, ingredients, null);
-        if (baseRecipe instanceof AnvilRecipe1_13) {
-            AnvilRecipe1_13 recipe = (AnvilRecipe1_13) baseRecipe;
+        if (baseRecipe instanceof AnvilRecipe) {
+            AnvilRecipe recipe = (AnvilRecipe) baseRecipe;
 
             Location location = inventory.getLocation();
 
@@ -314,7 +314,7 @@ public class AnvilEvents extends BaseRecipeEvents {
         }
 
         // Clone the recipe, so we can add custom flags to it
-        AnvilRecipe1_13 recipe = new AnvilRecipe1_13(anvil.getRecipe());
+        AnvilRecipe recipe = new AnvilRecipe(anvil.getRecipe());
         Args a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).build();
 
         String renameText = anvil.getRenameText();

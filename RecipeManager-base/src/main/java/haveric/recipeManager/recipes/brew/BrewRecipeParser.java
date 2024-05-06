@@ -21,14 +21,14 @@ import org.bukkit.inventory.RecipeChoice;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrewRecipeParser1_13 extends BaseRecipeParser {
-    public BrewRecipeParser1_13() {
+public class BrewRecipeParser extends BaseRecipeParser {
+    public BrewRecipeParser() {
         super();
     }
 
     @Override
     public boolean parseRecipe(int directiveLine) {
-        BrewRecipe1_13 recipe = new BrewRecipe1_13(fileFlags);
+        BrewRecipe recipe = new BrewRecipe(fileFlags);
 
         reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE);
 
@@ -111,7 +111,7 @@ public class BrewRecipeParser1_13 extends BaseRecipeParser {
         return parseAndSetResults(recipe, directiveLine);
     }
 
-    private boolean parseAndSetResults(BrewRecipe1_13 recipe, int directiveLine) {
+    private boolean parseAndSetResults(BrewRecipe recipe, int directiveLine) {
         List<ItemResult> results = new ArrayList<>();
         boolean hasResults = parseResults(recipe, results);
 
@@ -137,7 +137,7 @@ public class BrewRecipeParser1_13 extends BaseRecipeParser {
     }
 
     // get min-max or fixed brewing time
-    private boolean parseArgs(BrewRecipe1_13 recipe, String[] split) {
+    private boolean parseArgs(BrewRecipe recipe, String[] split) {
         if (!recipe.hasFlag(FlagType.REMOVE)) { // if it's got @remove we don't care about brew time
             int minTime;
             int maxTime = -1;

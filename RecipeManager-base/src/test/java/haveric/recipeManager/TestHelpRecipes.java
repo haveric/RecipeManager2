@@ -6,11 +6,11 @@ import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.TestMessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.brew.BrewRecipe1_13;
-import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
-import haveric.recipeManager.recipes.cooking.furnace.RMBaseFurnaceRecipe1_13;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
+import haveric.recipeManager.recipes.brew.BrewRecipe;
+import haveric.recipeManager.recipes.combine.CombineRecipe;
+import haveric.recipeManager.recipes.cooking.furnace.RMBaseFurnaceRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.settings.SettingsYaml;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -56,8 +56,8 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
             try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
                 mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
 
-                if (baseRecipe instanceof CraftRecipe1_13) {
-                    CraftRecipe1_13 recipe = (CraftRecipe1_13) baseRecipe;
+                if (baseRecipe instanceof CraftRecipe) {
+                    CraftRecipe recipe = (CraftRecipe) baseRecipe;
                     ItemResult result = recipe.getResults().get(0);
                     Material resultType = result.getType();
 
@@ -68,8 +68,8 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
                     } else if (resultType == Material.LIGHT_GRAY_TERRACOTTA) {
                         numCraftRecipes++;
                     }
-                } else if (baseRecipe instanceof CombineRecipe1_13) {
-                    CombineRecipe1_13 recipe = (CombineRecipe1_13) baseRecipe;
+                } else if (baseRecipe instanceof CombineRecipe) {
+                    CombineRecipe recipe = (CombineRecipe) baseRecipe;
                     ItemResult result = recipe.getResults().get(0);
                     Material resultType = result.getType();
 
@@ -78,8 +78,8 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
                     } else if (resultType == Material.DIAMOND) {
                         numCombineRecipes++;
                     }
-                } else if (baseRecipe instanceof RMBaseFurnaceRecipe1_13) {
-                    RMBaseFurnaceRecipe1_13 recipe = (RMBaseFurnaceRecipe1_13) baseRecipe;
+                } else if (baseRecipe instanceof RMBaseFurnaceRecipe) {
+                    RMBaseFurnaceRecipe recipe = (RMBaseFurnaceRecipe) baseRecipe;
                     ItemResult result = recipe.getResult();
                     Material resultType = result.getType();
 
@@ -88,8 +88,8 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
                     } else if (resultType == Material.EXPERIENCE_BOTTLE) {
                         numSmeltRecipes++;
                     }
-                } else if (baseRecipe instanceof FuelRecipe1_13) {
-                    FuelRecipe1_13 recipe = (FuelRecipe1_13) baseRecipe;
+                } else if (baseRecipe instanceof FuelRecipe) {
+                    FuelRecipe recipe = (FuelRecipe) baseRecipe;
                     RecipeChoice choice = recipe.getIngredientChoice();
                     assertInstanceOf(RecipeChoice.MaterialChoice.class, choice);
 
@@ -100,8 +100,8 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
                     } else if (choices.contains(Material.JACK_O_LANTERN)) {
                         numFuelRecipes++;
                     }
-                } else if (baseRecipe instanceof BrewRecipe1_13) {
-                    BrewRecipe1_13 recipe = (BrewRecipe1_13) baseRecipe;
+                } else if (baseRecipe instanceof BrewRecipe) {
+                    BrewRecipe recipe = (BrewRecipe) baseRecipe;
                     ItemResult result = recipe.getResults().get(0);
                     Material resultType = result.getType();
 

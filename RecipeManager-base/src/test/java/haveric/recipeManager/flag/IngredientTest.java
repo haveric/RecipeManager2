@@ -4,8 +4,8 @@ import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
+import haveric.recipeManager.recipes.combine.CombineRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -26,7 +26,7 @@ public class IngredientTest extends FlagBaseTest {
 
         assertEquals(9, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
+            CraftRecipe recipe = (CraftRecipe) entry.getKey();
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
@@ -110,7 +110,7 @@ public class IngredientTest extends FlagBaseTest {
 
         assertEquals(1, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
+            CraftRecipe recipe = (CraftRecipe) entry.getKey();
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
@@ -165,7 +165,7 @@ public class IngredientTest extends FlagBaseTest {
 
         assertEquals(9, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CombineRecipe1_13 recipe = (CombineRecipe1_13) entry.getKey();
+            CombineRecipe recipe = (CombineRecipe) entry.getKey();
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
@@ -231,7 +231,7 @@ public class IngredientTest extends FlagBaseTest {
 
         assertEquals(2, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CombineRecipe1_13 recipe = (CombineRecipe1_13) entry.getKey();
+            CombineRecipe recipe = (CombineRecipe) entry.getKey();
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 

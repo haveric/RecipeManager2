@@ -25,27 +25,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class CombineRecipe1_13 extends PreparableResultRecipe {
+public class CombineRecipe extends PreparableResultRecipe {
     private String choicePattern = "";
     private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
 
     private String group;
     private String category;
 
-    public CombineRecipe1_13() {
+    public CombineRecipe() {
     }
 
-    public CombineRecipe1_13(ShapelessRecipe recipe) {
+    public CombineRecipe(ShapelessRecipe recipe) {
         setIngredientChoiceList(recipe.getChoiceList());
 
         setResult(recipe.getResult());
     }
 
-    public CombineRecipe1_13(BaseRecipe recipe) {
+    public CombineRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof CombineRecipe1_13) {
-            CombineRecipe1_13 r = (CombineRecipe1_13) recipe;
+        if (recipe instanceof CombineRecipe) {
+            CombineRecipe r = (CombineRecipe) recipe;
 
             choicePattern = r.choicePattern;
 
@@ -58,7 +58,7 @@ public class CombineRecipe1_13 extends PreparableResultRecipe {
         }
     }
 
-    public CombineRecipe1_13(Flags flags) {
+    public CombineRecipe(Flags flags) {
         super(flags);
     }
 

@@ -22,21 +22,21 @@ import org.bukkit.inventory.RecipeChoice;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrewRecipe1_13 extends MultiResultRecipe {
+public class BrewRecipe extends MultiResultRecipe {
     private int minTime = -1;
     private int maxTime = -1;
     private RecipeChoice ingredientChoice;
     private RecipeChoice potionChoice;
 
-    public BrewRecipe1_13() {
+    public BrewRecipe() {
         minTime = Vanilla.BREWING_RECIPE_DEFAULT_TICKS;
     }
 
-    public BrewRecipe1_13(BaseRecipe recipe) {
+    public BrewRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof BrewRecipe1_13) {
-            BrewRecipe1_13 r = (BrewRecipe1_13) recipe;
+        if (recipe instanceof BrewRecipe) {
+            BrewRecipe r = (BrewRecipe) recipe;
 
             minTime = r.minTime;
             maxTime = r.maxTime;
@@ -50,7 +50,7 @@ public class BrewRecipe1_13 extends MultiResultRecipe {
         }
     }
 
-    public BrewRecipe1_13(Flags flags) {
+    public BrewRecipe(Flags flags) {
         super(flags);
 
         minTime = Vanilla.BREWING_RECIPE_DEFAULT_TICKS;

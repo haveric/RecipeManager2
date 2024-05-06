@@ -4,7 +4,7 @@ import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe1_13;
+import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe;
 import org.bukkit.Material;
 import org.bukkit.inventory.RecipeChoice;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class TestSmelt extends FlagBaseTest {
 
         assertEquals(4, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            RMFurnaceRecipe1_13 recipe = (RMFurnaceRecipe1_13) entry.getKey();
+            RMFurnaceRecipe recipe = (RMFurnaceRecipe) entry.getKey();
             RecipeChoice recipeChoice = recipe.getIngredientChoice();
 
             assertInstanceOf(RecipeChoice.MaterialChoice.class, recipeChoice);

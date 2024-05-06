@@ -29,7 +29,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
 
     @Override
     public boolean parseRecipe(int directiveLine) {
-        CombineRecipe1_13 recipe = new CombineRecipe1_13(fileFlags); // create recipe and copy flags from file
+        CombineRecipe recipe = new CombineRecipe(fileFlags); // create recipe and copy flags from file
         reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // parse recipe's flags
 
         String groupLine = reader.getLine();

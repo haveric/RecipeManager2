@@ -16,22 +16,22 @@ import org.bukkit.inventory.RecipeChoice;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnvilRecipe1_13 extends PreparableResultRecipe {
+public class AnvilRecipe extends PreparableResultRecipe {
     private int repairCost = 0;
     private boolean renamingAllowed = false;
     private double anvilDamageChance = 12;
     private RecipeChoice primaryIngredient;
     private RecipeChoice secondaryIngredient;
 
-    public AnvilRecipe1_13() {
+    public AnvilRecipe() {
 
     }
 
-    public AnvilRecipe1_13(BaseRecipe recipe) {
+    public AnvilRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof AnvilRecipe1_13) {
-            AnvilRecipe1_13 r = (AnvilRecipe1_13) recipe;
+        if (recipe instanceof AnvilRecipe) {
+            AnvilRecipe r = (AnvilRecipe) recipe;
 
             repairCost = r.repairCost;
 
@@ -49,7 +49,7 @@ public class AnvilRecipe1_13 extends PreparableResultRecipe {
         }
     }
 
-    public AnvilRecipe1_13(Flags flags) {
+    public AnvilRecipe(Flags flags) {
         super(flags);
     }
 

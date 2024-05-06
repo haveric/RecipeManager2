@@ -4,7 +4,7 @@ import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
 import org.bukkit.Material;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +23,7 @@ public class UnknownFlagTest extends FlagBaseTest {
 
         assertEquals(3, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
+            CraftRecipe recipe = (CraftRecipe) entry.getKey();
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 

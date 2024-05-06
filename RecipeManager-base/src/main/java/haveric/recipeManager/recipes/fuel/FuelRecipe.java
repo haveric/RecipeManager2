@@ -18,25 +18,25 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class FuelRecipe1_13 extends BaseRecipe {
+public class FuelRecipe extends BaseRecipe {
     private float minTime;
     private float maxTime;
     private RecipeChoice ingredientChoice;
 
-    public FuelRecipe1_13() {
+    public FuelRecipe() {
 
     }
 
-    public FuelRecipe1_13(Material type, float burnTime) {
+    public FuelRecipe(Material type, float burnTime) {
         setIngredientChoice(Collections.singletonList(type));
         minTime = burnTime;
     }
 
-    public FuelRecipe1_13(BaseRecipe recipe) {
+    public FuelRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof FuelRecipe1_13) {
-            FuelRecipe1_13 r = (FuelRecipe1_13) recipe;
+        if (recipe instanceof FuelRecipe) {
+            FuelRecipe r = (FuelRecipe) recipe;
 
             minTime = r.minTime;
             maxTime = r.maxTime;
@@ -47,7 +47,7 @@ public class FuelRecipe1_13 extends BaseRecipe {
         }
     }
 
-    public FuelRecipe1_13(Flags flags) {
+    public FuelRecipe(Flags flags) {
         super(flags);
     }
 
