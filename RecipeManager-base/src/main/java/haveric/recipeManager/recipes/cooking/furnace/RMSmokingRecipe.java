@@ -10,7 +10,7 @@ import haveric.recipeManager.tools.Supports;
 import org.bukkit.inventory.SmokingRecipe;
 import org.bukkit.inventory.recipe.CookingBookCategory;
 
-public class RMSmokingRecipe extends RMBaseFurnaceRecipe1_13 {
+public class RMSmokingRecipe extends RMBaseFurnaceRecipe {
     public RMSmokingRecipe() {
         minTime = Vanilla.SMOKER_RECIPE_TIME;
     }

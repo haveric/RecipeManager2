@@ -10,22 +10,22 @@ import haveric.recipeManager.tools.Supports;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.recipe.CookingBookCategory;
 
-public class RMFurnaceRecipe1_13 extends RMBaseFurnaceRecipe1_13 {
-    public RMFurnaceRecipe1_13() {
+public class RMFurnaceRecipe extends RMBaseFurnaceRecipe {
+    public RMFurnaceRecipe() {
         minTime = Vanilla.FURNACE_RECIPE_TIME;
     }
 
-    public RMFurnaceRecipe1_13(BaseRecipe recipe) {
+    public RMFurnaceRecipe(BaseRecipe recipe) {
         super(recipe);
     }
 
-    public RMFurnaceRecipe1_13(Flags flags) {
+    public RMFurnaceRecipe(Flags flags) {
         super(flags);
 
         minTime = Vanilla.FURNACE_RECIPE_TIME;
     }
 
-    public RMFurnaceRecipe1_13(FurnaceRecipe recipe) {
+    public RMFurnaceRecipe(FurnaceRecipe recipe) {
         super(recipe);
     }
 
@@ -36,7 +36,7 @@ public class RMFurnaceRecipe1_13 extends RMBaseFurnaceRecipe1_13 {
 
     @Override
     public boolean equals(Object obj) {
-        return this == obj || obj instanceof RMFurnaceRecipe1_13 && hashCode() == obj.hashCode();
+        return this == obj || obj instanceof RMFurnaceRecipe && hashCode() == obj.hashCode();
     }
 
     @Override

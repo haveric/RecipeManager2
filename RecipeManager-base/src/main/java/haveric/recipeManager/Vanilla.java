@@ -5,14 +5,14 @@ import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
+import haveric.recipeManager.recipes.combine.CombineRecipe;
 import haveric.recipeManager.recipes.compost.CompostRecipe;
 import haveric.recipeManager.recipes.cooking.campfire.RMCampfireRecipe;
 import haveric.recipeManager.recipes.cooking.furnace.RMBlastingRecipe;
-import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe1_13;
+import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe;
 import haveric.recipeManager.recipes.cooking.furnace.RMSmokingRecipe;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.smithing.RMSmithing1_19_4TransformRecipe;
 import haveric.recipeManager.recipes.smithing.RMSmithingRecipe;
 import haveric.recipeManager.recipes.stonecutting.RMStonecuttingRecipe;
@@ -359,7 +359,7 @@ public class Vanilla {
 
         // Index fuel recipes
         for (BaseRecipe recipe : initialRecipes.keySet()) {
-            if (recipe instanceof FuelRecipe1_13) {
+            if (recipe instanceof FuelRecipe) {
                 RecipeManager.getRecipes().addRecipeToQuickfindIndex(RMCRecipeType.FUEL.getDirective(), recipe);
             }
         }
@@ -370,7 +370,7 @@ public class Vanilla {
     }
 
     private static void addFuelRecipe(Material material, float burnTime) {
-        initialRecipes.put(new FuelRecipe1_13(material, burnTime), info);
+        initialRecipes.put(new FuelRecipe(material, burnTime), info);
     }
 
     private static void initCompostRecipes() {
@@ -527,11 +527,11 @@ public class Vanilla {
                 BaseRecipe recipe = null;
 
                 if (r instanceof ShapedRecipe) {
-                    recipe = new CraftRecipe1_13((ShapedRecipe) r);
+                    recipe = new CraftRecipe((ShapedRecipe) r);
                 } else if (r instanceof ShapelessRecipe) {
-                    recipe = new CombineRecipe1_13((ShapelessRecipe) r);
+                    recipe = new CombineRecipe((ShapelessRecipe) r);
                 } else if (r instanceof FurnaceRecipe) {
-                    recipe = new RMFurnaceRecipe1_13((FurnaceRecipe) r);
+                    recipe = new RMFurnaceRecipe((FurnaceRecipe) r);
                 } else if (r instanceof BlastingRecipe) {
                     recipe = new RMBlastingRecipe((BlastingRecipe) r);
                 } else if (r instanceof SmokingRecipe) {
@@ -578,16 +578,16 @@ public class Vanilla {
      * @return removed recipe or null if not found
      */
     public static Recipe removeCustomRecipe(BaseRecipe recipe) {
-        if (recipe instanceof CraftRecipe1_13) {
-            return replaceCraftRecipeV1_13((CraftRecipe1_13) recipe, true);
+        if (recipe instanceof CraftRecipe) {
+            return replaceCraftRecipeV1_13((CraftRecipe) recipe, true);
         }
 
-        if (recipe instanceof CombineRecipe1_13) {
-            return replaceCombineRecipeV1_13((CombineRecipe1_13) recipe, true);
+        if (recipe instanceof CombineRecipe) {
+            return replaceCombineRecipeV1_13((CombineRecipe) recipe, true);
         }
 
-        if (recipe instanceof RMFurnaceRecipe1_13) {
-            return removeSmeltRecipe((RMFurnaceRecipe1_13) recipe);
+        if (recipe instanceof RMFurnaceRecipe) {
+            return removeSmeltRecipe((RMFurnaceRecipe) recipe);
         }
 
         if (recipe instanceof RMBlastingRecipe) {
@@ -624,7 +624,7 @@ public class Vanilla {
      *            RecipeManager recipe
      * @return removed recipe or null if not found
      */
-    private static Recipe removeSmeltRecipe(RMFurnaceRecipe1_13 recipe) {
+    private static Recipe removeSmeltRecipe(RMFurnaceRecipe recipe) {
         RecipeChoice choice = recipe.getIngredientChoice();
         if (choice instanceof RecipeChoice.MaterialChoice) {
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
@@ -971,7 +971,7 @@ public class Vanilla {
      *
      * @return replaced recipe or null if not found
      */
-    public static Recipe replaceCraftRecipeV1_13(CraftRecipe1_13 recipe, boolean remove) {
+    public static Recipe replaceCraftRecipeV1_13(CraftRecipe recipe, boolean remove) {
         BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         ShapedRecipe sr;
@@ -1015,7 +1015,7 @@ public class Vanilla {
      *
      * @return replaced recipe or null if not found
      */
-    public static Recipe replaceCombineRecipeV1_13(CombineRecipe1_13 recipe, boolean remove) {
+    public static Recipe replaceCombineRecipeV1_13(CombineRecipe recipe, boolean remove) {
         BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         Recipe r;

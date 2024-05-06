@@ -6,9 +6,9 @@ import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
-import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe1_13;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
+import haveric.recipeManager.recipes.combine.CombineRecipe;
+import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.junit.jupiter.api.Test;
@@ -31,7 +31,7 @@ public class NamingTest extends FlagBaseTest {
         assertEquals(2, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
+            CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
             try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
                 mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
@@ -61,7 +61,7 @@ public class NamingTest extends FlagBaseTest {
         assertEquals(2, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CombineRecipe1_13 recipe = (CombineRecipe1_13) entry.getKey();
+            CombineRecipe recipe = (CombineRecipe) entry.getKey();
 
             try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
                 mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
@@ -91,7 +91,7 @@ public class NamingTest extends FlagBaseTest {
         assertEquals(2, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            RMFurnaceRecipe1_13 recipe = (RMFurnaceRecipe1_13) entry.getKey();
+            RMFurnaceRecipe recipe = (RMFurnaceRecipe) entry.getKey();
 
             try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
                 mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);

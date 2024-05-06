@@ -16,18 +16,18 @@ import org.bukkit.inventory.CookingRecipe;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 
-public class RMBaseFurnaceRecipe1_13 extends RMBaseCookingRecipe {
+public class RMBaseFurnaceRecipe extends RMBaseCookingRecipe {
     private ItemResult fuel;
 
-    public RMBaseFurnaceRecipe1_13() {
+    public RMBaseFurnaceRecipe() {
         minTime = Vanilla.FURNACE_RECIPE_TIME;
     }
 
-    public RMBaseFurnaceRecipe1_13(BaseRecipe recipe) {
+    public RMBaseFurnaceRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof RMBaseFurnaceRecipe1_13) {
-            RMBaseFurnaceRecipe1_13 r = (RMBaseFurnaceRecipe1_13) recipe;
+        if (recipe instanceof RMBaseFurnaceRecipe) {
+            RMBaseFurnaceRecipe r = (RMBaseFurnaceRecipe) recipe;
 
             if (r.ingredientChoice != null) {
                 ingredientChoice = r.ingredientChoice.clone();
@@ -43,18 +43,18 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseCookingRecipe {
         }
     }
 
-    public RMBaseFurnaceRecipe1_13(Flags flags) {
+    public RMBaseFurnaceRecipe(Flags flags) {
         super(flags);
     }
 
     // Legacy constructor for 1.13 / 1.12
-    public RMBaseFurnaceRecipe1_13(FurnaceRecipe recipe) {
+    public RMBaseFurnaceRecipe(FurnaceRecipe recipe) {
         setIngredientChoice(recipe.getInputChoice());
         setResult(recipe.getResult());
     }
 
     // Constructor for 1.14 +
-    public RMBaseFurnaceRecipe1_13(CookingRecipe<?> recipe) {
+    public RMBaseFurnaceRecipe(CookingRecipe<?> recipe) {
         super(recipe);
     }
 

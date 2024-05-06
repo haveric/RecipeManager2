@@ -35,13 +35,13 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
 
     @Override
     public boolean parseRecipe(int directiveLine) {
-        RMBaseFurnaceRecipe1_13 recipe;
+        RMBaseFurnaceRecipe recipe;
         if (recipeType == RMCRecipeType.BLASTING) {
             recipe = new RMBlastingRecipe(fileFlags); // create recipe and copy flags from file
         } else if (recipeType == RMCRecipeType.SMOKING) {
             recipe = new RMSmokingRecipe(fileFlags); // create recipe and copy flags from file
         } else {
-            recipe = new RMFurnaceRecipe1_13(fileFlags); // create recipe and copy flags from file
+            recipe = new RMFurnaceRecipe(fileFlags); // create recipe and copy flags from file
         }
 
         reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // check for @flags
@@ -158,7 +158,7 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
         return true;
     }
 
-    private void checkForArgs(RMBaseFurnaceRecipe1_13 recipe) {
+    private void checkForArgs(RMBaseFurnaceRecipe recipe) {
         String argLine = reader.getLine();
 
         String argLower = argLine.toLowerCase();
@@ -199,7 +199,7 @@ public class RMBaseFurnaceRecipeParser extends BaseRecipeParser {
     }
 
     // get min-max or fixed smelting time
-    private boolean parseArgs(RMBaseFurnaceRecipe1_13 recipe, String[] split, boolean isRemove) {
+    private boolean parseArgs(RMBaseFurnaceRecipe recipe, String[] split, boolean isRemove) {
         if (!isRemove) { // if it's got @remove we don't care about burn time or fuel
             float minTime;
             float maxTime = -1;

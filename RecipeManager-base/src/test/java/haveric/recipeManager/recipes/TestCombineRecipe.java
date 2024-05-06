@@ -3,7 +3,7 @@ package haveric.recipeManager.recipes;
 import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.FlagBaseTest;
-import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
+import haveric.recipeManager.recipes.combine.CombineRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -31,7 +31,7 @@ public class TestCombineRecipe extends FlagBaseTest {
 
         int numRecipesChecked = 0;
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CombineRecipe1_13 recipe = (CombineRecipe1_13) entry.getKey();
+            CombineRecipe recipe = (CombineRecipe) entry.getKey();
 
             try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
                 mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);

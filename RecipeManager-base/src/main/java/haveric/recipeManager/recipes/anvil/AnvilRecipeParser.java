@@ -19,14 +19,14 @@ import org.bukkit.inventory.RecipeChoice;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnvilRecipeParser1_13 extends BaseRecipeParser {
-    public AnvilRecipeParser1_13() {
+public class AnvilRecipeParser extends BaseRecipeParser {
+    public AnvilRecipeParser() {
         super();
     }
 
     @Override
     public boolean parseRecipe(int directiveLine) {
-        AnvilRecipe1_13 recipe = new AnvilRecipe1_13(fileFlags);
+        AnvilRecipe recipe = new AnvilRecipe(fileFlags);
 
         reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // parse recipe's flags
 
@@ -112,7 +112,7 @@ public class AnvilRecipeParser1_13 extends BaseRecipeParser {
         return parseAndSetResults(recipe, directiveLine);
     }
 
-    private void parseArgs(AnvilRecipe1_13 recipe, String[] split) {
+    private void parseArgs(AnvilRecipe recipe, String[] split) {
         if (split.length > 1) {
             String repairString = split[1].trim();
 
@@ -162,7 +162,7 @@ public class AnvilRecipeParser1_13 extends BaseRecipeParser {
         }
     }
 
-    private boolean parseAndSetResults(AnvilRecipe1_13 recipe, int directiveLine) {
+    private boolean parseAndSetResults(AnvilRecipe recipe, int directiveLine) {
         List<ItemResult> results = new ArrayList<>();
         boolean hasResults = parseResults(recipe, results);
 

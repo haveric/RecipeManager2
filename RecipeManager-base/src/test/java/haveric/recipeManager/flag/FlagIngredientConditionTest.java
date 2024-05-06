@@ -13,7 +13,7 @@ import haveric.recipeManager.messages.TestMessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.WorkbenchEvents;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
 import haveric.recipeManager.settings.SettingsYaml;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -139,7 +139,7 @@ public class FlagIngredientConditionTest extends FlagBaseYamlTest {
 
         assertEquals(12, indexedRecipes.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : indexedRecipes.entrySet()) {
-            CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
+            CraftRecipe recipe = (CraftRecipe) entry.getKey();
 
             try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
                 mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);

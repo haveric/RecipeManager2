@@ -7,7 +7,7 @@ import haveric.recipeManager.flag.conditions.ConditionsHold;
 import haveric.recipeManager.flag.flags.any.FlagHoldItem;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
+import haveric.recipeManager.recipes.craft.CraftRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -32,7 +32,7 @@ public class FlagHoldItemTest extends FlagBaseTest {
 
         assertEquals(4, queued.size());
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            CraftRecipe1_13 recipe = (CraftRecipe1_13) entry.getKey();
+            CraftRecipe recipe = (CraftRecipe) entry.getKey();
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 

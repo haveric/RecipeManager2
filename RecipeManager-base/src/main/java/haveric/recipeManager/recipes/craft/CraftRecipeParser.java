@@ -28,7 +28,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
 
     @Override
     public boolean parseRecipe(int directiveLine) {
-        CraftRecipe1_13 recipe = new CraftRecipe1_13(fileFlags); // create recipe and copy flags from file
+        CraftRecipe recipe = new CraftRecipe(fileFlags); // create recipe and copy flags from file
 
         reader.parseFlags(recipe.getFlags(), FlagBit.RECIPE); // parse recipe's flags
 

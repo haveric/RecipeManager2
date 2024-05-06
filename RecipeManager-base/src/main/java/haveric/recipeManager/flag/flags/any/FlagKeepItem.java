@@ -9,8 +9,8 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.cooking.furnace.RMBaseFurnaceRecipe1_13;
-import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
+import haveric.recipeManager.recipes.cooking.furnace.RMBaseFurnaceRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe;
 import haveric.recipeManager.recipes.item.ItemRecipe;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
@@ -306,10 +306,10 @@ public class FlagKeepItem extends Flag {
         } else if (a.inventory() instanceof FurnaceInventory) {
             FurnaceInventory inv = (FurnaceInventory) a.inventory();
 
-            if (a.recipe() instanceof RMBaseFurnaceRecipe1_13) {
+            if (a.recipe() instanceof RMBaseFurnaceRecipe) {
                 parse(inv, a, 0);
                 parse(inv, a, 1);
-            } else if (a.recipe() instanceof FuelRecipe1_13) {
+            } else if (a.recipe() instanceof FuelRecipe) {
                 parse(inv, a, 1);
             } else {
                 a.addCustomReason("Needs a recipe!");
