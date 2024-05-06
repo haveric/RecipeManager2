@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo.RecipeOwner;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
-import haveric.recipeManager.tools.VersionHandler;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.combine.CombineRecipe1_13;
 import haveric.recipeManager.recipes.compost.CompostRecipe;
@@ -13,7 +12,6 @@ import haveric.recipeManager.recipes.cooking.furnace.RMBlastingRecipe;
 import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe1_13;
 import haveric.recipeManager.recipes.cooking.furnace.RMSmokingRecipe;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
-import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
 import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
 import haveric.recipeManager.recipes.smithing.RMSmithing1_19_4TransformRecipe;
 import haveric.recipeManager.recipes.smithing.RMSmithingRecipe;
@@ -361,7 +359,7 @@ public class Vanilla {
 
         // Index fuel recipes
         for (BaseRecipe recipe : initialRecipes.keySet()) {
-            if (recipe instanceof BaseFuelRecipe) {
+            if (recipe instanceof FuelRecipe1_13) {
                 RecipeManager.getRecipes().addRecipeToQuickfindIndex(RMCRecipeType.FUEL.getDirective(), recipe);
             }
         }

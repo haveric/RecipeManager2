@@ -18,7 +18,7 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.recipes.cooking.furnace.data.FurnaceData;
 import haveric.recipeManager.recipes.cooking.furnace.data.Furnaces;
-import haveric.recipeManager.recipes.fuel.BaseFuelRecipe;
+import haveric.recipeManager.recipes.fuel.FuelRecipe1_13;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Bukkit;
@@ -256,7 +256,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                     if (hotbarItem != null && hotbarItem.getType() != Material.AIR) {
                         BaseRecipe fuelRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, hotbarItem);
 
-                        if (fuelRecipe instanceof BaseFuelRecipe && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
+                        if (fuelRecipe instanceof FuelRecipe1_13 && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
                             if (clicked == null || clicked.getType() == Material.AIR) {
                                 event.setCurrentItem(hotbarItem.clone());
                                 ToolsItem.replaceItem(player.getInventory(), hotbarButton, new ItemStack(Material.AIR));
@@ -267,7 +267,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 } else if (event.isLeftClick()) {
                     BaseRecipe fuelRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, cursor);
 
-                    if (fuelRecipe instanceof BaseFuelRecipe && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
+                    if (fuelRecipe instanceof FuelRecipe1_13 && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
                         if (cursor != null && cursor.getType() != Material.AIR) {
                             if (clicked == null || clicked.getType() == Material.AIR) {
                                 event.setCurrentItem(cursor.clone());
@@ -311,7 +311,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 } else if (event.isRightClick()) {
                     BaseRecipe fuelRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, cursor);
 
-                    if (fuelRecipe instanceof BaseFuelRecipe && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
+                    if (fuelRecipe instanceof FuelRecipe1_13 && !fuelRecipe.getInfo().getOwner().equals(RMCRecipeInfo.RecipeOwner.MINECRAFT)) {
                         if (cursor != null && cursor.getType() != Material.AIR) {
                             if (clicked == null || clicked.getType() == Material.AIR) {
                                 int cursorAmount = cursor.getAmount();
@@ -533,8 +533,8 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         ItemStack fuel = event.getFuel();
 
         BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, fuel);
-        if (baseRecipe instanceof BaseFuelRecipe) {
-            BaseFuelRecipe fuelRecipe = (BaseFuelRecipe) baseRecipe;
+        if (baseRecipe instanceof FuelRecipe1_13) {
+            FuelRecipe1_13 fuelRecipe = (FuelRecipe1_13) baseRecipe;
             if (fuelRecipe.hasFlag(FlagType.REMOVE)) {
                 event.setCancelled(true);
             }
@@ -572,12 +572,11 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 event.setCancelled(true);
             }
 
-            assert recipe instanceof RMBaseFurnaceRecipe1_13;
             cookTime = (short) ((RMBaseFurnaceRecipe1_13) recipe).getCookTicks();
         }
 
-        if (baseRecipe instanceof BaseFuelRecipe) {
-            BaseFuelRecipe fuelRecipe = (BaseFuelRecipe) baseRecipe;
+        if (baseRecipe instanceof FuelRecipe1_13) {
+            FuelRecipe1_13 fuelRecipe = (FuelRecipe1_13) baseRecipe;
             event.setBurnTime(burnTime);
 
             long randTime = (long) Math.floor(Math.random() * burnTime);
@@ -592,7 +591,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
     @EventHandler(priority = EventPriority.LOW)
     public void randomBurn(RecipeManagerFuelBurnRandomEvent event) {
-        BaseFuelRecipe recipe = event.getRecipe();
+        FuelRecipe1_13 recipe = event.getRecipe();
         Furnace furnace = event.getFurnace();
         FurnaceInventory inventory = furnace.getInventory();
         Args a = Args.create().player(event.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).inventory(inventory).extra(inventory.getSmelting()).build();
@@ -608,7 +607,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
     @EventHandler(priority = EventPriority.LOW)
     public void afterBurn(RecipeManagerFuelBurnEndEvent event) {
-        BaseFuelRecipe recipe = event.getRecipe();
+        FuelRecipe1_13 recipe = event.getRecipe();
         Furnace furnace = event.getFurnace();
         FurnaceInventory inventory = furnace.getInventory();
         Location furnaceLocation = furnace.getLocation();

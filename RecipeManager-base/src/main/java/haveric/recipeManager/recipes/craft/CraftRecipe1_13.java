@@ -1,6 +1,7 @@
 package haveric.recipeManager.recipes.craft;
 
 import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
@@ -8,6 +9,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.recipes.PreparableResultRecipe;
 import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
@@ -23,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-public class CraftRecipe1_13 extends BaseCraftRecipe {
+public class CraftRecipe1_13 extends PreparableResultRecipe {
     private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
     private String[] choicePattern;
     private String group;
@@ -63,6 +65,11 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
 
     public CraftRecipe1_13(Flags flags) {
         super(flags);
+    }
+
+    @Override
+    public RMCRecipeType getType() {
+        return RMCRecipeType.CRAFT;
     }
 
     private void setIngredientsChoiceMap(ShapedRecipe recipe) {
