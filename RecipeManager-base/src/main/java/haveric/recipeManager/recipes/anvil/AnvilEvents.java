@@ -5,7 +5,7 @@ import haveric.recipeManager.Recipes;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.any.FlagDisplayName;
+import haveric.recipeManager.flag.flags.any.meta.FlagDisplayName;
 import haveric.recipeManager.flag.flags.any.FlagModLevel;
 import haveric.recipeManager.flag.flags.any.FlagNeedLevel;
 import haveric.recipeManager.messages.Messages;

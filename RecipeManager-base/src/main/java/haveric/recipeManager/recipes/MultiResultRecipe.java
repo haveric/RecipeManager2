@@ -6,7 +6,7 @@ import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.flag.flags.any.FlagDisplayName;
+import haveric.recipeManager.flag.flags.any.meta.FlagDisplayName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.inventory.ItemStack;

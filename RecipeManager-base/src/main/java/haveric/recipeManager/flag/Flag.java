@@ -10,6 +10,7 @@ import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
@@ -398,4 +399,6 @@ public abstract class Flag implements Cloneable {
     public String[] getConditionDescription() {
         return null;
     }
+
+    public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {}
 }

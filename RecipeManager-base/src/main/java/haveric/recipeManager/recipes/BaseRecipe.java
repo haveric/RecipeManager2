@@ -8,7 +8,7 @@ import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.*;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.any.FlagDisplayName;
+import haveric.recipeManager.flag.flags.any.meta.FlagDisplayName;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
