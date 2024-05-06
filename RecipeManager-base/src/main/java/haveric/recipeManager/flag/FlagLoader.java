@@ -107,6 +107,7 @@ public class FlagLoader {
         }
         loadFlag(FlagType.CROSSBOW_ITEM, new FlagCrossbowItem(), APPLIED_TO_ITEM, "crossbow");
         loadFlag(FlagType.CUSTOM_MODEL_DATA, new FlagCustomModelData(), APPLIED_TO_ITEM, "modeldata");
+        loadFlag(FlagType.DAMAGE, new FlagDamage(), APPLIED_TO_ITEM, "durability", "dur");
         loadFlag(FlagType.ENCHANTED_BOOK, new FlagEnchantedBook(), APPLIED_TO_ITEM, "enchantbook", "enchantingbook");
         loadFlag(FlagType.ENCHANT_ITEM, new FlagEnchantItem(), APPLIED_TO_ITEM, "enchant", "enchantment");
         if (Version.has1_20_5Support()) {

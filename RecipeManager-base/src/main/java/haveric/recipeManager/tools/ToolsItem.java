@@ -422,7 +422,7 @@ public class ToolsItem {
     }
 
     /**
-     * This is used for Early 1.15 or below to replicate the method of the same name in Material added in late 1.15
+     * This is used for Early 1.15 or below (And for tests) to replicate the method of the same name in Material added in late 1.15
      *
      * Determines the remaining item in a crafting grid after crafting with this ingredient.
      *

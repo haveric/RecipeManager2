@@ -1,0 +1,69 @@
+craft
+stone_sword
+= stone_sword:5
+
+craft
+iron_sword
+= stone_sword
+@damage 5
+
+combine
+golden_sword
+= iron_sword:10
+
+combine
+diamond_sword
+= iron_sword
+@damage 10
+
+craft
+dirt
+= golden_sword:20
+@damage 20
+
+craft
+cobblestone
+= golden_sword:10
+@damage 20
+
+craft
+short_grass
+= golden_sword
+@damage 5
+@damage 20
+
+grindstone
+stone_sword + stone_sword
+= stone_sword:5
+
+grindstone
+iron_sword + iron_sword
+= stone_sword
+@damage 5
+
+cartography
+stone_sword + stone_sword
+= stone_sword:5
+
+cartography
+iron_sword + iron_sword
+= stone_sword
+@damage 5
+
+anvil
+stone_sword + stone_sword
+= stone_sword:5
+
+anvil
+iron_sword + iron_sword
+= stone_sword
+@damage 5
+
+smithing
+stone_sword + stone_sword
+= stone_sword:5
+
+smithing
+iron_sword + iron_sword
+= stone_sword
+@damage 5

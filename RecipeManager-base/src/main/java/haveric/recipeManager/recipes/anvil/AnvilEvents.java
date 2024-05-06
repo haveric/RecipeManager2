@@ -37,9 +37,7 @@ import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.EnchantmentStorageMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -448,27 +446,11 @@ public class AnvilEvents extends BaseRecipeEvents {
                 }
                 a.setResult(result);
 
-                int originalDamage = -1;
-                ItemMeta metaOne = result.getItemMeta(); // TODO: Rename metaOne and metaTwo
-                if (metaOne instanceof Damageable) {
-                    originalDamage = ((Damageable) metaOne).getDamage();
-                }
-
                 boolean recipeCraftSuccess = false;
                 boolean resultCraftSuccess = false;
                 if (!skipCraft) {
                     // Reset result's metadata for each craft
                     result.clearMetadata();
-
-                    // We're handling durability on the result line outside of flags, so it needs to be reset after clearing the metadata
-                    if (originalDamage != -1) {
-                        ItemMeta metaTwo = result.getItemMeta();
-
-                        if (metaTwo instanceof Damageable) {
-                            ((Damageable) metaTwo).setDamage(originalDamage);
-                            result.setItemMeta(metaTwo);
-                        }
-                    }
 
                     a.setFirstRun(firstRun); // TODO: Remove and create onCraftComplete
                     a.clear();

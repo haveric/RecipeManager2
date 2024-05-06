@@ -66,7 +66,7 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
     }
 
     @Override
-    public void setBasePotionData(PotionData data) {
+    public void setBasePotionData(PotionData potionData) {
 
     }
 

@@ -61,6 +61,7 @@ public class FlagType {
     public static final String COMPASS_ITEM = "@compassitem";
     public static final String CROSSBOW_ITEM = "@crossbowitem";
     public static final String CUSTOM_MODEL_DATA = "@custommodeldata";
+    public static final String DAMAGE = "@damage";
     public static final String ENCHANTED_BOOK = "@enchantedbook";
     public static final String ENCHANT_ITEM = "@enchantitem";
     public static final String ENCHANTMENT_GLINT_OVERRIDE = "@enchantmentglintoverride";

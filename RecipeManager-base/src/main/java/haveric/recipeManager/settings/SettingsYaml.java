@@ -3,7 +3,6 @@ package haveric.recipeManager.settings;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeManager;
-import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.tools.Tools;
@@ -68,7 +67,7 @@ public class SettingsYaml extends BaseSettings {
         anvilCombineItem.clear();
         String combineItemMaterials = fileConfig.getString("special-recipes.anvil.combine-item.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
         if (!combineItemMaterials.equals("false")) {
-            List<Material> materials = Tools.parseChoice(combineItemMaterials, ParseBit.NO_ERRORS);
+            List<Material> materials = Tools.parseChoice(combineItemMaterials);
             if (materials != null) {
                 anvilCombineItem.addAll(materials);
             }
@@ -77,7 +76,7 @@ public class SettingsYaml extends BaseSettings {
         grindstoneCombineItem.clear();
         String grindstoneCombineItemMaterials = fileConfig.getString("special-recipes.grindstone.combine-item.materials", SPECIAL_GRINDSTONE_CUSTOM_DEFAULT);
         if (!grindstoneCombineItemMaterials.equals("false")) {
-            List<Material> materials = Tools.parseChoice(grindstoneCombineItemMaterials, ParseBit.NO_ERRORS);
+            List<Material> materials = Tools.parseChoice(grindstoneCombineItemMaterials);
             if (materials != null) {
                 grindstoneCombineItem.addAll(materials);
             }
@@ -86,7 +85,7 @@ public class SettingsYaml extends BaseSettings {
         grindstoneItemMaterials.clear();
         String grindstoneDisenchantItemMaterials = fileConfig.getString("special-recipes.grindstone.disenchant.item.materials", SPECIAL_GRINDSTONE_CUSTOM_DEFAULT);
         if (!grindstoneDisenchantItemMaterials.equals("false")) {
-            List<Material> materials = Tools.parseChoice(grindstoneDisenchantItemMaterials, ParseBit.NO_ERRORS);
+            List<Material> materials = Tools.parseChoice(grindstoneDisenchantItemMaterials);
             if (materials != null) {
                 grindstoneItemMaterials.addAll(materials);
             }
@@ -95,7 +94,7 @@ public class SettingsYaml extends BaseSettings {
         anvilMaterialEnchant.clear();
         String enchantMaterials = fileConfig.getString("special-recipes.anvil.enchant.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
         if (!enchantMaterials.equals("false")) {
-            List<Material> materials = Tools.parseChoice(enchantMaterials, ParseBit.NO_ERRORS);
+            List<Material> materials = Tools.parseChoice(enchantMaterials);
             if (materials != null) {
                 anvilMaterialEnchant.addAll(materials);
             }
@@ -242,7 +241,7 @@ public class SettingsYaml extends BaseSettings {
         anvilRepairMaterial.clear();
         String repairMaterials = fileConfig.getString("special-recipes.anvil.repair-material.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
         if (!repairMaterials.equals("false")) {
-            List<Material> materials = Tools.parseChoice(repairMaterials, ParseBit.NO_ERRORS);
+            List<Material> materials = Tools.parseChoice(repairMaterials);
             if (materials != null) {
                 anvilRepairMaterial.addAll(materials);
             }
@@ -251,7 +250,7 @@ public class SettingsYaml extends BaseSettings {
         anvilRenaming.clear();
         String renameMaterials = fileConfig.getString("special-recipes.anvil.renaming.materials", SPECIAL_ANVIL_CUSTOM_DEFAULT);
         if (!renameMaterials.equals("false")) {
-            List<Material> materials = Tools.parseChoice(renameMaterials, ParseBit.NO_ERRORS);
+            List<Material> materials = Tools.parseChoice(renameMaterials);
             if (materials != null) {
                 anvilRenaming.addAll(materials);
             }
