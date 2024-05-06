@@ -16,22 +16,22 @@ public class FlagEnchantmentGlintOverride extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-                "{flag} [false]", };
+            "{flag} [false]", };
     }
 
     @Override
     protected String[] getDescription() {
         return new String[] {
-                "Makes the result glint, even without enchantments",
-                "",
-                "Optionally, adding false will remove the glint", };
+            "Makes the result glint, even without enchantments",
+            "",
+            "Optionally, adding false will remove the glint", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
-                "{flag} // Makes the result glint",
-                "{flag} false // Removes the glint", };
+            "{flag} // Makes the result glint",
+            "{flag} false // Removes the glint", };
     }
 
     private boolean glintOverride;
@@ -104,16 +104,17 @@ public class FlagEnchantmentGlintOverride extends Flag {
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
         Boolean value = null;
-        if (argLower.startsWith("!enchantmentglint") || argLower.startsWith("noenchantmentglint")) {
+        String conditionName = getConditionName();
+        if (argLower.startsWith("!" + conditionName) || argLower.startsWith("no" + conditionName)) {
             value = false;
-        } else if (argLower.startsWith("enchantmentglint")) {
+        } else if (argLower.startsWith(conditionName)) {
             value = true;
         }
 
         if (!noMeta && value == null) {
             return null;
         } else {
-            return new ConditionBoolean("enchantmentglint", value, (item, meta, condition) -> {
+            return new ConditionBoolean(conditionName, value, (item, meta, condition) -> {
                 ConditionBoolean conditionBoolean = (ConditionBoolean) condition;
                 boolean hasGlintOverride = meta.hasEnchantmentGlintOverride();
                 if (noMeta) {
@@ -123,5 +124,18 @@ public class FlagEnchantmentGlintOverride extends Flag {
                 }
             });
         }
+    }
+
+    @Override
+    public String getConditionName() {
+        return "enchantmentglint";
+    }
+
+    @Override
+    public String[] getConditionDescription() {
+        return new String[] {
+            "  enchantmentglint = Ingredient must have the enchantmentglint flag",
+            "  noenchantmentglint or !enchantmentglint = Ingredient must not have the enchantmentglint flag",
+        };
     }
 }

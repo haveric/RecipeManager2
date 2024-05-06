@@ -16,22 +16,22 @@ public class FlagHideTooltip extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-                "{flag} [false]", };
+            "{flag} [false]", };
     }
 
     @Override
     protected String[] getDescription() {
         return new String[] {
-                "Hides the result's tooltip",
-                "",
-                "Optionally, adding false will make the result show its tooltip again", };
+            "Hides the result's tooltip",
+            "",
+            "Optionally, adding false will make the result show its tooltip again", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
-                "{flag} // Hides the result's tooltip",
-                "{flag} false // Disable this flag, allowing the result to have a tooltip again", };
+            "{flag} // Hides the result's tooltip",
+            "{flag} false // Disable this flag, allowing the result to have a tooltip again", };
     }
 
     private boolean hideTooltip;
@@ -104,16 +104,17 @@ public class FlagHideTooltip extends Flag {
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
         Boolean value = null;
-        if (argLower.startsWith("!hidetooltip") || argLower.startsWith("nohidetooltip")) {
+        String conditionName = getConditionName();
+        if (argLower.startsWith("!" + conditionName) || argLower.startsWith("no" + conditionName)) {
             value = false;
-        } else if (argLower.startsWith("hidetooltip")) {
+        } else if (argLower.startsWith(conditionName)) {
             value = true;
         }
 
         if (!noMeta && value == null) {
             return null;
         } else {
-            return new ConditionBoolean("hidetooltip", value, (item, meta, condition) -> {
+            return new ConditionBoolean(conditionName, value, (item, meta, condition) -> {
                 ConditionBoolean conditionBoolean = (ConditionBoolean) condition;
                 boolean isHideTooltip = meta.isHideTooltip();
                 if (noMeta) {
@@ -123,5 +124,18 @@ public class FlagHideTooltip extends Flag {
                 }
             });
         }
+    }
+
+    @Override
+    public String getConditionName() {
+        return "hidetooltip";
+    }
+
+    @Override
+    public String[] getConditionDescription() {
+        return new String[] {
+            "  hidetooltip = Ingredient must have the hidetooltip flag",
+            "  nohidetooltip or !hidetooltip = Ingredient must not have the hidetooltip flag",
+        };
     }
 }

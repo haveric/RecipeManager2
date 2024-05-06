@@ -2045,14 +2045,6 @@ public class Conditions implements Cloneable {
                     }
                 }
             }
-        } else if (argLower.startsWith("spawnegg")) {
-            value = argLower.substring("spawnegg".length()).trim();
-
-            try {
-                spawnEggEntityType = EntityType.valueOf(value.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'spawnegg' argument with invalid entity type: " + value);
-            }
         } else {
             ErrorReporter.getInstance().warning("Flag " + flagType + " has unknown argument: " + arg);
         }

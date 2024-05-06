@@ -16,22 +16,22 @@ public class FlagFireResistant extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-                "{flag} [false]", };
+            "{flag} [false]", };
     }
 
     @Override
     protected String[] getDescription() {
         return new String[] {
-                "Makes the result immune to burning in fire",
-                "",
-                "Optionally, adding false will remove the fire immunity", };
+            "Makes the result immune to burning in fire",
+            "",
+            "Optionally, adding false will remove the fire immunity", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
-                "{flag} // Makes the result immune to burning in fire",
-                "{flag} false // Removes the fire immunity", };
+            "{flag} // Makes the result immune to burning in fire",
+            "{flag} false // Removes the fire immunity", };
     }
 
     private boolean fireResistant;
@@ -104,16 +104,17 @@ public class FlagFireResistant extends Flag {
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
         Boolean value = null;
-        if (argLower.startsWith("!fireresistant") || argLower.startsWith("nofireresistant")) {
+        String conditionName = getConditionName();
+        if (argLower.startsWith("!" + conditionName) || argLower.startsWith("no" + conditionName)) {
             value = false;
-        } else if (argLower.startsWith("fireresistant")) {
+        } else if (argLower.startsWith(conditionName)) {
             value = true;
         }
 
         if (!noMeta && value == null) {
             return null;
         } else {
-            return new ConditionBoolean("fireresistant", value, (item, meta, condition) -> {
+            return new ConditionBoolean(conditionName, value, (item, meta, condition) -> {
                 ConditionBoolean conditionBoolean = (ConditionBoolean) condition;
                 boolean isFireResistant = meta.isFireResistant();
                 if (noMeta) {
@@ -123,5 +124,18 @@ public class FlagFireResistant extends Flag {
                 }
             });
         }
+    }
+
+    @Override
+    public String getConditionName() {
+        return "fireresistant";
+    }
+
+    @Override
+    public String[] getConditionDescription() {
+        return new String[] {
+            "  fireresistant = Ingredient must have the fireresistant flag",
+            "  nofireresistant or !fireresistant = Ingredient must not have the fireresistant flag",
+        };
     }
 }

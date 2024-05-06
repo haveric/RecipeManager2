@@ -109,15 +109,16 @@ public class FlagDamage extends Flag {
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
         Integer value = null;
-        if (argLower.startsWith("!damage") || argLower.startsWith("nodamage")) {
+        String conditionName = getConditionName();
+        if (argLower.startsWith("!" + conditionName) || argLower.startsWith("no" + conditionName)) {
             value = Integer.MIN_VALUE;
-        } else if (argLower.startsWith("damage")) {
-            String argTrimmed = argLower.substring("damage".length()).trim();
+        } else if (argLower.startsWith(conditionName)) {
+            String argTrimmed = argLower.substring(conditionName.length()).trim();
 
             try {
                 value = Integer.parseInt(argTrimmed);
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'damage' argument with invalid number: " + argTrimmed);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has '" + conditionName + "' argument with invalid number: " + argTrimmed);
             }
         }
 
@@ -125,7 +126,7 @@ public class FlagDamage extends Flag {
             return null;
         } else {
             Integer finalValue = value;
-            return new ConditionInteger("damage", finalValue, (item, meta, condition) -> {
+            return new ConditionInteger(conditionName, finalValue, (item, meta, condition) -> {
                 ConditionInteger conditionInteger = (ConditionInteger) condition;
                 boolean isDamageableMeta = meta instanceof Damageable;
                 if (noMeta || finalValue == Integer.MIN_VALUE) {
@@ -143,5 +144,18 @@ public class FlagDamage extends Flag {
                 return false;
             });
         }
+    }
+
+    @Override
+    public String getConditionName() {
+        return "damage";
+    }
+
+    @Override
+    public String[] getConditionDescription() {
+        return new String[] {
+            "  damage <amount> = Ingredient must have damage/durability",
+            "  nodamage or !damage = Ingredient must not have damage/durability",
+        };
     }
 }
