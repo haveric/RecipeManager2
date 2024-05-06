@@ -4,7 +4,7 @@ import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.result.FlagItemUnbreakable;
+import haveric.recipeManager.flag.flags.result.meta.FlagItemUnbreakable;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.craft.CraftRecipe;

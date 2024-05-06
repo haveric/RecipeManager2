@@ -5,7 +5,7 @@ import haveric.recipeManager.TestMetaBanner;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.result.FlagBannerItem;
+import haveric.recipeManager.flag.flags.result.meta.FlagBannerItem;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.craft.CraftRecipe;

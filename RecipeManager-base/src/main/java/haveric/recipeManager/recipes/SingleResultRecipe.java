@@ -10,7 +10,7 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
-import haveric.recipeManager.flag.flags.any.FlagDisplayName;
+import haveric.recipeManager.flag.flags.any.meta.FlagDisplayName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Material;

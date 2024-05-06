@@ -12,7 +12,7 @@ import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.result.FlagDamage;
+import haveric.recipeManager.flag.flags.result.meta.FlagDamage;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.item.ItemRecipe;
@@ -1044,20 +1044,6 @@ public class Tools {
         }
 
         return "-1";
-    }
-
-    public static ItemStack[] mirrorItemMatrix(ItemStack[] matrix) {
-        ItemStack[] m = new ItemStack[9];
-
-        for (int r = 0; r < 3; r++) {
-            m[(r * 3)] = matrix[(r * 3) + 2];
-            m[(r * 3) + 1] = matrix[(r * 3) + 1];
-            m[(r * 3) + 2] = matrix[(r * 3)];
-        }
-
-        RMBukkitTools.trimItemMatrix(m);
-
-        return m;
     }
 
     public static boolean isDifferentMatrix(ItemStack[] original, ItemStack[] current) {

@@ -4,7 +4,7 @@ import haveric.recipeManager.*;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.any.FlagItemLore;
+import haveric.recipeManager.flag.flags.any.meta.FlagItemLore;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.TestMessageSender;
 import haveric.recipeManager.recipes.BaseRecipe;
