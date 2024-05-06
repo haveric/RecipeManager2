@@ -2,7 +2,7 @@
 
 ### v2.31.0
 * REMOVED support for Minecraft 1.8 - 1.11
-* REMOVED: 1.20.5+: `@LocalizedName` flag
+* REMOVED FLAG: 1.20.5+: `@LocalizedName`
 * REMOVED `@Summon` arguments: `elder`, `horse`, `skeleton`, `zombievillager`
 * REMOVED `@PotionItem` arguments: `level`, `extended`
   * The type argument is also now required

@@ -109,15 +109,16 @@ public class FlagMaxStackSize extends Flag {
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
         Integer value = null;
-        if (argLower.startsWith("!maxstacksize") || argLower.startsWith("nomaxstacksize")) {
+        String conditionName = getConditionName();
+        if (argLower.startsWith("!" + conditionName) || argLower.startsWith("no" + conditionName)) {
             value = Integer.MIN_VALUE;
-        } else if (argLower.startsWith("maxstacksize")) {
-            String argTrimmed = argLower.substring("maxstacksize".length()).trim();
+        } else if (argLower.startsWith(conditionName)) {
+            String argTrimmed = argLower.substring(conditionName.length()).trim();
 
             try {
                 value = Integer.parseInt(argTrimmed);
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'maxstacksize' argument with invalid number: " + argTrimmed);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has '" + conditionName + "' argument with invalid number: " + argTrimmed);
             }
         }
 
@@ -125,7 +126,7 @@ public class FlagMaxStackSize extends Flag {
             return null;
         } else {
             Integer finalValue = value;
-            return new ConditionInteger("maxstacksize", finalValue, (item, meta, condition) -> {
+            return new ConditionInteger(conditionName, finalValue, (item, meta, condition) -> {
                 ConditionInteger conditionInteger = (ConditionInteger) condition;
                 if (noMeta || finalValue == Integer.MIN_VALUE) {
                     return !meta.hasMaxStackSize();
@@ -142,5 +143,18 @@ public class FlagMaxStackSize extends Flag {
                 return false;
             });
         }
+    }
+
+    @Override
+    public String getConditionName() {
+        return "maxstacksize";
+    }
+
+    @Override
+    public String[] getConditionDescription() {
+        return new String[] {
+            "  maxstacksize <amount> = Ingredient must have a custom max stack size",
+            "  nomaxstacksize or !maxstacksize = Ingredient must not have a custom max stack size",
+        };
     }
 }

@@ -1,19 +1,22 @@
 package haveric.recipeManager.flag.flags.any;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
+import haveric.recipeManager.flag.FlagDescriptor;
+import haveric.recipeManager.flag.FlagFactory;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsHold;
 import haveric.recipeManager.flag.conditions.ConditionsHold.ConditionsSlot;
 import haveric.recipeManager.tools.Tools;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.DyeColor;
-import org.bukkit.inventory.ItemRarity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -35,7 +38,7 @@ public class FlagHoldItem extends Flag {
 
     @Override
     protected String[] getDescription() {
-        return new String[] {
+        String[] description = new String[]{
             "Makes the recipe require crafter to hold an item.",
             "",
             "This flag can be used more than once to add more items, the player will need to hold one to craft.",
@@ -114,56 +117,75 @@ public class FlagHoldItem extends Flag {
             "  noitemname or !itemname",
             "    Ingredient must have no/default item name",
             "    Overrides itemname condition if set",
-            "",
-            "  localizedname <text or regex:pattern>     = check the item's localizedname against exact text or if prefixed with 'regex:' it will check for a regex pattern.",
-            "    Note for regex:pattern           Escape for '|' is a double '||'. Any double pipes will be converted back to single pipes for regex parsing.",
-            "  nolocalizedname or !localizedname",
-            "    Ingredient must have no localizedname",
-            "    Overrides localizedname condition if set",
+        };
+
+        if (!Version.has1_20_5Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                "",
+                "  localizedname <text or regex:pattern>     = check the item's localizedname against exact text or if prefixed with 'regex:' it will check for a regex pattern.",
+                "    Note for regex:pattern           Escape for '|' is a double '||'. Any double pipes will be converted back to single pipes for regex parsing.",
+                "  nolocalizedname or !localizedname",
+                "    Ingredient must have no localizedname",
+                "    Overrides localizedname condition if set",
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[] {
             "",
             "  lore <text or regex:pattern>     = checks each lore line for a specific text or if prefixed with 'regex:' it will check for a regex pattern.",
             "    Note for regex:pattern           Escape for '|' is a double '||'. Any double pipes will be converted back to single pipes for regex parsing.",
             "  nolore or !lore",
-            "    Held item must have no lore",
+            "    Ingredient must have no lore",
             "    Overrides lore condition if set",
             "",
             "  color <colorname or R,G,B>       = only works for leather armor, checks color",
             "                                     values can be individual values or ranged separated by - char or you can use a color name constant, see " + Files.getNameIndexHashLink("dyecolor"),
-            "",
             "  nocolor or !color",
             "    Only works for leather armor",
             "    Held item must have default/vanilla color",
             "    Overrides color condition if set",
-            "",
-            "  unbreakable = Ingredient must have the unbreakable flag",
-            "  nounbreakable or !unbreakable = Ingredient must not have the unbreakable flag",
-            "",
-            "  hidetooltip = Ingredient must have the hidetooltip flag",
-            "  nohidetooltip or !hidetooltip = Ingredient must not have the hidetooltip flag",
-            "",
-            "  enchantmentglint = Ingredient must have the enchantmentglint flag",
-            "  noenchantmentglint or !enchantmentglint = Ingredient must not have the enchantmentglint flag",
-            "",
-            "  fireresistant = Ingredient must have the fireresistant flag",
-            "  nofireresistant or !fireresistant = Ingredient must not have the fireresistant flag",
-            "",
-            "  custommodeldata <number> = Ingredient must have custom model data",
-            "  nocustommodeldata or !custommodeldata = Ingredient must not have custom model data",
-            "",
-            "  maxstacksize <amount> = Ingredient must have a custom max stack size",
-            "  nomaxstacksize or !maxstacksize = Ingredient must not have a custom max stack size",
-            "",
-            "  rarity <rarity> = Ingredient must have a specific rarity",
-            "    Rarity values: " + RMCUtil.collectionToString(Arrays.asList(ItemRarity.values())).toLowerCase(),
-            "  norarity or !rarity = Ingredient must not have a rarity",
-            "",
-            "  ominousbottleamplifier <amount> = Ingredient must have an ominous bottle amplifier",
-            "  noominousbottleamplifier or !ominousbottleamplifier = Ingredient must not have an ominous bottle amplifier",
+        }, String.class);
+
+        Map<String, String[]> conditionDescriptionsMap = new TreeMap<>();
+        List<String> conditionNoMetas = new ArrayList<>();
+        for (FlagDescriptor flagDescriptor : FlagFactory.getInstance().getFlags().values()) {
+            Flag flag = flagDescriptor.getFlag();
+            String conditionString = flag.getConditionName();
+            String[] conditionDescription = flag.getConditionDescription();
+
+            if (conditionString != null) {
+                if (conditionDescription != null) {
+                    conditionDescriptionsMap.put(conditionString, conditionDescription);
+                }
+
+                conditionNoMetas.add(conditionString);
+            }
+        }
+
+        for (String[] conditionDescriptions : conditionDescriptionsMap.values()) {
+            description = ObjectArrays.concat(description, new String[] { "", }, String.class);
+            description = ObjectArrays.concat(description, conditionDescriptions, String.class);
+        }
+
+        StringBuilder metaList = new StringBuilder();
+        StringBuilder noMetaList = new StringBuilder();
+
+        if (!Version.has1_20_5Support()) {
+            conditionNoMetas.add("localizedname");
+        }
+
+        Collections.sort(conditionNoMetas);
+        for (String noMeta : conditionNoMetas) {
+            metaList.append(", ").append(noMeta);
+            noMetaList.append(" | no").append(noMeta);
+        }
+
+        description = ObjectArrays.concat(description, new String[] {
             "",
             "  nometa or !meta",
-            "    Ingredient must have no metadata (enchants, bookenchants, name, itemname, lore, color, unbreakable, hidetooltip, enchantmentglint, fireresistant, localizedname, custommodeldata, maxstacksize, rarity, ominousbottleamplifier)",
-            "    Overrides enchant, name, itemname, lore, color, unbreakable, hidetooltip, enchantmentglint, fireresistant, localizedname, custommodeldata, maxstacksize, rarity, ominousbottleamplifier conditions if set",
-            "    Equivalent to noenchant | nobookenchant | noname | noitemname | nolore | nocolor | nounbreakable | nohidetooltip | noenchantmentglint | nofireresistant | nolocalizedname | nocustommodeldata | nomaxstacksize | norarity | noominousbottleamplifier",
+            "    Ingredient must have no metadata (enchants, bookenchants, name, itemname, lore, color" + metaList + ")",
+            "    Overrides enchant, name, itemname, lore, color" + metaList + " conditions if set",
+            "    Equivalent to noenchant | nobookenchant | noname | noitemname | nolore | nocolor" + noMetaList,
             "",
             "  potion <condition>, [...]",
             "    type &lt;potiontype&gt;      = Type of potion, see " + Files.getNameIndexHashLink("potiontype"),
@@ -189,9 +211,9 @@ public class FlagHoldItem extends Flag {
             "",
             "    Patterns: " + Files.getNameIndexHashLink("bannerpattern"),
             "    Dye Colors: " + RMCUtil.collectionToString(Arrays.asList(DyeColor.values())).toLowerCase(),
-            "",
-            "  spawnegg &lt;entitytype&gt; = Type of entity contained in a spawn egg, see " + Files.getNameIndexHashLink("entitytype"),
-        };
+        }, String.class);
+
+        return description;
     }
 
     @Override

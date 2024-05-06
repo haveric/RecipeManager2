@@ -16,22 +16,22 @@ public class FlagItemUnbreakable extends Flag {
     @Override
     protected String[] getArguments() {
         return new String[] {
-                "{flag} [false]", };
+            "{flag} [false]", };
     }
 
     @Override
     protected String[] getDescription() {
         return new String[] {
-                "Makes the result unbreakable",
-                "",
-                "Optionally, adding false will make the result breakable again", };
+            "Makes the result unbreakable",
+            "",
+            "Optionally, adding false will make the result breakable again", };
     }
 
     @Override
     protected String[] getExamples() {
         return new String[] {
-                "{flag} // Makes the result unbreakable",
-                "{flag} false // Remove the unbreakable status, allowing for the item to be destroyed", };
+            "{flag} // Makes the result unbreakable",
+            "{flag} false // Remove the unbreakable status, allowing for the item to be destroyed", };
     }
 
     private boolean unbreakable;
@@ -104,16 +104,17 @@ public class FlagItemUnbreakable extends Flag {
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
         Boolean value = null;
-        if (argLower.startsWith("!unbreakable") || argLower.startsWith("nounbreakable")) {
+        String conditionName = getConditionName();
+        if (argLower.startsWith("!" + conditionName) || argLower.startsWith("no" + conditionName)) {
             value = false;
-        } else if (argLower.startsWith("unbreakable")) {
+        } else if (argLower.startsWith(conditionName)) {
             value = true;
         }
 
         if (!noMeta && value == null) {
             return null;
         } else {
-            return new ConditionBoolean("unbreakable", value, (item, meta, condition) -> {
+            return new ConditionBoolean(conditionName, value, (item, meta, condition) -> {
                 ConditionBoolean conditionBoolean = (ConditionBoolean) condition;
                 boolean isUnbreakable = meta.isUnbreakable();
                 if (noMeta) {
@@ -123,5 +124,18 @@ public class FlagItemUnbreakable extends Flag {
                 }
             });
         }
+    }
+
+    @Override
+    public String getConditionName() {
+        return "unbreakable";
+    }
+
+    @Override
+    public String[] getConditionDescription() {
+        return new String[] {
+            "  unbreakable = Ingredient must have the unbreakable flag",
+            "  nounbreakable or !unbreakable = Ingredient must not have the unbreakable flag",
+        };
     }
 }

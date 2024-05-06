@@ -105,15 +105,16 @@ public class FlagCustomModelData extends Flag {
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
         Integer value = null;
-        if (argLower.startsWith("!custommodeldata") || argLower.startsWith("nocustommodeldata")) {
+        String conditionName = getConditionName();
+        if (argLower.startsWith("!" + conditionName) || argLower.startsWith("no" + conditionName)) {
             value = Integer.MIN_VALUE;
-        } else if (argLower.startsWith("custommodeldata")) {
-            String argTrimmed = argLower.substring("custommodeldata".length()).trim();
+        } else if (argLower.startsWith(conditionName)) {
+            String argTrimmed = argLower.substring(conditionName.length()).trim();
 
             try {
                 value = Integer.parseInt(argTrimmed);
             } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has 'custommodeldata' argument with invalid number: " + argTrimmed);
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has '" + conditionName + "' argument with invalid number: " + argTrimmed);
             }
         }
 
@@ -121,7 +122,7 @@ public class FlagCustomModelData extends Flag {
             return null;
         } else {
             Integer finalValue = value;
-            return new ConditionInteger("custommodeldata", finalValue, (item, meta, condition) -> {
+            return new ConditionInteger(conditionName, finalValue, (item, meta, condition) -> {
                 ConditionInteger conditionInteger = (ConditionInteger) condition;
                 if (noMeta || finalValue == Integer.MIN_VALUE) {
                     return !meta.hasCustomModelData();
@@ -138,5 +139,18 @@ public class FlagCustomModelData extends Flag {
                 return false;
             });
         }
+    }
+
+    @Override
+    public String getConditionName() {
+        return "custommodeldata";
+    }
+
+    @Override
+    public String[] getConditionDescription() {
+        return new String[] {
+            "  custommodeldata <number> = Ingredient must have custom model data",
+            "  nocustommodeldata or !custommodeldata = Ingredient must not have custom model data",
+        };
     }
 }

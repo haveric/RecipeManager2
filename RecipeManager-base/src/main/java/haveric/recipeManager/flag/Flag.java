@@ -390,4 +390,12 @@ public abstract class Flag implements Cloneable {
     public Condition parseCondition(String argLower, boolean noMeta) {
         return null;
     }
+
+    public String getConditionName() {
+        return null;
+    }
+
+    public String[] getConditionDescription() {
+        return null;
+    }
 }
