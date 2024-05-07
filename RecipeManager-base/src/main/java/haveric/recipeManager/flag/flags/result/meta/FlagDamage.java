@@ -135,10 +135,6 @@ public class FlagDamage extends Flag {
                     return !isDamageableMeta || !((Damageable) meta).hasDamage();
                 }
 
-                if (condition.hasValue()) {
-                    return true;
-                }
-
                 if (isDamageableMeta && ((Damageable) meta).hasDamage()) {
                     return !conditionInteger.hasValue() || ((Damageable) meta).getDamage() == conditionInteger.getValue();
                 }

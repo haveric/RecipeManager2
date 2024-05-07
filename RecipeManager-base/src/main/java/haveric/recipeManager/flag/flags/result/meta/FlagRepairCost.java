@@ -226,10 +226,6 @@ public class FlagRepairCost extends Flag {
                     return !isRepariableMeta || !((Repairable) meta).hasRepairCost();
                 }
 
-                if (condition.hasValue()) {
-                    return true;
-                }
-
                 if (isRepariableMeta && ((Repairable) meta).hasRepairCost()) {
                     return !conditionInteger.hasValue() || ((Repairable) meta).getRepairCost() == conditionInteger.getValue();
                 }
