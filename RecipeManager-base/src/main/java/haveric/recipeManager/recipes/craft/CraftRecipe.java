@@ -87,23 +87,6 @@ public class CraftRecipe extends PreparableResultRecipe {
         updateHash();
     }
 
-    public void setIngredientsChoiceMap(Map<Character, List<Material>> newIngredientsChoiceMap) {
-        ingredientsChoiceMap.clear();
-
-        for (Entry<Character, List<Material>> entry : newIngredientsChoiceMap.entrySet()) {
-            List<Material> materials = entry.getValue();
-
-            if (materials.size() == 1 && materials.get(0) == Material.AIR) {
-                ingredientsChoiceMap.put(entry.getKey(), null);
-            } else {
-                RecipeChoice.MaterialChoice newMaterialList = new RecipeChoice.MaterialChoice(entry.getValue());
-                ingredientsChoiceMap.put(entry.getKey(), newMaterialList);
-            }
-        }
-
-        updateHash();
-    }
-
     public Map<Character, RecipeChoice> getIngredientsChoiceMap() {
         return ingredientsChoiceMap;
     }

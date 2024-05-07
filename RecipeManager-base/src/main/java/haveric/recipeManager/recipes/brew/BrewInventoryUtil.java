@@ -48,12 +48,6 @@ public class BrewInventoryUtil {
         }
     }
 
-    public static void addResults(List<Material> materials) {
-        for (Material material : materials) {
-            addResult(material);
-        }
-    }
-
     public static void addResult(Material material) {
         if (!results.contains(material)) {
             results.add(material);

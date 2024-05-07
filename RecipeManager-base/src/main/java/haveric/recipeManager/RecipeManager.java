@@ -79,10 +79,10 @@ public class RecipeManager extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         Supports.init();
 
-        FurnaceData.init(); // dummy caller to initialize Serialization class
+        FurnaceData.init(); // dummy callers to initialize Serialization class
         BrewingStandData.init();
         CooldownData.init();
-        RMCampfireData.init(); // dummy caller to initialize Serialization class
+        RMCampfireData.init();
         ComposterData.init();
 
         events = new Events();

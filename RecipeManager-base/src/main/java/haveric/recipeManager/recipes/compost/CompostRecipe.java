@@ -65,15 +65,6 @@ public class CompostRecipe extends MultiResultRecipe {
         return ingredientChoice;
     }
 
-    public void addIngredientChoice(List<Material> materials) {
-        if (ingredientChoice == null) {
-            setIngredientChoice(materials);
-        } else {
-            ingredientChoice = ToolsRecipeChoice.mergeRecipeChoiceWithMaterials(ingredientChoice, materials);
-            updateHash();
-        }
-    }
-
     public void addIngredientChoiceItems(List<ItemStack> items) {
         if (ingredientChoice == null) {
             setIngredientChoiceItems(items);
@@ -81,11 +72,6 @@ public class CompostRecipe extends MultiResultRecipe {
             ingredientChoice = ToolsRecipeChoice.mergeRecipeChoiceWithItems(ingredientChoice, items);
             updateHash();
         }
-    }
-
-    public void setIngredientChoice(List<Material> materials) {
-        RecipeChoice.MaterialChoice materialChoice = new RecipeChoice.MaterialChoice(materials);
-        setIngredientChoice(materialChoice);
     }
 
     public void setIngredientChoiceItems(List<ItemStack> items) {

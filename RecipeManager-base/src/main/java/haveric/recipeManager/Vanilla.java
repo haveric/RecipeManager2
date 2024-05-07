@@ -365,10 +365,6 @@ public class Vanilla {
         }
     }
 
-    private static void addFuelRecipe(String legacyMaterial, float burnTime) {
-        addFuelRecipe(Material.getMaterial(legacyMaterial), burnTime);
-    }
-
     private static void addFuelRecipe(Material material, float burnTime) {
         initialRecipes.put(new FuelRecipe(material, burnTime), info);
     }
@@ -579,11 +575,11 @@ public class Vanilla {
      */
     public static Recipe removeCustomRecipe(BaseRecipe recipe) {
         if (recipe instanceof CraftRecipe) {
-            return replaceCraftRecipeV1_13((CraftRecipe) recipe, true);
+            return replaceCraftRecipe((CraftRecipe) recipe, true);
         }
 
         if (recipe instanceof CombineRecipe) {
-            return replaceCombineRecipeV1_13((CombineRecipe) recipe, true);
+            return replaceCombineRecipe((CombineRecipe) recipe, true);
         }
 
         if (recipe instanceof RMFurnaceRecipe) {
@@ -963,7 +959,6 @@ public class Vanilla {
     }
 
     /**
-     * V1_13 or newer only.
      * Replaces/Removes a RecipeManager craft recipe on the <b>server</b>
      *
      * @param recipe RecipeManager recipe
@@ -971,7 +966,7 @@ public class Vanilla {
      *
      * @return replaced recipe or null if not found
      */
-    public static Recipe replaceCraftRecipeV1_13(CraftRecipe recipe, boolean remove) {
+    public static Recipe replaceCraftRecipe(CraftRecipe recipe, boolean remove) {
         BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         ShapedRecipe sr;
@@ -1007,7 +1002,6 @@ public class Vanilla {
     }
 
     /**
-     * V1_13 or newer supported only.
      * Replaces/Removes a RecipeManager combine recipe from the <b>server</b>
      *
      * @param recipe RecipeManager recipe
@@ -1015,7 +1009,7 @@ public class Vanilla {
      *
      * @return replaced recipe or null if not found
      */
-    public static Recipe replaceCombineRecipeV1_13(CombineRecipe recipe, boolean remove) {
+    public static Recipe replaceCombineRecipe(CombineRecipe recipe, boolean remove) {
         BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
         Recipe r;
@@ -1273,7 +1267,7 @@ public class Vanilla {
         return matches;
     }
 
-    public static boolean recipeMatchesFireworkStar(Recipe recipe, ItemStack result, ItemStack[] matrix) {
+    public static boolean recipeMatchesFireworkStar(Recipe recipe) {
         boolean matches = false;
 
         Keyed keyedRecipe = (Keyed) recipe;
@@ -1288,7 +1282,7 @@ public class Vanilla {
         return matches;
     }
 
-    public static boolean recipeMatchesFireworkStarFade(Recipe recipe, ItemStack result, ItemStack[] matrix) {
+    public static boolean recipeMatchesFireworkStarFade(Recipe recipe) {
         boolean matches = false;
 
         Keyed keyedRecipe = (Keyed) recipe;

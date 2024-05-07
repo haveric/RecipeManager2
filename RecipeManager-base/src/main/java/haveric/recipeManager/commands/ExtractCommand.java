@@ -3,7 +3,6 @@ package haveric.recipeManager.commands;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
-import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.messages.MessageSender;
@@ -359,28 +358,6 @@ public class ExtractCommand implements TabExecutor {
         for (String str : recipes) {
             stream.write(str);
         }
-    }
-
-    private String parseIngredient(ItemStack item) {
-        String name;
-
-        if (item == null || item.getType() == Material.AIR) {
-            name = "air";
-        } else {
-            name = parseMaterial(item.getType()) + ":";
-
-            if (item.getDurability() == -1 || item.getDurability() == RMCVanilla.DATA_WILDCARD) {
-                name += "*";
-            } else {
-                name += item.getDurability();
-            }
-
-            if (item.getAmount() != 1) {
-                name += ":" + item.getAmount();
-            }
-        }
-
-        return name;
     }
 
     private void parseChoice(RecipeChoice choice, StringBuilder recipeString) {
