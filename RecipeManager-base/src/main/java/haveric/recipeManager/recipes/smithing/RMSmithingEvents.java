@@ -11,10 +11,7 @@ import haveric.recipeManager.messages.SoundNotifier;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.Supports;
-import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.ToolsInventory;
-import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
@@ -106,9 +103,9 @@ public class RMSmithingEvents extends BaseRecipeEvents {
         if (recipe != null) {
             ItemStack recipeResult = recipe.getResult();
 
-            if (!result.equals(recipeResult)) {
+            if (!result.equals(recipeResult) && Version.has1_19_4Support()) {
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimBolt()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimBolt(recipe)) {
+                    if (Version.has1_20_5Support() && Vanilla.recipeMatchesTrimKey(recipe, "bolt")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.bolt");
                         inv.setResult(null);
                         return true;
@@ -116,7 +113,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimCoast()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimCoast(recipe)) {
+                    if (Vanilla.recipeMatchesTrimKey(recipe, "coast")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.coast");
                         inv.setResult(null);
                         return true;
@@ -124,7 +121,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimDune()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimDune(recipe)) {
+                    if (Vanilla.recipeMatchesTrimKey(recipe, "dune")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.dune");
                         inv.setResult(null);
                         return true;
@@ -132,7 +129,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimEye()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimEye(recipe)) {
+                    if (Vanilla.recipeMatchesTrimKey(recipe, "eye")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.eye");
                         inv.setResult(null);
                         return true;
@@ -140,7 +137,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimFlow()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimFlow(recipe)) {
+                    if (Version.has1_20_5Support() && Vanilla.recipeMatchesTrimKey(recipe, "flow")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.flow");
                         inv.setResult(null);
                         return true;
@@ -148,7 +145,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimHost()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimHost(recipe)) {
+                    if (Version.has1_20Support() && Vanilla.recipeMatchesTrimKey(recipe, "host")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.host");
                         inv.setResult(null);
                         return true;
@@ -156,7 +153,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimRaiser()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimRaiser(recipe)) {
+                    if (Version.has1_20Support() && Vanilla.recipeMatchesTrimKey(recipe, "raiser")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.raiser");
                         inv.setResult(null);
                         return true;
@@ -164,7 +161,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimRib()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimRib(recipe)) {
+                    if (Vanilla.recipeMatchesTrimKey(recipe, "rib")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.rib");
                         inv.setResult(null);
                         return true;
@@ -172,7 +169,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimSentry()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimSentry(recipe)) {
+                    if (Vanilla.recipeMatchesTrimKey(recipe, "sentry")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.sentry");
                         inv.setResult(null);
                         return true;
@@ -180,7 +177,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimShaper()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimShaper(recipe)) {
+                    if (Version.has1_20Support() && Vanilla.recipeMatchesTrimKey(recipe, "shaper")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.shaper");
                         inv.setResult(null);
                         return true;
@@ -188,7 +185,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimSilence()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimSilence(recipe)) {
+                    if (Version.has1_20Support() && Vanilla.recipeMatchesTrimKey(recipe, "silence")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.silence");
                         inv.setResult(null);
                         return true;
@@ -196,7 +193,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimSnout()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimSnout(recipe)) {
+                    if (Vanilla.recipeMatchesTrimKey(recipe, "snout")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.snout");
                         inv.setResult(null);
                         return true;
@@ -204,7 +201,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimSpire()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimSpire(recipe)) {
+                    if (Vanilla.recipeMatchesTrimKey(recipe, "spire")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.spire");
                         inv.setResult(null);
                         return true;
@@ -212,7 +209,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimTide()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimTide(recipe)) {
+                    if (Vanilla.recipeMatchesTrimKey(recipe, "tide")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.tide");
                         inv.setResult(null);
                         return true;
@@ -220,7 +217,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimVex()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimVex(recipe)) {
+                    if (Vanilla.recipeMatchesTrimKey(recipe, "vex")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.vex");
                         inv.setResult(null);
                         return true;
@@ -228,7 +225,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimWard()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimWard(recipe)) {
+                    if (Vanilla.recipeMatchesTrimKey(recipe, "ward")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.ward");
                         inv.setResult(null);
                         return true;
@@ -236,7 +233,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimWayfinder()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimWayfinder(recipe)) {
+                    if (Version.has1_20Support() && Vanilla.recipeMatchesTrimKey(recipe, "wayfinder")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.wayfinder");
                         inv.setResult(null);
                         return true;
@@ -244,7 +241,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (!RecipeManager.getSettings().getSpecialSmithingArmorTrimWild()) {
-                    if (Vanilla.recipeMatchesSmithingArmorTrimWild(recipe)) {
+                    if (Vanilla.recipeMatchesTrimKey(recipe, "wild")) {
                         Messages.getInstance().sendOnce(player, "craft.special.armortrim.wild");
                         inv.setResult(null);
                         return true;

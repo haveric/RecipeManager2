@@ -6,8 +6,8 @@ public class VersionHandler {
 
     private static BaseToolsRecipe toolsRecipe;
 
-    public static BaseRecipeIterator getRecipeIterator() {
-        return new RecipeIteratorOld();
+    public static RecipeIterator getRecipeIterator() {
+        return new RecipeIterator();
     }
 
     public static BaseToolsRecipe getToolsRecipe() {

@@ -575,11 +575,11 @@ public class Vanilla {
      */
     public static Recipe removeCustomRecipe(BaseRecipe recipe) {
         if (recipe instanceof CraftRecipe) {
-            return replaceCraftRecipe((CraftRecipe) recipe, true);
+            return removeCraftRecipe((CraftRecipe) recipe);
         }
 
         if (recipe instanceof CombineRecipe) {
-            return replaceCombineRecipe((CombineRecipe) recipe, true);
+            return removeCombineRecipe((CombineRecipe) recipe);
         }
 
         if (recipe instanceof RMFurnaceRecipe) {
@@ -634,9 +634,9 @@ public class Vanilla {
     }
 
     private static Recipe removeFurnaceRecipe(ItemStack ingredient) {
-        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
+        RecipeIterator recipeIterator = VersionHandler.getRecipeIterator();
         BaseToolsRecipe toolsRecipe = VersionHandler.getToolsRecipe();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        Iterator<Recipe> iterator = recipeIterator.getIterator();
         Recipe r;
 
         while (iterator.hasNext()) {
@@ -646,8 +646,6 @@ public class Vanilla {
                 if (r instanceof FurnaceRecipe) {
                     if (toolsRecipe.matchesFurnace(r, ingredient)) {
                         iterator.remove();
-
-                        baseRecipeIterator.finish();
 
                         return r;
                     }
@@ -676,9 +674,9 @@ public class Vanilla {
     }
 
     private static Recipe removeBlastingRecipe(ItemStack ingredient) {
-        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
+        RecipeIterator recipeIterator = VersionHandler.getRecipeIterator();
         BaseToolsRecipe toolsRecipe = VersionHandler.getToolsRecipe();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        Iterator<Recipe> iterator = recipeIterator.getIterator();
         Recipe r;
 
         while (iterator.hasNext()) {
@@ -688,8 +686,6 @@ public class Vanilla {
                 if (r instanceof BlastingRecipe) {
                     if (toolsRecipe.matchesBlasting(r, ingredient)) {
                         iterator.remove();
-
-                        baseRecipeIterator.finish();
 
                         return r;
                     }
@@ -718,9 +714,9 @@ public class Vanilla {
     }
 
     private static Recipe removeSmokingRecipe(ItemStack ingredient) {
-        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
+        RecipeIterator recipeIterator = VersionHandler.getRecipeIterator();
         BaseToolsRecipe toolsRecipe = VersionHandler.getToolsRecipe();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        Iterator<Recipe> iterator = recipeIterator.getIterator();
         Recipe r;
 
         while (iterator.hasNext()) {
@@ -730,8 +726,6 @@ public class Vanilla {
                 if (r instanceof SmokingRecipe) {
                     if (toolsRecipe.matchesSmoking(r, ingredient)) {
                         iterator.remove();
-
-                        baseRecipeIterator.finish();
 
                         return r;
                     }
@@ -760,9 +754,9 @@ public class Vanilla {
     }
 
     private static Recipe removeCampfireRecipe(ItemStack ingredient) {
-        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
+        RecipeIterator recipeIterator = VersionHandler.getRecipeIterator();
         BaseToolsRecipe toolsRecipe = VersionHandler.getToolsRecipe();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        Iterator<Recipe> iterator = recipeIterator.getIterator();
         Recipe r;
 
         while (iterator.hasNext()) {
@@ -772,8 +766,6 @@ public class Vanilla {
                 if (r instanceof CampfireRecipe) {
                     if (toolsRecipe.matchesCampfire(r, ingredient)) {
                         iterator.remove();
-
-                        baseRecipeIterator.finish();
 
                         return r;
                     }
@@ -802,9 +794,9 @@ public class Vanilla {
     }
 
     private static Recipe removeStonecuttingRecipe(ItemStack ingredient, ItemStack result) {
-        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
+        RecipeIterator recipeIterator = VersionHandler.getRecipeIterator();
         BaseToolsRecipe toolsRecipe = VersionHandler.getToolsRecipe();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        Iterator<Recipe> iterator = recipeIterator.getIterator();
         Recipe r;
 
         while (iterator.hasNext()) {
@@ -814,8 +806,6 @@ public class Vanilla {
                 if (r instanceof StonecuttingRecipe) {
                     if (toolsRecipe.matchesStonecutting(r, ingredient, result)) {
                         iterator.remove();
-
-                        baseRecipeIterator.finish();
 
                         return r;
                     }
@@ -872,9 +862,9 @@ public class Vanilla {
     }
 
     private static Recipe removeSmithingTransformRecipe(ItemStack templateIngredient, ItemStack baseIngredient, ItemStack addIngredient) {
-        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
+        RecipeIterator recipeIterator = VersionHandler.getRecipeIterator();
         BaseToolsRecipe toolsRecipe = VersionHandler.getToolsRecipe();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        Iterator<Recipe> iterator = recipeIterator.getIterator();
         Recipe r;
 
         while (iterator.hasNext()) {
@@ -884,8 +874,6 @@ public class Vanilla {
                 if (r instanceof SmithingTransformRecipe) {
                     if (toolsRecipe.matchesSmithingTransform(r, templateIngredient, baseIngredient, addIngredient)) {
                         iterator.remove();
-
-                        baseRecipeIterator.finish();
 
                         return r;
                     }
@@ -930,9 +918,9 @@ public class Vanilla {
     }
 
     private static Recipe removeSmithingRecipe(ItemStack baseIngredient, ItemStack addIngredient) {
-        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
+        RecipeIterator recipeIterator = VersionHandler.getRecipeIterator();
         BaseToolsRecipe toolsRecipe = VersionHandler.getToolsRecipe();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+        Iterator<Recipe> iterator = recipeIterator.getIterator();
         Recipe r;
 
         while (iterator.hasNext()) {
@@ -942,8 +930,6 @@ public class Vanilla {
                 if (r instanceof SmithingRecipe) {
                     if (toolsRecipe.matchesSmithing(r, baseIngredient, addIngredient)) {
                         iterator.remove();
-
-                        baseRecipeIterator.finish();
 
                         return r;
                     }
@@ -959,16 +945,15 @@ public class Vanilla {
     }
 
     /**
-     * Replaces/Removes a RecipeManager craft recipe on the <b>server</b>
+     * Removes a RecipeManager craft recipe on the <b>server</b>
      *
      * @param recipe RecipeManager recipe
-     * @param remove Whether the recipe should be removed
      *
      * @return replaced recipe or null if not found
      */
-    public static Recipe replaceCraftRecipe(CraftRecipe recipe, boolean remove) {
-        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+    public static Recipe removeCraftRecipe(CraftRecipe recipe) {
+        RecipeIterator recipeIterator = VersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = recipeIterator.getIterator();
         ShapedRecipe sr;
         Recipe r;
 
@@ -980,14 +965,8 @@ public class Vanilla {
                     sr = (ShapedRecipe) r;
 
                     if (VersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoicePattern(), recipe.getIngredientsChoiceMap())) {
-                        if (remove) {
-                            iterator.remove();
-                        } else {
-                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
-                            baseRecipeIterator.replace(overrideItem);
-                        }
+                        iterator.remove();
 
-                        baseRecipeIterator.finish();
                         return sr;
                     }
                 }
@@ -1002,16 +981,15 @@ public class Vanilla {
     }
 
     /**
-     * Replaces/Removes a RecipeManager combine recipe from the <b>server</b>
+     * Removes a RecipeManager combine recipe from the <b>server</b>
      *
      * @param recipe RecipeManager recipe
-     * @param remove Whether the recipe should be removed
      *
      * @return replaced recipe or null if not found
      */
-    public static Recipe replaceCombineRecipe(CombineRecipe recipe, boolean remove) {
-        BaseRecipeIterator baseRecipeIterator = VersionHandler.getRecipeIterator();
-        Iterator<Recipe> iterator = baseRecipeIterator.getIterator();
+    public static Recipe removeCombineRecipe(CombineRecipe recipe) {
+        RecipeIterator recipeIterator = VersionHandler.getRecipeIterator();
+        Iterator<Recipe> iterator = recipeIterator.getIterator();
         Recipe r;
 
         List<RecipeChoice> ingredientChoices = recipe.getIngredientChoiceList();
@@ -1039,14 +1017,8 @@ public class Vanilla {
 
                 if (r instanceof ShapelessRecipe) {
                     if (VersionHandler.getToolsRecipe().matchesShapeless(r, ingredientChoiceList)) {
-                        if (remove) {
-                            iterator.remove();
-                        } else {
-                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
-                            baseRecipeIterator.replace(overrideItem);
-                        }
+                        iterator.remove();
 
-                        baseRecipeIterator.finish();
                         return r;
                     }
                 }
@@ -1193,543 +1165,18 @@ public class Vanilla {
         return isSpecial;
     }
 
-    public static boolean recipeMatchesRepair(Recipe recipe) {
-        boolean matches = false;
-
-        Keyed keyedRecipe = (Keyed) recipe;
-        NamespacedKey key = keyedRecipe.getKey();
-
-        if (key.getKey().equals("repair_item")) { // 1.13+
-            matches = true;
-        }
-
-        return matches;
+    public static boolean recipeMatchesTrimKey(Recipe recipe, String trim) {
+        return recipeMatchesKey(recipe, trim + "_armor_trim_smithing_template_smithing_trim");
     }
 
-    public static boolean recipeMatchesArmorDye(Recipe recipe) {
-        boolean matches = false;
-
-        Keyed keyedRecipe = (Keyed) recipe;
-        NamespacedKey key = keyedRecipe.getKey();
-
-        if (key.getKey().equals("armor_dye")) { // 1.13+
-            matches = true;
-        }
-
-        return matches;
-    }
-
-    public static boolean recipeMatchesMapCloning(Recipe recipe) {
-        boolean matches = false;
-
+    public static boolean recipeMatchesKey(Recipe recipe, String keyToMatch) {
         Keyed keyedRecipe = (Keyed) recipe;
         NamespacedKey key = keyedRecipe.getKey();
 
         if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            if (key.getKey().equals("map_cloning")) { // 1.13+
-                matches = true;
-            }
+            return key.getKey().equals(keyToMatch);
         }
 
-        return matches;
-    }
-
-    public static boolean recipeMatchesMapExtending(Recipe recipe) {
-        boolean matches = false;
-
-        if (recipe instanceof ShapedRecipe) {
-            ShapedRecipe shaped = (ShapedRecipe) recipe;
-
-            NamespacedKey key = shaped.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("map_extending")) { // 1.13+
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    public static boolean recipeMatchesFireworkRocket(Recipe recipe) {
-        boolean matches = false;
-
-        Keyed keyedRecipe = (Keyed) recipe;
-        NamespacedKey key = keyedRecipe.getKey();
-
-        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            if (key.getKey().equals("firework_rocket")) { // 1.13+
-                matches = true;
-            }
-        }
-
-        return matches;
-    }
-
-    public static boolean recipeMatchesFireworkStar(Recipe recipe) {
-        boolean matches = false;
-
-        Keyed keyedRecipe = (Keyed) recipe;
-        NamespacedKey key = keyedRecipe.getKey();
-
-        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            if (key.getKey().equals("firework_star")) {
-                matches = true;
-            }
-        }
-
-        return matches;
-    }
-
-    public static boolean recipeMatchesFireworkStarFade(Recipe recipe) {
-        boolean matches = false;
-
-        Keyed keyedRecipe = (Keyed) recipe;
-        NamespacedKey key = keyedRecipe.getKey();
-
-        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            if ("firework_star_fade".equals(key.getKey())) { // 1.13+
-                matches = true;
-            }
-        }
-
-        return matches;
-    }
-
-    public static boolean recipeMatchesBookCloning(Recipe recipe) {
-        boolean matches = false;
-
-        Keyed keyedRecipe = (Keyed) recipe;
-        NamespacedKey key = keyedRecipe.getKey();
-
-        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            if (key.getKey().equals("book_cloning")) { // 1.13+
-                matches = true;
-            }
-        }
-
-        return matches;
-    }
-
-    public static boolean recipeMatchesBannerDuplicate(Recipe recipe) {
-        boolean matches = false;
-
-        Keyed keyedRecipe = (Keyed) recipe;
-        NamespacedKey key = keyedRecipe.getKey();
-
-        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            if (key.getKey().equals("banner_duplicate")) { // 1.13+
-                matches = true;
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.9+
-    public static boolean recipeMatchesShieldDecoration(Recipe recipe) {
-        boolean matches = false;
-
-        Keyed keyedRecipe = (Keyed) recipe;
-        NamespacedKey key = keyedRecipe.getKey();
-
-        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            if (key.getKey().equals("shield_decoration")) { // 1.13+
-                matches = true;
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.9+
-    public static boolean recipeMatchesTippedArrow(Recipe recipe) {
-        boolean matches = false;
-
-        Keyed keyedRecipe = (Keyed) recipe;
-        NamespacedKey key = keyedRecipe.getKey();
-
-        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            if (key.getKey().equals("tipped_arrow")) { // 1.13+
-                matches = true;
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.11+
-    public static boolean recipeMatchesShulkerDye(Recipe recipe) {
-        boolean matches = false;
-
-        Keyed keyedRecipe = (Keyed) recipe;
-        NamespacedKey key = keyedRecipe.getKey();
-
-        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            if (key.getKey().equals("shulker_box_coloring")) { // 1.13+
-                matches = true;
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.14+
-    public static boolean recipeMatchesSuspiciousStew(Recipe recipe) {
-        boolean matches = false;
-
-        Keyed keyedRecipe = (Keyed) recipe;
-        NamespacedKey key = keyedRecipe.getKey();
-
-        if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-            if (key.getKey().equals("suspicious_stew")) {
-                matches = true;
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.19.4 (1.20 experimental)
-    public static boolean recipeMatchesDecoratedPot(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_19_4Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("decorated_pot")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.20.5
-    public static boolean recipeMatchesSmithingArmorTrimBolt(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_20_5Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("bolt_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.19.4 (1.20 experimental)
-    public static boolean recipeMatchesSmithingArmorTrimCoast(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_19_4Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("coast_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.19.4 (1.20 experimental)
-    public static boolean recipeMatchesSmithingArmorTrimDune(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_19_4Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("dune_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.19.4 (1.20 experimental)
-    public static boolean recipeMatchesSmithingArmorTrimEye(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_19_4Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("eye_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.20.5
-    public static boolean recipeMatchesSmithingArmorTrimFlow(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_20_5Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("flow_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.20
-    public static boolean recipeMatchesSmithingArmorTrimHost(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_20Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("host_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.20
-    public static boolean recipeMatchesSmithingArmorTrimRaiser(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_20Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("raiser_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.19.4 (1.20 experimental)
-    public static boolean recipeMatchesSmithingArmorTrimRib(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_19_4Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("rib_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.19.4 (1.20 experimental)
-    public static boolean recipeMatchesSmithingArmorTrimSentry(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_19_4Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("sentry_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.20
-    public static boolean recipeMatchesSmithingArmorTrimShaper(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_20Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("shaper_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.20
-    public static boolean recipeMatchesSmithingArmorTrimSilence(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_20Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("silence_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.19.4 (1.20 experimental)
-    public static boolean recipeMatchesSmithingArmorTrimSnout(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_19_4Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("snout_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.19.4 (1.20 experimental)
-    public static boolean recipeMatchesSmithingArmorTrimSpire(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_19_4Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("spire_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.19.4 (1.20 experimental)
-    public static boolean recipeMatchesSmithingArmorTrimTide(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_19_4Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("tide_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.19.4 (1.20 experimental)
-    public static boolean recipeMatchesSmithingArmorTrimVex(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_19_4Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("vex_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.19.4 (1.20 experimental)
-    public static boolean recipeMatchesSmithingArmorTrimWard(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_19_4Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("ward_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.20
-    public static boolean recipeMatchesSmithingArmorTrimWayfinder(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_20Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("wayfinder_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
-    }
-
-    // 1.19.4 (1.20 experimental)
-    public static boolean recipeMatchesSmithingArmorTrimWild(Recipe recipe) {
-        boolean matches = false;
-
-        if (Version.has1_19_4Support()) {
-            Keyed keyedRecipe = (Keyed) recipe;
-            NamespacedKey key = keyedRecipe.getKey();
-
-            if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {
-                if (key.getKey().equals("wild_armor_trim_smithing_template_smithing_trim")) {
-                    matches = true;
-                }
-            }
-        }
-
-        return matches;
+        return false;
     }
 }

@@ -1,6 +1,5 @@
 package haveric.recipeManager.tools;
 
-import haveric.recipeManager.common.RMCVanilla;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -36,56 +35,6 @@ public class RMBukkitTools {
             }
 
             if (!compareMaterialChoice(entry.getValue(), choiceMap.get(character), true)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public static boolean compareShapedRecipeToMatrix(ShapedRecipe recipe, ItemStack[] matrix, ItemStack[] matrixMirror) {
-        ItemStack[] ingredients = convertShapedRecipeToItemMatrix(recipe);
-
-        boolean result = compareItemMatrix(ingredients, matrix);
-
-        if (!result) {
-            result = compareItemMatrix(ingredients, matrixMirror);
-        }
-
-        return result;
-    }
-
-    public static ItemStack[] convertShapedRecipeToItemMatrix(ShapedRecipe bukkitRecipe) {
-        Map<Character, ItemStack> items = bukkitRecipe.getIngredientMap();
-        ItemStack[] matrix = new ItemStack[9];
-        String[] shape = bukkitRecipe.getShape();
-        int slot = 0;
-
-        int shapeLength = shape.length;
-        for (int r = 0; r < shapeLength; r++) {
-            for (char col : shape[r].toCharArray()) {
-                matrix[slot] = items.get(col);
-                slot++;
-            }
-
-            slot = ((r + 1) * 3);
-        }
-
-        trimItemMatrix(matrix);
-
-        return matrix;
-    }
-
-    public static boolean compareItemMatrix(ItemStack[] ingredients, ItemStack[] matrix) {
-        for (int i = 0; i < 9; i++) {
-            ItemStack matrixItem = matrix[i];
-            ItemStack ingredientItem = ingredients[i];
-
-            if (matrixItem == null && ingredientItem == null) {
-                continue;
-            }
-
-            if (matrixItem == null || ingredientItem == null || ingredientItem.getType() != matrixItem.getType() || (ingredientItem.getDurability() != RMCVanilla.DATA_WILDCARD && matrixItem.getDurability() != RMCVanilla.DATA_WILDCARD && ingredientItem.getDurability() != matrixItem.getDurability())) {
                 return false;
             }
         }
@@ -259,24 +208,6 @@ public class RMBukkitTools {
         return true;
     }
 
-    public static boolean compareIngredientList(List<ItemStack> sortedIngr, List<ItemStack> ingredients) {
-        int size = ingredients.size();
-
-        if (size != sortedIngr.size()) {
-            return false;
-        }
-
-        sortIngredientList(ingredients);
-
-        for (int i = 0; i < size; i++) {
-            if (!isSameItemPlusDur(sortedIngr.get(i), ingredients.get(i))) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public static boolean isSameItemPlusDur(ItemStack one, ItemStack two) {
         boolean same = false;
 
@@ -302,25 +233,5 @@ public class RMBukkitTools {
         }
 
         return false;
-    }
-
-    public static void sortIngredientList(List<ItemStack> ingredients) {
-        ingredients.sort((item1, item2) -> {
-            String id1 = item1.getType().toString();
-            String id2 = item2.getType().toString();
-
-            int compare;
-            if (id1.equals(id2)) {
-                if (item1.getDurability() > item2.getDurability()) {
-                    compare = -1;
-                } else {
-                    compare = 1;
-                }
-            } else {
-                compare = id1.compareTo(id2);
-            }
-
-            return compare;
-        });
     }
 }
