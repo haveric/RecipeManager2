@@ -151,14 +151,14 @@ public class WorkbenchEvents extends BaseRecipeEvents {
         ItemStack recipeResult = recipe.getResult();
 
         if (!result.equals(recipeResult)) { // result was processed by the game, and it doesn't match the original recipe
-            if (Vanilla.recipeMatchesRepair(recipe)) {
+            if (Vanilla.recipeMatchesKey(recipe, "repair_item")) {
                 if (prepareRepairRecipe(player, inv, location)) {
                     return true;
                 }
             }
 
             if (!RecipeManager.getSettings().getSpecialLeatherDye()) {
-                if (Vanilla.recipeMatchesArmorDye(recipe)) {
+                if (Vanilla.recipeMatchesKey(recipe, "armor_dye")) {
                     Messages.getInstance().sendOnce(player, "craft.special.leatherdye");
                     inv.setResult(null);
                     return true;
@@ -166,7 +166,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialMapCloning()) {
-                if (Vanilla.recipeMatchesMapCloning(recipe)) {
+                if (Vanilla.recipeMatchesKey(recipe, "map_cloning")) {
                     Messages.getInstance().sendOnce(player, "craft.special.map.cloning");
                     inv.setResult(null);
                     return true;
@@ -174,7 +174,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialMapExtending()) {
-                if (Vanilla.recipeMatchesMapExtending(recipe)) {
+                if (Vanilla.recipeMatchesKey(recipe, "map_extending")) {
                     Messages.getInstance().sendOnce(player, "craft.special.map.extending");
                     inv.setResult(null);
                     return true;
@@ -182,7 +182,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialFireworks()) {
-                if (Vanilla.recipeMatchesFireworkRocket(recipe)) {
+                if (Vanilla.recipeMatchesKey(recipe, "firework_rocket")) {
                     Messages.getInstance().sendOnce(player, "craft.special.fireworks");
                     inv.setResult(null);
                     return true;
@@ -190,7 +190,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialFireworkStar()) {
-                if (Vanilla.recipeMatchesFireworkStar(recipe)) {
+                if (Vanilla.recipeMatchesKey(recipe, "firework_star")) {
                     Messages.getInstance().sendOnce(player, "craft.special.fireworkstar");
                     inv.setResult(null);
                     return true;
@@ -198,7 +198,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialFireworkStarFade()) {
-                if (Vanilla.recipeMatchesFireworkStarFade(recipe)) {
+                if (Vanilla.recipeMatchesKey(recipe, "firework_star_fade")) {
                     Messages.getInstance().sendOnce(player, "craft.special.fireworkstarfade");
                     inv.setResult(null);
                     return true;
@@ -206,7 +206,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialBookCloning()) {
-                if (Vanilla.recipeMatchesBookCloning(recipe)) {
+                if (Vanilla.recipeMatchesKey(recipe, "book_cloning")) {
                     Messages.getInstance().sendOnce(player, "craft.special.book.cloning");
                     inv.setResult(null);
                     return true;
@@ -214,7 +214,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialBannerDuplicate()) {
-                if (Vanilla.recipeMatchesBannerDuplicate(recipe)) {
+                if (Vanilla.recipeMatchesKey(recipe, "banner_duplicate")) {
                     Messages.getInstance().sendOnce(player, "craft.special.bannerduplicate");
                     inv.setResult(null);
                     return true;
@@ -222,7 +222,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialShieldBanner()) {
-                if (Vanilla.recipeMatchesShieldDecoration(recipe)) {
+                if (Vanilla.recipeMatchesKey(recipe, "shield_decoration")) {
                     Messages.getInstance().sendOnce(player, "craft.special.shieldbanner");
                     inv.setResult(null);
                     return true;
@@ -230,7 +230,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialTippedArrows()) {
-                if (Vanilla.recipeMatchesTippedArrow(recipe)) {
+                if (Vanilla.recipeMatchesKey(recipe, "tipped_arrow")) {
                     Messages.getInstance().sendOnce(player, "craft.special.tippedarrows");
                     inv.setResult(null);
                     return true;
@@ -238,7 +238,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialShulkerDye()) {
-                if (Vanilla.recipeMatchesShulkerDye(recipe)) {
+                if (Vanilla.recipeMatchesKey(recipe, "shulker_box_coloring")) {
                     Messages.getInstance().sendOnce(player, "craft.special.shulkerdye");
                     inv.setResult(null);
                     return true;
@@ -246,7 +246,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialSuspiciousStew()) {
-                if (Vanilla.recipeMatchesSuspiciousStew(recipe)) {
+                if (Vanilla.recipeMatchesKey(recipe, "suspicious_stew")) {
                     Messages.getInstance().sendOnce(player, "craft.special.suspiciousstew");
                     inv.setResult(null);
                     return true;
@@ -254,7 +254,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialDecoratedPot()) {
-                if (Vanilla.recipeMatchesDecoratedPot(recipe)) {
+                if (Version.has1_19_4Support() && Vanilla.recipeMatchesKey(recipe, "decorated_pot")) {
                     Messages.getInstance().sendOnce(player, "craft.special.decoratedpot");
                     inv.setResult(null);
                     return true;
