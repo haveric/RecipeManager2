@@ -137,10 +137,6 @@ public class FlagRarity extends Flag {
                     return !meta.hasRarity();
                 }
 
-                if (condition.hasValue()) {
-                    return true;
-                }
-
                 if (meta.hasRarity()) {
                     return !conditionString.hasValue() || meta.getRarity() == ItemRarity.valueOf(conditionString.getValue());
                 }

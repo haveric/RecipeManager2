@@ -133,10 +133,6 @@ public class FlagMaxDamage extends Flag {
                     return !isDamageableMeta || !((Damageable) meta).hasMaxDamage();
                 }
 
-                if (condition.hasValue()) {
-                    return true;
-                }
-
                 if (isDamageableMeta && ((Damageable) meta).hasMaxDamage()) {
                     return !conditionInteger.hasValue() || ((Damageable) meta).getMaxDamage() == conditionInteger.getValue();
                 }
