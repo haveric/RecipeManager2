@@ -165,15 +165,31 @@ public class FlagBannerItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@banneritem ", "", " | ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | banner ", ",", " pattern ");
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix, String afterFirst, String patternPrefix) {
         if (meta instanceof BannerMeta) {
             BannerMeta bannerMeta = (BannerMeta) meta;
 
-            recipeString.append(Files.NL).append("@banneritem ");
+            builder.append(prefix);
 
+            boolean first = true;
             for (Pattern pattern : bannerMeta.getPatterns()) {
                 PatternType patternType = pattern.getPattern();
                 DyeColor patternColor = pattern.getColor();
-                recipeString.append(" | ").append(patternType.name()).append(" ").append(patternColor.name());
+
+                if (!first) {
+                    builder.append(afterFirst);
+                }
+                builder.append(patternPrefix).append(patternType.name()).append(" ").append(patternColor.name());
+
+                first = false;
             }
         }
     }

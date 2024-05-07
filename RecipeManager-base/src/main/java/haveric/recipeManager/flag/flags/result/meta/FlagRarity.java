@@ -166,8 +166,17 @@ public class FlagRarity extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@rarity ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | rarity ");
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
         if (meta != null && meta.hasRarity()) {
-            recipeString.append(Files.NL).append("@rarity ").append(meta.getRarity());
+            builder.append(prefix).append(meta.getRarity());
         }
     }
 }

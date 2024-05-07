@@ -208,9 +208,18 @@ public class FlagEnchantItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(item, recipeString, Files.NL + "@enchant ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(item, ingredientCondition, " | enchant ");
+    }
+
+    private void parse(ItemStack item, StringBuilder builder, String prefix) {
         if (!item.getEnchantments().isEmpty()) {
             for (Map.Entry<Enchantment, Integer> entry : item.getEnchantments().entrySet()) {
-                recipeString.append(Files.NL).append("@enchant ").append(entry.getKey().getName()).append(' ').append(entry.getValue());
+                builder.append(prefix).append(entry.getKey().getName()).append(' ').append(entry.getValue());
             }
         }
     }

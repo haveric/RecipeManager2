@@ -401,4 +401,5 @@ public abstract class Flag implements Cloneable {
     }
 
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {}
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {}
 }

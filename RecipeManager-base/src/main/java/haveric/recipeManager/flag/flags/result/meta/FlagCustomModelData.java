@@ -158,8 +158,17 @@ public class FlagCustomModelData extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@custommodeldata ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | custommodeldata ");
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
         if (meta != null && meta.hasCustomModelData()) {
-            recipeString.append(Files.NL).append("@custommodeldata ").append(meta.getCustomModelData());
+            builder.append(prefix).append(meta.getCustomModelData());
         }
     }
 }

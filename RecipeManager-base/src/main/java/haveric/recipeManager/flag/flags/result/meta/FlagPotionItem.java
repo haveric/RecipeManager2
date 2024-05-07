@@ -247,25 +247,40 @@ public class FlagPotionItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@potionitem type ", Files.NL + "@potionitem custom ", true);
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | potion type ", " | potioneffect type ", false);
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix, String effectPrefix, boolean isItemMeta) {
         if (meta instanceof PotionMeta) {
             PotionMeta potionMeta = (PotionMeta) meta;
             PotionType potionType = potionMeta.getBasePotionType();
 
-            recipeString.append(Files.NL).append("@potionitem type ").append(potionType);
+            builder.append(prefix).append(potionType);
 
-            if (potionMeta.hasColor()) {
-                Color potionColor = potionMeta.getColor();
-                if (potionColor != null) {
-                    recipeString.append(" | color ").append(potionColor.getRed()).append(" ").append(potionColor.getGreen()).append(" ").append(potionColor.getBlue());
+            if (isItemMeta) { // TODO: Add color condition
+                if (potionMeta.hasColor()) {
+                    Color potionColor = potionMeta.getColor();
+                    if (potionColor != null) {
+                        builder.append(" | color ").append(potionColor.getRed()).append(" ").append(potionColor.getGreen()).append(" ").append(potionColor.getBlue());
+                    }
                 }
             }
 
             if (potionMeta.hasCustomEffects()) {
                 List<PotionEffect> potionEffects = potionMeta.getCustomEffects();
                 for (PotionEffect effect : potionEffects) {
-                    recipeString.append(Files.NL).append("@potionitem custom ");
+                    builder.append(effectPrefix);
 
-                    ToolsFlag.parsePotionEffectForItemMeta(recipeString, effect);
+                    if (isItemMeta) {
+                        ToolsFlag.parsePotionEffectForItemMeta(builder, effect);
+                    } else {
+                        ToolsFlag.parsePotionEffectForCondition(builder, effect);
+                    }
                 }
             }
         }

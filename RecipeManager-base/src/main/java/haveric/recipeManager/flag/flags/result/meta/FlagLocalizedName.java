@@ -119,11 +119,20 @@ public class FlagLocalizedName extends Flag {
         return toHash.hashCode();
     }
 
-    @SuppressWarnings("removal")
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@localizedname ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | localizedname ");
+    }
+
+    @SuppressWarnings("removal")
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
         if (meta != null && meta.hasLocalizedName()) {
-            recipeString.append(Files.NL).append("@localizedname ").append(meta.getLocalizedName());
+            builder.append(prefix).append(meta.getLocalizedName());
         }
     }
 }

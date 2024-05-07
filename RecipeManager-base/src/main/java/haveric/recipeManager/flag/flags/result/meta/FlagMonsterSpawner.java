@@ -317,4 +317,6 @@ public class FlagMonsterSpawner extends Flag {
             }
         }
     }
+
+    // TODO: Add condition support for FlagMonsterSpawner
 }

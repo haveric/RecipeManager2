@@ -215,11 +215,20 @@ public class FlagItemLore extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@lore ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | lore ");
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
         if (meta != null && meta.hasLore()) {
             List<String> lores = meta.getLore();
             if (lores != null) {
                 for (String lore : lores) {
-                    recipeString.append(Files.NL).append("@lore ").append(lore);
+                    builder.append(prefix).append(lore);
                 }
             }
         }

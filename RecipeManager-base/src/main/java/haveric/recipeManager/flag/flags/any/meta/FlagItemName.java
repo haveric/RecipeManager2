@@ -163,8 +163,17 @@ public class FlagItemName extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@itemname ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | itemname ");
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
         if (meta != null && meta.hasItemName()) {
-            recipeString.append(Files.NL).append("@itemname ").append(meta.getItemName());
+            builder.append(prefix).append(meta.getItemName());
         }
     }
 }

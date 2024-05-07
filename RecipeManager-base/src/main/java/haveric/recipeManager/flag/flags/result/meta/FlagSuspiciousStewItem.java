@@ -169,14 +169,27 @@ public class FlagSuspiciousStewItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@suspiciousstewitem ", true);
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | suspiciousstew type ", false);
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix, boolean isItemMeta) {
         if (meta instanceof SuspiciousStewMeta) {
             SuspiciousStewMeta stewMeta = (SuspiciousStewMeta) meta;
             if (stewMeta.hasCustomEffects()) {
                 List<PotionEffect> potionEffects = stewMeta.getCustomEffects();
                 for (PotionEffect effect : potionEffects) {
-                    recipeString.append(Files.NL).append("@suspiciousstewitem ");
+                    builder.append(prefix);
 
-                    ToolsFlag.parsePotionEffectForItemMeta(recipeString, effect);
+                    if (isItemMeta) {
+                        ToolsFlag.parsePotionEffectForItemMeta(builder, effect);
+                    } else {
+                        ToolsFlag.parsePotionEffectForCondition(builder, effect);
+                    }
                 }
             }
         }

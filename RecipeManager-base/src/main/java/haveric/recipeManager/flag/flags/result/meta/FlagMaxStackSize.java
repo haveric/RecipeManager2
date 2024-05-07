@@ -162,8 +162,17 @@ public class FlagMaxStackSize extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@maxstacksize ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | maxstacksize ");
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
         if (meta != null && meta.hasMaxStackSize()) {
-            recipeString.append(Files.NL).append("@maxstacksize ").append(meta.getMaxStackSize());
+            builder.append(prefix).append(meta.getMaxStackSize());
         }
     }
 }

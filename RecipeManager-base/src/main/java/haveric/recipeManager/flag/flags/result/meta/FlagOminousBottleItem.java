@@ -201,11 +201,20 @@ public class FlagOminousBottleItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@ominousbottle ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | ominousbottle ");
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
         if (meta instanceof OminousBottleMeta) {
             OminousBottleMeta ominousBottleMeta = (OminousBottleMeta) meta;
 
             if (ominousBottleMeta.hasAmplifier()) {
-                recipeString.append(Files.NL).append("@ominousbottle ").append(ominousBottleMeta.getAmplifier());
+                builder.append(prefix).append(ominousBottleMeta.getAmplifier());
             }
         }
     }
