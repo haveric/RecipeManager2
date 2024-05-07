@@ -8,6 +8,10 @@ public abstract class Condition {
     protected CheckCallback checkCallback;
     protected String name;
 
+    public Condition(String name) {
+        this.name = name;
+    }
+
     public Condition(String name, CheckCallback checkCallback) {
         this.name = name;
         this.checkCallback = checkCallback;
@@ -21,6 +25,10 @@ public abstract class Condition {
     public abstract void copy(Condition condition);
     public abstract String getHashString();
     public abstract void addReasons(Args a, ItemStack item, ItemMeta meta, String failMessage);
+
+    public void setCheckCallback(CheckCallback checkCallback) {
+        this.checkCallback = checkCallback;
+    }
 
     public boolean check(ItemStack item, ItemMeta meta) {
         return this.checkCallback.checkCondition(item, meta, this);

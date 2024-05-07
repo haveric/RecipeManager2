@@ -148,38 +148,26 @@ public class FlagOminousBottleItem extends Flag {
 
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
-        Integer value = null;
-        String conditionName = getConditionName();
-        if (argLower.startsWith("!" + conditionName) || argLower.startsWith("no" + conditionName)) {
-            value = Integer.MIN_VALUE;
-        } else if (argLower.startsWith(conditionName)) {
-            String argTrimmed = argLower.substring(conditionName.length()).trim();
-
-            try {
-                value = Integer.parseInt(argTrimmed);
-            } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has '" + conditionName + "' argument with invalid number: " + argTrimmed);
-            }
-        }
-
-        if (!noMeta && value == null) {
+        ConditionInteger returnCondition = new ConditionInteger(getConditionName(), getFlagType(), argLower, noMeta);
+        if (returnCondition.skipCondition()) {
             return null;
-        } else {
-            Integer finalValue = value;
-            return new ConditionInteger(conditionName, finalValue, (item, meta, condition) -> {
-                ConditionInteger conditionInteger = (ConditionInteger) condition;
-                boolean isOminousBottleMeta = meta instanceof OminousBottleMeta;
-                if (noMeta || finalValue == Integer.MIN_VALUE) {
-                    return !isOminousBottleMeta || !((OminousBottleMeta) meta).hasAmplifier();
-                }
-
-                if (isOminousBottleMeta && ((OminousBottleMeta) meta).hasAmplifier()) {
-                    return !conditionInteger.hasValue() || ((OminousBottleMeta) meta).getAmplifier() == conditionInteger.getValue();
-                }
-
-                return false;
-            });
         }
+
+        returnCondition.setCheckCallback((item, meta, condition) -> {
+            ConditionInteger callbackCondition = (ConditionInteger) condition;
+            boolean isOminousBottleMeta = meta instanceof OminousBottleMeta;
+            if (callbackCondition.shouldHaveNoMeta()) {
+                return !isOminousBottleMeta || !((OminousBottleMeta) meta).hasAmplifier();
+            }
+
+            if (isOminousBottleMeta &&  ((OminousBottleMeta) meta).hasAmplifier()) {
+                return !callbackCondition.hasValue() || callbackCondition.contains(((OminousBottleMeta) meta).getAmplifier());
+            }
+
+            return false;
+        });
+
+        return returnCondition;
     }
 
     @Override
@@ -190,7 +178,12 @@ public class FlagOminousBottleItem extends Flag {
     @Override
     public String[] getConditionDescription() {
         return new String[] {
-            "  ominousbottleamplifier <amount> = Ingredient must have an ominous bottle amplifier",
+            "  ominousbottleamplifier <number> = Ingredient must have an ominous bottle amplifier",
+            "    <number> supports ranges: <min>-<max>",
+            "    <number> supports multiple values that are comma separated: <number1>, <number2>, <number3>",
+            "    <number> supports negative matching by preceding a number (or range) with an exclamation mark `!`: !<min>-<max>, !<number>",
+            "    <number> any combination of the above can be combined together: <min>-<max>, <number1>, !<number2>, !<min>-<max>",
+            "      Matching for <number> must match ANY of the non-negative values and NONE of the negative values",
             "  noominousbottleamplifier or !ominousbottleamplifier = Ingredient must not have an ominous bottle amplifier",
         };
     }
