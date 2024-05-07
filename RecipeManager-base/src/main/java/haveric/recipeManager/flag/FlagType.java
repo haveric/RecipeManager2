@@ -79,6 +79,7 @@ public class FlagType {
     public static final String LEATHER_COLOR = "@leathercolor";
     public static final String LOCALIZED_NAME = "@localizedname";
     public static final String MAP_ITEM = "@mapitem";
+    public static final String MAX_DAMAGE = "@maxdamage";
     public static final String MAX_STACK_SIZE = "@maxstacksize";
     public static final String MONSTER_SPAWNER = "@monsterspawner";
     public static final String OMINOUS_BOTTLE_ITEM = "@ominousbottleitem";
