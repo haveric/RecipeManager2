@@ -136,6 +136,9 @@ public class FlagLoader {
             loadFlag(FlagType.LOCALIZED_NAME, new FlagLocalizedName(), APPLIED_TO_ITEM);
         }
         loadFlag(FlagType.MAP_ITEM, new FlagMapItem(), APPLIED_TO_ITEM, "map");
+        if (Version.has1_20_5Support()) {
+            loadFlag(FlagType.MAX_DAMAGE, new FlagMaxDamage(), APPLIED_TO_ITEM, "damagemax", "maxdurability", "maxdur");
+        }
         loadFlag(FlagType.MONSTER_SPAWNER, new FlagMonsterSpawner(), APPLIED_TO_ITEM, "spawner", "mobspawner");
         if (Version.has1_20_5Support()) {
             loadFlag(FlagType.OMINOUS_BOTTLE_ITEM, new FlagOminousBottleItem(), APPLIED_TO_ITEM, "ominousbottle");
