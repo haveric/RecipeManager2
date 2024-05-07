@@ -215,4 +215,6 @@ public class FlagCrossbowItem extends Flag {
             }
         }
     }
+
+    // TODO: Add condition support for FlagCrossbowItem
 }

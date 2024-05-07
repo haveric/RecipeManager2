@@ -6,6 +6,8 @@ import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.flag.conditions.condition.Condition;
+import haveric.recipeManager.flag.conditions.condition.ConditionInteger;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
@@ -46,7 +48,7 @@ public class FlagRepairCost extends Flag {
             "{flag} 25 // Sets the default repair cost to 25", };
     }
 
-    private int cost;
+    private Integer cost = null;
     boolean useLoreMessage = false;
     String loreMessage = null;
 
@@ -154,7 +156,7 @@ public class FlagRepairCost extends Flag {
     public void onPrepare(Args a) {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
-            if (!(meta instanceof Repairable)) {
+            if (!(meta instanceof Repairable) || cost == null) {
                 return;
             }
 
@@ -174,7 +176,7 @@ public class FlagRepairCost extends Flag {
     public void onCrafted(Args a) {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
-            if (!(meta instanceof Repairable)) {
+            if (!(meta instanceof Repairable) || cost == null) {
                 return;
             }
 
@@ -198,11 +200,73 @@ public class FlagRepairCost extends Flag {
     }
 
     @Override
+    public Condition parseCondition(String argLower, boolean noMeta) {
+        Integer value = null;
+        String conditionName = getConditionName();
+        if (argLower.startsWith("!" + conditionName) || argLower.startsWith("no" + conditionName)) {
+            value = Integer.MIN_VALUE;
+        } else if (argLower.startsWith(conditionName)) {
+            String argTrimmed = argLower.substring(conditionName.length()).trim();
+
+            try {
+                value = Integer.parseInt(argTrimmed);
+            } catch (NumberFormatException e) {
+                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has '" + conditionName + "' argument with invalid number: " + argTrimmed);
+            }
+        }
+
+        if (!noMeta && value == null) {
+            return null;
+        } else {
+            Integer finalValue = value;
+            return new ConditionInteger(conditionName, finalValue, (item, meta, condition) -> {
+                ConditionInteger conditionInteger = (ConditionInteger) condition;
+                boolean isRepariableMeta = meta instanceof Repairable;
+                if (noMeta || finalValue == Integer.MIN_VALUE) {
+                    return !isRepariableMeta || !((Repairable) meta).hasRepairCost();
+                }
+
+                if (condition.hasValue()) {
+                    return true;
+                }
+
+                if (isRepariableMeta && ((Repairable) meta).hasRepairCost()) {
+                    return !conditionInteger.hasValue() || ((Repairable) meta).getRepairCost() == conditionInteger.getValue();
+                }
+
+                return false;
+            });
+        }
+    }
+
+    @Override
+    public String getConditionName() {
+        return "repaircost";
+    }
+
+    @Override
+    public String[] getConditionDescription() {
+        return new String[] {
+            "  repaircost <amount> = Ingredient must have a repair cost",
+            "  norepaircost or !repaircost = Ingredient must not have repair cost",
+        };
+    }
+
+    @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@repaircost ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | repaircost ");
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
         if (meta instanceof Repairable) {
             Repairable repairableMeta = (Repairable) meta;
             if (repairableMeta.hasRepairCost()) {
-                recipeString.append(Files.NL).append("@repaircost ").append(repairableMeta.getRepairCost());
+                builder.append(prefix).append(repairableMeta.getRepairCost());
             }
         }
     }

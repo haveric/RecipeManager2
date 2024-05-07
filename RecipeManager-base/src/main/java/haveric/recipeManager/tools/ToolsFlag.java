@@ -5,40 +5,46 @@ import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagDescriptor;
 import haveric.recipeManager.flag.FlagFactory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
 public class ToolsFlag {
     public static void parseItemMeta(ItemStack item, StringBuilder recipeString) {
-        ItemMeta meta = item.getItemMeta();
         for (FlagDescriptor flagDescriptor : FlagFactory.getInstance().getFlags().values()) {
             Flag flag = flagDescriptor.getFlag();
-            flag.parseItemMeta(item, meta, recipeString);
+            flag.parseItemMeta(item, item.getItemMeta(), recipeString);
         }
 
         recipeString.append(Files.NL);
     }
 
     public static void parsePotionEffectForItemMeta(StringBuilder recipeString, PotionEffect effect) {
-        recipeString.append(effect.getType());
+        parsePotionEffect(recipeString, effect, " | ");
+    }
+
+    public static void parsePotionEffectForCondition(StringBuilder ingredientCondition, PotionEffect effect) {
+        parsePotionEffect(ingredientCondition, effect, ", ");
+    }
+
+    private static void parsePotionEffect(StringBuilder builder, PotionEffect effect, String separator) {
+        builder.append(effect.getType());
 
         int duration = effect.getDuration();
         if (duration != 20) {
             float durationInSeconds = (float) (duration / 20);
-            recipeString.append(" | duration ").append(durationInSeconds);
+            builder.append(separator).append("duration ").append(durationInSeconds);
         }
         int amplifier = effect.getAmplifier();
         if (amplifier != 0) {
-            recipeString.append(" | amplifier ").append(amplifier);
+            builder.append(separator).append("amplifier ").append(amplifier);
         }
         if (!effect.isAmbient()) {
-            recipeString.append(" | !ambient");
+            builder.append(separator).append("!ambient");
         }
         if (!effect.hasParticles()) {
-            recipeString.append(" | !particles");
+            builder.append(separator).append("!particles");
         }
         if (!effect.hasIcon()) {
-            recipeString.append(" | !icon");
+            builder.append(separator).append("!icon");
         }
     }
 }

@@ -381,4 +381,6 @@ public class FlagSkullOwner extends Flag {
             // TODO: Handle texture somehow
         }
     }
+
+    // TODO: Add condition support for FlagSkullOwner
 }

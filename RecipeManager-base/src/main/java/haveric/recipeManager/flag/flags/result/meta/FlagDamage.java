@@ -163,12 +163,20 @@ public class FlagDamage extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@damage ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | damage ");
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
         if (meta instanceof Damageable) {
             Damageable damageable = (Damageable) meta;
             if (damageable.hasDamage()) {
-                recipeString.append(Files.NL).append("@damage ").append(damageable.getDamage());
+                builder.append(prefix).append(damageable.getDamage());
             }
-
         }
     }
 }

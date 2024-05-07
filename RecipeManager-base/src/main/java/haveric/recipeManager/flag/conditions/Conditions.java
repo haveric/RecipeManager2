@@ -54,7 +54,6 @@ public class Conditions implements Cloneable {
     private Map<PotionEffectType, ConditionPotionEffect> potionEffectConditions = new HashMap<>();
     private Map<PotionEffectType, ConditionPotionEffect> suspiciousStewConditions = new HashMap<>();
     private Map<PatternType, DyeColor> bannerPatterns = new HashMap<>();
-    private EntityType spawnEggEntityType;
     private String localizedName;
 
     private boolean noMeta = false;

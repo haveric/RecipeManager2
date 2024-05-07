@@ -257,6 +257,15 @@ public class FlagEnchantedBook extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@enchantedbook ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | bookenchant ");
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
         if (meta instanceof EnchantmentStorageMeta) {
             EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) meta;
 
@@ -266,10 +275,10 @@ public class FlagEnchantedBook extends Flag {
                     Enchantment enchantment = entry.getKey();
                     Integer level = entry.getValue();
 
-                    recipeString.append(Files.NL).append("@enchantedbook ").append(enchantment.toString());
+                    builder.append(prefix).append(enchantment.toString());
 
                     if (level != enchantment.getStartLevel()) {
-                        recipeString.append(" ").append(level);
+                        builder.append(" ").append(level);
                     }
                 }
             }

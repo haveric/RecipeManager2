@@ -229,4 +229,6 @@ public class FlagCompassItem extends Flag {
             }
         }
     }
+
+    // TODO: Add condition support for FlagCompassItem
 }

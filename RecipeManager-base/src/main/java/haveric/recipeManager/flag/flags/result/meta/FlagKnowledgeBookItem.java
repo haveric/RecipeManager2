@@ -194,4 +194,6 @@ public class FlagKnowledgeBookItem extends Flag {
             }
         }
     }
+
+    // TODO: Add condition support for FlagKnowledgeBookItem
 }

@@ -236,4 +236,6 @@ public class FlagHide extends Flag {
             }
         }
     }
+
+    // TODO: Add condition support for FlagHide
 }

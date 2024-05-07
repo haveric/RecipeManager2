@@ -160,4 +160,6 @@ public class FlagFoodPotionEffect extends Flag {
             }
         }
     }
+
+    // TODO: Add condition support for FlagFoodPotionEffect
 }

@@ -143,8 +143,17 @@ public class FlagEnchantmentGlintOverride extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@enchantmentglint ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | enchantmentglint ");
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
         if (meta != null && meta.hasEnchantmentGlintOverride()) {
-            recipeString.append(Files.NL).append("@enchantmentglint");
+            builder.append(prefix);
         }
     }
 }

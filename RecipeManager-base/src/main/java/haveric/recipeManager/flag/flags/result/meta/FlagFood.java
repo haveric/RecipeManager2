@@ -230,4 +230,6 @@ public class FlagFood extends Flag {
             recipeString.append(" | seconds ").append(food.getEatSeconds());
         }
     }
+
+    // TODO: Add condition support for FlagFood
 }

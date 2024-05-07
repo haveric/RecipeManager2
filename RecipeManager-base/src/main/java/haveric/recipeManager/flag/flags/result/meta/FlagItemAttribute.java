@@ -239,4 +239,6 @@ public class FlagItemAttribute extends Flag {
             }
         }
     }
+
+    // TODO: Add condition support for FlagItemAttribute
 }

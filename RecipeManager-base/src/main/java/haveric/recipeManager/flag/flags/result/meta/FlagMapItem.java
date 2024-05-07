@@ -449,4 +449,6 @@ public class FlagMapItem extends Flag {
             }
         }
     }
+
+    // TODO: Add condition support for FlagMapItem
 }

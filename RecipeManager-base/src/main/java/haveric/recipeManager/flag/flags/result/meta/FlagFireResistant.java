@@ -143,8 +143,17 @@ public class FlagFireResistant extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@fireresistant ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | fireresistant ");
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
         if (meta != null && meta.isFireResistant()) {
-            recipeString.append(Files.NL).append("@fireresistant");
+            builder.append(prefix);
         }
     }
 }

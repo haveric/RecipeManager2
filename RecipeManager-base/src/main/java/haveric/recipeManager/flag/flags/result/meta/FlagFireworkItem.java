@@ -256,4 +256,6 @@ public class FlagFireworkItem extends Flag {
             }
         }
     }
+
+    // TODO: Add condition support for FlagFireworkItem
 }

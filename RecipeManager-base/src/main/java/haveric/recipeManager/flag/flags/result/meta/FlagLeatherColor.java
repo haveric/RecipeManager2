@@ -129,12 +129,21 @@ public class FlagLeatherColor extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@leathercolor ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | color ");
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
         if (meta instanceof LeatherArmorMeta) {
             LeatherArmorMeta leatherMeta = (LeatherArmorMeta) meta;
             Color color = leatherMeta.getColor();
 
             if (!color.equals(Bukkit.getItemFactory().getDefaultLeatherColor())) {
-                recipeString.append(Files.NL).append("@leathercolor ").append(color.getRed()).append(' ').append(color.getGreen()).append(' ').append(color.getBlue());
+                builder.append(prefix).append(color.getRed()).append(' ').append(color.getGreen()).append(' ').append(color.getBlue());
             }
         }
     }

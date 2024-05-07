@@ -143,8 +143,17 @@ public class FlagHideTooltip extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
+        parse(meta, recipeString, Files.NL + "@hidetooltip ");
+    }
+
+    @Override
+    public void parseIngredientForConditions(ItemStack item, ItemMeta meta, StringBuilder ingredientCondition) {
+        parse(meta, ingredientCondition, " | hidetooltip ");
+    }
+
+    private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
         if (meta != null && meta.isHideTooltip()) {
-            recipeString.append(Files.NL).append("@hidetooltip");
+            builder.append(prefix);
         }
     }
 }
