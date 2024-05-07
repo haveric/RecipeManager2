@@ -201,38 +201,26 @@ public class FlagRepairCost extends Flag {
 
     @Override
     public Condition parseCondition(String argLower, boolean noMeta) {
-        Integer value = null;
-        String conditionName = getConditionName();
-        if (argLower.startsWith("!" + conditionName) || argLower.startsWith("no" + conditionName)) {
-            value = Integer.MIN_VALUE;
-        } else if (argLower.startsWith(conditionName)) {
-            String argTrimmed = argLower.substring(conditionName.length()).trim();
-
-            try {
-                value = Integer.parseInt(argTrimmed);
-            } catch (NumberFormatException e) {
-                ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has '" + conditionName + "' argument with invalid number: " + argTrimmed);
-            }
-        }
-
-        if (!noMeta && value == null) {
+        ConditionInteger returnCondition = new ConditionInteger(getConditionName(), getFlagType(), argLower, noMeta);
+        if (returnCondition.skipCondition()) {
             return null;
-        } else {
-            Integer finalValue = value;
-            return new ConditionInteger(conditionName, finalValue, (item, meta, condition) -> {
-                ConditionInteger conditionInteger = (ConditionInteger) condition;
-                boolean isRepariableMeta = meta instanceof Repairable;
-                if (noMeta || finalValue == Integer.MIN_VALUE) {
-                    return !isRepariableMeta || !((Repairable) meta).hasRepairCost();
-                }
-
-                if (isRepariableMeta && ((Repairable) meta).hasRepairCost()) {
-                    return !conditionInteger.hasValue() || ((Repairable) meta).getRepairCost() == conditionInteger.getValue();
-                }
-
-                return false;
-            });
         }
+
+        returnCondition.setCheckCallback((item, meta, condition) -> {
+            ConditionInteger callbackCondition = (ConditionInteger) condition;
+            boolean isRepariableMeta = meta instanceof Repairable;
+            if (callbackCondition.shouldHaveNoMeta()) {
+                return !isRepariableMeta || !((Repairable) meta).hasRepairCost();
+            }
+
+            if (isRepariableMeta &&  ((Repairable) meta).hasRepairCost()) {
+                return !callbackCondition.hasValue() || callbackCondition.contains(((Repairable) meta).getRepairCost());
+            }
+
+            return false;
+        });
+
+        return returnCondition;
     }
 
     @Override
@@ -243,7 +231,12 @@ public class FlagRepairCost extends Flag {
     @Override
     public String[] getConditionDescription() {
         return new String[] {
-            "  repaircost <amount> = Ingredient must have a repair cost",
+            "  repaircost <number> = Ingredient must have a repair cost",
+            "    <number> supports ranges: <min>-<max>",
+            "    <number> supports multiple values that are comma separated: <number1>, <number2>, <number3>",
+            "    <number> supports negative matching by preceding a number (or range) with an exclamation mark `!`: !<min>-<max>, !<number>",
+            "    <number> any combination of the above can be combined together: <min>-<max>, <number1>, !<number2>, !<min>-<max>",
+            "      Matching for <number> must match ANY of the non-negative values and NONE of the negative values",
             "  norepaircost or !repaircost = Ingredient must not have repair cost",
         };
     }
