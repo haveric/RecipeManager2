@@ -16,7 +16,6 @@ import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
-import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.bukkit.inventory.recipe.CraftingBookCategory;
 
@@ -75,33 +74,9 @@ public class CombineRecipe extends PreparableResultRecipe {
         return choicePattern;
     }
 
-    private void setIngredientsChoiceMap(ShapedRecipe recipe) {
-        ingredientsChoiceMap.clear();
-        ingredientsChoiceMap.putAll(recipe.getChoiceMap());
-
-        updateHash();
-    }
-
     public void setIngredientsRecipeChoiceMap(Map<Character, RecipeChoice> newIngredientsChoiceMap) {
         ingredientsChoiceMap.clear();
         ingredientsChoiceMap.putAll(newIngredientsChoiceMap);
-
-        updateHash();
-    }
-
-    public void setIngredientsChoiceMap(Map<Character, List<Material>> newIngredientsChoiceMap) {
-        ingredientsChoiceMap.clear();
-
-        for (Map.Entry<Character, List<Material>> entry : newIngredientsChoiceMap.entrySet()) {
-            List<Material> materials = entry.getValue();
-
-            if (materials.size() == 1 && materials.get(0) == Material.AIR) {
-                ingredientsChoiceMap.put(entry.getKey(), null);
-            } else {
-                RecipeChoice.MaterialChoice newMaterialList = new RecipeChoice.MaterialChoice(entry.getValue());
-                ingredientsChoiceMap.put(entry.getKey(), newMaterialList);
-            }
-        }
 
         updateHash();
     }

@@ -190,7 +190,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialFireworkStar()) {
-                if (Vanilla.recipeMatchesFireworkStar(recipe, result, inv.getMatrix())) {
+                if (Vanilla.recipeMatchesFireworkStar(recipe)) {
                     Messages.getInstance().sendOnce(player, "craft.special.fireworkstar");
                     inv.setResult(null);
                     return true;
@@ -198,7 +198,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             if (!RecipeManager.getSettings().getSpecialFireworkStarFade()) {
-                if (Vanilla.recipeMatchesFireworkStarFade(recipe, result, inv.getMatrix())) {
+                if (Vanilla.recipeMatchesFireworkStarFade(recipe)) {
                     Messages.getInstance().sendOnce(player, "craft.special.fireworkstarfade");
                     inv.setResult(null);
                     return true;

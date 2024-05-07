@@ -17,7 +17,6 @@ import org.bukkit.potion.PotionType;
 import java.util.*;
 
 public class ToolsRecipeChoice {
-
     public static boolean isValidMetaType(RecipeChoice choice, Class<?> metaClass) {
         if (choice instanceof RecipeChoice.MaterialChoice) {
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;

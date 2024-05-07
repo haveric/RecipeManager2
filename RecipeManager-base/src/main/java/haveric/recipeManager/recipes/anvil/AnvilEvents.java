@@ -537,27 +537,6 @@ public class AnvilEvents extends BaseRecipeEvents {
         }
     }
 
-    private void updateAnvilInventory(Player player, AnvilInventory anvilInventory) {
-        Anvil anvil = Anvils.get(player);
-
-        boolean leftMatch = ToolsItem.isSameItemHash(anvilInventory.getItem(0), anvil.getIngredientSingleStack(0));
-
-        boolean rightMatch = false;
-        if (leftMatch) {
-            rightMatch = ToolsItem.isSameItemHash(anvilInventory.getItem(1), anvil.getIngredientSingleStack(1));
-
-            if (rightMatch) {
-                // Force a new prepare event by setting an item
-                anvilInventory.setItem(0, anvil.getIngredient(0));
-            }
-        }
-
-        if (!leftMatch || !rightMatch) {
-            Anvils.remove(player);
-        }
-    }
-
-
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void anvilPlayerInteract(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {

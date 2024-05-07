@@ -3,7 +3,6 @@ package haveric.recipeManager.recipes.cooking.furnace;
 import com.google.common.base.Preconditions;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.common.RMCChatColor;
-import haveric.recipeManager.common.RMCVanilla;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
@@ -13,7 +12,6 @@ import haveric.recipeManager.recipes.cooking.RMBaseCookingRecipe;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.inventory.CookingRecipe;
-import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 
 public class RMBaseFurnaceRecipe extends RMBaseCookingRecipe {
@@ -47,13 +45,6 @@ public class RMBaseFurnaceRecipe extends RMBaseCookingRecipe {
         super(flags);
     }
 
-    // Legacy constructor for 1.13 / 1.12
-    public RMBaseFurnaceRecipe(FurnaceRecipe recipe) {
-        setIngredientChoice(recipe.getInputChoice());
-        setResult(recipe.getResult());
-    }
-
-    // Constructor for 1.14 +
     public RMBaseFurnaceRecipe(CookingRecipe<?> recipe) {
         super(recipe);
     }
@@ -70,16 +61,6 @@ public class RMBaseFurnaceRecipe extends RMBaseCookingRecipe {
         } else {
             fuel = new ItemResult(newFuel).setRecipe(this);
         }
-    }
-
-    public String getFuelIndex() {
-        String fuelIndex = "" + fuel.getType();
-
-        if (fuel.getDurability() != RMCVanilla.DATA_WILDCARD) {
-            fuelIndex += ":" + fuel.getDurability();
-        }
-
-        return fuelIndex;
     }
 
     public boolean hasFuel() {

@@ -69,7 +69,6 @@ public class RecipeTypeLoader {
         loadRecipeType(RMCRecipeType.SMOKING.getDirective(), new RMSmokingRecipe(), new RMBaseFurnaceRecipeParser(RMCRecipeType.SMOKING), new RMBaseFurnaceEvents());
         loadRecipeType(RMCRecipeType.STONECUTTING.getDirective(), new RMStonecuttingRecipe(), new RMStonecuttingRecipeParser());
 
-
         if (Version.has1_19_4Support()) {
             loadRecipeType(RMCRecipeType.SMITHING.getDirective(), new RMSmithing1_19_4TransformRecipe(), new RMSmithingRecipeParser(), new RMSmithingEvents());
         } else {

@@ -13,7 +13,6 @@ public class ToolsInventory {
     private static final int PLAYER_INVENTORY_SIZE = 36;
 
     public static void simulateDrag(Player player, Inventory topInventory, Inventory bottomInventory, Map<Integer, ItemStack> newItemsMap, ItemStack cursor) {
-
         int topInventorySize = topInventory.getSize();
         for (Map.Entry<Integer, ItemStack> entry : newItemsMap.entrySet()) {
             int slot = entry.getKey();
