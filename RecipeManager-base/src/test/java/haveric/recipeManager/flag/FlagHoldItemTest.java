@@ -4,6 +4,7 @@ import haveric.recipeManager.RecipeProcessor;
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeInfo;
 import haveric.recipeManager.flag.conditions.ConditionsHold;
+import haveric.recipeManager.flag.conditions.condition.ConditionString;
 import haveric.recipeManager.flag.flags.any.FlagHoldItem;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
@@ -53,18 +54,21 @@ public class FlagHoldItemTest extends FlagBaseTest {
                 } else if (resultType == Material.GRAVEL) {
                     List<ConditionsHold> conditions = flag.getConditions(new ItemStack(Material.DIAMOND_SHOVEL));
                     ConditionsHold cond = conditions.get(0);
-                    assertEquals(RMCChatColor.COLOR_CHAR + "bHammer", cond.getDisplayName());
+                    ConditionString conditionString = (ConditionString) cond.getConditions().get("name");
+                    assertEquals(RMCChatColor.COLOR_CHAR + "bHammer", conditionString.getValuesString());
                     assertEquals(RMCChatColor.COLOR_CHAR + "cFoo", cond.getFailMessage());
                 } else if (resultType == Material.COBBLESTONE) {
                     List<ConditionsHold> conditions = flag.getConditions(new ItemStack(Material.DIRT));
                     ConditionsHold cond = conditions.get(0);
-                    assertEquals("One", cond.getDisplayName());
+                    ConditionString conditionString = (ConditionString) cond.getConditions().get("name");
+                    assertEquals("One", conditionString.getValuesString());
                     assertEquals("Two", cond.getLores().get(0));
                     assertEquals("Three", cond.getFailMessage());
                 } else if (resultType == Material.STONE) {
                     List<ConditionsHold> conditions = flag.getConditions(new ItemStack(Material.DIRT));
                     ConditionsHold cond = conditions.get(0);
-                    assertEquals("   One   ", cond.getDisplayName());
+                    ConditionString conditionString = (ConditionString) cond.getConditions().get("name");
+                    assertEquals("   One   ", conditionString.getValuesString());
                     assertEquals("   Two   ", cond.getLores().get(0));
                     assertEquals("   Three   ", cond.getFailMessage());
                 }

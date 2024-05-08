@@ -137,7 +137,7 @@ public class ConditionString extends Condition {
             matchesName = true;
         } else if (argLower.startsWith(name)) {
             matchesName = true;
-            String argTrimmed = argLower.substring(name.length()).trim();
+            String argTrimmed = originalArg.substring(name.length()).trim();
             String[] args = argTrimmed.split(",");
             for (String arg : args) {
                 boolean negative = false;
@@ -172,29 +172,34 @@ public class ConditionString extends Condition {
     @Override
     public void addReasons(Args a, ItemStack item, ItemMeta meta, String failMessage) {
         if (hasValue()) {
-            StringBuilder data = new StringBuilder();
-            boolean firstValue = true;
-            for (String value : values) {
-                if (!firstValue) {
-                    data.append(",");
-                }
-                data.append(value);
-
-                firstValue = false;
-            }
-
-            for (String value : negativeValues) {
-                if (!firstValue) {
-                    data.append(",");
-                }
-                data.append(value);
-
-                firstValue = false;
-            }
-            a.addReason("flag.ingredientconditions.no" + name, failMessage, "{item}", ToolsItem.print(item), "{data}", data.toString());
+            a.addReason("flag.ingredientconditions.no" + name, failMessage, "{item}", ToolsItem.print(item), "{data}", getValuesString());
         } else {
             a.addReason("flag.ingredientconditions.empty" + name, failMessage, "{item}", ToolsItem.print(item));
         }
+    }
+
+    public String getValuesString() {
+        StringBuilder data = new StringBuilder();
+        boolean firstValue = true;
+        for (String value : values) {
+            if (!firstValue) {
+                data.append(",");
+            }
+            data.append(value);
+
+            firstValue = false;
+        }
+
+        for (String value : negativeValues) {
+            if (!firstValue) {
+                data.append(",");
+            }
+            data.append(value);
+
+            firstValue = false;
+        }
+
+        return data.toString();
     }
 
     @Override
