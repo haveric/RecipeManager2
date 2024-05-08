@@ -12,7 +12,6 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.condition.Condition;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -42,8 +41,6 @@ public class Conditions implements Cloneable {
     private int amount;
     private Map<Enchantment, Map<Integer, Boolean>> enchants = new HashMap<>();
     private Map<Enchantment, Map<Integer, Boolean>> bookEnchants = new HashMap<>();
-    private String displayName;
-    private String itemName;
     private List<String> lores = new ArrayList<>();
     private Color minColor;
     private Color maxColor;
@@ -51,16 +48,12 @@ public class Conditions implements Cloneable {
     private Map<PotionEffectType, ConditionPotionEffect> potionEffectConditions = new HashMap<>();
     private Map<PotionEffectType, ConditionPotionEffect> suspiciousStewConditions = new HashMap<>();
     private Map<PatternType, DyeColor> bannerPatterns = new EnumMap<>(PatternType.class);
-    private String localizedName;
 
     private boolean noMeta = false;
-    private boolean noDisplayName = false;
-    private boolean noItemName = false;
     private boolean noLore = false;
     private boolean noEnchant = false;
     private boolean noBookEnchant = false;
     private boolean noColor = false;
-    private boolean noLocalizedName = false;
 
     private boolean allSet = false;
 
@@ -104,9 +97,6 @@ public class Conditions implements Cloneable {
             bookEnchants.put(e.getKey(), map);
         }
 
-        displayName = original.displayName;
-        itemName = original.itemName;
-
         lores = original.lores;
 
         minColor = original.minColor;
@@ -116,16 +106,12 @@ public class Conditions implements Cloneable {
         potionEffectConditions.putAll(original.potionEffectConditions);
         suspiciousStewConditions.putAll(original.suspiciousStewConditions);
         bannerPatterns.putAll(original.bannerPatterns);
-        localizedName = original.localizedName;
 
         noMeta = original.noMeta;
-        noDisplayName = original.noDisplayName;
-        noItemName = original.noItemName;
         noLore = original.noLore;
         noEnchant = original.noEnchant;
         noBookEnchant = original.noBookEnchant;
         noColor = original.noColor;
-        noLocalizedName = original.noLocalizedName;
 
         allSet = original.allSet;
     }
@@ -570,134 +556,6 @@ public class Conditions implements Cloneable {
         return true;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
-
-    public void setDisplayName(String newName) {
-        if (newName == null) {
-            displayName = null;
-        } else {
-            displayName = RMCUtil.parseColors(newName, false);
-        }
-    }
-
-    public boolean hasDisplayName() {
-        return displayName != null;
-    }
-
-    public boolean checkDisplayName(ItemMeta meta) {
-        if (noMeta || noDisplayName) {
-            return !meta.hasDisplayName();
-        }
-
-        if (!hasDisplayName()) {
-            return true;
-        }
-
-        if (meta.hasDisplayName()) {
-            String nameToCheck = meta.getDisplayName();
-            if (displayName.startsWith("regex:")) {
-                try {
-                    Pattern pattern = Pattern.compile(displayName.substring("regex:".length()));
-                    return pattern.matcher(nameToCheck).matches();
-                } catch (PatternSyntaxException e) {
-                    return ErrorReporter.getInstance().error("Flag " + flagType + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
-                }
-            }
-
-            return displayName.equalsIgnoreCase(nameToCheck);
-        }
-
-        return false;
-    }
-
-
-    public String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(String newName) {
-        if (newName == null) {
-            itemName = null;
-        } else {
-            itemName = RMCUtil.parseColors(newName, false);
-        }
-    }
-
-    public boolean hasItemName() {
-        return itemName != null;
-    }
-
-    public boolean checkItemName(ItemMeta meta) {
-        if (noMeta || noItemName) {
-            return !meta.hasItemName();
-        }
-
-        if (!hasItemName()) {
-            return true;
-        }
-
-        if (meta.hasItemName()) {
-            String nameToCheck = meta.getItemName();
-            if (itemName.startsWith("regex:")) {
-                try {
-                    Pattern pattern = Pattern.compile(itemName.substring("regex:".length()));
-                    return pattern.matcher(nameToCheck).matches();
-                } catch (PatternSyntaxException e) {
-                    return ErrorReporter.getInstance().error("Flag " + flagType + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
-                }
-            }
-
-            return itemName.equalsIgnoreCase(nameToCheck);
-        }
-
-        return false;
-    }
-
-    public String getLocalizedName() {
-        return localizedName;
-    }
-
-    public void setLocalizedName(String newLocalizedName) {
-        if (newLocalizedName == null) {
-            localizedName = null;
-        } else {
-            localizedName = RMCUtil.parseColors(newLocalizedName, false);
-        }
-    }
-
-    public boolean hasLocalizedName() {
-        return localizedName != null;
-    }
-
-    @SuppressWarnings("removal")
-    public boolean checkLocalizedName(ItemMeta meta) {
-        if (noMeta || noLocalizedName) {
-            return !meta.hasLocalizedName();
-        }
-
-        if (!hasLocalizedName()) {
-            return true;
-        }
-
-        if (meta.hasLocalizedName()) {
-            String nameToCheck = meta.getLocalizedName();
-            if (localizedName.startsWith("regex:")) {
-                try {
-                    Pattern pattern = Pattern.compile(localizedName.substring("regex:".length()));
-                    return pattern.matcher(nameToCheck).matches();
-                } catch (PatternSyntaxException e) {
-                    return ErrorReporter.getInstance().error("Flag " + flagType + " has invalid regex pattern '" + e.getPattern() + "', error: " + e.getMessage(), "Use 'https://www.regexpal.com/' (or something similar) to test your regex code before using it.");
-                }
-            }
-
-            return localizedName.equalsIgnoreCase(nameToCheck);
-        }
-
-        return false;
-    }
-
     public List<String> getLores() {
         return lores;
     }
@@ -1139,63 +997,6 @@ public class Conditions implements Cloneable {
             return false;
         }
 
-        if (!checkDisplayName(meta)) {
-            if (a == null) {
-                return false;
-            }
-
-            if (addReasons) {
-                if (hasDisplayName()) {
-                    a.addReason("flag.ingredientconditions.noname", failMessage, "{item}", ToolsItem.print(item), "{name}", displayName);
-                } else {
-                    a.addReason("flag.ingredientconditions.emptyname", failMessage, "{item}", ToolsItem.print(item));
-                }
-            }
-            ok = false;
-
-            if (failMessage != null) {
-                return false;
-            }
-        }
-
-        if (Version.has1_20_5Support() && !checkItemName(meta)) {
-            if (a == null) {
-                return false;
-            }
-
-            if (addReasons) {
-                if (hasItemName()) {
-                    a.addReason("flag.ingredientconditions.noitemname", failMessage, "{item}", ToolsItem.print(item), "{name}", itemName);
-                } else {
-                    a.addReason("flag.ingredientconditions.emptyitemname", failMessage, "{item}", ToolsItem.print(item));
-                }
-            }
-            ok = false;
-
-            if (failMessage != null) {
-                return false;
-            }
-        }
-
-        if (!checkLocalizedName(meta)) {
-            if (a == null) {
-                return false;
-            }
-
-            if (addReasons) {
-                if (hasLocalizedName()) {
-                    a.addReason("flag.ingredientconditions.nolocalizedname", failMessage, "{item}", ToolsItem.print(item), "{name}", localizedName);
-                } else {
-                    a.addReason("flag.ingredientconditions.emptylocalizedname", failMessage, "{item}", ToolsItem.print(item));
-                }
-            }
-            ok = false;
-
-            if (failMessage != null) {
-                return false;
-            }
-        }
-
         if (!checkLore(meta.getLore())) {
             if (a == null) {
                 return false;
@@ -1402,30 +1203,6 @@ public class Conditions implements Cloneable {
         this.noColor = noColor;
     }
 
-    public void setNoLocalizedName(boolean noLocalizedName) {
-        this.noLocalizedName = noLocalizedName;
-    }
-
-    public boolean isNoLocalizedName() {
-        return noLocalizedName;
-    }
-
-    public boolean isNoDisplayName() {
-        return noDisplayName;
-    }
-
-    public void setNoDisplayName(boolean noDisplayName) {
-        this.noDisplayName = noDisplayName;
-    }
-
-    public boolean isNoItemName() {
-        return noItemName;
-    }
-
-    public void setNoItemName(boolean noItemName) {
-        this.noItemName = noItemName;
-    }
-
     public boolean isNoLore() {
         return noLore;
     }
@@ -1475,7 +1252,7 @@ public class Conditions implements Cloneable {
         }
 
         for (FlagDescriptor flagDescriptor : FlagFactory.getInstance().getFlags().values()) {
-            Condition condition = flagDescriptor.getFlag().parseCondition(argLower, noMeta);
+            Condition condition = flagDescriptor.getFlag().parseCondition(arg, noMeta);
 
             if (condition != null) {
                 addCondition(condition);
@@ -1750,24 +1527,6 @@ public class Conditions implements Cloneable {
             } else {
                 setColor(dye.getColor(), null);
             }
-        } else if (argLower.startsWith("!name") || argLower.startsWith("noname")) {
-            noDisplayName = true;
-        } else if (argLower.startsWith("!itemname") || argLower.startsWith("noitemname")) {
-            noItemName = true;
-        } else if (argLower.startsWith("!localizedname") || argLower.startsWith("nolocalizedname")) {
-            noLocalizedName = true;
-        } else if (argLower.startsWith("name")) {
-            value = arg.substring("name".length()); // preserve case for regex
-
-            setDisplayName(RMCUtil.trimExactQuotes(value));
-        } else if (argLower.startsWith("itemname")) {
-            value = arg.substring("itemname".length()); // preserve case for regex
-
-            setItemName(RMCUtil.trimExactQuotes(value));
-        } else if (argLower.startsWith("localizedname")) {
-            value = arg.substring("localizedname".length()); // preserve case for regex
-
-            setLocalizedName(RMCUtil.trimExactQuotes(value));
         } else if (argLower.startsWith("!lore") || argLower.startsWith("nolore")) {
             noLore = true;
         } else if (argLower.startsWith("lore")) {
@@ -1946,9 +1705,6 @@ public class Conditions implements Cloneable {
             }
         }
 
-        toHash += "name: " + displayName;
-        toHash += "itemname: " + itemName;
-
         toHash += "lores: ";
         for (String lore : lores) {
             toHash += lore;
@@ -1980,16 +1736,11 @@ public class Conditions implements Cloneable {
             toHash += entry.getKey().toString() + entry.getValue().toString();
         }
 
-        toHash += "localizedName: " + localizedName;
-
         toHash += "noMeta: " + noMeta;
-        toHash += "noName: " + noDisplayName;
-        toHash += "noItemName: " + noItemName;
         toHash += "noLore: " + noLore;
         toHash += "noEnchant: " + noEnchant;
         toHash += "noBookEnchant: " + noBookEnchant;
         toHash += "noColor: " + noColor;
-        toHash += "noLocalizedName: " + noLocalizedName;
         toHash += "allSet: " + allSet;
 
         return toHash.hashCode();

@@ -109,8 +109,8 @@ public class FlagMaxStackSize extends Flag {
     }
 
     @Override
-    public Condition parseCondition(String argLower, boolean noMeta) {
-        ConditionInteger returnCondition = new ConditionInteger(getConditionName(), getFlagType(), argLower, noMeta);
+    public Condition parseCondition(String arg, boolean noMeta) {
+        ConditionInteger returnCondition = new ConditionInteger(getConditionName(), getFlagType(), arg, noMeta);
         if (returnCondition.skipCondition()) {
             return null;
         }

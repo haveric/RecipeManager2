@@ -7,6 +7,8 @@ import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.flag.conditions.condition.Condition;
+import haveric.recipeManager.flag.conditions.condition.ConditionString;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -159,6 +161,51 @@ public class FlagItemName extends Flag {
         toHash += "itemName: " + itemName;
 
         return toHash.hashCode();
+    }
+
+    @Override
+    public Condition parseCondition(String arg, boolean noMeta) {
+        String conditionName = getConditionName();
+        ConditionString returnCondition = new ConditionString(conditionName, getFlagType(), arg, noMeta, true);
+
+        if (returnCondition.skipCondition()) {
+            return null;
+        }
+
+        returnCondition.setCheckCallback((item, meta, condition) -> {
+            ConditionString callbackCondition = (ConditionString) condition;
+            if (callbackCondition.shouldHaveNoMeta()) {
+                return !meta.hasItemName();
+            }
+
+            if (meta.hasItemName()) {
+                return !callbackCondition.hasValue() || callbackCondition.containsRegex(meta.getItemName());
+            }
+
+            return false;
+        });
+
+        return returnCondition;
+    }
+
+    @Override
+    public String getConditionName() {
+        return "itemname";
+    }
+
+    @Override
+    public String[] getConditionDescription() {
+        return new String[] {
+            "  itemname <text or regex:pattern>     = check the item name against exact text or if prefixed with 'regex:' it will check for a regex pattern.",
+            "    Note for regex:pattern           Escape for '|' is a double '||'. Any double pipes will be converted back to single pipes for regex parsing.",
+            "    <text> supports multiple values that are comma separated: <text1>, <text2>, <text3>",
+            "    <text> supports negative matching by preceding a text with an exclamation mark `!`: !<text1>, !<text2>",
+            "    <text> any combination of the above can be combined together: <text1>, !<text2>",
+            "      Matching for <text> must match ANY of the non-negative values and NONE of the negative values",
+            "  noitemname or !itemname",
+            "    Ingredient must have no/default item name",
+            "    Overrides itemname condition if set",
+        };
     }
 
     @Override
