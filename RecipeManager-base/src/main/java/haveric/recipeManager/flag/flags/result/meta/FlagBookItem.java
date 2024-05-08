@@ -231,12 +231,10 @@ public class FlagBookItem extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof BookMeta)) {
+            if (!(meta instanceof BookMeta bookMeta)) {
                 a.addCustomReason("Needs BookMeta supported item!");
                 return;
             }
-
-            BookMeta bookMeta = (BookMeta) meta;
 
             bookMeta.setTitle(title);
             bookMeta.setAuthor(author);
@@ -264,9 +262,7 @@ public class FlagBookItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
-        if (meta instanceof BookMeta) {
-            BookMeta bookMeta = (BookMeta) meta;
-
+        if (meta instanceof BookMeta bookMeta) {
             if (bookMeta.hasTitle()) {
                 recipeString.append(Files.NL).append("@bookitem title ").append(bookMeta.getTitle());
             }

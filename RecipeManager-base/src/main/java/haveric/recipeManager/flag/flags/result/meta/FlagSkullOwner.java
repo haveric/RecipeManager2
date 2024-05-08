@@ -369,8 +369,7 @@ public class FlagSkullOwner extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
-        if (meta instanceof SkullMeta) {
-            SkullMeta skullMeta = (SkullMeta) meta;
+        if (meta instanceof SkullMeta skullMeta) {
             if (skullMeta.hasOwner()) {
                 OfflinePlayer player = skullMeta.getOwningPlayer();
                 if (player != null) {

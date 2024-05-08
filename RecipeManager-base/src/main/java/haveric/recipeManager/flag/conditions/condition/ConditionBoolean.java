@@ -25,8 +25,8 @@ public class ConditionBoolean extends Condition {
 
     @Override
     public void copy(Condition condition) {
-        if (condition instanceof ConditionBoolean) {
-            value = ((ConditionBoolean) condition).value;
+        if (condition instanceof ConditionBoolean conditionBoolean) {
+            value = conditionBoolean.value;
         }
     }
 

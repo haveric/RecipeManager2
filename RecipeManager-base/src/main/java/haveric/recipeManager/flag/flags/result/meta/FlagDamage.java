@@ -90,8 +90,7 @@ public class FlagDamage extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (meta instanceof Damageable && damage != null) {
-                Damageable damageable = (Damageable) meta;
+            if (meta instanceof Damageable damageable && damage != null) {
                 damageable.setDamage(damage);
 
                 a.result().setItemMeta(meta);
@@ -161,8 +160,7 @@ public class FlagDamage extends Flag {
     }
 
     private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
-        if (meta instanceof Damageable) {
-            Damageable damageable = (Damageable) meta;
+        if (meta instanceof Damageable damageable) {
             if (damageable.hasDamage()) {
                 builder.append(prefix).append(damageable.getDamage());
             }

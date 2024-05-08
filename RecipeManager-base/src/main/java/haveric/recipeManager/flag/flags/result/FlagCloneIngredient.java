@@ -360,17 +360,14 @@ public class FlagCloneIngredient extends Flag {
 
         ItemStack ingredient = null;
 
-        if (a.inventory() instanceof CraftingInventory) {
-            CraftingInventory inv = (CraftingInventory) a.inventory();
-
+        if (a.inventory() instanceof CraftingInventory inv) {
             for (ItemStack i : inv.getMatrix()) {
                 if (i != null && allTypes.contains(i.getType())) {
                     ingredient = i.clone();
                     break;
                 }
             }
-        } else if (a.inventory() instanceof FurnaceInventory) {
-            FurnaceInventory inv = (FurnaceInventory) a.inventory();
+        } else if (a.inventory() instanceof FurnaceInventory inv) {
             ItemStack i = inv.getSmelting();
 
             if (i != null && allTypes.contains(i.getType())) {
@@ -410,14 +407,12 @@ public class FlagCloneIngredient extends Flag {
             return true;
         }
 
-        if (hasCopyBit(Bit.DATA) && ingredientMeta instanceof Damageable && resultMeta instanceof Damageable) {
-            Damageable ingredientDamageable = (Damageable) ingredientMeta;
+        if (hasCopyBit(Bit.DATA) && ingredientMeta instanceof Damageable ingredientDamageable && resultMeta instanceof Damageable resultDamageable) {
             int data = ingredientDamageable.getDamage();
             int[] mod = getDataModifier();
 
             data = modValue(data, mod);
 
-            Damageable resultDamageable = (Damageable) resultMeta;
             resultDamageable.setDamage(data);
 
             if (hasCopyBit(Bit.SPECIAL)) {

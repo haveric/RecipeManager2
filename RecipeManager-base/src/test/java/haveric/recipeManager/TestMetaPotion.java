@@ -22,10 +22,9 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
 
     TestMetaPotion(TestMetaItem meta) {
         super(meta);
-        if (!(meta instanceof TestMetaPotion)) {
+        if (!(meta instanceof TestMetaPotion potionMeta)) {
             return;
         }
-        TestMetaPotion potionMeta = (TestMetaPotion) meta;
         this.type = potionMeta.type;
         this.color = potionMeta.color;
         if (potionMeta.hasCustomEffects()) {
@@ -198,9 +197,7 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
         if (!super.equalsCommon(meta)) {
             return false;
         }
-        if (meta instanceof TestMetaPotion) {
-            TestMetaPotion that = (TestMetaPotion) meta;
-
+        if (meta instanceof TestMetaPotion that) {
             return Objects.equals(type, that.type)
                     && (this.hasCustomEffects() ? that.hasCustomEffects() && this.customEffects.equals(that.customEffects) : !that.hasCustomEffects())
                     && (this.hasColor() ? that.hasColor() && this.color.equals(that.color) : !that.hasColor());

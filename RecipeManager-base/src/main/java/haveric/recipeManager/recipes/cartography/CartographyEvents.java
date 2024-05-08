@@ -86,8 +86,7 @@ public class CartographyEvents extends BaseRecipeEvents {
         if (ent instanceof Player) {
             Inventory inv = event.getInventory();
 
-            if (inv instanceof CartographyInventory) {
-                CartographyInventory cartographyInventory = (CartographyInventory) inv;
+            if (inv instanceof CartographyInventory cartographyInventory) {
                 Location location = inv.getLocation();
                 if (location != null) {
                     Player player = (Player) ent;
@@ -186,9 +185,7 @@ public class CartographyEvents extends BaseRecipeEvents {
         ingredients.add(bottom);
 
         BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.CARTOGRAPHY, ingredients, null);
-        if (baseRecipe instanceof CartographyRecipe) {
-            CartographyRecipe recipe = (CartographyRecipe) baseRecipe;
-
+        if (baseRecipe instanceof CartographyRecipe recipe) {
             CartographyTable cartographyTable = CartographyTables.get(player);
             Location location = cartographyTable.getLocation();
 

@@ -43,9 +43,7 @@ public class CombineRecipe extends PreparableResultRecipe {
     public CombineRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof CombineRecipe) {
-            CombineRecipe r = (CombineRecipe) recipe;
-
+        if (recipe instanceof CombineRecipe r) {
             choicePattern = r.choicePattern;
 
             if (!r.ingredientsChoiceMap.isEmpty()) {

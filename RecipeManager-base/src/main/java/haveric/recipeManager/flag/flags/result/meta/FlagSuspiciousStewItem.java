@@ -141,12 +141,11 @@ public class FlagSuspiciousStewItem extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof SuspiciousStewMeta)) {
+            if (!(meta instanceof SuspiciousStewMeta stewMeta)) {
                 a.addCustomReason("Needs suspicious stew");
                 return;
             }
 
-            SuspiciousStewMeta stewMeta = (SuspiciousStewMeta) meta;
             for (PotionEffect e : effects) {
                 stewMeta.addCustomEffect(e, true);
             }
@@ -178,8 +177,7 @@ public class FlagSuspiciousStewItem extends Flag {
     }
 
     private void parse(ItemMeta meta, StringBuilder builder, String prefix, boolean isItemMeta) {
-        if (meta instanceof SuspiciousStewMeta) {
-            SuspiciousStewMeta stewMeta = (SuspiciousStewMeta) meta;
+        if (meta instanceof SuspiciousStewMeta stewMeta) {
             if (stewMeta.hasCustomEffects()) {
                 List<PotionEffect> potionEffects = stewMeta.getCustomEffects();
                 for (PotionEffect effect : potionEffects) {

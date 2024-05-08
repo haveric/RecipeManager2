@@ -84,8 +84,7 @@ public class ExtractCommand implements TabExecutor {
                     }
                 }
 
-                if (r instanceof ShapedRecipe) {
-                    ShapedRecipe recipe = (ShapedRecipe) r;
+                if (r instanceof ShapedRecipe recipe) {
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.CRAFT.getDirective());
 
                     appendNamespacedKey(recipeString, recipe.getKey());
@@ -122,8 +121,7 @@ public class ExtractCommand implements TabExecutor {
                     parseResult(recipe.getResult(), recipeString);
 
                     parsedCraftRecipes.add(recipeString.toString());
-                } else if (r instanceof ShapelessRecipe) {
-                    ShapelessRecipe recipe = (ShapelessRecipe) r;
+                } else if (r instanceof ShapelessRecipe recipe) {
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.COMBINE.getDirective());
 
                     appendNamespacedKey(recipeString, recipe.getKey());
@@ -151,8 +149,7 @@ public class ExtractCommand implements TabExecutor {
                     parseResult(recipe.getResult(), recipeString);
 
                     parsedCombineRecipes.add(recipeString.toString());
-                } else if (r instanceof FurnaceRecipe) {
-                    FurnaceRecipe recipe = (FurnaceRecipe) r;
+                } else if (r instanceof FurnaceRecipe recipe) {
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMELT.getDirective());
 
                     appendNamespacedKey(recipeString, recipe.getKey());
@@ -173,8 +170,7 @@ public class ExtractCommand implements TabExecutor {
                     parseResult(recipe.getResult(), recipeString);
 
                     parsedSmeltRecipes.add(recipeString.toString());
-                } else if (r instanceof BlastingRecipe) {
-                    BlastingRecipe recipe = (BlastingRecipe) r;
+                } else if (r instanceof BlastingRecipe recipe) {
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.BLASTING.getDirective());
 
                     appendNamespacedKey(recipeString, recipe.getKey());
@@ -195,8 +191,7 @@ public class ExtractCommand implements TabExecutor {
                     parseResult(recipe.getResult(), recipeString);
 
                     parsedBlastingRecipes.add(recipeString.toString());
-                } else if (r instanceof SmokingRecipe) {
-                    SmokingRecipe recipe = (SmokingRecipe) r;
+                } else if (r instanceof SmokingRecipe recipe) {
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMOKING.getDirective());
 
                     appendNamespacedKey(recipeString, recipe.getKey());
@@ -217,8 +212,7 @@ public class ExtractCommand implements TabExecutor {
                     parseResult(recipe.getResult(), recipeString);
 
                     parsedSmokingRecipes.add(recipeString.toString());
-                } else if (r instanceof CampfireRecipe) {
-                    CampfireRecipe recipe = (CampfireRecipe) r;
+                } else if (r instanceof CampfireRecipe recipe) {
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.CAMPFIRE.getDirective());
 
                     appendNamespacedKey(recipeString, recipe.getKey());
@@ -239,8 +233,7 @@ public class ExtractCommand implements TabExecutor {
                     parseResult(recipe.getResult(), recipeString);
 
                     parsedCampfireRecipes.add(recipeString.toString());
-                } else if (r instanceof StonecuttingRecipe) {
-                    StonecuttingRecipe recipe = (StonecuttingRecipe) r;
+                } else if (r instanceof StonecuttingRecipe recipe) {
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.STONECUTTING.getDirective());
 
                     appendNamespacedKey(recipeString, recipe.getKey());
@@ -255,15 +248,12 @@ public class ExtractCommand implements TabExecutor {
                     parseResult(recipe.getResult(), recipeString);
 
                     parsedStonecuttingRecipes.add(recipeString.toString());
-                } else if (r instanceof SmithingRecipe) {
-                    SmithingRecipe recipe = (SmithingRecipe) r;
+                } else if (r instanceof SmithingRecipe recipe) {
                     StringBuilder recipeString = new StringBuilder(RMCRecipeType.SMITHING.getDirective());
                     appendNamespacedKey(recipeString, recipe.getKey());
 
                     if (Supports.experimental1_20()) {
-                        if (r instanceof SmithingTransformRecipe) {
-                            SmithingTransformRecipe transformRecipe = (SmithingTransformRecipe) r;
-
+                        if (r instanceof SmithingTransformRecipe transformRecipe) {
                             parseChoice(transformRecipe.getTemplate(), recipeString);
                             recipeString.append(" + ");
                         }
@@ -292,8 +282,7 @@ public class ExtractCommand implements TabExecutor {
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : initialRecipes.entrySet()) {
             BaseRecipe recipe = entry.getKey();
 
-            if (recipe instanceof FuelRecipe) {
-                FuelRecipe fuelRecipe = (FuelRecipe) recipe;
+            if (recipe instanceof FuelRecipe fuelRecipe) {
                 StringBuilder recipeString = new StringBuilder(RMCRecipeType.FUEL.getDirective()).append(Files.NL);
 
                 parseChoice(fuelRecipe.getIngredientChoice(), recipeString);
@@ -302,8 +291,7 @@ public class ExtractCommand implements TabExecutor {
                 recipeString.append(Files.NL).append(Files.NL);
 
                 parsedFuelRecipes.add(recipeString.toString());
-            } else if (recipe instanceof CompostRecipe) {
-                CompostRecipe compostRecipe = (CompostRecipe) recipe;
+            } else if (recipe instanceof CompostRecipe compostRecipe) {
                 StringBuilder recipeString = new StringBuilder(RMCRecipeType.COMPOST.getDirective()).append(Files.NL);
 
                 parseChoice(compostRecipe.getIngredientChoice(), recipeString);
@@ -361,8 +349,7 @@ public class ExtractCommand implements TabExecutor {
     }
 
     private void parseChoice(RecipeChoice choice, StringBuilder recipeString) {
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             parseMaterialList(materialChoice.getChoices(), recipeString);
         } else {
             recipeString.append("air");

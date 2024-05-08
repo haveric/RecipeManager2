@@ -112,12 +112,11 @@ public class FlagAxolotlBucketItem extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof AxolotlBucketMeta)) {
+            if (!(meta instanceof AxolotlBucketMeta axolotlBucketMeta)) {
                 a.addCustomReason("Needs axolotl bucket item!");
                 return;
             }
 
-            AxolotlBucketMeta axolotlBucketMeta = (AxolotlBucketMeta) meta;
             if (hasVariant()) {
                 axolotlBucketMeta.setVariant(variant);
             }
@@ -137,8 +136,7 @@ public class FlagAxolotlBucketItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
-        if (meta instanceof AxolotlBucketMeta) {
-            AxolotlBucketMeta axolotlBucketMeta = (AxolotlBucketMeta) meta;
+        if (meta instanceof AxolotlBucketMeta axolotlBucketMeta) {
             if (axolotlBucketMeta.hasVariant()) {
                 recipeString.append(Files.NL).append("@axolotlbucketitem ").append(axolotlBucketMeta.getVariant());
             }

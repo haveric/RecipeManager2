@@ -34,8 +34,7 @@ import java.util.Map.Entry;
 public class CreateRecipeCommand implements CommandExecutor {
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (sender instanceof Player) {
-            Player player = ((Player) sender);
+        if (sender instanceof Player player) {
             ItemStack holdingStack = player.getInventory().getItemInMainHand();
             PlayerInventory inventory = player.getInventory();
 

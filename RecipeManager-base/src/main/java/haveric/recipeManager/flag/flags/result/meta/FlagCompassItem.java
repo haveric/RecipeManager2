@@ -151,12 +151,11 @@ public class FlagCompassItem extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof CompassMeta)) {
+            if (!(meta instanceof CompassMeta compass)) {
                 a.addCustomReason("Needs compass!");
                 return;
             }
 
-            CompassMeta compass = (CompassMeta) meta;
             compass.setLodestoneTracked(isLodestoneTracked);
 
             double actualX;
@@ -210,9 +209,7 @@ public class FlagCompassItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
-        if (meta instanceof CompassMeta) {
-            CompassMeta compassMeta = (CompassMeta) meta;
-
+        if (meta instanceof CompassMeta compassMeta) {
             if (compassMeta.hasLodestone()) {
                 Location location = compassMeta.getLodestone();
                 if (location != null) {

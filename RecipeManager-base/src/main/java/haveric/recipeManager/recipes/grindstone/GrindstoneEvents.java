@@ -74,8 +74,7 @@ public class GrindstoneEvents extends BaseRecipeEvents {
         if (ent instanceof Player) {
             Inventory inv = event.getInventory();
 
-            if (inv instanceof GrindstoneInventory) {
-                GrindstoneInventory grindstoneInventory = (GrindstoneInventory) inv;
+            if (inv instanceof GrindstoneInventory grindstoneInventory) {
                 Location location = inv.getLocation();
                 if (location != null) {
                     Player player = (Player) ent;
@@ -91,8 +90,7 @@ public class GrindstoneEvents extends BaseRecipeEvents {
         HumanEntity ent = event.getWhoClicked();
         if (ent instanceof Player) {
             Inventory inv = event.getInventory();
-            if (inv instanceof GrindstoneInventory) {
-                GrindstoneInventory grindstoneInventory = (GrindstoneInventory) inv;
+            if (inv instanceof GrindstoneInventory grindstoneInventory) {
                 Location location = inv.getLocation();
                 if (location != null) {
                     Player player = (Player) ent;
@@ -163,9 +161,7 @@ public class GrindstoneEvents extends BaseRecipeEvents {
         ingredients.add(bottom);
 
         BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.GRINDSTONE, ingredients, null);
-        if (baseRecipe instanceof GrindstoneRecipe) {
-            GrindstoneRecipe recipe = (GrindstoneRecipe) baseRecipe;
-
+        if (baseRecipe instanceof GrindstoneRecipe recipe) {
             Location location = inventory.getLocation();
 
             if (location != null) {

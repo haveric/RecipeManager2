@@ -24,9 +24,7 @@ public class RMBaseFurnaceRecipe extends RMBaseCookingRecipe {
     public RMBaseFurnaceRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof RMBaseFurnaceRecipe) {
-            RMBaseFurnaceRecipe r = (RMBaseFurnaceRecipe) recipe;
-
+        if (recipe instanceof RMBaseFurnaceRecipe r) {
             if (r.ingredientChoice != null) {
                 ingredientChoice = r.ingredientChoice.clone();
             }
@@ -56,8 +54,8 @@ public class RMBaseFurnaceRecipe extends RMBaseCookingRecipe {
     public void setFuel(ItemStack newFuel) {
         Preconditions.checkNotNull(newFuel);
 
-        if (newFuel instanceof ItemResult) {
-            fuel = ((ItemResult) newFuel).setRecipe(this);
+        if (newFuel instanceof ItemResult itemResult) {
+            fuel = itemResult.setRecipe(this);
         } else {
             fuel = new ItemResult(newFuel).setRecipe(this);
         }

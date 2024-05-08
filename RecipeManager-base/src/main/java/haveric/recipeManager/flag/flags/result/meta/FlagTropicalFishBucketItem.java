@@ -187,12 +187,11 @@ public class FlagTropicalFishBucketItem extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof TropicalFishBucketMeta)) {
+            if (!(meta instanceof TropicalFishBucketMeta tropicalFishBucketMeta)) {
                 a.addCustomReason("Needs tropical fish bucket!");
                 return;
             }
 
-            TropicalFishBucketMeta tropicalFishBucketMeta = (TropicalFishBucketMeta) meta;
             if (hasPattern()) {
                 tropicalFishBucketMeta.setPattern(pattern);
             }
@@ -222,8 +221,7 @@ public class FlagTropicalFishBucketItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
-        if (meta instanceof TropicalFishBucketMeta) {
-            TropicalFishBucketMeta tropicalFishBucketMeta = (TropicalFishBucketMeta) meta;
+        if (meta instanceof TropicalFishBucketMeta tropicalFishBucketMeta) {
             if (tropicalFishBucketMeta.hasVariant()) {
                 DyeColor bodyColor = tropicalFishBucketMeta.getBodyColor();
                 TropicalFish.Pattern pattern = tropicalFishBucketMeta.getPattern();

@@ -14,9 +14,7 @@ import java.util.Map;
 public class ToolsRecipeV1_16_1 extends BaseToolsRecipe {
     @Override
     public boolean matchesShaped(Recipe bukkitRecipe, String[] shape, Map<Character, RecipeChoice> choice) {
-        if (bukkitRecipe instanceof ShapedRecipe) {
-            ShapedRecipe shapedRecipe = (ShapedRecipe) bukkitRecipe;
-
+        if (bukkitRecipe instanceof ShapedRecipe shapedRecipe) {
             return RMBukkitTools.compareShapedRecipeToChoice(shapedRecipe, shape, choice);
         }
 
@@ -25,9 +23,7 @@ public class ToolsRecipeV1_16_1 extends BaseToolsRecipe {
 
     @Override
     public boolean matchesShapeless(Recipe bukkitRecipe, List<List<Material>> materialsList) {
-        if (bukkitRecipe instanceof ShapelessRecipe) {
-            ShapelessRecipe shapelessRecipe = (ShapelessRecipe) bukkitRecipe;
-
+        if (bukkitRecipe instanceof ShapelessRecipe shapelessRecipe) {
             List<RecipeChoice> choices = shapelessRecipe.getChoiceList();
 
             return RMBukkitTools.compareShapelessChoiceList(choices, materialsList);
@@ -38,9 +34,7 @@ public class ToolsRecipeV1_16_1 extends BaseToolsRecipe {
 
     @Override
     public boolean matchesFurnace(Recipe bukkitRecipe, ItemStack furnaceIngredient) {
-        if (bukkitRecipe instanceof FurnaceRecipe) {
-            FurnaceRecipe furnaceRecipe = (FurnaceRecipe) bukkitRecipe;
-
+        if (bukkitRecipe instanceof FurnaceRecipe furnaceRecipe) {
             return RMBukkitTools.isSameItemFromChoice(furnaceRecipe.getInputChoice(), furnaceIngredient);
         }
 
@@ -49,9 +43,7 @@ public class ToolsRecipeV1_16_1 extends BaseToolsRecipe {
 
     @Override
     public boolean matchesBlasting(Recipe bukkitRecipe, ItemStack blastingIngredient) {
-        if (bukkitRecipe instanceof BlastingRecipe) {
-            BlastingRecipe blastingRecipe = (BlastingRecipe) bukkitRecipe;
-
+        if (bukkitRecipe instanceof BlastingRecipe blastingRecipe) {
             return RMBukkitTools.isSameItemFromChoice(blastingRecipe.getInputChoice(), blastingIngredient);
         }
 
@@ -60,9 +52,7 @@ public class ToolsRecipeV1_16_1 extends BaseToolsRecipe {
 
     @Override
     public boolean matchesSmoking(Recipe bukkitRecipe, ItemStack smokingIngredient) {
-        if (bukkitRecipe instanceof SmokingRecipe) {
-            SmokingRecipe smokingRecipe = (SmokingRecipe) bukkitRecipe;
-
+        if (bukkitRecipe instanceof SmokingRecipe smokingRecipe) {
             return RMBukkitTools.isSameItemFromChoice(smokingRecipe.getInputChoice(), smokingIngredient);
         }
 
@@ -71,9 +61,7 @@ public class ToolsRecipeV1_16_1 extends BaseToolsRecipe {
 
     @Override
     public boolean matchesCampfire(Recipe bukkitRecipe, ItemStack campfireIngredient) {
-        if (bukkitRecipe instanceof CampfireRecipe) {
-            CampfireRecipe campfireRecipe = (CampfireRecipe) bukkitRecipe;
-
+        if (bukkitRecipe instanceof CampfireRecipe campfireRecipe) {
             return RMBukkitTools.isSameItemFromChoice(campfireRecipe.getInputChoice(), campfireIngredient);
         }
 
@@ -82,9 +70,7 @@ public class ToolsRecipeV1_16_1 extends BaseToolsRecipe {
 
     @Override
     public boolean matchesStonecutting(Recipe bukkitRecipe, ItemStack stonecuttingIngredient, ItemStack stonecuttingResult) {
-        if (bukkitRecipe instanceof StonecuttingRecipe) {
-            StonecuttingRecipe stonecuttingRecipe = (StonecuttingRecipe) bukkitRecipe;
-
+        if (bukkitRecipe instanceof StonecuttingRecipe stonecuttingRecipe) {
             return RMBukkitTools.isSameItemFromChoice(stonecuttingRecipe.getInputChoice(), stonecuttingIngredient) && RMBukkitTools.isSameItemPlusDur(stonecuttingRecipe.getResult(), stonecuttingResult);
         }
 
@@ -93,9 +79,7 @@ public class ToolsRecipeV1_16_1 extends BaseToolsRecipe {
 
     @Override
     public boolean matchesSmithing(Recipe bukkitRecipe, ItemStack baseIngredient, ItemStack addIngredient) {
-        if (bukkitRecipe instanceof SmithingRecipe) {
-            SmithingRecipe smithingRecipe = (SmithingRecipe) bukkitRecipe;
-
+        if (bukkitRecipe instanceof SmithingRecipe smithingRecipe) {
             boolean isBaseSame = RMBukkitTools.isSameItemFromChoice(smithingRecipe.getBase(), baseIngredient);
             boolean isAddSame = RMBukkitTools.isSameItemFromChoice(smithingRecipe.getAddition(), addIngredient);
             return isBaseSame && isAddSame;

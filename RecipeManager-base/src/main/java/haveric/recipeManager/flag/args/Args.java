@@ -557,8 +557,7 @@ public class Args {
                 if (meta.hasLore() && string.contains("{lore}")) {
                     string = string.replace("{lore}", "\"" + Joiner.on("\",\"").join(meta.getLore()) + "\"");
                 }
-                if (meta instanceof BookMeta) {
-                    BookMeta book = (BookMeta) meta;
+                if (meta instanceof BookMeta book) {
                     if (book.hasTitle() && string.contains("{booktitle}")) {
                         string = string.replace("{booktitle}", book.getTitle());
                     }

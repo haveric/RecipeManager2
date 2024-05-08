@@ -324,12 +324,10 @@ public class FlagMapItem extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof MapMeta)) {
+            if (!(meta instanceof MapMeta mapMeta)) {
                 a.addCustomReason("Needs a FILLED_MAP item!");
                 return;
             }
-
-            MapMeta mapMeta = (MapMeta) meta;
 
             mapMeta.setScaling(isScaling);
 
@@ -393,8 +391,7 @@ public class FlagMapItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
-        if (meta instanceof MapMeta) {
-            MapMeta mapMeta = (MapMeta) meta;
+        if (meta instanceof MapMeta mapMeta) {
             recipeString.append(Files.NL).append("@map scaling");
             if (!mapMeta.isScaling()) {
                 recipeString.append(" false");

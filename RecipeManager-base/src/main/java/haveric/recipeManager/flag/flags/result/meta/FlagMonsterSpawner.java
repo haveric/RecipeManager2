@@ -234,11 +234,10 @@ public class FlagMonsterSpawner extends Flag {
     public void onCrafted(Args a) {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
-            if (!(meta instanceof BlockStateMeta)) {
+            if (!(meta instanceof BlockStateMeta blockStateMeta)) {
                 return;
             }
 
-            BlockStateMeta blockStateMeta = (BlockStateMeta) meta;
             BlockState blockState = blockStateMeta.getBlockState();
 
             CreatureSpawner spawner = (CreatureSpawner) blockState;
@@ -271,13 +270,10 @@ public class FlagMonsterSpawner extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
-        if (meta instanceof BlockStateMeta) {
-            BlockStateMeta blockStateMeta = (BlockStateMeta) meta;
+        if (meta instanceof BlockStateMeta blockStateMeta) {
             BlockState blockState = blockStateMeta.getBlockState();
 
-            if (blockState instanceof CreatureSpawner) {
-                CreatureSpawner creatureSpawner = (CreatureSpawner) blockState;
-
+            if (blockState instanceof CreatureSpawner creatureSpawner) {
                 recipeString.append(Files.NL).append("@monsterspawner ").append(creatureSpawner.getSpawnedType().name());
 
                 int delay = creatureSpawner.getDelay();

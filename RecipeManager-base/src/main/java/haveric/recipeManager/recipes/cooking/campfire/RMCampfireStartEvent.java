@@ -26,9 +26,7 @@ public class RMCampfireStartEvent extends BaseRecipeEvents {
         if (slot != -1) {
             ItemStack ingredient = event.getSource();
             BaseRecipe baseRecipe = RecipeManager.getRecipes().getRecipe(RMCRecipeType.CAMPFIRE, ingredient);
-            if (baseRecipe instanceof RMCampfireRecipe) {
-                RMCampfireRecipe recipe = (RMCampfireRecipe) baseRecipe;
-
+            if (baseRecipe instanceof RMCampfireRecipe recipe) {
                 int cookTicks = recipe.getCookTicks();
                 event.setTotalCookTime(cookTicks);
             }

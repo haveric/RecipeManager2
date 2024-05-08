@@ -27,9 +27,7 @@ public class GrindstoneRecipe extends PreparableResultRecipe {
     public GrindstoneRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof GrindstoneRecipe) {
-            GrindstoneRecipe r = (GrindstoneRecipe) recipe;
-
+        if (recipe instanceof GrindstoneRecipe r) {
             if (r.primaryIngredient != null) {
                 primaryIngredient = r.primaryIngredient.clone();
             }

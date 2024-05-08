@@ -90,8 +90,7 @@ public class RMBukkitTools {
     }
 
     private static boolean compareShapelessChoice(RecipeChoice choice, List<Material> materials, boolean airAllowed) {
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             List<Material> choiceMaterials = materialChoice.getChoices();
 
             int size = materials.size();
@@ -106,8 +105,7 @@ public class RMBukkitTools {
                     return false;
                 }
             }
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             List<ItemStack> choiceMaterials = exactChoice.getChoices();
 
             int size = materials.size();
@@ -132,15 +130,13 @@ public class RMBukkitTools {
     }
 
     private static boolean compareMaterialChoice(RecipeChoice choice, RecipeChoice choice2, boolean airAllowed) {
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             List<Material> choiceMaterials = materialChoice.getChoices();
 
-            if (!(choice2 instanceof RecipeChoice.MaterialChoice)) {
+            if (!(choice2 instanceof RecipeChoice.MaterialChoice materialChoice2)) {
                 return false;
             }
 
-            RecipeChoice.MaterialChoice materialChoice2 = (RecipeChoice.MaterialChoice) choice2;
             List<Material> choice2Materials = materialChoice2.getChoices();
             int size = choice2Materials.size();
             int choiceSize = choiceMaterials.size();
@@ -154,15 +150,13 @@ public class RMBukkitTools {
                     return false;
                 }
             }
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             List<ItemStack> choiceMaterials = exactChoice.getChoices();
 
-            if (!(choice2 instanceof RecipeChoice.ExactChoice)) {
+            if (!(choice2 instanceof RecipeChoice.ExactChoice exactChoice2)) {
                 return false;
             }
 
-            RecipeChoice.ExactChoice exactChoice2 = (RecipeChoice.ExactChoice) choice2;
             List<ItemStack> choice2Materials = exactChoice2.getChoices();
 
             int size = choice2Materials.size();
@@ -193,8 +187,7 @@ public class RMBukkitTools {
             if (choice == null) {
                 if (choice2 == null) {
                     return true;
-                } else if (choice2 instanceof RecipeChoice.MaterialChoice) {
-                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice2;
+                } else if (choice2 instanceof RecipeChoice.MaterialChoice materialChoice) {
 
                     List<Material> materials = materialChoice.getChoices();
 

@@ -199,9 +199,7 @@ public class FlagOminousBottleItem extends Flag {
     }
 
     private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
-        if (meta instanceof OminousBottleMeta) {
-            OminousBottleMeta ominousBottleMeta = (OminousBottleMeta) meta;
-
+        if (meta instanceof OminousBottleMeta ominousBottleMeta) {
             if (ominousBottleMeta.hasAmplifier()) {
                 builder.append(prefix).append(ominousBottleMeta.getAmplifier());
             }

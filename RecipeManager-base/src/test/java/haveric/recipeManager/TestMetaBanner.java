@@ -15,11 +15,10 @@ public class TestMetaBanner extends TestMetaItem implements BannerMeta {
     public TestMetaBanner(TestMetaItem meta) {
         super(meta);
 
-        if (!(meta instanceof TestMetaBanner)) {
+        if (!(meta instanceof TestMetaBanner banner)) {
             return;
         }
 
-        TestMetaBanner banner = (TestMetaBanner) meta;
         baseColor = banner.baseColor;
         patterns = new ArrayList<>(banner.getPatterns());
     }

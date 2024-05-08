@@ -29,9 +29,7 @@ public abstract class RMBaseCookingRecipe extends SingleRecipeChoiceSingleResult
     public RMBaseCookingRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof RMBaseCookingRecipe) {
-            RMBaseCookingRecipe r = (RMBaseCookingRecipe) recipe;
-
+        if (recipe instanceof RMBaseCookingRecipe r) {
             if (r.ingredientChoice != null) {
                 ingredientChoice = r.ingredientChoice.clone();
             }

@@ -249,16 +249,14 @@ public class IngredientTest extends FlagBaseTest {
         boolean contains = false;
 
         for (RecipeChoice choice : list) {
-            if (choice instanceof RecipeChoice.MaterialChoice) {
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
                 List<Material> materials = materialChoice.getChoices();
 
                 if (materials.contains(mat)) {
                     contains = true;
                     break;
                 }
-            } else if (choice instanceof RecipeChoice.ExactChoice) {
-                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
                 List<ItemStack> items = exactChoice.getChoices();
 
                 for (ItemStack item : items) {

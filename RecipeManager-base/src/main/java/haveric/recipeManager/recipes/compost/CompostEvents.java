@@ -129,9 +129,7 @@ public class CompostEvents extends BaseRecipeEvents {
         }
 
         BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.COMPOST, item);
-        if (baseRecipe instanceof CompostRecipe) {
-            CompostRecipe recipe = (CompostRecipe) baseRecipe;
-
+        if (baseRecipe instanceof CompostRecipe recipe) {
             // If existing composter already has a recipe, it must be a vanilla recipe if we are to ignore it
             if (data.getRecipe() == null || data.getRecipe().getInfo().getOwner() == RMCRecipeInfo.RecipeOwner.MINECRAFT) {
                 // No overridden compost recipes, so let's ignore vanilla recipes
@@ -446,8 +444,7 @@ public class CompostEvents extends BaseRecipeEvents {
         InventoryHolder sourceHolder = sourceInventory.getHolder();
         InventoryHolder destHolder = destinationInventory.getHolder();
 
-        if (destHolder instanceof BlockInventoryHolder) {
-            BlockInventoryHolder blockHolder = (BlockInventoryHolder) destHolder;
+        if (destHolder instanceof BlockInventoryHolder blockHolder) {
             Block block = blockHolder.getBlock();
 
             if (block.getType() == Material.COMPOSTER) {
@@ -457,8 +454,7 @@ public class CompostEvents extends BaseRecipeEvents {
             }
         }
 
-        if (sourceHolder instanceof BlockInventoryHolder) {
-            BlockInventoryHolder blockHolder = (BlockInventoryHolder) sourceHolder;
+        if (sourceHolder instanceof BlockInventoryHolder blockHolder) {
             Block block = blockHolder.getBlock();
 
             if (block.getType() == Material.COMPOSTER) {

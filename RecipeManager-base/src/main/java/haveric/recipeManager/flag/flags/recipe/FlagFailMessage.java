@@ -105,14 +105,10 @@ public class FlagFailMessage extends Flag {
         float failChance = 0;
         float successChance = 0;
 
-        if (a.recipe() instanceof SingleResultRecipe) {
-            SingleResultRecipe recipe = (SingleResultRecipe) a.recipe();
-
+        if (a.recipe() instanceof SingleResultRecipe recipe) {
             successChance = recipe.getResult().getChance();
             failChance = 100 - successChance;
-        } else if (a.recipe() instanceof MultiResultRecipe) {
-            MultiResultRecipe recipe = (MultiResultRecipe) a.recipe();
-
+        } else if (a.recipe() instanceof MultiResultRecipe recipe) {
             for (ItemResult r : recipe.getResults()) {
                 if (r.getType() == Material.AIR) {
                     failChance = r.getChance();

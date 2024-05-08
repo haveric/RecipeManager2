@@ -94,7 +94,7 @@ public class FlagStoreEnchantment extends BaseFlagApplyStoreEnchantment {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof EnchantmentStorageMeta)) {
+            if (!(meta instanceof EnchantmentStorageMeta enchantmentStorageMeta)) {
                 a.addCustomReason("Needs enchanted book!");
                 return;
             }
@@ -104,7 +104,6 @@ public class FlagStoreEnchantment extends BaseFlagApplyStoreEnchantment {
                 return;
             }
 
-            EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) meta;
             for (Map.Entry<Enchantment, Integer> entry : enchantments.entrySet()) {
                 Enchantment enchantment = entry.getKey();
                 int level = entry.getValue();

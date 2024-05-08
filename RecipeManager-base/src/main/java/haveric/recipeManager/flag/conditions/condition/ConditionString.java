@@ -163,9 +163,9 @@ public class ConditionString extends Condition {
 
     @Override
     public void copy(Condition condition) {
-        if (condition instanceof ConditionString) {
-            values = ((ConditionString) condition).values;
-            negativeValues = ((ConditionString) condition).negativeValues;
+        if (condition instanceof ConditionString conditionString) {
+            values = conditionString.values;
+            negativeValues = conditionString.negativeValues;
         }
     }
 

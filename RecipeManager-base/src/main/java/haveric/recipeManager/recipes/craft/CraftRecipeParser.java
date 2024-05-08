@@ -113,8 +113,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
 
                     if (ingredientFlags.hasFlags()) {
                         List<ItemStack> items = new ArrayList<>();
-                        if (choice instanceof RecipeChoice.MaterialChoice) {
-                            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
                             List<Material> materials = materialChoice.getChoices();
 
                             for (Material material : materials) {
@@ -123,8 +122,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
 
                                 items.add(a.result());
                             }
-                        } else if (choice instanceof RecipeChoice.ExactChoice) {
-                            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
                             List<ItemStack> exactItems = exactChoice.getChoices();
 
                             for (ItemStack exactItem : exactItems) {

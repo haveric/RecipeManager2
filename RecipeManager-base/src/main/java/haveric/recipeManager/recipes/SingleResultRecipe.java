@@ -31,9 +31,7 @@ public abstract class SingleResultRecipe extends BaseRecipe {
     public SingleResultRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof SingleResultRecipe) {
-            SingleResultRecipe r = (SingleResultRecipe) recipe;
-
+        if (recipe instanceof SingleResultRecipe r) {
             result = r.getResult();
         }
     }
@@ -86,8 +84,8 @@ public abstract class SingleResultRecipe extends BaseRecipe {
     public void setResult(ItemStack newResult) {
         Preconditions.checkNotNull(newResult);
 
-        if (newResult instanceof ItemResult) {
-            result = ((ItemResult) newResult).setRecipe(this);
+        if (newResult instanceof ItemResult itemResult) {
+            result = itemResult.setRecipe(this);
         } else {
             result = new ItemResult(newResult).setRecipe(this);
         }

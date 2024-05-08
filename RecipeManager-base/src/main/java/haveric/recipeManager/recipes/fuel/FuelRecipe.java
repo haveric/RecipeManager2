@@ -35,9 +35,7 @@ public class FuelRecipe extends BaseRecipe {
     public FuelRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof FuelRecipe) {
-            FuelRecipe r = (FuelRecipe) recipe;
-
+        if (recipe instanceof FuelRecipe r) {
             minTime = r.minTime;
             maxTime = r.maxTime;
 

@@ -67,15 +67,14 @@ public class RecipeCommand implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (args.length > 0) {
             UUID playerUUID = null;
-            if (sender instanceof Player) {
-                playerUUID = ((Player) sender).getUniqueId();
+            if (sender instanceof Player player) {
+                playerUUID = player.getUniqueId();
             }
 
             ItemStack item;
 
             if (args[0].equalsIgnoreCase("this")) {
-                if (sender instanceof Player) {
-                    Player player = (Player) sender;
+                if (sender instanceof Player player) {
                     item = player.getInventory().getItemInMainHand();
 
                     if (item == null || item.getType() == Material.AIR) {
@@ -163,14 +162,11 @@ public class RecipeCommand implements TabExecutor {
 
     private boolean hasItem(BaseRecipe recipe, ItemStack item, boolean ingredient) {
         if (ingredient) {
-            if (recipe instanceof AnvilRecipe) {
-                AnvilRecipe anvilRecipe = (AnvilRecipe) recipe;
+            if (recipe instanceof AnvilRecipe anvilRecipe) {
                 return containsRecipeChoice(anvilRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(anvilRecipe.getSecondaryIngredient(), item);
-            } else if (recipe instanceof BrewRecipe) {
-                BrewRecipe brewRecipe = (BrewRecipe) recipe;
+            } else if (recipe instanceof BrewRecipe brewRecipe) {
                 return containsRecipeChoice(brewRecipe.getIngredientChoice(), item) || containsRecipeChoice(brewRecipe.getPotionChoice(), item);
-            } else if (recipe instanceof CartographyRecipe) {
-                CartographyRecipe cartographyRecipe = (CartographyRecipe) recipe;
+            } else if (recipe instanceof CartographyRecipe cartographyRecipe) {
                 return containsRecipeChoice(cartographyRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(cartographyRecipe.getSecondaryIngredient(), item);
             } else if (recipe instanceof CraftRecipe) {
                 return containsRecipeChoiceMap(((CraftRecipe) recipe).getIngredientsChoiceMap(), item);
@@ -180,30 +176,23 @@ public class RecipeCommand implements TabExecutor {
                 return containsRecipeChoice(((CompostRecipe) recipe).getIngredientChoice(), item);
             } else if (recipe instanceof FuelRecipe) {
                 return containsRecipeChoice(((FuelRecipe) recipe).getIngredientChoice(), item.getType());
-            } else if (recipe instanceof GrindstoneRecipe) {
-                GrindstoneRecipe grindstoneRecipe = (GrindstoneRecipe) recipe;
+            } else if (recipe instanceof GrindstoneRecipe grindstoneRecipe) {
                 return containsRecipeChoice(grindstoneRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(grindstoneRecipe.getSecondaryIngredient(), item);
             } else if (recipe instanceof RMBaseFurnaceRecipe) {
                 return containsRecipeChoice(((RMBaseFurnaceRecipe) recipe).getIngredientChoice(), item.getType());
             } else if (recipe instanceof RMCampfireRecipe) {
                 return containsRecipeChoice(((RMCampfireRecipe) recipe).getIngredientChoice(), item.getType());
-            } else if (recipe instanceof RMSmithing1_19_4TransformRecipe) {
-                RMSmithing1_19_4TransformRecipe rmSmithing1_19_4TransformRecipe = (RMSmithing1_19_4TransformRecipe) recipe;
+            } else if (recipe instanceof RMSmithing1_19_4TransformRecipe rmSmithing1_19_4TransformRecipe) {
                 return containsRecipeChoice(rmSmithing1_19_4TransformRecipe.getTemplateIngredient(), item) || containsRecipeChoice(rmSmithing1_19_4TransformRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(rmSmithing1_19_4TransformRecipe.getSecondaryIngredient(), item);
-            } else if (recipe instanceof RMSmithingRecipe) {
-                RMSmithingRecipe rmSmithingRecipe = (RMSmithingRecipe) recipe;
+            } else if (recipe instanceof RMSmithingRecipe rmSmithingRecipe) {
                 return containsRecipeChoice(rmSmithingRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(rmSmithingRecipe.getSecondaryIngredient(), item);
             } else if (recipe instanceof RMStonecuttingRecipe) {
                 return containsRecipeChoice(((RMStonecuttingRecipe) recipe).getIngredientChoice(), item.getType());
             }
         } else {
-            if (recipe instanceof MultiResultRecipe) {
-                MultiResultRecipe r = (MultiResultRecipe) recipe;
-
+            if (recipe instanceof MultiResultRecipe r) {
                 return containsItem(r.getResults(), item, false);
-            } else if (recipe instanceof SingleResultRecipe) {
-                SingleResultRecipe r = (SingleResultRecipe) recipe;
-
+            } else if (recipe instanceof SingleResultRecipe r) {
                 return containsItem(Collections.singletonList(r.getResult()), item, false);
             }
         }
@@ -228,11 +217,9 @@ public class RecipeCommand implements TabExecutor {
     }
 
     private boolean containsRecipeChoice(RecipeChoice choice, ItemStack item) {
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             return containsMaterial(materialChoice.getChoices(), item.getType());
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             return containsItem(exactChoice.getChoices(), item, true);
         }
 
@@ -240,11 +227,9 @@ public class RecipeCommand implements TabExecutor {
     }
 
     private boolean containsRecipeChoice(RecipeChoice choice, Material material) {
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             return containsMaterial(materialChoice.getChoices(), material);
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             return containsMaterialFromItems(exactChoice.getChoices(), material);
         }
 

@@ -58,9 +58,7 @@ public class AnvilEvents extends BaseRecipeEvents {
         ingredients.add(right);
 
         BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.ANVIL, ingredients, null);
-        if (baseRecipe instanceof AnvilRecipe) {
-            AnvilRecipe recipe = (AnvilRecipe) baseRecipe;
-
+        if (baseRecipe instanceof AnvilRecipe recipe) {
             Location location = inventory.getLocation();
 
             if (location != null) {
@@ -249,8 +247,7 @@ public class AnvilEvents extends BaseRecipeEvents {
         if (ent instanceof Player) {
             Inventory inv = event.getInventory();
 
-            if (inv instanceof AnvilInventory) {
-                AnvilInventory anvilInventory = (AnvilInventory) inv;
+            if (inv instanceof AnvilInventory anvilInventory) {
                 Location location = inv.getLocation();
                 if (location != null) {
                     Player player = (Player) ent;
@@ -274,8 +271,7 @@ public class AnvilEvents extends BaseRecipeEvents {
         HumanEntity ent = event.getWhoClicked();
         if (ent instanceof Player) {
             Inventory inv = event.getInventory();
-            if (inv instanceof AnvilInventory) {
-                AnvilInventory anvilInventory = (AnvilInventory) inv;
+            if (inv instanceof AnvilInventory anvilInventory) {
                 Location location = inv.getLocation();
                 if (location != null) {
                     Player player = (Player) ent;

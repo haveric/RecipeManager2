@@ -30,8 +30,7 @@ public class ConditionEvaluator {
         for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             RecipeChoice choice = entry.getValue();
 
-            if (choice instanceof RecipeChoice.MaterialChoice) {
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
                 List<Material> materials = materialChoice.getChoices();
 
                 for (Material material : materials) {
@@ -43,8 +42,7 @@ public class ConditionEvaluator {
                         }
                     }
                 }
-            } else if (choice instanceof RecipeChoice.ExactChoice) {
-                RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+            } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
                 List<ItemStack> items = exactChoice.getChoices();
 
                 for (ItemStack item : items) {

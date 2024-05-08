@@ -21,9 +21,7 @@ public abstract class SingleRecipeChoiceSingleResultRecipe extends SingleResultR
     public SingleRecipeChoiceSingleResultRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof SingleRecipeChoiceSingleResultRecipe) {
-            SingleRecipeChoiceSingleResultRecipe r = (SingleRecipeChoiceSingleResultRecipe) recipe;
-
+        if (recipe instanceof SingleRecipeChoiceSingleResultRecipe r) {
             if (r.ingredientChoice != null) {
                 ingredientChoice = r.ingredientChoice.clone();
             }
@@ -76,8 +74,8 @@ public abstract class SingleRecipeChoiceSingleResultRecipe extends SingleResultR
     public void setResult(ItemStack newResult) {
         Preconditions.checkNotNull(newResult);
 
-        if (newResult instanceof ItemResult) {
-            result = ((ItemResult) newResult).setRecipe(this);
+        if (newResult instanceof ItemResult itemResult) {
+            result = itemResult.setRecipe(this);
         } else {
             result = new ItemResult(newResult).setRecipe(this);
         }

@@ -337,9 +337,7 @@ public class FlagIngredientCondition extends Flag {
 
         if (!a.hasInventory()) {
             Object extra = a.extra();
-            if (extra instanceof List) {
-                List<?> ingredients = (List<?>) extra;
-
+            if (extra instanceof List<?> ingredients) {
                 for (ConditionsIngredient checkConditions : conditions) {
                     if (checkConditions.hasNeeded()) {
                         checkConditions.setNeededLeft(checkConditions.getNeeded());

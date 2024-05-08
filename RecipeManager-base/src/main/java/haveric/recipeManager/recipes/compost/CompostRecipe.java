@@ -43,9 +43,7 @@ public class CompostRecipe extends MultiResultRecipe {
     public CompostRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof CompostRecipe) {
-            CompostRecipe r = (CompostRecipe) recipe;
-
+        if (recipe instanceof CompostRecipe r) {
             if (r.ingredientChoice != null) {
                 ingredientChoice = r.ingredientChoice.clone();
             }

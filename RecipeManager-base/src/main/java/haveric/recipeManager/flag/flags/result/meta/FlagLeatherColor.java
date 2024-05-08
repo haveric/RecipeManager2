@@ -106,12 +106,11 @@ public class FlagLeatherColor extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof LeatherArmorMeta)) {
+            if (!(meta instanceof LeatherArmorMeta leather)) {
                 a.addCustomReason("Needs leather armor!");
                 return;
             }
 
-            LeatherArmorMeta leather = (LeatherArmorMeta) meta;
             leather.setColor(color);
 
             a.result().setItemMeta(leather);
@@ -138,8 +137,7 @@ public class FlagLeatherColor extends Flag {
     }
 
     private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
-        if (meta instanceof LeatherArmorMeta) {
-            LeatherArmorMeta leatherMeta = (LeatherArmorMeta) meta;
+        if (meta instanceof LeatherArmorMeta leatherMeta) {
             Color color = leatherMeta.getColor();
 
             if (!color.equals(Bukkit.getItemFactory().getDefaultLeatherColor())) {

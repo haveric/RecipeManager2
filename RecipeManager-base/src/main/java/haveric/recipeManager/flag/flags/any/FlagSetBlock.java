@@ -117,9 +117,7 @@ public class FlagSetBlock extends Flag {
             return;
         }
 
-        if (noInv && a.inventory() instanceof CraftingInventory) {
-            CraftingInventory inv = (CraftingInventory) a.inventory();
-
+        if (noInv && a.inventory() instanceof CraftingInventory inv) {
             if (inv.getSize() < 9) {
                 a.addReason("flag.setblock.needsworkbench", failMessage);
             }

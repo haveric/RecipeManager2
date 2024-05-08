@@ -70,13 +70,11 @@ public class BrewEvents extends BaseRecipeEvents {
     public void brewingStandDrag(InventoryDragEvent event) {
         HumanEntity entity = event.getWhoClicked();
 
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
+        if (entity instanceof Player player) {
             Inventory inv = event.getInventory();
             InventoryHolder holder = inv.getHolder();
 
-            if (inv instanceof BrewerInventory && holder instanceof BrewingStand) {
-                BrewerInventory brewerInventory = (BrewerInventory) inv;
+            if (inv instanceof BrewerInventory brewerInventory && holder instanceof BrewingStand) {
                 Inventory bottomInventory = event.getView().getBottomInventory();
 
                 Set<Integer> rawSlots = event.getRawSlots();
@@ -117,13 +115,11 @@ public class BrewEvents extends BaseRecipeEvents {
     public void brewingStandInventoryClick(InventoryClickEvent event) {
         HumanEntity ent = event.getWhoClicked();
 
-        if (ent instanceof Player) {
+        if (ent instanceof Player player) {
             Inventory inv = event.getInventory();
             InventoryHolder holder = inv.getHolder();
-            Player player = (Player) ent;
 
-            if (inv instanceof BrewerInventory && holder instanceof BrewingStand) {
-                BrewerInventory brewerInventory = (BrewerInventory) inv;
+            if (inv instanceof BrewerInventory brewerInventory && holder instanceof BrewingStand) {
                 int rawSlot = event.getRawSlot();
                 if (rawSlot >= 0) {
                     ClickType clickType = event.getClick();
@@ -204,9 +200,7 @@ public class BrewEvents extends BaseRecipeEvents {
     public void brewingStandFuelEvent(BrewingStandFuelEvent event) {
         Block block = event.getBlock();
         BlockState state = block.getState();
-        if (state instanceof BrewingStand) {
-            BrewingStand brewingStand = (BrewingStand) state;
-
+        if (state instanceof BrewingStand brewingStand) {
             prepareCustomBrewEventLater(brewingStand.getInventory());
         }
     }
@@ -454,9 +448,7 @@ public class BrewEvents extends BaseRecipeEvents {
                     if (potion != null) {
                         ingredients.add(potion);
                         BaseRecipe baseRecipe = RecipeManager.getRecipes().getRecipe(RMCRecipeType.BREW, ingredients);
-                        if (baseRecipe instanceof BrewRecipe) {
-                            BrewRecipe recipe = (BrewRecipe) baseRecipe;
-
+                        if (baseRecipe instanceof BrewRecipe recipe) {
                             if (!recipeSlots.containsKey(recipe)) {
                                 recipeSlots.put(recipe, new ArrayList<>());
                             }
@@ -549,8 +541,7 @@ public class BrewEvents extends BaseRecipeEvents {
     public void brewEvent(BrewEvent event) {
         Block block = event.getBlock();
         BlockState state = block.getState();
-        if (state instanceof BrewingStand) {
-            BrewingStand brewingStand = (BrewingStand) state;
+        if (state instanceof BrewingStand brewingStand) {
             BrewingStandData data = BrewingStands.get(brewingStand.getLocation());
             if (data.isBrewing()) {
                 event.setCancelled(true);

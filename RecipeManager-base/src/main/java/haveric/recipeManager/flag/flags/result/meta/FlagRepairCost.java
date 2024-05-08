@@ -156,15 +156,13 @@ public class FlagRepairCost extends Flag {
     public void onPrepare(Args a) {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
-            if (!(meta instanceof Repairable) || cost == null) {
+            if (!(meta instanceof Repairable repairable) || cost == null) {
                 return;
             }
 
             if (useLoreMessage) {
                 addResultLore(a, Messages.getInstance().parseCustom("flag.repaircost.preparelore", loreMessage, "{cost}", cost));
             }
-
-            Repairable repairable = (Repairable) meta;
 
             repairable.setRepairCost(cost);
 
@@ -176,11 +174,9 @@ public class FlagRepairCost extends Flag {
     public void onCrafted(Args a) {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
-            if (!(meta instanceof Repairable) || cost == null) {
+            if (!(meta instanceof Repairable repairable) || cost == null) {
                 return;
             }
-
-            Repairable repairable = (Repairable) meta;
 
             repairable.setRepairCost(cost);
 
@@ -252,8 +248,7 @@ public class FlagRepairCost extends Flag {
     }
 
     private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
-        if (meta instanceof Repairable) {
-            Repairable repairableMeta = (Repairable) meta;
+        if (meta instanceof Repairable repairableMeta) {
             if (repairableMeta.hasRepairCost()) {
                 builder.append(prefix).append(repairableMeta.getRepairCost());
             }

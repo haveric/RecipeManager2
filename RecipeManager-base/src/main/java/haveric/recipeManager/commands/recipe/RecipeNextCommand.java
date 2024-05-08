@@ -14,8 +14,8 @@ public class RecipeNextCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         UUID playerUUID = null;
-        if (sender instanceof Player) {
-            playerUUID = ((Player) sender).getUniqueId();
+        if (sender instanceof Player player) {
+            playerUUID = player.getUniqueId();
         }
 
         Pages pages = RecipePagination.get(playerUUID);

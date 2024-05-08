@@ -83,11 +83,9 @@ public class AbstractBlockID {
             return false;
         }
 
-        if (!(obj instanceof AbstractBlockID)) {
+        if (!(obj instanceof AbstractBlockID b)) {
             return false;
         }
-
-        AbstractBlockID b = (AbstractBlockID) obj;
 
         return (b.x == x && b.y == y && b.z == z && b.wid.equals(wid));
     }
