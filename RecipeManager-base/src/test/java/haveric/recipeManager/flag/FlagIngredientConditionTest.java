@@ -7,6 +7,7 @@ import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
 import haveric.recipeManager.flag.conditions.condition.ConditionBoolean;
+import haveric.recipeManager.flag.conditions.condition.ConditionString;
 import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.TestMessageSender;
@@ -172,7 +173,8 @@ public class FlagIngredientConditionTest extends FlagBaseYamlTest {
                         } else if (resultType == Material.GRAVEL) {
                             List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIAMOND_SHOVEL));
                             ConditionsIngredient cond = conditions.get(0);
-                            assertEquals(RMCChatColor.COLOR_CHAR + "bHammer", cond.getDisplayName());
+                            ConditionString conditionString = (ConditionString) cond.getConditions().get("name");
+                            assertEquals(RMCChatColor.COLOR_CHAR + "bHammer", conditionString.getValuesString());
                             assertEquals(RMCChatColor.COLOR_CHAR + "cFoo", cond.getFailMessage());
 
                             a.clear();
@@ -180,7 +182,8 @@ public class FlagIngredientConditionTest extends FlagBaseYamlTest {
                         } else if (resultType == Material.COBBLESTONE) {
                             List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIRT));
                             ConditionsIngredient cond = conditions.get(0);
-                            assertEquals("One", cond.getDisplayName());
+                            ConditionString conditionString = (ConditionString) cond.getConditions().get("name");
+                            assertEquals("One", conditionString.getValuesString());
                             assertEquals("Two", cond.getLores().get(0));
                             assertEquals("Three", cond.getFailMessage());
 
@@ -192,7 +195,8 @@ public class FlagIngredientConditionTest extends FlagBaseYamlTest {
                         } else if (resultType == Material.STONE) {
                             List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.DIRT));
                             ConditionsIngredient cond = conditions.get(0);
-                            assertEquals("   One   ", cond.getDisplayName());
+                            ConditionString conditionString = (ConditionString) cond.getConditions().get("name");
+                            assertEquals("   One   ", conditionString.getValuesString());
                             assertEquals("   Two   ", cond.getLores().get(0));
                             assertEquals("   Three   ", cond.getFailMessage());
 
@@ -298,11 +302,13 @@ public class FlagIngredientConditionTest extends FlagBaseYamlTest {
                         } else if (resultType == Material.STONE_SHOVEL) {
                             List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.STONE_SHOVEL));
                             ConditionsIngredient cond = conditions.get(0);
-                            assertEquals("regex:foo", cond.getDisplayName());
+                            ConditionString conditionString = (ConditionString) cond.getConditions().get("name");
+                            assertEquals("regex:foo", conditionString.getValuesString());
                         } else if (resultType == Material.IRON_SHOVEL) {
                             List<ConditionsIngredient> conditions = flag.getIngredientConditions(new ItemStack(Material.IRON_SHOVEL));
                             ConditionsIngredient cond = conditions.get(0);
-                            assertEquals("regex:foo|bar", cond.getDisplayName());
+                            ConditionString conditionString = (ConditionString) cond.getConditions().get("name");
+                            assertEquals("regex:foo|bar", conditionString.getValuesString());
                         }
                     }
                 }

@@ -9,6 +9,8 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.conditions.ConditionsIngredient;
+import haveric.recipeManager.flag.conditions.condition.Condition;
+import haveric.recipeManager.flag.conditions.condition.ConditionString;
 import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.flag.flags.any.meta.FlagDisplayName;
 import haveric.recipeManager.messages.Messages;
@@ -18,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public abstract class SingleResultRecipe extends BaseRecipe {
     protected ItemResult result;
@@ -164,13 +167,15 @@ public abstract class SingleResultRecipe extends BaseRecipe {
         String print = "";
         if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
             FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
-            List<ConditionsIngredient> conditions = flag.getIngredientConditions(result.getItemStack());
+            List<ConditionsIngredient> conditionsList = flag.getIngredientConditions(result.getItemStack());
 
-            if (!conditions.isEmpty()) {
-                ConditionsIngredient condition = conditions.get(0);
+            if (!conditionsList.isEmpty()) {
+                ConditionsIngredient condition = conditionsList.get(0);
 
-                if (condition.hasDisplayName()) {
-                    print = RMCChatColor.BLACK + condition.getDisplayName();
+                Map<String, Condition> conditions = condition.getConditions();
+                if (conditions.containsKey("name")) {
+                    ConditionString conditionString = (ConditionString) conditions.get("name");
+                    print = RMCChatColor.BLACK + conditionString.getValuesString();
                 } else if (condition.hasLore()) {
                     print = RMCChatColor.BLACK + "" + RMCChatColor.ITALIC + condition.getLores().get(0);
                 }

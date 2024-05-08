@@ -204,11 +204,11 @@ public class FlagDisplayName extends Flag {
         returnCondition.setCheckCallback((item, meta, condition) -> {
             ConditionString callbackCondition = (ConditionString) condition;
             if (callbackCondition.shouldHaveNoMeta()) {
-                return !meta.hasItemName();
+                return !meta.hasDisplayName();
             }
 
-            if (meta.hasItemName()) {
-                return !callbackCondition.hasValue() || callbackCondition.containsRegex(meta.getItemName());
+            if (meta.hasDisplayName()) {
+                return !callbackCondition.hasValue() || callbackCondition.containsRegex(meta.getDisplayName());
             }
 
             return false;
