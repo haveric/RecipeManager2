@@ -1,14 +1,12 @@
 package haveric.recipeManager.flag.flags.any;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 
@@ -43,21 +41,10 @@ public class FlagBiome extends Flag {
 
     @Override
     protected String[] getExamples() {
-        String[] description = new String[]{};
-
-        if (Version.has1_18Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                "{flag} " + Biome.JUNGLE.name().toLowerCase() + ", " + Biome.BAMBOO_JUNGLE.name().toLowerCase() + ", " + Biome.SPARSE_JUNGLE.name().toLowerCase(),
-                "{flag} !" + Biome.DRIPSTONE_CAVES.name().toLowerCase() + ", !" + Biome.LUSH_CAVES.name().toLowerCase()
-            }, String.class);
-        } else {
-            description = ObjectArrays.concat(description, new String[]{
-                "{flag} " + Biome.JUNGLE.name().toLowerCase() + ", jungle_hills",
-                "{flag} !" + Biome.MUSHROOM_FIELDS.name().toLowerCase() + ", !mushroom_field_shore"
-            }, String.class);
-
-        }
-        return description;
+        return new String[]{
+            "{flag} " + Biome.JUNGLE.name().toLowerCase() + ", " + Biome.BAMBOO_JUNGLE.name().toLowerCase() + ", " + Biome.SPARSE_JUNGLE.name().toLowerCase(),
+            "{flag} !" + Biome.DRIPSTONE_CAVES.name().toLowerCase() + ", !" + Biome.LUSH_CAVES.name().toLowerCase()
+        };
     }
 
     private Map<Biome, Boolean> biomes = new EnumMap<>(Biome.class);

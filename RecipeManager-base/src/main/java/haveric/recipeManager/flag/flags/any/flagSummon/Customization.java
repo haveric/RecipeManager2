@@ -182,20 +182,17 @@ public class Customization implements Cloneable {
         rabbit = c.rabbit;
         saddle = c.saddle;
         shearedSheep = c.shearedSheep;
+        skeletonHorseTrapped = c.skeletonHorseTrapped;
+        skeletonHorseTrappedTicks = c.skeletonHorseTrappedTicks;
         spread = c.spread;
         target = c.target;
         tropicalFishColor = c.tropicalFishColor;
         tropicalFishPattern = c.tropicalFishPattern;
         tropicalFishPatternColor = c.tropicalFishPatternColor;
         villager = c.villager;
+        vindicatorJohnny = c.vindicatorJohnny;
         visualFire = c.visualFire;
         wanderingTraderDespawnDelay = c.wanderingTraderDespawnDelay;
-
-        if (Version.has1_18Support()) {
-            skeletonHorseTrapped = c.skeletonHorseTrapped;
-            skeletonHorseTrappedTicks = c.skeletonHorseTrappedTicks;
-            vindicatorJohnny = c.vindicatorJohnny;
-        }
 
         if (Version.has1_19Support()) {
             frogVariant = c.frogVariant;
@@ -582,17 +579,15 @@ public class Customization implements Cloneable {
 
             ent.setVisualFire(visualFire);
 
-            if (Version.has1_18Support()) {
-                if (ent instanceof SkeletonHorse) {
-                    SkeletonHorse skeletonHorse = (SkeletonHorse) ent;
-                    skeletonHorse.setTrapped(skeletonHorseTrapped);
-                    skeletonHorse.setTrapTime(skeletonHorseTrappedTicks);
-                }
+            if (ent instanceof SkeletonHorse) {
+                SkeletonHorse skeletonHorse = (SkeletonHorse) ent;
+                skeletonHorse.setTrapped(skeletonHorseTrapped);
+                skeletonHorse.setTrapTime(skeletonHorseTrappedTicks);
+            }
 
-                if (ent instanceof Vindicator) {
-                    Vindicator vindicator = (Vindicator) ent;
-                    vindicator.setJohnny(vindicatorJohnny);
-                }
+            if (ent instanceof Vindicator) {
+                Vindicator vindicator = (Vindicator) ent;
+                vindicator.setJohnny(vindicatorJohnny);
             }
 
             if (Version.has1_19Support()) {
@@ -1386,9 +1381,9 @@ public class Customization implements Cloneable {
             goatScreaming = true;
         } else if (lower.equals("visualfire")) {
             visualFire = true;
-        } else if (Version.has1_18Support() && lower.equals("skeletonhorsetrapped")) {
+        } else if (lower.equals("skeletonhorsetrapped")) {
             skeletonHorseTrapped = true;
-        } else if (Version.has1_18Support() && lower.startsWith("skeletonhorsetrappedticks")) {
+        } else if (lower.startsWith("skeletonhorsetrappedticks")) {
             lower = lower.substring("skeletonhorsetrappedticks".length()).trim();
 
             try {
@@ -1402,7 +1397,7 @@ public class Customization implements Cloneable {
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'skeletonhorsetrappedticks' argument with invalid value number: " + lower);
             }
-        } else if (Version.has1_18Support() && lower.equals("vindicatorjohnny")) {
+        } else if (lower.equals("vindicatorjohnny")) {
             vindicatorJohnny = true;
         } else if (Version.has1_19Support() && lower.startsWith("frog")) {
             if (entityType != EntityType.FROG) {
@@ -1544,20 +1539,17 @@ public class Customization implements Cloneable {
         toHash += "rabbit: " + rabbit.toString();
         toHash += "saddle: " + saddle;
         toHash += "shearedSheep: " + shearedSheep;
+        toHash += "skeletonHorseTrapped: " + skeletonHorseTrapped;
+        toHash += "skeletonHorseTrappedTicks: " + skeletonHorseTrappedTicks;
         toHash += "spread: " + spread;
         toHash += "target: " + target;
         toHash += "tropicalFishColor: " + tropicalFishColor;
         toHash += "tropicalFishPattern: " + tropicalFishPattern;
         toHash += "tropicalFishPatternColor: " + tropicalFishPatternColor;
         toHash += "villager: " + villager.toString();
+        toHash += "vindicatorJohnny: " + vindicatorJohnny;
         toHash += "visualFire: " + visualFire;
         toHash += "wanderingTraderDespawnDelay: " + wanderingTraderDespawnDelay;
-
-        if (Version.has1_18Support()) {
-            toHash += "skeletonHorseTrapped: " + skeletonHorseTrapped;
-            toHash += "skeletonHorseTrappedTicks: " + skeletonHorseTrappedTicks;
-            toHash += "vindicatorJohnny: " + vindicatorJohnny;
-        }
 
         if (Version.has1_19Support()) {
             toHash += "frogVariant: " + frogVariant;

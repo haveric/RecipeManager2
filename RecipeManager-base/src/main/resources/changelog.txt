@@ -2,7 +2,7 @@
 This file will be automatically overwritten when a new version is installed.
 
 ### v2.32.0
-* REMOVED support for Minecraft 1.12 - 1.16
+* REMOVED support for Minecraft 1.12 - 1.17
 * REMOVED FLAG: `@SpawnEgg`
 * FIX: `@BlockPowered` for soul campfires
 * REMOVED: `@Summon`: `ocelot` option
