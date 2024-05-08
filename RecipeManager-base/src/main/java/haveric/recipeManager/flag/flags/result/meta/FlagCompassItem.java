@@ -211,7 +211,7 @@ public class FlagCompassItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
-        if (Supports.compassMeta() && meta instanceof CompassMeta) {
+        if (meta instanceof CompassMeta) {
             CompassMeta compassMeta = (CompassMeta) meta;
 
             if (compassMeta.hasLodestone()) {

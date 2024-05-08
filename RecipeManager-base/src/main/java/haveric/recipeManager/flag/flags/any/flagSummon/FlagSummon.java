@@ -60,16 +60,8 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "angry", "makes entity angry, only works for wolves and pigzombies; you can't use 'pet' with this."),
             String.format(argFormat, "arrowcooldown <ticks>", "sets the ticks until the next arrow leaves the entity's body."),
             String.format(argFormat, "arrowsinbody <amount>", "sets the number of arrows in the entity's body."),
-        }, String.class);
-
-        if (Version.has1_17Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "axolotl <variant>", "sets the axolotl variant, available values: " + RMCUtil.collectionToString(Arrays.asList(Axolotl.Variant.values())).toLowerCase()),
-                    String.format(argFormat, "axolotlplayingdead", "sets the axolotl to be playing dead."),
-            }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[]{
+            String.format(argFormat, "axolotl <variant>", "sets the axolotl variant, available values: " + RMCUtil.collectionToString(Arrays.asList(Axolotl.Variant.values())).toLowerCase()),
+            String.format(argFormat, "axolotlplayingdead", "sets the axolotl to be playing dead."),
             String.format(argFormat, "baby", "spawn entity as a baby, works with animals, villagers and zombies (works opposite of adult)."),
             String.format(argFormat, "beeanger <ticks>", "sets the anger level to the number of ticks the bee will remain angry for."),
             String.format(argFormat, "beecannotenterhiveticks <ticks>", "sets the ticks the bee cannot enter a hive for."),
@@ -104,14 +96,8 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "foxfirsttrustedplayer <uuid or player>", "set the fox's first trusted player. If set to 'player', the crafter will be used."),
             String.format(argFormat, "foxsecondtrustedplayer <uuid or player>", "set the fox's second trusted player. If set to 'player', the crafter will be used."),
             String.format(argFormat, "foxsleeping", "set the fox to be sleeping"),
+            String.format(argFormat, "freezeticks <ticks>", "sets the entity's current freeze ticks (amount of ticks the entity has been in powdered snow)."),
         }, String.class);
-
-        if (Version.has1_17Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "freezeticks <ticks>", "sets the entity's current freeze ticks (amount of ticks the entity has been in powdered snow)."),
-            }, String.class);
-        }
-
 
         if (Version.has1_19Support()) {
             if (!Frog.Variant.class.isEnum()) {
@@ -131,11 +117,10 @@ public class FlagSummon extends Flag {
             }
         }
 
-        if (Version.has1_17Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "glowsquiddarkticksremaining <ticks>", "sets the number of dark ticks that a glow squid has remaining."),
-            }, String.class);
-        }
+
+        description = ObjectArrays.concat(description, new String[]{
+            String.format(argFormat, "glowsquiddarkticksremaining <ticks>", "sets the number of dark ticks that a glow squid has remaining."),
+        }, String.class);
 
         if (Version.has1_19Support()) {
             description = ObjectArrays.concat(description, new String[]{
@@ -144,13 +129,8 @@ public class FlagSummon extends Flag {
             }, String.class);
         }
 
-        if (Version.has1_17Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "goatscreaming", "set the goat to be a screaming goat."),
-            }, String.class);
-        }
-
         description = ObjectArrays.concat(description, new String[] {
+            String.format(argFormat, "goatscreaming", "set the goat to be a screaming goat."),
             String.format(argFormat, "hand <item> [drop%]", "equip an item on the entity's main hand with optional drop chance; for enderman it only uses material and data from the item."),
             String.format(argFormat, "head <item> [drop%]", "equip an item on the entity's head with optional drop chance."),
             String.format(argFormat, "hit", "crafter will fake-attack the entity to provoke it into attacking or scare it away."),
@@ -230,12 +210,8 @@ public class FlagSummon extends Flag {
                     String.format(argFormat, "vindicatorjohnny", "sets the johnny state of a vindicator.") }, String.class);
         }
 
-        if (Version.has1_17Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                String.format(argFormat, "visualfire", "sets if the entity has visual fire (it will always appear to be on fire).") }, String.class);
-        }
-
         description = ObjectArrays.concat(description, new String[]{
+            String.format(argFormat, "visualfire", "sets if the entity has visual fire (it will always appear to be on fire)."),
             String.format(argFormat, "wanderingtraderdespawndelay <ticks>", "sets if the despawn delay (in ticks) of a wandering trader. If ticks is less than or equal to zero, the trader will not be despawned.")
         }, String.class);
 

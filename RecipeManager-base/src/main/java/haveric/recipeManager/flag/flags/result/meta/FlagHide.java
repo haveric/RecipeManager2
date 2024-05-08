@@ -40,13 +40,8 @@ public class FlagHide extends Flag {
             "  placedon           = Hide where this item can be placed on",
             "  additionaltooltip  = Hide potion effects, book and firework information, map tooltips, patterns of banners, and enchantments of enchanted books",
             "  unbreakable        = Hide the unbreakable state",
+            "  dye            = Hides dyes from colored leather armor",
         };
-
-        if (Supports.itemFlagHideDye()) {
-            description = ObjectArrays.concat(description, new String[] {
-                "  dye            = Hides dyes from colored leather armor",
-            }, String.class);
-        }
 
         if (Supports.itemFlagHideArmorTrim()) {
             description = ObjectArrays.concat(description, new String[] {
@@ -188,7 +183,7 @@ public class FlagHide extends Flag {
                     meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
                 }
 
-                if (dye && Supports.itemFlagHideDye()) {
+                if (dye) {
                     meta.addItemFlags(ItemFlag.HIDE_DYE);
                 }
 

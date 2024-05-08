@@ -16,8 +16,6 @@ import static org.bukkit.Tag.REGISTRY_BLOCKS;
 
 public class Supports {
     static boolean axolotlBucketMeta = false;
-    static boolean compassMeta = false;
-    static boolean itemFlagHideDye = false;
     static boolean itemFlagHideArmorTrim = false;
     static boolean allayDuplication = false;
     static boolean categories = false;
@@ -29,8 +27,6 @@ public class Supports {
 
     public static void init() {
         checkAxolotlBucketMeta();
-        checkCompassMetaSupport();
-        checkItemFlagHideDyeSupport();
         checkItemFlagHideArmorTrimSupport();
         checkAllayDuplication();
         checkCategories();
@@ -39,29 +35,6 @@ public class Supports {
         checkPlayerProfile();
         checkBasePotionType();
         checkShortGrassMaterial();
-    }
-
-    // 1.16.1
-    private static void checkCompassMetaSupport() {
-        try {
-            ItemStack compass = new ItemStack(Material.COMPASS);
-            @SuppressWarnings("unused")
-            CompassMeta meta = (CompassMeta) compass.getItemMeta();
-            compassMeta = true;
-        } catch (NoSuchFieldError | NoClassDefFoundError e) {
-            compassMeta = false;
-        }
-    }
-
-    // 1.16.2
-    private static void checkItemFlagHideDyeSupport() {
-        try {
-            @SuppressWarnings("unused")
-            ItemFlag flag = ItemFlag.HIDE_DYE;
-            itemFlagHideDye = true;
-        } catch (NoSuchFieldError e) {
-            itemFlagHideDye = false;
-        }
     }
 
     // 1.17+
@@ -178,14 +151,6 @@ public class Supports {
 
     public static boolean axolotlBucketMeta() {
         return axolotlBucketMeta;
-    }
-
-    public static boolean compassMeta() {
-        return compassMeta;
-    }
-
-    public static boolean itemFlagHideDye() {
-        return itemFlagHideDye;
     }
 
     public static boolean itemFlagHideArmorTrim() {

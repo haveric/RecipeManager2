@@ -269,10 +269,9 @@ public class Vanilla {
         addFuelRecipe(Material.OAK_BOAT, 60);
         addFuelRecipe(Material.SPRUCE_BOAT, 60);
 
-        if (Version.has1_17Support()) {
-            addFuelRecipe(Material.AZALEA, 5);
-            addFuelRecipe(Material.FLOWERING_AZALEA, 5);
-        }
+        // 1.17
+        addFuelRecipe(Material.AZALEA, 5);
+        addFuelRecipe(Material.FLOWERING_AZALEA, 5);
 
         if (Version.has1_19Support()) {
             addFuelRecipe(Material.MANGROVE_ROOTS, 15);
@@ -463,23 +462,22 @@ public class Vanilla {
         addCompostRecipe(Material.NETHER_WART_BLOCK, 85);
         addCompostRecipe(Material.WARPED_WART_BLOCK, 85);
 
-        if (Version.has1_17Support()) {
-            addCompostRecipe(Material.AZALEA_LEAVES, 30);
-            addCompostRecipe(Material.GLOW_BERRIES, 30);
-            addCompostRecipe(Material.HANGING_ROOTS, 30);
-            addCompostRecipe(Material.MOSS_CARPET, 30);
-            addCompostRecipe(Material.SMALL_DRIPLEAF, 30);
+        // 1.17
+        addCompostRecipe(Material.AZALEA_LEAVES, 30);
+        addCompostRecipe(Material.GLOW_BERRIES, 30);
+        addCompostRecipe(Material.HANGING_ROOTS, 30);
+        addCompostRecipe(Material.MOSS_CARPET, 30);
+        addCompostRecipe(Material.SMALL_DRIPLEAF, 30);
 
-            addCompostRecipe(Material.FLOWERING_AZALEA_LEAVES , 50);
-            addCompostRecipe(Material.GLOW_LICHEN, 50);
+        addCompostRecipe(Material.FLOWERING_AZALEA_LEAVES , 50);
+        addCompostRecipe(Material.GLOW_LICHEN, 50);
 
-            addCompostRecipe(Material.AZALEA, 65);
-            addCompostRecipe(Material.BIG_DRIPLEAF, 65);
-            addCompostRecipe(Material.MOSS_BLOCK, 65);
-            addCompostRecipe(Material.SPORE_BLOSSOM, 65);
+        addCompostRecipe(Material.AZALEA, 65);
+        addCompostRecipe(Material.BIG_DRIPLEAF, 65);
+        addCompostRecipe(Material.MOSS_BLOCK, 65);
+        addCompostRecipe(Material.SPORE_BLOSSOM, 65);
 
-            addCompostRecipe(Material.FLOWERING_AZALEA, 85);
-        }
+        addCompostRecipe(Material.FLOWERING_AZALEA, 85);
 
         if (Version.has1_19Support()) {
             addCompostRecipe(Material.MANGROVE_LEAVES, 30);
