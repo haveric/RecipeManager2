@@ -103,12 +103,8 @@ public class FlagLoader {
         }
         loadFlag(FlagType.BANNER_ITEM, new FlagBannerItem(), APPLIED_TO_ITEM, "banner");
         loadFlag(FlagType.BOOK_ITEM, new FlagBookItem(), APPLIED_TO_ITEM, "book");
-        if (Version.has1_17Support()) {
-            loadFlag(FlagType.BUNDLE_ITEM, new FlagBundleItem(), APPLIED_TO_ITEM, "bundle");
-        }
-        if (Supports.compassMeta()) {
-            loadFlag(FlagType.COMPASS_ITEM, new FlagCompassItem(), APPLIED_TO_ITEM, "compass");
-        }
+        loadFlag(FlagType.BUNDLE_ITEM, new FlagBundleItem(), APPLIED_TO_ITEM, "bundle");
+        loadFlag(FlagType.COMPASS_ITEM, new FlagCompassItem(), APPLIED_TO_ITEM, "compass");
         loadFlag(FlagType.CROSSBOW_ITEM, new FlagCrossbowItem(), APPLIED_TO_ITEM, "crossbow");
         loadFlag(FlagType.CUSTOM_MODEL_DATA, new FlagCustomModelData(), APPLIED_TO_ITEM, "modeldata");
         loadFlag(FlagType.DAMAGE, new FlagDamage(), APPLIED_TO_ITEM, "durability", "dur");

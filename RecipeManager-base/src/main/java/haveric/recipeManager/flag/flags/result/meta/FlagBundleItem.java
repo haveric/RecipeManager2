@@ -195,7 +195,7 @@ public class FlagBundleItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
-        if (Version.has1_17Support() && meta instanceof BundleMeta) {
+        if (meta instanceof BundleMeta) {
             BundleMeta bundleMeta = (BundleMeta) meta;
             List<ItemStack> bundleItems = bundleMeta.getItems();
             for (ItemStack bundleItem : bundleItems) {

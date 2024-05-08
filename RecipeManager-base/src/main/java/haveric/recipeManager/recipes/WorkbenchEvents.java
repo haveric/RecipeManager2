@@ -273,14 +273,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             return true;
         }
 
-        ItemStack result;
-        if (Version.has1_17Support()) {
-            result = inv.getRecipe().getResult();
-        } else {
-            // 1.15 and 1.16 do not handle repair recipes well, so use the inventory instead of the recipe
-            result = inv.getResult();
-        }
-
+        ItemStack result = inv.getRecipe().getResult();
         if (RecipeManager.getSettings().getSpecialRepairMetadata()) {
             ItemStack[] matrix = inv.getMatrix();
             ItemStack[] repaired = new ItemStack[2];

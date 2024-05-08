@@ -1,7 +1,6 @@
 package haveric.recipeManager.tools;
 
 import org.bukkit.Material;
-import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -23,10 +22,8 @@ public class Version {
             supportVersion = "1.19";
         } else if (supports1_18()) {
             supportVersion = "1.18";
-        } else if (supports1_17()) {
-            supportVersion = "1.17";
         } else {
-            supportVersion = "1.16";
+            supportVersion = "1.17";
         }
 
         spigotSupport = supportsSpigot();
@@ -136,20 +133,6 @@ public class Version {
         return supports;
     }
 
-    private static boolean supports1_17() {
-        boolean supports;
-
-        try {
-            @SuppressWarnings("unused")
-            EntityType goat = EntityType.GOAT;
-            supports = true;
-        } catch (NoSuchFieldError e) {
-            supports = false;
-        }
-
-        return supports;
-    }
-
     private static String getVersion() {
         if (supportVersion == null) {
             init();
@@ -218,17 +201,6 @@ public class Version {
         String version = getVersion();
 
         if (version.equals("1.20.5") || version.equals("1.20") || version.equals("1.19.4") || version.equals("1.19.3") || version.equals("1.19") || version.equals("1.18")) {
-            hasSupport = true;
-        }
-
-        return hasSupport;
-    }
-
-    public static boolean has1_17Support() {
-        boolean hasSupport = false;
-        String version = getVersion();
-
-        if (version.equals("1.20.5") || version.equals("1.20") || version.equals("1.19.4") || version.equals("1.19.3") || version.equals("1.19") || version.equals("1.18") || version.equals("1.17")) {
             hasSupport = true;
         }
 

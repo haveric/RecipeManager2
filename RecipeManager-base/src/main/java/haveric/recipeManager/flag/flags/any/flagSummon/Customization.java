@@ -126,6 +126,8 @@ public class Customization implements Cloneable {
         angry = c.angry;
         arrowCooldown = c.arrowCooldown;
         arrowsInBody = c.arrowsInBody;
+        axolotl = c.axolotl;
+        axolotlPlayingDead = c.axolotlPlayingDead;
         baby = c.baby;
         beeAnger = c.beeAnger;
         beeCannotEnterHiveTicks = c.beeCannotEnterHiveTicks;
@@ -143,6 +145,9 @@ public class Customization implements Cloneable {
         foxSecondTrustedPlayer = c.foxSecondTrustedPlayer;
         foxSecondTrustedPlayerUUID = c.foxSecondTrustedPlayerUUID;
         foxSleeping = c.foxSleeping;
+        freezeTicks = c.freezeTicks;
+        glowSquidDarkTicksRemaining = c.glowSquidDarkTicksRemaining;
+        goatScreaming = c.goatScreaming;
         hasChest = c.hasChest;
         hit = c.hit;
         horseColor = c.horseColor;
@@ -183,16 +188,8 @@ public class Customization implements Cloneable {
         tropicalFishPattern = c.tropicalFishPattern;
         tropicalFishPatternColor = c.tropicalFishPatternColor;
         villager = c.villager;
+        visualFire = c.visualFire;
         wanderingTraderDespawnDelay = c.wanderingTraderDespawnDelay;
-
-        if (Version.has1_17Support()) {
-            axolotl = c.axolotl;
-            axolotlPlayingDead = c.axolotlPlayingDead;
-            freezeTicks = c.freezeTicks;
-            glowSquidDarkTicksRemaining = c.glowSquidDarkTicksRemaining;
-            goatScreaming = c.goatScreaming;
-            visualFire = c.visualFire;
-        }
 
         if (Version.has1_18Support()) {
             skeletonHorseTrapped = c.skeletonHorseTrapped;
@@ -563,29 +560,27 @@ public class Customization implements Cloneable {
             ent.setArrowsInBody(arrowsInBody);
             ent.setInvisible(invisible);
 
-            if (Version.has1_17Support()) {
-                if (ent instanceof Axolotl) {
-                    Axolotl axolotlEntity = (Axolotl) ent;
-                    axolotlEntity.setVariant(axolotl);
-                    axolotlEntity.setPlayingDead(axolotlPlayingDead);
-                }
-
-                if (ent instanceof GlowSquid && glowSquidDarkTicksRemaining != null) {
-                    GlowSquid glowSquid = (GlowSquid) ent;
-                    glowSquid.setDarkTicksRemaining(glowSquidDarkTicksRemaining);
-                }
-
-                if (ent instanceof Goat) {
-                    Goat goat = (Goat) ent;
-                    goat.setScreaming(goatScreaming);
-                }
-
-                if (freezeTicks != null) {
-                    ent.setFreezeTicks(freezeTicks);
-                }
-
-                ent.setVisualFire(visualFire);
+            if (ent instanceof Axolotl) {
+                Axolotl axolotlEntity = (Axolotl) ent;
+                axolotlEntity.setVariant(axolotl);
+                axolotlEntity.setPlayingDead(axolotlPlayingDead);
             }
+
+            if (ent instanceof GlowSquid && glowSquidDarkTicksRemaining != null) {
+                GlowSquid glowSquid = (GlowSquid) ent;
+                glowSquid.setDarkTicksRemaining(glowSquidDarkTicksRemaining);
+            }
+
+            if (ent instanceof Goat) {
+                Goat goat = (Goat) ent;
+                goat.setScreaming(goatScreaming);
+            }
+
+            if (freezeTicks != null) {
+                ent.setFreezeTicks(freezeTicks);
+            }
+
+            ent.setVisualFire(visualFire);
 
             if (Version.has1_18Support()) {
                 if (ent instanceof SkeletonHorse) {
@@ -1356,16 +1351,16 @@ public class Customization implements Cloneable {
             }
         } else if (lower.equals("invisible")) {
             invisible = true;
-        } else if (Version.has1_17Support() && lower.equals("axolotlplayingdead")) {
+        } else if (lower.equals("axolotlplayingdead")) {
             axolotlPlayingDead = true;
-        } else if (Version.has1_17Support() && lower.startsWith("axolotl")) {
+        } else if (lower.startsWith("axolotl")) {
             lower = lower.substring("axolotl".length()).trim();
             axolotl = RMCUtil.parseEnum(lower, Axolotl.Variant.values());
 
             if (axolotl == null) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'axolotl' argument with invalid variant: " + lower);
             }
-        } else if (Version.has1_17Support() && lower.startsWith("freezeticks")) {
+        } else if (lower.startsWith("freezeticks")) {
             lower = lower.substring("freezeticks".length()).trim();
 
             try {
@@ -1373,7 +1368,7 @@ public class Customization implements Cloneable {
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'freezeticks' argument with invalid value number: " + lower);
             }
-        } else if (Version.has1_17Support() && lower.startsWith("glowsquiddarkticksremaining")) {
+        } else if (lower.startsWith("glowsquiddarkticksremaining")) {
             lower = lower.substring("glowsquiddarkticksremaining".length()).trim();
 
             try {
@@ -1387,9 +1382,9 @@ public class Customization implements Cloneable {
             } catch (NumberFormatException e) {
                 ErrorReporter.getInstance().warning("Flag " + flagType + " has 'glowsquiddarkticksremaining' argument with invalid value number: " + lower);
             }
-        } else if (Version.has1_17Support() && lower.equals("goatscreaming")) {
+        } else if (lower.equals("goatscreaming")) {
             goatScreaming = true;
-        } else if (Version.has1_17Support() && lower.equals("visualfire")) {
+        } else if (lower.equals("visualfire")) {
             visualFire = true;
         } else if (Version.has1_18Support() && lower.equals("skeletonhorsetrapped")) {
             skeletonHorseTrapped = true;
@@ -1481,6 +1476,8 @@ public class Customization implements Cloneable {
         toHash += "angry: " + angry;
         toHash += "arrowCooldown: " + arrowCooldown;
         toHash += "arrowsInBody: " + arrowsInBody;
+        toHash += "axolotl: " + axolotl;
+        toHash += "axolotlPlayingDead: " + axolotlPlayingDead;
         toHash += "baby: " + baby;
         toHash += "beeAnger: " + beeAnger;
         toHash += "beeCannotEnterHiveTicks: " + beeCannotEnterHiveTicks;
@@ -1506,6 +1503,9 @@ public class Customization implements Cloneable {
         toHash += "foxSecondTrustedPlayer: " + foxSecondTrustedPlayer;
         toHash += "foxSecondTrustedPlayerUUID: " + foxSecondTrustedPlayerUUID;
         toHash += "foxSleeping: " + foxSleeping;
+        toHash += "freezeTicks: " + freezeTicks;
+        toHash += "glowSquidDarkTicksRemaining: " + glowSquidDarkTicksRemaining;
+        toHash += "goatScreaming: " + goatScreaming;
         toHash += "hasChest: " + hasChest;
         toHash += "horseColor: " + horseColor.toString();
         toHash += "horseStyle: " + horseStyle.toString();
@@ -1550,16 +1550,8 @@ public class Customization implements Cloneable {
         toHash += "tropicalFishPattern: " + tropicalFishPattern;
         toHash += "tropicalFishPatternColor: " + tropicalFishPatternColor;
         toHash += "villager: " + villager.toString();
+        toHash += "visualFire: " + visualFire;
         toHash += "wanderingTraderDespawnDelay: " + wanderingTraderDespawnDelay;
-
-        if (Version.has1_17Support()) {
-            toHash += "axolotl: " + axolotl;
-            toHash += "axolotlPlayingDead: " + axolotlPlayingDead;
-            toHash += "freezeTicks: " + freezeTicks;
-            toHash += "glowSquidDarkTicksRemaining: " + glowSquidDarkTicksRemaining;
-            toHash += "goatScreaming: " + goatScreaming;
-            toHash += "visualFire: " + visualFire;
-        }
 
         if (Version.has1_18Support()) {
             toHash += "skeletonHorseTrapped: " + skeletonHorseTrapped;
