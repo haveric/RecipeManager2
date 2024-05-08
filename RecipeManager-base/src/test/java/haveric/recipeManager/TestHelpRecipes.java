@@ -56,8 +56,7 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
             try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
                 mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);
 
-                if (baseRecipe instanceof CraftRecipe) {
-                    CraftRecipe recipe = (CraftRecipe) baseRecipe;
+                if (baseRecipe instanceof CraftRecipe recipe) {
                     ItemResult result = recipe.getResults().get(0);
                     Material resultType = result.getType();
 
@@ -68,8 +67,7 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
                     } else if (resultType == Material.LIGHT_GRAY_TERRACOTTA) {
                         numCraftRecipes++;
                     }
-                } else if (baseRecipe instanceof CombineRecipe) {
-                    CombineRecipe recipe = (CombineRecipe) baseRecipe;
+                } else if (baseRecipe instanceof CombineRecipe recipe) {
                     ItemResult result = recipe.getResults().get(0);
                     Material resultType = result.getType();
 
@@ -78,8 +76,7 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
                     } else if (resultType == Material.DIAMOND) {
                         numCombineRecipes++;
                     }
-                } else if (baseRecipe instanceof RMBaseFurnaceRecipe) {
-                    RMBaseFurnaceRecipe recipe = (RMBaseFurnaceRecipe) baseRecipe;
+                } else if (baseRecipe instanceof RMBaseFurnaceRecipe recipe) {
                     ItemResult result = recipe.getResult();
                     Material resultType = result.getType();
 
@@ -88,8 +85,7 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
                     } else if (resultType == Material.EXPERIENCE_BOTTLE) {
                         numSmeltRecipes++;
                     }
-                } else if (baseRecipe instanceof FuelRecipe) {
-                    FuelRecipe recipe = (FuelRecipe) baseRecipe;
+                } else if (baseRecipe instanceof FuelRecipe recipe) {
                     RecipeChoice choice = recipe.getIngredientChoice();
                     assertInstanceOf(RecipeChoice.MaterialChoice.class, choice);
 
@@ -100,8 +96,7 @@ public class TestHelpRecipes extends FlagBaseYamlTest {
                     } else if (choices.contains(Material.JACK_O_LANTERN)) {
                         numFuelRecipes++;
                     }
-                } else if (baseRecipe instanceof BrewRecipe) {
-                    BrewRecipe recipe = (BrewRecipe) baseRecipe;
+                } else if (baseRecipe instanceof BrewRecipe recipe) {
                     ItemResult result = recipe.getResults().get(0);
                     Material resultType = result.getType();
 

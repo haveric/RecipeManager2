@@ -304,9 +304,7 @@ public class SettingsYaml extends BaseSettings {
 
             if (value instanceof String) {
                 parseMaterialNames(sender, (String) value, material);
-            } else if (value instanceof ConfigurationSection) {
-                ConfigurationSection section = (ConfigurationSection) value;
-
+            } else if (value instanceof ConfigurationSection section) {
                 for (String key : section.getKeys(false)) {
                     if (key.equals("names")) {
                         parseMaterialNames(sender, section.getString(key), material);

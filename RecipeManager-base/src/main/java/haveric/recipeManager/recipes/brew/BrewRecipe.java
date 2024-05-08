@@ -35,9 +35,7 @@ public class BrewRecipe extends MultiResultRecipe {
     public BrewRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof BrewRecipe) {
-            BrewRecipe r = (BrewRecipe) recipe;
-
+        if (recipe instanceof BrewRecipe r) {
             minTime = r.minTime;
             maxTime = r.maxTime;
 

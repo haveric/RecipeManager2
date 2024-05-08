@@ -137,12 +137,10 @@ public class FlagBannerItem extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof BannerMeta)) {
+            if (!(meta instanceof BannerMeta banner)) {
                 a.addCustomReason("Needs banner!");
                 return;
             }
-
-            BannerMeta banner = (BannerMeta) meta;
 
             for (Pattern pattern : patterns) {
                 banner.addPattern(pattern);
@@ -174,9 +172,7 @@ public class FlagBannerItem extends Flag {
     }
 
     private void parse(ItemMeta meta, StringBuilder builder, String prefix, String afterFirst, String patternPrefix) {
-        if (meta instanceof BannerMeta) {
-            BannerMeta bannerMeta = (BannerMeta) meta;
-
+        if (meta instanceof BannerMeta bannerMeta) {
             builder.append(prefix);
 
             boolean first = true;

@@ -18,11 +18,9 @@ public class TestMetaFirework extends TestMetaItem implements FireworkMeta {
     TestMetaFirework(TestMetaItem meta) {
         super(meta);
 
-        if (!(meta instanceof TestMetaFirework)) {
+        if (!(meta instanceof TestMetaFirework that)) {
             return;
         }
-
-        TestMetaFirework that = (TestMetaFirework) meta;
 
         this.power = that.power;
 
@@ -100,9 +98,7 @@ public class TestMetaFirework extends TestMetaItem implements FireworkMeta {
             return false;
         }
 
-        if (meta instanceof TestMetaFirework) {
-            TestMetaFirework that = (TestMetaFirework) meta;
-
+        if (meta instanceof TestMetaFirework that) {
             return (hasPower() ? that.hasPower() && this.power == that.power : !that.hasPower())
                     && (hasEffects() ? that.hasEffects() && this.effects.equals(that.effects) : !that.hasEffects());
         }

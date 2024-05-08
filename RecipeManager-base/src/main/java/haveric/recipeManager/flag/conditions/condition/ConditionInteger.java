@@ -121,10 +121,10 @@ public class ConditionInteger extends Condition {
 
     @Override
     public void copy(Condition condition) {
-        if (condition instanceof ConditionInteger) {
-            noCondition = ((ConditionInteger) condition).noCondition;
-            values = ((ConditionInteger) condition).values;
-            negativeValues = ((ConditionInteger) condition).negativeValues;
+        if (condition instanceof ConditionInteger conditionInteger) {
+            noCondition = conditionInteger.noCondition;
+            values = conditionInteger.values;
+            negativeValues = conditionInteger.negativeValues;
         }
     }
 

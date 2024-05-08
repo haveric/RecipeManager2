@@ -21,8 +21,7 @@ public class TestMetaBook extends TestMetaItem implements BookMeta {
     TestMetaBook(TestMetaItem meta) {
         super(meta);
 
-        if (meta instanceof TestMetaBook) {
-            TestMetaBook bookMeta = (TestMetaBook) meta;
+        if (meta instanceof TestMetaBook bookMeta) {
             this.title = bookMeta.title;
             this.author = bookMeta.author;
             pages.addAll(bookMeta.pages);

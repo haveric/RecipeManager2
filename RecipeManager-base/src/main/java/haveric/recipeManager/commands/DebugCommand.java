@@ -44,9 +44,7 @@ public class DebugCommand implements CommandExecutor {
             MessageSender.getInstance().send(sender, "  " + worldName + ": " + gameruleMessage);
         }
 
-        if (sender instanceof Player) {
-            Player player = (Player) sender;
-
+        if (sender instanceof Player player) {
             Block block = player.getTargetBlockExact(20);
 
             if (block != null) {

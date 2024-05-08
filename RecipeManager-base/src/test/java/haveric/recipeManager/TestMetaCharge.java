@@ -10,8 +10,8 @@ public class TestMetaCharge extends TestMetaItem implements FireworkEffectMeta {
     TestMetaCharge(TestMetaItem meta) {
         super(meta);
 
-        if (meta instanceof TestMetaCharge) {
-            effect = ((TestMetaCharge) meta).effect;
+        if (meta instanceof TestMetaCharge testMetaCharge) {
+            effect = testMetaCharge.effect;
         }
     }
 
@@ -49,9 +49,7 @@ public class TestMetaCharge extends TestMetaItem implements FireworkEffectMeta {
         if (!super.equalsCommon(meta)) {
             return false;
         }
-        if (meta instanceof TestMetaCharge) {
-            TestMetaCharge that = (TestMetaCharge) meta;
-
+        if (meta instanceof TestMetaCharge that) {
             return (hasEffect() ? that.hasEffect() && this.effect.equals(that.effect) : !that.hasEffect());
         }
         return true;

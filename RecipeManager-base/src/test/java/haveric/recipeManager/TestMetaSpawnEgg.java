@@ -12,11 +12,10 @@ public class TestMetaSpawnEgg extends TestMetaItem implements SpawnEggMeta {
     TestMetaSpawnEgg(TestMetaItem meta) {
         super(meta);
 
-        if (!(meta instanceof TestMetaSpawnEgg)) {
+        if (!(meta instanceof TestMetaSpawnEgg egg)) {
             return;
         }
 
-        TestMetaSpawnEgg egg = (TestMetaSpawnEgg) meta;
         this.spawnedType = egg.spawnedType;
     }
 
@@ -80,9 +79,7 @@ public class TestMetaSpawnEgg extends TestMetaItem implements SpawnEggMeta {
         if (!super.equalsCommon(meta)) {
             return false;
         }
-        if (meta instanceof TestMetaSpawnEgg) {
-            TestMetaSpawnEgg that = (TestMetaSpawnEgg) meta;
-
+        if (meta instanceof TestMetaSpawnEgg that) {
             return hasSpawnedType() ? that.hasSpawnedType() && this.spawnedType.equals(that.spawnedType) : !that.hasSpawnedType();
         }
         return true;

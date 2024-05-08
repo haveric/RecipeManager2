@@ -107,8 +107,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
 
                     if (ingredientFlags.hasFlags()) {
                         List<ItemStack> items = new ArrayList<>();
-                        if (choice instanceof RecipeChoice.MaterialChoice) {
-                            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
                             List<Material> materials = materialChoice.getChoices();
 
                             for (Material material : materials) {
@@ -117,8 +116,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
 
                                 items.add(a.result().getItemStack());
                             }
-                        } else if (choice instanceof RecipeChoice.ExactChoice) {
-                            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
                             List<ItemStack> exactItems = exactChoice.getChoices();
 
                             for (ItemStack exactItem : exactItems) {
@@ -186,13 +184,11 @@ public class CombineRecipeParser extends BaseRecipeParser {
                     return ErrorReporter.getInstance().error("Ingredient cannot be empty: " + str, "Check for incorrect spelling or missing tags or aliases.");
                 }
 
-                if (choice instanceof RecipeChoice.MaterialChoice) {
-                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
                     if (materialChoice.getChoices().contains(Material.AIR)) {
                         return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");
                     }
-                } else if (choice instanceof RecipeChoice.ExactChoice) {
-                    RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
                     for (ItemStack item : exactChoice.getChoices()) {
                         if (item.getType() == Material.AIR) {
                             return ErrorReporter.getInstance().error("Recipe does not accept AIR as ingredients!");

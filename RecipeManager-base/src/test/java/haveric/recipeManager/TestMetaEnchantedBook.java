@@ -14,11 +14,9 @@ public class TestMetaEnchantedBook extends TestMetaItem implements EnchantmentSt
     TestMetaEnchantedBook(TestMetaItem meta) {
         super(meta);
 
-        if (!(meta instanceof TestMetaEnchantedBook)) {
+        if (!(meta instanceof TestMetaEnchantedBook that)) {
             return;
         }
-
-        TestMetaEnchantedBook that = (TestMetaEnchantedBook) meta;
 
         if (that.hasEnchants()) {
             this.enchantments = new HashMap<>(that.enchantments);
@@ -40,9 +38,7 @@ public class TestMetaEnchantedBook extends TestMetaItem implements EnchantmentSt
         if (!super.equalsCommon(meta)) {
             return false;
         }
-        if (meta instanceof TestMetaEnchantedBook) {
-            TestMetaEnchantedBook that = (TestMetaEnchantedBook) meta;
-
+        if (meta instanceof TestMetaEnchantedBook that) {
             return (hasStoredEnchants() ? that.hasStoredEnchants() && this.enchantments.equals(that.enchantments) : !that.hasStoredEnchants());
         }
         return true;

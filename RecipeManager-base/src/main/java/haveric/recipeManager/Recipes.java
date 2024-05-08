@@ -121,12 +121,10 @@ public class Recipes {
             return false;
         }
 
-        if (recipe instanceof FurnaceRecipe) {
-            RecipeChoice choice = ((FurnaceRecipe) recipe).getInputChoice();
+        if (recipe instanceof FurnaceRecipe furnaceRecipe) {
+            RecipeChoice choice = furnaceRecipe.getInputChoice();
 
-            if (choice instanceof RecipeChoice.MaterialChoice) {
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
+            if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
                 return (getRecipe(RMCRecipeType.SMELT, new ItemStack(materialChoice.getChoices().get(0))) != null);
             }
         }
@@ -268,8 +266,8 @@ public class Recipes {
         }
 
         PreparableResultRecipe resultRecipe = null;
-        if (baseRecipe instanceof PreparableResultRecipe) {
-            resultRecipe = (PreparableResultRecipe) baseRecipe;
+        if (baseRecipe instanceof PreparableResultRecipe preparableResultRecipe) {
+            resultRecipe = preparableResultRecipe;
         }
 
         return resultRecipe;
@@ -379,16 +377,13 @@ public class Recipes {
             recipe.getFlags().sendRegistered();
         }
 
-        if (recipe instanceof SingleResultRecipe) {
-            SingleResultRecipe rec = (SingleResultRecipe) recipe;
+        if (recipe instanceof SingleResultRecipe rec) {
             ItemResult result = rec.getResult();
 
             if (result != null && result.hasFlags()) {
                 result.getFlags().sendRegistered();
             }
-        } else if (recipe instanceof MultiResultRecipe) {
-            MultiResultRecipe rec = (MultiResultRecipe) recipe;
-
+        } else if (recipe instanceof MultiResultRecipe rec) {
             for (ItemResult result : rec.getResults()) {
                 if (result != null && result.hasFlags()) {
                     result.getFlags().sendRegistered();

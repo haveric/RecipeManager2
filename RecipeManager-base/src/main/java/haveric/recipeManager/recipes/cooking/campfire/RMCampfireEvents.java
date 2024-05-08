@@ -67,8 +67,7 @@ public class RMCampfireEvents extends BaseRecipeEvents {
             ItemStack ingredient = event.getSource();
 
             BaseRecipe baseRecipe = RecipeManager.getRecipes().getRecipe(RMCRecipeType.CAMPFIRE, ingredient);
-            if (baseRecipe instanceof RMCampfireRecipe) {
-                RMCampfireRecipe recipe = (RMCampfireRecipe) baseRecipe;
+            if (baseRecipe instanceof RMCampfireRecipe recipe) {
                 Campfire campfire = (Campfire) block.getState();
 
                 int slot = -1;

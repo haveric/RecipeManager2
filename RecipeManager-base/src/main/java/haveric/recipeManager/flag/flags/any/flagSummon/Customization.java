@@ -277,23 +277,18 @@ public class Customization implements Cloneable {
                 ent.setCanPickupItems(pickup);
             }
 
-            if (pet && ent instanceof Tameable) {
-                Tameable npc = (Tameable) ent;
+            if (pet && ent instanceof Tameable npc) {
                 npc.setOwner(player);
                 npc.setTamed(true);
             }
 
-            if (ent instanceof Sittable) {
-                Sittable npc = (Sittable) ent;
-
+            if (ent instanceof Sittable npc) {
                 if (pet && noSit) {
                     npc.setSitting(false);
                 }
             }
 
-            if (ent instanceof Wolf) {
-                Wolf npc = (Wolf) ent;
-
+            if (ent instanceof Wolf npc) {
                 if (pet) {
                     if (color != null) {
                         npc.setCollarColor(color);
@@ -303,9 +298,7 @@ public class Customization implements Cloneable {
                 }
             }
 
-            if (ent instanceof PigZombie) {
-                PigZombie npc = (PigZombie) ent;
-
+            if (ent instanceof PigZombie npc) {
                 if (angry) {
                     npc.setAngry(true);
                 }
@@ -315,9 +308,7 @@ public class Customization implements Cloneable {
                 }
             }
 
-            if (ent instanceof Cat) {
-                Cat npc = (Cat) ent;
-
+            if (ent instanceof Cat npc) {
                 if (cat != null) {
                     npc.setCatType(cat);
                 }
@@ -335,9 +326,7 @@ public class Customization implements Cloneable {
                 }
             }
 
-            if (ent instanceof Ageable) {
-                Ageable npc = (Ageable) ent;
-
+            if (ent instanceof Ageable npc) {
                 if (baby) {
                     npc.setBaby();
                 }
@@ -346,8 +335,7 @@ public class Customization implements Cloneable {
                     npc.setAdult();
                 }
 
-                if (ent instanceof Breedable) {
-                    Breedable breedable = (Breedable) ent;
+                if (ent instanceof Breedable breedable) {
                     if (ageLock) {
                         breedable.setAgeLock(true);
                     }
@@ -359,18 +347,14 @@ public class Customization implements Cloneable {
             }
 
             if (saddle) {
-                if (ent instanceof Steerable) {
-                    Steerable steerable = (Steerable) ent;
-
+                if (ent instanceof Steerable steerable) {
                     steerable.setAdult();
                     steerable.setSaddle(true);
 
                     if (mount) {
                         steerable.addPassenger(player);
                     }
-                } else if (ent instanceof Horse) {
-                    Horse horse = (Horse) ent;
-
+                } else if (ent instanceof Horse horse) {
                     horse.setAdult();
                     horse.getInventory().setSaddle(new ItemStack(Material.SADDLE));
 
@@ -380,42 +364,33 @@ public class Customization implements Cloneable {
                 }
             }
 
-            if (ent instanceof Zombie) {
-                Zombie npc = (Zombie) ent;
-
+            if (ent instanceof Zombie npc) {
                 if (baby) {
                     npc.setBaby(true);
                 }
             }
 
-            if (villager != null && ent instanceof Villager) {
-                Villager npc = (Villager) ent;
+            if (villager != null && ent instanceof Villager npc) {
                 npc.setProfession(villager);
             }
 
-            if (poweredCreeper && ent instanceof Creeper) {
-                Creeper npc = (Creeper) ent;
+            if (poweredCreeper && ent instanceof Creeper npc) {
                 npc.setPowered(true);
             }
 
-            if (playerIronGolem && ent instanceof IronGolem) {
-                IronGolem npc = (IronGolem) ent;
+            if (playerIronGolem && ent instanceof IronGolem npc) {
                 npc.setPlayerCreated(true);
             }
 
-            if (shearedSheep && ent instanceof Sheep) {
-                Sheep npc = (Sheep) ent;
+            if (shearedSheep && ent instanceof Sheep npc) {
                 npc.setSheared(true);
             }
 
-            if (color != null && ent instanceof Colorable) {
-                Colorable npc = (Colorable) ent;
+            if (color != null && ent instanceof Colorable npc) {
                 npc.setColor(color);
             }
 
-            if (ent instanceof Horse) {
-                Horse npc = (Horse) ent;
-
+            if (ent instanceof Horse npc) {
                 if (horseColor != null) {
                     npc.setColor(horseColor);
                 }
@@ -428,8 +403,7 @@ public class Customization implements Cloneable {
                     npc.setAdult();
                     npc.setTamed(true);
 
-                    if (npc instanceof ChestedHorse) {
-                        ChestedHorse chestedHorse = (ChestedHorse) npc;
+                    if (npc instanceof ChestedHorse chestedHorse) {
                         chestedHorse.setCarryingChest(true);
                     }
                 }
@@ -439,13 +413,11 @@ public class Customization implements Cloneable {
                 }
             }
 
-            if (rabbit != null && ent instanceof Rabbit) {
-                Rabbit npc = (Rabbit) ent;
+            if (rabbit != null && ent instanceof Rabbit npc) {
                 npc.setRabbitType(rabbit);
             }
 
-            if (target && ent instanceof Creature) {
-                Creature npc = (Creature) ent;
+            if (target && ent instanceof Creature npc) {
                 npc.setTarget(player);
             }
 
@@ -469,8 +441,7 @@ public class Customization implements Cloneable {
             ent.setInvulnerable(invulnerable);
             ent.setAI(!noAi);
 
-            if (ent instanceof Parrot) {
-                Parrot npc = (Parrot) ent;
+            if (ent instanceof Parrot npc) {
 
                 if (parrot != null) {
                     npc.setVariant(parrot);
@@ -479,8 +450,7 @@ public class Customization implements Cloneable {
 
             ent.setPersistent(persistent);
 
-            if (ent instanceof TropicalFish) {
-                TropicalFish fish = (TropicalFish) ent;
+            if (ent instanceof TropicalFish fish) {
                 // Set pattern before body color in order to set correctly
                 if (tropicalFishPattern != null) {
                     fish.setPattern(tropicalFishPattern);
@@ -495,9 +465,7 @@ public class Customization implements Cloneable {
                 }
             }
 
-            if (ent instanceof Fox) {
-                Fox npc = (Fox) ent;
-
+            if (ent instanceof Fox npc) {
                 if (fox != null) {
                     npc.setFoxType(fox);
                 }
@@ -525,9 +493,7 @@ public class Customization implements Cloneable {
                 }
             }
 
-            if (ent instanceof Panda) {
-                Panda npc = (Panda) ent;
-
+            if (ent instanceof Panda npc) {
                 if (pandaMainGene != null) {
                     npc.setMainGene(pandaMainGene);
                 }
@@ -536,15 +502,13 @@ public class Customization implements Cloneable {
                 }
             }
 
-            if (ent instanceof WanderingTrader) {
-                WanderingTrader trader = (WanderingTrader) ent;
+            if (ent instanceof WanderingTrader trader) {
                 if (wanderingTraderDespawnDelay != null) {
                     trader.setDespawnDelay(wanderingTraderDespawnDelay);
                 }
             }
 
-            if (ent instanceof Bee) {
-                Bee bee = (Bee) ent;
+            if (ent instanceof Bee bee) {
                 bee.setAnger(beeAnger);
                 bee.setCannotEnterHiveTicks(beeCannotEnterHiveTicks);
                 bee.setHasNectar(beeHasNectar);
@@ -557,19 +521,16 @@ public class Customization implements Cloneable {
             ent.setArrowsInBody(arrowsInBody);
             ent.setInvisible(invisible);
 
-            if (ent instanceof Axolotl) {
-                Axolotl axolotlEntity = (Axolotl) ent;
+            if (ent instanceof Axolotl axolotlEntity) {
                 axolotlEntity.setVariant(axolotl);
                 axolotlEntity.setPlayingDead(axolotlPlayingDead);
             }
 
-            if (ent instanceof GlowSquid && glowSquidDarkTicksRemaining != null) {
-                GlowSquid glowSquid = (GlowSquid) ent;
+            if (ent instanceof GlowSquid glowSquid && glowSquidDarkTicksRemaining != null) {
                 glowSquid.setDarkTicksRemaining(glowSquidDarkTicksRemaining);
             }
 
-            if (ent instanceof Goat) {
-                Goat goat = (Goat) ent;
+            if (ent instanceof Goat goat) {
                 goat.setScreaming(goatScreaming);
             }
 
@@ -579,26 +540,21 @@ public class Customization implements Cloneable {
 
             ent.setVisualFire(visualFire);
 
-            if (ent instanceof SkeletonHorse) {
-                SkeletonHorse skeletonHorse = (SkeletonHorse) ent;
+            if (ent instanceof SkeletonHorse skeletonHorse) {
                 skeletonHorse.setTrapped(skeletonHorseTrapped);
                 skeletonHorse.setTrapTime(skeletonHorseTrappedTicks);
             }
 
-            if (ent instanceof Vindicator) {
-                Vindicator vindicator = (Vindicator) ent;
+            if (ent instanceof Vindicator vindicator) {
                 vindicator.setJohnny(vindicatorJohnny);
             }
 
             if (Version.has1_19Support()) {
-                if (ent instanceof Frog && frogVariant != null) {
-                    Frog frog = (Frog) ent;
+                if (ent instanceof Frog frog && frogVariant != null) {
                     frog.setVariant(frogVariant);
                 }
 
-                if (ent instanceof Goat) {
-                    Goat goat = (Goat) ent;
-
+                if (ent instanceof Goat goat) {
                     if (goatHasLeftHorn != null) {
                         goat.setLeftHorn(goatHasLeftHorn);
                     }
@@ -608,19 +564,16 @@ public class Customization implements Cloneable {
                     }
                 }
 
-                if (ent instanceof Warden && wardenAnger != null) {
-                    Warden warden = (Warden) ent;
+                if (ent instanceof Warden warden && wardenAnger != null) {
                     warden.setAnger(player, wardenAnger);
                 }
 
-                if (ent instanceof Zombie && zombieCanBreakDoors != null) {
-                    Zombie zombie = (Zombie) ent;
+                if (ent instanceof Zombie zombie && zombieCanBreakDoors != null) {
                     zombie.setCanBreakDoors(zombieCanBreakDoors);
                 }
             }
 
-            if (Supports.allayDuplication() && ent instanceof Allay) {
-                Allay allay = (Allay) ent;
+            if (Supports.allayDuplication() && ent instanceof Allay allay) {
                 allay.setCanDuplicate(allayCanDuplicate);
                 allay.setDuplicationCooldown(allayDuplicateCooldown);
             }
@@ -665,8 +618,7 @@ public class Customization implements Cloneable {
                             break;
 
                         case 4:
-                            if (ent instanceof Enderman) {
-                                Enderman npc = (Enderman) ent;
+                            if (ent instanceof Enderman npc) {
                                 if (item.getData() != null) {
                                     npc.setCarriedMaterial(item.getData());
                                 }

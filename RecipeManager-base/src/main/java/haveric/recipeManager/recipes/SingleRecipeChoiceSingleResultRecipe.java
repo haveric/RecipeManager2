@@ -21,9 +21,7 @@ public abstract class SingleRecipeChoiceSingleResultRecipe extends SingleResultR
     public SingleRecipeChoiceSingleResultRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof SingleRecipeChoiceSingleResultRecipe) {
-            SingleRecipeChoiceSingleResultRecipe r = (SingleRecipeChoiceSingleResultRecipe) recipe;
-
+        if (recipe instanceof SingleRecipeChoiceSingleResultRecipe r) {
             if (r.ingredientChoice != null) {
                 ingredientChoice = r.ingredientChoice.clone();
             }

@@ -20,11 +20,10 @@ public class TestMetaMap extends TestMetaItem implements MapMeta {
     TestMetaMap(TestMetaItem meta) {
         super(meta);
 
-        if (!(meta instanceof TestMetaMap)) {
+        if (!(meta instanceof TestMetaMap map)) {
             return;
         }
 
-        TestMetaMap map = (TestMetaMap) meta;
         this.scaling = map.scaling;
         this.locName = map.locName;
         this.color = map.color;
@@ -124,9 +123,7 @@ public class TestMetaMap extends TestMetaItem implements MapMeta {
         if (!super.equalsCommon(meta)) {
             return false;
         }
-        if (meta instanceof TestMetaMap) {
-            TestMetaMap that = (TestMetaMap) meta;
-
+        if (meta instanceof TestMetaMap that) {
             return (this.scaling == that.scaling)
                     && (hasLocationName() ? that.hasLocationName() && this.locName.equals(that.locName) : !that.hasLocationName())
                     && (hasColor() ? that.hasColor() && this.color.equals(that.color) : !that.hasColor());

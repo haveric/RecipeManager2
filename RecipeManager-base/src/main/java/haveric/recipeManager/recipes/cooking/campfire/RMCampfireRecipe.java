@@ -24,9 +24,7 @@ public class RMCampfireRecipe extends RMBaseCookingRecipe {
     public RMCampfireRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof RMCampfireRecipe) {
-            RMCampfireRecipe r = (RMCampfireRecipe) recipe;
-
+        if (recipe instanceof RMCampfireRecipe r) {
             hash = r.hash;
         }
     }

@@ -301,8 +301,7 @@ public class FlagPotionItem extends Flag {
     }
 
     private void parse(ItemMeta meta, StringBuilder builder, String prefix, String effectPrefix, boolean isItemMeta) {
-        if (meta instanceof PotionMeta) {
-            PotionMeta potionMeta = (PotionMeta) meta;
+        if (meta instanceof PotionMeta potionMeta) {
             PotionType potionType = potionMeta.getBasePotionType();
 
             builder.append(prefix).append(potionType);

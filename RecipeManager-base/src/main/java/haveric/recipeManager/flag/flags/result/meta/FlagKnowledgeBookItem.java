@@ -143,12 +143,10 @@ public class FlagKnowledgeBookItem extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof KnowledgeBookMeta)) {
+            if (!(meta instanceof KnowledgeBookMeta knowledgeBookMeta)) {
                 a.addCustomReason("Needs knowledge book!");
                 return;
             }
-
-            KnowledgeBookMeta knowledgeBookMeta = (KnowledgeBookMeta) meta;
 
             knowledgeBookMeta.setRecipes(namespacedKeys);
 
@@ -170,8 +168,7 @@ public class FlagKnowledgeBookItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
-        if (meta instanceof KnowledgeBookMeta) {
-            KnowledgeBookMeta knowledgeBookMeta = (KnowledgeBookMeta) meta;
+        if (meta instanceof KnowledgeBookMeta knowledgeBookMeta) {
             if (knowledgeBookMeta.hasRecipes()) {
                 List<NamespacedKey> recipes = knowledgeBookMeta.getRecipes();
                 if (!recipes.isEmpty()) {

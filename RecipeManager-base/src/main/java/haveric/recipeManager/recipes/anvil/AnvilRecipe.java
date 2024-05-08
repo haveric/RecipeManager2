@@ -30,9 +30,7 @@ public class AnvilRecipe extends PreparableResultRecipe {
     public AnvilRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof AnvilRecipe) {
-            AnvilRecipe r = (AnvilRecipe) recipe;
-
+        if (recipe instanceof AnvilRecipe r) {
             repairCost = r.repairCost;
 
             renamingAllowed = r.renamingAllowed;

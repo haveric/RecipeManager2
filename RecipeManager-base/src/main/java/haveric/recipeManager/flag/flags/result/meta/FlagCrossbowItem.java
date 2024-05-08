@@ -134,12 +134,10 @@ public class FlagCrossbowItem extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof CrossbowMeta)) {
+            if (!(meta instanceof CrossbowMeta crossbowMeta)) {
                 a.addCustomReason("Needs crossbow!");
                 return;
             }
-
-            CrossbowMeta crossbowMeta = (CrossbowMeta) meta;
 
             for (ItemRecipe itemRecipe : itemRecipes) {
                 ItemResult result = itemRecipe.getResult();
@@ -164,12 +162,10 @@ public class FlagCrossbowItem extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof CrossbowMeta)) {
+            if (!(meta instanceof CrossbowMeta crossbowMeta)) {
                 a.addCustomReason("Needs crossbow!");
                 return;
             }
-
-            CrossbowMeta crossbowMeta = (CrossbowMeta) meta;
 
             for (ItemRecipe itemRecipe : itemRecipes) {
                 ItemResult result = itemRecipe.getResult();
@@ -203,9 +199,7 @@ public class FlagCrossbowItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
-        if (meta instanceof CrossbowMeta) {
-            CrossbowMeta crossbowMeta = (CrossbowMeta) meta;
-
+        if (meta instanceof CrossbowMeta crossbowMeta) {
             if (crossbowMeta.hasChargedProjectiles()) {
                 for (ItemStack projectile : crossbowMeta.getChargedProjectiles()) {
                     recipeString.append(Files.NL).append("@crossbow ").append(Tools.convertItemToStringId(projectile));

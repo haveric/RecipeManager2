@@ -21,9 +21,7 @@ public class RMStonecuttingRecipe extends SingleRecipeChoiceSingleResultRecipe {
     public RMStonecuttingRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof RMStonecuttingRecipe) {
-            RMStonecuttingRecipe r = (RMStonecuttingRecipe) recipe;
-
+        if (recipe instanceof RMStonecuttingRecipe r) {
             group = r.group;
             hash = r.hash;
         }

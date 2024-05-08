@@ -399,22 +399,17 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
                             boolean same = false;
 
-                            if (recipe instanceof RMBaseFurnaceRecipe) {
-                                RMBaseFurnaceRecipe recipe1_13 = (RMBaseFurnaceRecipe) recipe;
-                                RecipeChoice choice = recipe1_13.getIngredientChoice();
+                            if (recipe instanceof RMBaseFurnaceRecipe baseFurnaceRecipe) {
+                                RecipeChoice choice = baseFurnaceRecipe.getIngredientChoice();
 
-                                if (choice instanceof RecipeChoice.MaterialChoice) {
-                                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
+                                if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
                                     for (Material material : materialChoice.getChoices()) {
                                         if (clicked.getType() == material) {
                                             same = true;
                                             break;
                                         }
                                     }
-                                } else if (choice instanceof RecipeChoice.ExactChoice) {
-                                    RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
-
+                                } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
                                     for (ItemStack exactItem : exactChoice.getChoices()) {
                                         if (clicked.getType() == exactItem.getType()) {
                                             same = true;
@@ -533,8 +528,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         ItemStack fuel = event.getFuel();
 
         BaseRecipe baseRecipe = Recipes.getInstance().getRecipe(RMCRecipeType.FUEL, fuel);
-        if (baseRecipe instanceof FuelRecipe) {
-            FuelRecipe fuelRecipe = (FuelRecipe) baseRecipe;
+        if (baseRecipe instanceof FuelRecipe fuelRecipe) {
             if (fuelRecipe.hasFlag(FlagType.REMOVE)) {
                 event.setCancelled(true);
             }
@@ -575,8 +569,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
             cookTime = (short) ((RMBaseFurnaceRecipe) recipe).getCookTicks();
         }
 
-        if (baseRecipe instanceof FuelRecipe) {
-            FuelRecipe fuelRecipe = (FuelRecipe) baseRecipe;
+        if (baseRecipe instanceof FuelRecipe fuelRecipe) {
             event.setBurnTime(burnTime);
 
             long randTime = (long) Math.floor(Math.random() * burnTime);
@@ -718,8 +711,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
             if (furnace instanceof BlastFurnace) {
                 for (BaseRecipe r : RecipeManager.getRecipes().getRecipesOfType(RMCRecipeType.BLASTING)) {
-                    if (r instanceof RMBlastingRecipe) {
-                        RMBlastingRecipe br = (RMBlastingRecipe) r;
+                    if (r instanceof RMBlastingRecipe br) {
                         if (result.isSimilar(br.getResult().getItemStack())) {
                             smeltRecipe = br;
                             break;
@@ -728,8 +720,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 }
             } else if (furnace instanceof Smoker) {
                 for (BaseRecipe r : RecipeManager.getRecipes().getRecipesOfType(RMCRecipeType.SMOKING)) {
-                    if (r instanceof RMSmokingRecipe) {
-                        RMSmokingRecipe sr = (RMSmokingRecipe) r;
+                    if (r instanceof RMSmokingRecipe sr) {
                         if (result.isSimilar(sr.getResult().getItemStack())) {
                             smeltRecipe = sr;
                             break;
@@ -738,8 +729,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 }
             } else {
                 for (BaseRecipe r : RecipeManager.getRecipes().getRecipesOfType(RMCRecipeType.SMELT)) {
-                    if (r instanceof RMFurnaceRecipe) {
-                        RMFurnaceRecipe fr = (RMFurnaceRecipe) r;
+                    if (r instanceof RMFurnaceRecipe fr) {
                         if (result.isSimilar(fr.getResult().getItemStack())) {
                             smeltRecipe = fr;
                             break;
@@ -758,9 +748,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
     public void inventoryMove(InventoryMoveItemEvent event) {
         Inventory dest = event.getDestination();
 
-        if (dest instanceof FurnaceInventory) {
-            FurnaceInventory furnaceInventory = (FurnaceInventory) dest;
-
+        if (dest instanceof FurnaceInventory furnaceInventory) {
             ItemStack smeltingItem = furnaceInventory.getSmelting();
 
             if (smeltingItem == null || smeltingItem.getType() == Material.AIR) {

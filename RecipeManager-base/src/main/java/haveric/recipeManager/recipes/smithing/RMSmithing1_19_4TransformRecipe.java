@@ -35,9 +35,7 @@ public class RMSmithing1_19_4TransformRecipe extends RMSmithingRecipe {
     public RMSmithing1_19_4TransformRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof RMSmithing1_19_4TransformRecipe) {
-            RMSmithing1_19_4TransformRecipe r = (RMSmithing1_19_4TransformRecipe) recipe;
-
+        if (recipe instanceof RMSmithing1_19_4TransformRecipe r) {
             if (r.templateIngredient != null) {
                 templateIngredient = r.templateIngredient.clone();
             }

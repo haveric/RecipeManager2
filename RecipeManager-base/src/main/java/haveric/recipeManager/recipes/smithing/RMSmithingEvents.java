@@ -484,8 +484,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
         HumanEntity ent = event.getWhoClicked();
         if (ent instanceof Player) {
             Inventory inv = event.getInventory();
-            if (inv instanceof SmithingInventory) {
-                SmithingInventory smithingTableInventory = (SmithingInventory) inv;
+            if (inv instanceof SmithingInventory smithingTableInventory) {
                 Location location = inv.getLocation();
 
                 if (location != null) {

@@ -23,11 +23,10 @@ public class FindItemCommand implements TabExecutor {
         String find = args[0].trim();
 
         if (find.equalsIgnoreCase("this")) {
-            if (!(sender instanceof Player)) {
+            if (!(sender instanceof Player player)) {
                 sender.sendMessage("Only players can use the 'this' argument.");
                 return true;
             }
-            Player player = (Player) sender;
             ItemStack item = player.getInventory().getItemInMainHand();
 
             if (item == null || item.getType() == Material.AIR) {

@@ -233,10 +233,9 @@ public class FlagKeepItem extends Flag {
                         clone.setDurability((short) Math.max(dmg + clone.getDurability(), 0));
                     }
                 }
-            } else if (obj instanceof ItemStack) {
-                clone = ((ItemStack) obj).clone();
-            } else if (obj instanceof ItemRecipe) {
-                ItemRecipe itemRecipe = (ItemRecipe) obj;
+            } else if (obj instanceof ItemStack itemStack) {
+                clone = itemStack.clone();
+            } else if (obj instanceof ItemRecipe itemRecipe) {
                 ItemResult result = itemRecipe.getResult();
                 Args itemArgs = ArgBuilder.create(a).recipe(itemRecipe).result(result).build();
                 itemArgs.setFirstRun(true);
@@ -295,17 +294,13 @@ public class FlagKeepItem extends Flag {
             return;
         }
 
-        if (a.inventory() instanceof CraftingInventory) {
-            CraftingInventory inv = (CraftingInventory) a.inventory();
-
+        if (a.inventory() instanceof CraftingInventory inv) {
             for (int i = 1; i < inv.getSize(); i++) {
                 parse(inv, a, i);
             }
         } else if (a.inventory() instanceof BrewerInventory) {
             parse(a.inventory(), a, 3);
-        } else if (a.inventory() instanceof FurnaceInventory) {
-            FurnaceInventory inv = (FurnaceInventory) a.inventory();
-
+        } else if (a.inventory() instanceof FurnaceInventory inv) {
             if (a.recipe() instanceof RMBaseFurnaceRecipe) {
                 parse(inv, a, 0);
                 parse(inv, a, 1);

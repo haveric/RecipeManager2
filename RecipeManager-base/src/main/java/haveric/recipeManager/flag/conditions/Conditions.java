@@ -990,9 +990,7 @@ public class Conditions implements Cloneable {
             }
         }
 
-        if (item.getItemMeta() instanceof EnchantmentStorageMeta) {
-            EnchantmentStorageMeta meta = (EnchantmentStorageMeta) item.getItemMeta();
-
+        if (item.getItemMeta() instanceof EnchantmentStorageMeta meta) {
             if (!checkBookEnchants(meta.getStoredEnchants())) {
                 if (a == null) {
                     return false;
@@ -1060,9 +1058,7 @@ public class Conditions implements Cloneable {
         if (hasColor()) {
             boolean failed = true;
 
-            if (meta instanceof LeatherArmorMeta) {
-                LeatherArmorMeta leather = (LeatherArmorMeta) meta;
-
+            if (meta instanceof LeatherArmorMeta leather) {
                 if (checkColor(leather.getColor())) {
                     failed = false;
                 }
@@ -1088,9 +1084,7 @@ public class Conditions implements Cloneable {
             if (hasPotionType()) {
                 boolean failed = true;
 
-                if (meta instanceof PotionMeta) {
-                    PotionMeta potion = (PotionMeta) meta;
-
+                if (meta instanceof PotionMeta potion) {
                     if (checkPotionType(potion.getBasePotionType())) {
                         failed = false;
                     }
@@ -1143,9 +1137,7 @@ public class Conditions implements Cloneable {
         if (hasPotionEffect()) {
             boolean failed = true;
 
-            if (meta instanceof PotionMeta) {
-                PotionMeta potion = (PotionMeta) meta;
-
+            if (meta instanceof PotionMeta potion) {
                 if (checkPotionEffect(potion)) {
                     failed = false;
                 }
@@ -1170,9 +1162,7 @@ public class Conditions implements Cloneable {
         if (hasSuspiciousStewEffect()) {
             boolean failed = true;
 
-            if (meta instanceof SuspiciousStewMeta) {
-                SuspiciousStewMeta stew = (SuspiciousStewMeta) meta;
-
+            if (meta instanceof SuspiciousStewMeta stew) {
                 if (checkSuspiciousStewEffect(stew)) {
                     failed = false;
                 }
@@ -1197,9 +1187,7 @@ public class Conditions implements Cloneable {
         if (hasBannerPatterns()) {
             boolean failed = true;
 
-            if (meta instanceof BannerMeta) {
-                BannerMeta banner = (BannerMeta) meta;
-
+            if (meta instanceof BannerMeta banner) {
                 if (checkBannerPatterns(banner)) {
                     failed = false;
                 }

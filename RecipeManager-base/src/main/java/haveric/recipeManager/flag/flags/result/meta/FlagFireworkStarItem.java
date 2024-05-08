@@ -130,12 +130,10 @@ public class FlagFireworkStarItem extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof FireworkEffectMeta)) {
+            if (!(meta instanceof FireworkEffectMeta effectMeta)) {
                 a.addCustomReason("Needs FireworkEffectMeta supported item!");
                 return;
             }
-
-            FireworkEffectMeta effectMeta = (FireworkEffectMeta) meta;
 
             effectMeta.setEffect(effect);
 
@@ -154,8 +152,7 @@ public class FlagFireworkStarItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
-        if (meta instanceof FireworkEffectMeta) {
-            FireworkEffectMeta fireworkEffectMeta = (FireworkEffectMeta) meta;
+        if (meta instanceof FireworkEffectMeta fireworkEffectMeta) {
             if (fireworkEffectMeta.hasEffect()) {
                 FireworkEffect effect = fireworkEffectMeta.getEffect();
                 if (effect != null) {

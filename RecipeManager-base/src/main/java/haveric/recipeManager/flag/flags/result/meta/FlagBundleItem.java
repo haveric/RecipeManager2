@@ -133,12 +133,10 @@ public class FlagBundleItem extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof BundleMeta)) {
+            if (!(meta instanceof BundleMeta bundleMeta)) {
                 a.addCustomReason("Needs bundle!");
                 return;
             }
-
-            BundleMeta bundleMeta = (BundleMeta) meta;
 
             for (ItemRecipe itemRecipe : itemRecipes) {
                 ItemResult result = itemRecipe.getResult();
@@ -159,12 +157,10 @@ public class FlagBundleItem extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (!(meta instanceof BundleMeta)) {
+            if (!(meta instanceof BundleMeta bundleMeta)) {
                 a.addCustomReason("Needs bundle!");
                 return;
             }
-
-            BundleMeta bundleMeta = (BundleMeta) meta;
 
             for (ItemRecipe itemRecipe : itemRecipes) {
                 ItemResult result = itemRecipe.getResult();
@@ -194,8 +190,7 @@ public class FlagBundleItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
-        if (meta instanceof BundleMeta) {
-            BundleMeta bundleMeta = (BundleMeta) meta;
+        if (meta instanceof BundleMeta bundleMeta) {
             List<ItemStack> bundleItems = bundleMeta.getItems();
             for (ItemStack bundleItem : bundleItems) {
                 recipeString.append(Files.NL).append("@bundle ").append(bundleItem.getType());

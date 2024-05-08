@@ -12,11 +12,10 @@ public class TestMetaLeatherArmor extends TestMetaItem implements LeatherArmorMe
 
     TestMetaLeatherArmor(TestMetaItem meta) {
         super(meta);
-        if (!(meta instanceof TestMetaLeatherArmor)) {
+        if (!(meta instanceof TestMetaLeatherArmor armorMeta)) {
             return;
         }
 
-        TestMetaLeatherArmor armorMeta = (TestMetaLeatherArmor) meta;
         this.color = armorMeta.color;
     }
 
@@ -59,9 +58,7 @@ public class TestMetaLeatherArmor extends TestMetaItem implements LeatherArmorMe
         if (!super.equalsCommon(meta)) {
             return false;
         }
-        if (meta instanceof TestMetaLeatherArmor) {
-            TestMetaLeatherArmor that = (TestMetaLeatherArmor) meta;
-
+        if (meta instanceof TestMetaLeatherArmor that) {
             return color.equals(that.color);
         }
         return true;

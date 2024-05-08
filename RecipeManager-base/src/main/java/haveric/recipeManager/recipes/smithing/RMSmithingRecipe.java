@@ -37,9 +37,7 @@ public class RMSmithingRecipe extends PreparableResultRecipe {
     public RMSmithingRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof RMSmithingRecipe) {
-            RMSmithingRecipe r = (RMSmithingRecipe) recipe;
-
+        if (recipe instanceof RMSmithingRecipe r) {
             if (r.primaryIngredient != null) {
                 primaryIngredient = r.primaryIngredient.clone();
             }

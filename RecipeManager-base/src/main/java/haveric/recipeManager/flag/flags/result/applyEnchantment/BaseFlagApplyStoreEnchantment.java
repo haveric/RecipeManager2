@@ -146,9 +146,7 @@ public abstract class BaseFlagApplyStoreEnchantment extends Flag {
                 ItemMeta meta = i.getItemMeta();
 
                 if (!onlyItems) {
-                    if (meta instanceof EnchantmentStorageMeta) {
-                        EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) meta;
-
+                    if (meta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
                         for (Map.Entry<Enchantment, Integer> entry : enchantmentStorageMeta.getStoredEnchants().entrySet()) {
                             evaluateEnchantments(enchantments, entry.getKey(), entry.getValue());
                         }
@@ -206,13 +204,9 @@ public abstract class BaseFlagApplyStoreEnchantment extends Flag {
     protected Map<Enchantment, Integer> copyEnchantmentsByInventory(Args a) {
         Map<Enchantment, Integer> enchantments = new HashMap<>();
 
-        if (a.inventory() instanceof CraftingInventory) {
-            CraftingInventory inv = (CraftingInventory) a.inventory();
-
+        if (a.inventory() instanceof CraftingInventory inv) {
             enchantments = copyEnchantments(inv.getMatrix());
-        } else if (a.inventory() instanceof FurnaceInventory) {
-            FurnaceInventory inv = (FurnaceInventory) a.inventory();
-
+        } else if (a.inventory() instanceof FurnaceInventory inv) {
             enchantments = copyEnchantments(inv.getSmelting());
         } else if (a.inventory() instanceof AnvilInventory || a.inventory() instanceof CartographyInventory || a.inventory() instanceof GrindstoneInventory || a.inventory() instanceof SmithingInventory) {
             ItemStack[] anvilIngredients = new ItemStack[2];
@@ -220,9 +214,7 @@ public abstract class BaseFlagApplyStoreEnchantment extends Flag {
             anvilIngredients[1] = a.inventory().getItem(1);
 
             enchantments = copyEnchantments(anvilIngredients);
-        } else if (a.inventory() instanceof BrewerInventory) {
-            BrewerInventory inv = (BrewerInventory) a.inventory();
-
+        } else if (a.inventory() instanceof BrewerInventory inv) {
             enchantments = copyEnchantments(inv.getIngredient());
         } else {
             a.addCustomReason(getFlagType() + " has unsupported inventory type: " + a.inventory().getType());

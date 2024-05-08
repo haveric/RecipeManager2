@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class GetBookCommand implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage("Command can only be used by players.");
             return true;
         }
@@ -25,8 +25,6 @@ public class GetBookCommand implements TabExecutor {
             Messages.getInstance().send(sender, "cmd.getbook.usage", "{command}", label);
             return true;
         }
-
-        Player player = (Player) sender;
 
         StringBuilder s = new StringBuilder(argsLength * 10);
 

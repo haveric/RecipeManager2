@@ -88,8 +88,7 @@ public class FlagMaxDamage extends Flag {
         if (canAddMeta(a)) {
             ItemMeta meta = a.result().getItemMeta();
 
-            if (meta instanceof Damageable && maxDamage != null) {
-                Damageable damageable = (Damageable) meta;
+            if (meta instanceof Damageable damageable && maxDamage != null) {
                 damageable.setMaxDamage(maxDamage);
 
                 a.result().setItemMeta(meta);
@@ -159,8 +158,7 @@ public class FlagMaxDamage extends Flag {
     }
 
     private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
-        if (meta instanceof Damageable) {
-            Damageable damageable = (Damageable) meta;
+        if (meta instanceof Damageable damageable) {
             if (damageable.hasMaxDamage()) {
                 builder.append(prefix).append(damageable.getMaxDamage());
             }

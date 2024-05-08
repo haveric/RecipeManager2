@@ -48,9 +48,7 @@ public class CraftRecipe extends PreparableResultRecipe {
     public CraftRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof CraftRecipe) {
-            CraftRecipe r = (CraftRecipe) recipe;
-
+        if (recipe instanceof CraftRecipe r) {
             if (!r.ingredientsChoiceMap.isEmpty()) {
                 ingredientsChoiceMap.putAll(r.ingredientsChoiceMap);
             }
@@ -275,8 +273,7 @@ public class CraftRecipe extends PreparableResultRecipe {
                 s.append('[');
 
                 RecipeChoice choice = ingredientsChoiceMap.get(letter);
-                if (choice instanceof RecipeChoice.MaterialChoice) {
-                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
                     List<Material> materials = materialChoice.getChoices();
 
                     if (materials.size() == 1 && materials.contains(Material.AIR)) {
@@ -284,8 +281,7 @@ public class CraftRecipe extends PreparableResultRecipe {
                     } else {
                         s.append(RMCChatColor.DARK_PURPLE).append(letter);
                     }
-                } else if (choice instanceof RecipeChoice.ExactChoice) {
-                    RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+                } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
                     List<ItemStack> items = exactChoice.getChoices();
 
                     if (items.size() == 1 && items.get(0).getType() == Material.AIR) {
@@ -311,8 +307,7 @@ public class CraftRecipe extends PreparableResultRecipe {
             // Skip empty choices which might be air
             if (choice instanceof RecipeChoice.MaterialChoice || choice instanceof RecipeChoice.ExactChoice) {
                 boolean isAir = false;
-                if (choice instanceof RecipeChoice.MaterialChoice) {
-                    RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+                if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
                     List<Material> choices = materialChoice.getChoices();
                     if (choices.size() == 1 && choices.get(0) == Material.AIR) {
                         isAir = true;

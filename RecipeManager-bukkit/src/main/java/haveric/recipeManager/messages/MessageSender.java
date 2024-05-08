@@ -109,8 +109,7 @@ public class MessageSender {
 
         Collection<?> onlinePlayers = Bukkit.getOnlinePlayers();
         for (Object p : onlinePlayers) {
-            if (p instanceof Player) {
-                Player player = (Player) p;
+            if (p instanceof Player player) {
                 if (player.hasPermission("recipemanager.debugger")) {
                     send(player, message);
                 }

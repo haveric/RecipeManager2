@@ -24,9 +24,7 @@ public abstract class MultiResultRecipe extends BaseRecipe {
     public MultiResultRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof MultiResultRecipe) {
-            MultiResultRecipe r = (MultiResultRecipe) recipe;
-
+        if (recipe instanceof MultiResultRecipe r) {
             results = new ArrayList<>(r.results.size());
 
             for (ItemResult i : r.results) {

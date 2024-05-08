@@ -31,9 +31,7 @@ public abstract class SingleResultRecipe extends BaseRecipe {
     public SingleResultRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof SingleResultRecipe) {
-            SingleResultRecipe r = (SingleResultRecipe) recipe;
-
+        if (recipe instanceof SingleResultRecipe r) {
             result = r.getResult();
         }
     }

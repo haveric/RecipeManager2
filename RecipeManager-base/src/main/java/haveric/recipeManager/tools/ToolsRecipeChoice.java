@@ -20,9 +20,7 @@ import java.util.*;
 
 public class ToolsRecipeChoice {
     public static boolean isValidMetaType(RecipeChoice choice, Class<?> metaClass) {
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             int numMatches = 0;
             int total = materialChoice.getChoices().size();
             for (Material material : materialChoice.getChoices()) {
@@ -34,9 +32,7 @@ public class ToolsRecipeChoice {
             }
 
             return numMatches == total;
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
-
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             int numMatches = 0;
             int total = exactChoice.getChoices().size();
             for (ItemStack item : exactChoice.getChoices()) {
@@ -53,11 +49,9 @@ public class ToolsRecipeChoice {
     }
 
     public static String printRecipeChoice(RecipeChoice choice, RMCChatColor defColor, RMCChatColor endColor) {
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             return printChoice(materialChoice.getChoices(), defColor, endColor);
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             return printExactChoice(exactChoice.getChoices(), defColor, endColor);
         } else {
             return RMCChatColor.GRAY + "(air)" + endColor;
@@ -124,16 +118,13 @@ public class ToolsRecipeChoice {
 
     public static int getNumMaterialsInRecipeChoice(Material type, RecipeChoice choice) {
         int found = 0;
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             List<Material> materials = materialChoice.getChoices();
 
             if (materials.contains(type)) {
                 found++;
             }
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             List<ItemStack> items = exactChoice.getChoices();
 
             for (ItemStack item : items) {
@@ -148,13 +139,10 @@ public class ToolsRecipeChoice {
 
     public static List<Material> getMaterialsInRecipeChoice(RecipeChoice choice) {
         List<Material> materials = new ArrayList<>();
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             materials.addAll(materialChoice.getChoices());
 
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             List<ItemStack> items = exactChoice.getChoices();
 
             for (ItemStack item : items) {
@@ -167,9 +155,7 @@ public class ToolsRecipeChoice {
 
     public static String getRecipeChoiceHash(RecipeChoice choice) {
         StringBuilder s = new StringBuilder();
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             List<Material> sorted = new ArrayList<>(materialChoice.getChoices());
             Collections.sort(sorted);
 
@@ -187,9 +173,8 @@ public class ToolsRecipeChoice {
                     }
                 }
             }
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             s.append("exact:");
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
 
             List<ItemStack> sorted = new ArrayList<>(exactChoice.getChoices());
             sorted.sort(Comparator.comparing(ItemStack::getType));
@@ -212,8 +197,7 @@ public class ToolsRecipeChoice {
     public static String getRecipeChoiceName(RecipeChoice choice) {
         StringBuilder s = new StringBuilder();
 
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             List<Material> materials = materialChoice.getChoices();
             int materialsSize = materials.size();
 
@@ -229,9 +213,8 @@ public class ToolsRecipeChoice {
                     }
                 }
             }
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             s.append("exact:");
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
             List<ItemStack> items = exactChoice.getChoices();
 
             int itemsSize = items.size();
@@ -250,11 +233,9 @@ public class ToolsRecipeChoice {
     }
 
     public static RecipeChoice mergeRecipeChoices(RecipeChoice choice, RecipeChoice choiceToMerge) {
-        if (choiceToMerge instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choiceToMerge;
+        if (choiceToMerge instanceof RecipeChoice.MaterialChoice materialChoice) {
             return mergeRecipeChoiceWithMaterials(choice, materialChoice.getChoices());
-        } else if (choiceToMerge instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choiceToMerge;
+        } else if (choiceToMerge instanceof RecipeChoice.ExactChoice exactChoice) {
             return mergeRecipeChoiceWithItems(choice, exactChoice.getChoices());
         }
 
@@ -274,8 +255,7 @@ public class ToolsRecipeChoice {
             } else {
                 choice = new RecipeChoice.MaterialChoice(materials);
             }
-        } else if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+        } else if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             List<Material> newMaterials = new ArrayList<>();
             newMaterials.addAll(materialChoice.getChoices());
             newMaterials.addAll(materials);
@@ -306,15 +286,13 @@ public class ToolsRecipeChoice {
             } else {
                 choice = new RecipeChoice.ExactChoice(items);
             }
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             List<ItemStack> newItems = new ArrayList<>();
             newItems.addAll(exactChoice.getChoices());
             newItems.addAll(items);
 
             choice = new RecipeChoice.ExactChoice(newItems);
-        } else if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+        } else if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             List<ItemStack> newItems = new ArrayList<>();
             for (Material material : materialChoice.getChoices()) {
                 newItems.add(new ItemStack(material));
@@ -330,18 +308,15 @@ public class ToolsRecipeChoice {
     @SuppressWarnings("removal")
     public static int getIngredientMatchQuality(ItemStack ingredient, RecipeChoice choice, boolean checkExact) {
         Material ingredientType = ingredient.getType();
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             for (Material material : materialChoice.getChoices()) {
                 if (material == ingredientType) {
                     return 1;
                 }
             }
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             ItemMeta ingredientMeta = ingredient.getItemMeta();
 
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
             List<ItemStack> items = exactChoice.getChoices();
 
             int bestQuality = 0;
@@ -418,8 +393,7 @@ public class ToolsRecipeChoice {
                             quality ++;
                         }
 
-                        if (itemMeta instanceof BannerMeta) {
-                            BannerMeta itemBannerMeta = (BannerMeta) itemMeta;
+                        if (itemMeta instanceof BannerMeta itemBannerMeta) {
                             BannerMeta ingredientBannerMeta = (BannerMeta) ingredientMeta;
 
                             if (itemBannerMeta.numberOfPatterns() == ingredientBannerMeta.numberOfPatterns()) {
@@ -439,8 +413,7 @@ public class ToolsRecipeChoice {
                             }
                         }
 
-                        if (itemMeta instanceof BookMeta) {
-                            BookMeta itemBookMeta = (BookMeta) itemMeta;
+                        if (itemMeta instanceof BookMeta itemBookMeta) {
                             BookMeta ingredientBookMeta = (BookMeta) ingredientMeta;
 
                             if (itemBookMeta.hasAuthor() && ingredientBookMeta.hasAuthor()) {
@@ -478,8 +451,7 @@ public class ToolsRecipeChoice {
                             }
                         }
 
-                        if (itemMeta instanceof EnchantmentStorageMeta) {
-                            EnchantmentStorageMeta itemStorageMeta = (EnchantmentStorageMeta) itemMeta;
+                        if (itemMeta instanceof EnchantmentStorageMeta itemStorageMeta) {
                             EnchantmentStorageMeta ingredientStorageMeta = (EnchantmentStorageMeta) ingredientMeta;
 
                             if (itemStorageMeta.hasEnchants() && ingredientStorageMeta.hasEnchants()) {
@@ -496,8 +468,7 @@ public class ToolsRecipeChoice {
                             }
                         }
 
-                        if (itemMeta instanceof FireworkMeta) {
-                            FireworkMeta itemFireworkMeta = (FireworkMeta) itemMeta;
+                        if (itemMeta instanceof FireworkMeta itemFireworkMeta) {
                             FireworkMeta ingredientFireworkMeta = (FireworkMeta) ingredientMeta;
 
                             if (itemFireworkMeta.getPower() == ingredientFireworkMeta.getPower()) {
@@ -519,8 +490,7 @@ public class ToolsRecipeChoice {
                             }
                         }
 
-                        if (itemMeta instanceof FireworkEffectMeta) {
-                            FireworkEffectMeta itemFireworkEffectMeta = (FireworkEffectMeta) itemMeta;
+                        if (itemMeta instanceof FireworkEffectMeta itemFireworkEffectMeta) {
                             FireworkEffectMeta ingredientFireworkEffectMeta = (FireworkEffectMeta) ingredientMeta;
 
                             if (itemFireworkEffectMeta.hasEffect() == ingredientFireworkEffectMeta.hasEffect()) {
@@ -532,8 +502,7 @@ public class ToolsRecipeChoice {
                             }
                         }
 
-                        if (itemMeta instanceof LeatherArmorMeta) {
-                            LeatherArmorMeta itemLeatherMeta = (LeatherArmorMeta) itemMeta;
+                        if (itemMeta instanceof LeatherArmorMeta itemLeatherMeta) {
                             LeatherArmorMeta ingredientLeatherMeta = (LeatherArmorMeta) ingredientMeta;
 
                             if (itemLeatherMeta.getColor().equals(ingredientLeatherMeta.getColor())) {
@@ -541,8 +510,7 @@ public class ToolsRecipeChoice {
                             }
                         }
 
-                        if (itemMeta instanceof PotionMeta) {
-                            PotionMeta itemPotion = (PotionMeta) itemMeta;
+                        if (itemMeta instanceof PotionMeta itemPotion) {
                             PotionMeta ingredientPotion = (PotionMeta) ingredientMeta;
 
                             if (itemPotion.hasColor() && ingredientPotion.hasColor()) {
@@ -586,8 +554,7 @@ public class ToolsRecipeChoice {
                             }
                         }
 
-                        if (itemMeta instanceof Repairable) {
-                            Repairable itemRepairable = (Repairable) itemMeta;
+                        if (itemMeta instanceof Repairable itemRepairable) {
                             Repairable ingredientRepairable = (Repairable) ingredientMeta;
 
                             if (itemRepairable.hasRepairCost() && ingredientRepairable.hasRepairCost()) {
@@ -601,14 +568,12 @@ public class ToolsRecipeChoice {
                             }
                         }
 
-                        if (itemMeta instanceof BlockStateMeta) {
-                            BlockStateMeta itemBlockStateMeta = (BlockStateMeta) itemMeta;
+                        if (itemMeta instanceof BlockStateMeta itemBlockStateMeta) {
                             BlockStateMeta ingredientBlockStateMeta = (BlockStateMeta) ingredientMeta;
                             BlockState itemBlockState = itemBlockStateMeta.getBlockState();
                             BlockState ingredientBlockState = ingredientBlockStateMeta.getBlockState();
 
-                            if (itemBlockState instanceof CreatureSpawner) {
-                                CreatureSpawner itemSpawner = (CreatureSpawner) itemBlockState;
+                            if (itemBlockState instanceof CreatureSpawner itemSpawner) {
                                 CreatureSpawner ingredientSpawner = (CreatureSpawner) ingredientBlockState;
 
                                 if (itemSpawner.getSpawnedType() == ingredientSpawner.getSpawnedType()) {
@@ -645,8 +610,7 @@ public class ToolsRecipeChoice {
                             }
                         }
 
-                        if (itemMeta instanceof SuspiciousStewMeta) {
-                            SuspiciousStewMeta itemStewMeta = (SuspiciousStewMeta) itemMeta;
+                        if (itemMeta instanceof SuspiciousStewMeta itemStewMeta) {
                             SuspiciousStewMeta ingredientStewMeta = (SuspiciousStewMeta) ingredientMeta;
 
                             if (itemStewMeta.hasCustomEffects() && ingredientStewMeta.hasCustomEffects()) {

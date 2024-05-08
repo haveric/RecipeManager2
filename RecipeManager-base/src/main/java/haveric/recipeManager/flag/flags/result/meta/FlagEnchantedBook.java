@@ -266,9 +266,7 @@ public class FlagEnchantedBook extends Flag {
     }
 
     private void parse(ItemMeta meta, StringBuilder builder, String prefix) {
-        if (meta instanceof EnchantmentStorageMeta) {
-            EnchantmentStorageMeta enchantmentStorageMeta = (EnchantmentStorageMeta) meta;
-
+        if (meta instanceof EnchantmentStorageMeta enchantmentStorageMeta) {
             if (enchantmentStorageMeta.hasStoredEnchants()) {
                 Map<Enchantment, Integer> storedEnchants = enchantmentStorageMeta.getStoredEnchants();
                 for (Map.Entry<Enchantment, Integer> entry : storedEnchants.entrySet()) {

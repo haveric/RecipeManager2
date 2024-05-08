@@ -620,11 +620,9 @@ public class Vanilla {
      */
     private static Recipe removeSmeltRecipe(RMFurnaceRecipe recipe) {
         RecipeChoice choice = recipe.getIngredientChoice();
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             return removeFurnaceRecipe(new ItemStack(materialChoice.getChoices().get(0)));
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             return removeFurnaceRecipe(exactChoice.getChoices().get(0));
         } else {
             return null;
@@ -660,11 +658,9 @@ public class Vanilla {
 
     private static Recipe removeBlastingRecipe(RMBlastingRecipe recipe) {
         RecipeChoice choice = recipe.getIngredientChoice();
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             return removeBlastingRecipe(new ItemStack(materialChoice.getChoices().get(0)));
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             return removeBlastingRecipe(exactChoice.getChoices().get(0));
         } else {
             return null;
@@ -700,11 +696,9 @@ public class Vanilla {
 
     private static Recipe removeSmokingRecipe(RMSmokingRecipe recipe) {
         RecipeChoice choice = recipe.getIngredientChoice();
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             return removeSmokingRecipe(new ItemStack(materialChoice.getChoices().get(0)));
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             return removeSmokingRecipe(exactChoice.getChoices().get(0));
         } else {
             return null;
@@ -740,11 +734,9 @@ public class Vanilla {
 
     private static Recipe removeCampfireRecipe(RMCampfireRecipe recipe) {
         RecipeChoice choice = recipe.getIngredientChoice();
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             return removeCampfireRecipe(new ItemStack(materialChoice.getChoices().get(0)));
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             return removeCampfireRecipe(exactChoice.getChoices().get(0));
         } else {
             return null;
@@ -780,11 +772,9 @@ public class Vanilla {
 
     private static Recipe removeStonecuttingRecipe(RMStonecuttingRecipe recipe) {
         RecipeChoice choice = recipe.getIngredientChoice();
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
             return removeStonecuttingRecipe(new ItemStack(materialChoice.getChoices().get(0)), recipe.getResult().getItemStack());
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
             return removeStonecuttingRecipe(exactChoice.getChoices().get(0), recipe.getResult().getItemStack());
         } else {
             return null;
@@ -824,33 +814,27 @@ public class Vanilla {
         ItemStack addIngredient;
 
         RecipeChoice templateChoice = recipe.getTemplateIngredient();
-        if (templateChoice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) templateChoice;
+        if (templateChoice instanceof RecipeChoice.MaterialChoice materialChoice) {
             templateIngredient = new ItemStack(materialChoice.getChoices().get(0));
-        } else if (templateChoice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) templateChoice;
+        } else if (templateChoice instanceof RecipeChoice.ExactChoice exactChoice) {
             templateIngredient = exactChoice.getChoices().get(0);
         } else {
             return null;
         }
 
         RecipeChoice baseChoice = recipe.getPrimaryIngredient();
-        if (baseChoice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) baseChoice;
+        if (baseChoice instanceof RecipeChoice.MaterialChoice materialChoice) {
             baseIngredient = new ItemStack(materialChoice.getChoices().get(0));
-        } else if (baseChoice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) baseChoice;
+        } else if (baseChoice instanceof RecipeChoice.ExactChoice exactChoice) {
             baseIngredient = exactChoice.getChoices().get(0);
         } else {
             return null;
         }
 
         RecipeChoice addChoice = recipe.getSecondaryIngredient();
-        if (addChoice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) addChoice;
+        if (addChoice instanceof RecipeChoice.MaterialChoice materialChoice) {
             addIngredient = new ItemStack(materialChoice.getChoices().get(0));
-        } else if (addChoice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) addChoice;
+        } else if (addChoice instanceof RecipeChoice.ExactChoice exactChoice) {
             addIngredient = exactChoice.getChoices().get(0);
         } else {
             return null;
@@ -891,22 +875,18 @@ public class Vanilla {
         ItemStack baseIngredient;
         ItemStack addIngredient;
 
-        if (baseChoice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) baseChoice;
+        if (baseChoice instanceof RecipeChoice.MaterialChoice materialChoice) {
             baseIngredient = new ItemStack(materialChoice.getChoices().get(0));
-        } else if (baseChoice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) baseChoice;
+        } else if (baseChoice instanceof RecipeChoice.ExactChoice exactChoice) {
             baseIngredient = exactChoice.getChoices().get(0);
         } else {
             return null;
         }
 
         RecipeChoice addChoice = recipe.getSecondaryIngredient();
-        if (addChoice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) addChoice;
+        if (addChoice instanceof RecipeChoice.MaterialChoice materialChoice) {
             addIngredient = new ItemStack(materialChoice.getChoices().get(0));
-        } else if (addChoice instanceof RecipeChoice.ExactChoice) {
-            RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) addChoice;
+        } else if (addChoice instanceof RecipeChoice.ExactChoice exactChoice) {
             addIngredient = exactChoice.getChoices().get(0);
         } else {
             return null;
@@ -952,16 +932,13 @@ public class Vanilla {
     public static Recipe removeCraftRecipe(CraftRecipe recipe) {
         RecipeIterator recipeIterator = VersionHandler.getRecipeIterator();
         Iterator<Recipe> iterator = recipeIterator.getIterator();
-        ShapedRecipe sr;
         Recipe r;
 
         while (iterator.hasNext()) {
             try {
                 r = iterator.next();
 
-                if (r instanceof ShapedRecipe) {
-                    sr = (ShapedRecipe) r;
-
+                if (r instanceof ShapedRecipe sr) {
                     if (VersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoicePattern(), recipe.getIngredientsChoiceMap())) {
                         iterator.remove();
 
@@ -994,8 +971,7 @@ public class Vanilla {
         List<List<Material>> ingredientChoiceList = new ArrayList<>();
 
         for (RecipeChoice choice : ingredientChoices) {
-            if (choice instanceof RecipeChoice.MaterialChoice) {
-                RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
+            if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
                 ingredientChoiceList.add(materialChoice.getChoices());
             } else if (choice instanceof RecipeChoice.ExactChoice) {
                 RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) ingredientChoices;
@@ -1105,8 +1081,7 @@ public class Vanilla {
     public static boolean isSpecialRecipe(Recipe recipe) {
         boolean isSpecial = false;
 
-        if (recipe instanceof Keyed) {
-            Keyed keyedRecipe = (Keyed) recipe;
+        if (recipe instanceof Keyed keyedRecipe) {
             NamespacedKey key = keyedRecipe.getKey();
 
             if (key.getNamespace().equals(NamespacedKey.MINECRAFT)) {

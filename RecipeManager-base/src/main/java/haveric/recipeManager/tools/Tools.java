@@ -390,9 +390,7 @@ public class Tools {
     private static RecipeChoice parseMaterialDataToChoice(RecipeChoice choice, Material material, String dataString, int settings) {
         ItemStack item = new ItemStack(material);
         ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta instanceof Damageable) {
-            Damageable damageable = (Damageable) itemMeta;
-
+        if (itemMeta instanceof Damageable damageable) {
             Map<String, Short> dataMap = RecipeManager.getSettings().getMaterialDataNames(material);
             if (dataMap == null) {
                 try {
