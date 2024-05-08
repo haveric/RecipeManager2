@@ -35,12 +35,12 @@ public class ConditionBoolean extends Condition {
         if (hasValue() && value) {
             a.addReason("flag.ingredientconditions.no" + name, failMessage, "{item}", ToolsItem.print(item));
         } else {
-            a.addReason("flag.ingredientconditions." + name, failMessage, "{item}", ToolsItem.print(item));
+            a.addReason("flag.ingredientconditions.empty" + name, failMessage, "{item}", ToolsItem.print(item));
         }
     }
 
     @Override
     public String getHashString() {
-        return name + ": " + value;
+        return "conditionBoolean:" + name + ": " + value;
     }
 }

@@ -48,7 +48,6 @@ flag:
     nopotioneffect: "<yellow>{item}<red> needs effect(s): <yellow>{effect}"
     nosuspicioussteweffect: "<yellow>{item}<red> needs effect(s): <yellow>{effect}"
     nobannerpatterns: "<yellow>{item}<red> needs banner pattern(s): <yellow>{patterns}"
-    nospawneggentitytype: "<yellow>{item}<red> needs entity type: <yellow>{entitytype}"
     emptyunbreakable: "<yellow>{item}<red> needs to be unbreakable"
     nounbreakable: "<yellow>{item}<red> needs to not be unbreakable"
     emptyhidetooltip: "<yellow>{item}<red> needs to have a hidden tooltip"
