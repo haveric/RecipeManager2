@@ -6,24 +6,18 @@ public enum LightType {
     BLOCKS;
 
     public static LightType getLightType(char c) {
-        switch (c) {
-            case 's':
-                return LightType.SUN;
-            case 'b':
-                return LightType.BLOCKS;
-            default:
-                return LightType.ANY;
-        }
+        return switch (c) {
+            case 's' -> LightType.SUN;
+            case 'b' -> LightType.BLOCKS;
+            default -> LightType.ANY;
+        };
     }
 
     public String asString() {
-        switch(this) {
-            case SUN:
-                return "sun light";
-            case BLOCKS:
-                return "block light";
-            default:
-                return "light";
-        }
+        return switch (this) {
+            case SUN -> "sun light";
+            case BLOCKS -> "block light";
+            default -> "light";
+        };
     }
 }

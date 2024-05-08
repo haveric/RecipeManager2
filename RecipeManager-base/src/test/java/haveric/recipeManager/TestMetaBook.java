@@ -122,7 +122,7 @@ public class TestMetaBook extends TestMetaItem implements BookMeta {
 
     public List<String> getPages() {
         final List<String> copy = new ArrayList<>(pages);
-        return new AbstractList<String>() {
+        return new AbstractList<>() {
 
             @Override
             public String get(int index) {
@@ -160,12 +160,9 @@ public class TestMetaBook extends TestMetaItem implements BookMeta {
     }
 
     boolean applicableTo(Material type) {
-        switch (type) {
-            case WRITTEN_BOOK:
-            case WRITABLE_BOOK:
-                return true;
-            default:
-                return false;
-        }
+        return switch (type) {
+            case WRITTEN_BOOK, WRITABLE_BOOK -> true;
+            default -> false;
+        };
     }
 }

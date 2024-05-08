@@ -2,7 +2,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'idea'
 
-    sourceCompatibility = 1.8
+    sourceCompatibility = JavaVersion.VERSION_17
 
     configurations.configureEach {
         resolutionStrategy.capabilitiesResolution.withCapability("com.google.collections:google-collections") {

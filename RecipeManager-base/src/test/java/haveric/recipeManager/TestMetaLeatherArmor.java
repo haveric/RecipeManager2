@@ -31,15 +31,10 @@ public class TestMetaLeatherArmor extends TestMetaItem implements LeatherArmorMe
 
     @Override
     boolean applicableTo(Material type) {
-        switch(type) {
-            case LEATHER_HELMET:
-            case LEATHER_CHESTPLATE:
-            case LEATHER_LEGGINGS:
-            case LEATHER_BOOTS:
-                return true;
-            default:
-                return false;
-        }
+        return switch (type) {
+            case LEATHER_HELMET, LEATHER_CHESTPLATE, LEATHER_LEGGINGS, LEATHER_BOOTS -> true;
+            default -> false;
+        };
     }
 
     @Override
