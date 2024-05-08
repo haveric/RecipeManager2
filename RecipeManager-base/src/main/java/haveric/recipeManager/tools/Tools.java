@@ -1084,22 +1084,12 @@ public class Tools {
     }
 
     public static Sound getSound(String newSound) {
-        Sound sound;
-
         // set known sounds to make sure Enum isn't changing on us
-        switch (newSound) {
-            case "BLOCK_NOTE_BASS":
-                sound = Sound.BLOCK_NOTE_BLOCK_BASS;
-                break;
-            case "BLOCK_NOTE_PLING":
-                sound = Sound.BLOCK_NOTE_BLOCK_PLING;
-                break;
-            default:
-                sound = Sound.valueOf(newSound);
-                break;
-        }
-
-        return sound;
+        return switch (newSound) {
+            case "BLOCK_NOTE_BASS" -> Sound.BLOCK_NOTE_BLOCK_BASS;
+            case "BLOCK_NOTE_PLING" -> Sound.BLOCK_NOTE_BLOCK_PLING;
+            default -> Sound.valueOf(newSound);
+        };
     }
 
     private static void reportMaterialDoesNotExist(String materialValue) {

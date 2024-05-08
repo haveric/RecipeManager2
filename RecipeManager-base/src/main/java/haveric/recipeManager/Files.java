@@ -673,11 +673,7 @@ public class Files {
             String alias = RecipeManager.getSettings().getMaterialPrint(m);
 
             String aliasString;
-            if (alias == null) {
-                aliasString = "";
-            } else {
-                aliasString = alias;
-            }
+            aliasString = Objects.requireNonNullElse(alias, "");
 
             String durabilityString = "";
             if (m.getMaxDurability() != 0) {

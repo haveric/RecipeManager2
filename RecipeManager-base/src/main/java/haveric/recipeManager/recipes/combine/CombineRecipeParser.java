@@ -219,9 +219,7 @@ public class CombineRecipeParser extends BaseRecipeParser {
                 items += newAmount;
 
                 ingredientRecipeChoiceMap.put(letter, choice);
-                for (int i = 0; i < newAmount; i++) {
-                    shape.append(letter);
-                }
+                shape.append(String.valueOf(letter).repeat(Math.max(0, newAmount)));
 
                 letter ++;
             }

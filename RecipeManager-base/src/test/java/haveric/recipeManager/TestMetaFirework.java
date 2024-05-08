@@ -32,37 +32,25 @@ public class TestMetaFirework extends TestMetaItem implements FireworkMeta {
     }
 
     static int getNBT(Type type) {
-        switch (type) {
-            case BALL:
-                return 0;
-            case BALL_LARGE:
-                return 1;
-            case STAR:
-                return 2;
-            case CREEPER:
-                return 3;
-            case BURST:
-                return 4;
-            default:
-                throw new AssertionError(type);
-        }
+        return switch (type) {
+            case BALL -> 0;
+            case BALL_LARGE -> 1;
+            case STAR -> 2;
+            case CREEPER -> 3;
+            case BURST -> 4;
+            default -> throw new AssertionError(type);
+        };
     }
 
     static Type getEffectType(int nbt) {
-        switch (nbt) {
-            case 0:
-                return Type.BALL;
-            case 1:
-                return Type.BALL_LARGE;
-            case 2:
-                return Type.STAR;
-            case 3:
-                return Type.CREEPER;
-            case 4:
-                return Type.BURST;
-            default:
-                throw new AssertionError(nbt);
-        }
+        return switch (nbt) {
+            case 0 -> Type.BALL;
+            case 1 -> Type.BALL_LARGE;
+            case 2 -> Type.STAR;
+            case 3 -> Type.CREEPER;
+            case 4 -> Type.BURST;
+            default -> throw new AssertionError(nbt);
+        };
     }
 
     public boolean hasEffects() {

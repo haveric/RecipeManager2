@@ -44,15 +44,10 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
 
     @Override
     boolean applicableTo(Material type) {
-        switch(type) {
-            case POTION:
-            case SPLASH_POTION:
-            case LINGERING_POTION:
-            case TIPPED_ARROW:
-                return true;
-            default:
-                return false;
-        }
+        return switch (type) {
+            case POTION, SPLASH_POTION, LINGERING_POTION, TIPPED_ARROW -> true;
+            default -> false;
+        };
     }
 
     @Override
