@@ -14,7 +14,6 @@ import org.bukkit.profile.PlayerProfile;
 import static org.bukkit.Tag.REGISTRY_BLOCKS;
 
 public class Supports {
-    static boolean axolotlBucketMeta = false;
     static boolean itemFlagHideArmorTrim = false;
     static boolean allayDuplication = false;
     static boolean categories = false;
@@ -24,7 +23,6 @@ public class Supports {
     static boolean shortGrassMaterial = false;
 
     public static void init() {
-        checkAxolotlBucketMeta();
         checkItemFlagHideArmorTrimSupport();
         checkAllayDuplication();
         checkCategories();
@@ -32,18 +30,6 @@ public class Supports {
         checkExperimental1_20();
         checkPlayerProfile();
         checkShortGrassMaterial();
-    }
-
-    // 1.17+
-    private static void checkAxolotlBucketMeta() {
-        try {
-            ItemStack axolotlBucket = new ItemStack(Material.AXOLOTL_BUCKET);
-            @SuppressWarnings("unused")
-            AxolotlBucketMeta axolotlMeta = (AxolotlBucketMeta) axolotlBucket.getItemMeta();
-            axolotlBucketMeta = true;
-        } catch (NoSuchFieldError | NoClassDefFoundError e) {
-            axolotlBucketMeta = false;
-        }
     }
 
     // 1.18.1
@@ -131,10 +117,6 @@ public class Supports {
         } catch (NoSuchFieldError | NoClassDefFoundError e) {
             shortGrassMaterial = false;
         }
-    }
-
-    public static boolean axolotlBucketMeta() {
-        return axolotlBucketMeta;
     }
 
     public static boolean itemFlagHideArmorTrim() {

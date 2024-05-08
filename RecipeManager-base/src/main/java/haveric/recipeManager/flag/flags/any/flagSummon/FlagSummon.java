@@ -136,16 +136,8 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "rabbit <type>", "set the rabbit type, values: " + RMCUtil.collectionToString(Arrays.asList(Rabbit.Type.values())).toLowerCase()),
             String.format(argFormat, "saddle [mount]", "adds saddle on entity (forces animal to be adult), only works for pig and horse, optionally you can specify 'mount' to make crafter mount entity."),
             String.format(argFormat, "shearedsheep", "sets the sheep as sheared, only works for sheep."),
-        }, String.class);
-
-        if (Version.has1_18Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "skeletonhorsetrapped", "sets if the skeleton horse is trapped. When a player goes near the trapped horse, lightning will strike and convert it into a skeleton horseman."),
-                    String.format(argFormat, "skeletonhorsetrappedtime <ticks>", "sets the trapped time (in ticks) of the skeleton horse. Trap time is increased every tick if skeletonhorsetrapped is also set. The horse will despawn when ticks is greater than 18000.")
-            }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[] {
+            String.format(argFormat, "skeletonhorsetrapped", "sets if the skeleton horse is trapped. When a player goes near the trapped horse, lightning will strike and convert it into a skeleton horseman."),
+            String.format(argFormat, "skeletonhorsetrappedtime <ticks>", "sets the trapped time (in ticks) of the skeleton horse. Trap time is increased every tick if skeletonhorsetrapped is also set. The horse will despawn when ticks is greater than 18000."),
             String.format(argFormat, "spread <range>", "spawns entities spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)"),
             String.format(argFormat, "target", "entity targets crafter, that means monsters attack and animals follow and the rest do nothing"),
             String.format(argFormat, "tropicalfishcolor <dye>", "sets the tropical fish's body color."),
@@ -156,14 +148,7 @@ public class FlagSummon extends Flag {
             String.format(argFormatExtra, "", "Values: " + Files.getNameIndexHashLink("dyecolor")),
             String.format(argFormat, "villager <type>", "set the villager profession"),
             String.format(argFormatExtra, "", "Values: " + RMCUtil.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()),
-        }, String.class);
-
-        if (Version.has1_18Support()) {
-            ObjectArrays.concat(description, new String[]{
-                    String.format(argFormat, "vindicatorjohnny", "sets the johnny state of a vindicator.") }, String.class);
-        }
-
-        description = ObjectArrays.concat(description, new String[]{
+            String.format(argFormat, "vindicatorjohnny", "sets the johnny state of a vindicator."),
             String.format(argFormat, "visualfire", "sets if the entity has visual fire (it will always appear to be on fire)."),
             String.format(argFormat, "wanderingtraderdespawndelay <ticks>", "sets if the despawn delay (in ticks) of a wandering trader. If ticks is less than or equal to zero, the trader will not be despawned.")
         }, String.class);

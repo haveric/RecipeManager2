@@ -8,7 +8,6 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.inventory.ItemStack;
@@ -138,7 +137,7 @@ public class FlagAxolotlBucketItem extends Flag {
 
     @Override
     public void parseItemMeta(ItemStack item, ItemMeta meta, StringBuilder recipeString) {
-        if (Supports.axolotlBucketMeta() && meta instanceof AxolotlBucketMeta) {
+        if (meta instanceof AxolotlBucketMeta) {
             AxolotlBucketMeta axolotlBucketMeta = (AxolotlBucketMeta) meta;
             if (axolotlBucketMeta.hasVariant()) {
                 recipeString.append(Files.NL).append("@axolotlbucketitem ").append(axolotlBucketMeta.getVariant());

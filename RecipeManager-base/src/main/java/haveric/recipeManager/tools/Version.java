@@ -20,10 +20,8 @@ public class Version {
             supportVersion = "1.19.3";
         } else if (supports1_19()) {
             supportVersion = "1.19";
-        } else if (supports1_18()) {
-            supportVersion = "1.18";
         } else {
-            supportVersion = "1.17";
+            supportVersion = "1.18";
         }
 
         spigotSupport = supportsSpigot();
@@ -119,20 +117,6 @@ public class Version {
         return supports;
     }
 
-    private static boolean supports1_18() {
-        boolean supports;
-
-        try {
-            @SuppressWarnings("unused")
-            Material othersideDisk = Material.MUSIC_DISC_OTHERSIDE;
-            supports = true;
-        } catch (NoSuchFieldError e) {
-            supports = false;
-        }
-
-        return supports;
-    }
-
     private static String getVersion() {
         if (supportVersion == null) {
             init();
@@ -190,17 +174,6 @@ public class Version {
         String version = getVersion();
 
         if (version.equals("1.20.5") || version.equals("1.20") || version.equals("1.19.4") || version.equals("1.19.3") || version.equals("1.19")) {
-            hasSupport = true;
-        }
-
-        return hasSupport;
-    }
-
-    public static boolean has1_18Support() {
-        boolean hasSupport = false;
-        String version = getVersion();
-
-        if (version.equals("1.20.5") || version.equals("1.20") || version.equals("1.19.4") || version.equals("1.19.3") || version.equals("1.19") || version.equals("1.18")) {
             hasSupport = true;
         }
 

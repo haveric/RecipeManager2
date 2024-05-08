@@ -5,7 +5,6 @@ import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.tools.Version;
 
 public class FlagHeight extends Flag {
 
@@ -127,10 +126,6 @@ public class FlagHeight extends Flag {
 
         if (maxHeight < minHeight) {
             return ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs max higher than min.");
-        }
-
-        if (!Version.has1_18Support() && minHeight <= 0 && maxHeight <= 0) {
-            return ErrorReporter.getInstance().error("The " + getFlagType() + " flag needs min or max higher than 0.");
         }
 
         return true;
