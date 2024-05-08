@@ -16,7 +16,6 @@ import haveric.recipeManager.flag.conditions.ConditionsHold;
 import haveric.recipeManager.flag.conditions.ConditionsHold.ConditionsSlot;
 import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.DyeColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -105,31 +104,7 @@ public class FlagHoldItem extends Flag {
             "    Overrides bookenchant condition if set",
             "",
             "  amount <num>                     = stack amount",
-            "",
-            "  name <text or regex:pattern>     = check the item name against exact text or if prefixed with 'regex:' it will check for a regex pattern.",
-            "    Note for regex:pattern           Escape for '|' is a double '||'. Any double pipes will be converted back to single pipes for regex parsing.",
-            "",
-            "  noname or !name",
-            "    Held item must have no/default name",
-            "    Overrides name condition if set",
-            "",
-            "  itemname <text or regex:pattern>     = check the item name against exact text or if prefixed with 'regex:' it will check for a regex pattern.",
-            "    Note for regex:pattern           Escape for '|' is a double '||'. Any double pipes will be converted back to single pipes for regex parsing.",
-            "  noitemname or !itemname",
-            "    Ingredient must have no/default item name",
-            "    Overrides itemname condition if set",
         };
-
-        if (!Version.has1_20_5Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                "",
-                "  localizedname <text or regex:pattern>     = check the item's localizedname against exact text or if prefixed with 'regex:' it will check for a regex pattern.",
-                "    Note for regex:pattern           Escape for '|' is a double '||'. Any double pipes will be converted back to single pipes for regex parsing.",
-                "  nolocalizedname or !localizedname",
-                "    Ingredient must have no localizedname",
-                "    Overrides localizedname condition if set",
-            }, String.class);
-        }
 
         description = ObjectArrays.concat(description, new String[] {
             "",
@@ -171,10 +146,6 @@ public class FlagHoldItem extends Flag {
         StringBuilder metaList = new StringBuilder();
         StringBuilder noMetaList = new StringBuilder();
 
-        if (!Version.has1_20_5Support()) {
-            conditionNoMetas.add("localizedname");
-        }
-
         Collections.sort(conditionNoMetas);
         for (String noMeta : conditionNoMetas) {
             metaList.append(", ").append(noMeta);
@@ -184,9 +155,9 @@ public class FlagHoldItem extends Flag {
         description = ObjectArrays.concat(description, new String[] {
             "",
             "  nometa or !meta",
-            "    Ingredient must have no metadata (enchants, bookenchants, name, itemname, lore, color" + metaList + ")",
-            "    Overrides enchant, name, itemname, lore, color" + metaList + " conditions if set",
-            "    Equivalent to noenchant | nobookenchant | noname | noitemname | nolore | nocolor" + noMetaList,
+            "    Ingredient must have no metadata (enchants, bookenchants, lore, color" + metaList + ")",
+            "    Overrides enchant, lore, color" + metaList + " conditions if set",
+            "    Equivalent to noenchant | nobookenchant | nolore | nocolor" + noMetaList,
             "",
             "  potion <condition>, [...]",
             "    type &lt;potiontype&gt;      = Type of potion, see " + Files.getNameIndexHashLink("potiontype"),

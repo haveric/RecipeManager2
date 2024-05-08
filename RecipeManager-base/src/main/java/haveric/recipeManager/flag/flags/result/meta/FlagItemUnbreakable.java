@@ -104,7 +104,8 @@ public class FlagItemUnbreakable extends Flag {
     }
 
     @Override
-    public Condition parseCondition(String argLower, boolean noMeta) {
+    public Condition parseCondition(String arg, boolean noMeta) {
+        String argLower = arg.toLowerCase();
         Boolean value = null;
         String conditionName = getConditionName();
         if (argLower.startsWith("!" + conditionName) || argLower.startsWith("no" + conditionName)) {

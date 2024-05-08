@@ -21,7 +21,8 @@ This file will be automatically overwritten when a new version is installed.
 * REMOVED: Shorthand item/result options for name, lore, and enchants on items. Flags should be used instead
 * NEW `@IngredientCondition`, `@HoldItem` argument: `repaircost <amount>`
 * FIX: `@IngredientCondition` matching for `@CustomModelData`, `@MaxStackSize`, `@OminousBottleItem`, `@Rarity`
-* NEW: `@CustomModelData`, `@Damage`, `@MaxDamage`, `@MaxStackSize`, `@OminousBottleItem`, `@RepairCost`: Added support for ranges (min-max), comma separated values, and negative matching
+* NEW: `@CustomModelData`, `@Damage`, `@MaxDamage`, `@MaxStackSize`, `@OminousBottleItem`, `@RepairCost`: Added condition support for ranges (min-max), comma separated values, and negative matching
+* NEW: `@DisplayName`, `@ItemName`, `@LocalizedName`, `@Rarity`: Added condition support for comma separated values and negative matching
 
 ### v2.31.0
 * REMOVED support for Minecraft 1.8 - 1.11

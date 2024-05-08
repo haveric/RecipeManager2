@@ -113,37 +113,44 @@ public class FlagRarity extends Flag {
     }
 
     @Override
-    public Condition parseCondition(String argLower, boolean noMeta) {
-        String value = null;
+    public Condition parseCondition(String arg, boolean noMeta) {
         String conditionName = getConditionName();
-        if (argLower.startsWith("!" + conditionName) || argLower.startsWith("no" + conditionName)) {
-            value = "NO_VALUE";
-        } else if (argLower.startsWith(conditionName)) {
-            String argTrimmed = argLower.substring(conditionName.length()).trim();
-            try {
-                value = String.valueOf(ItemRarity.valueOf(argTrimmed));
-            } catch (IllegalArgumentException e) {
-                ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid '" + conditionName + "' name: " + argTrimmed, "Valid rarity values: " + RMCUtil.collectionToString(Arrays.asList(ItemRarity.values())).toLowerCase());
+        ConditionString returnCondition = new ConditionString(conditionName, getFlagType(), arg, noMeta);
+
+        String lastValue = "";
+        try {
+            for (String value : returnCondition.getValues()) {
+                lastValue = value;
+                ItemRarity.valueOf(value);
             }
-        }
 
-        if (!noMeta && value == null) {
+            for (String value : returnCondition.getNegativeValues()) {
+                lastValue = value;
+                ItemRarity.valueOf(value);
+            }
+        } catch (IllegalArgumentException e) {
+            ErrorReporter.getInstance().error("Flag " + getFlagType() + " has invalid '" + conditionName + "' name: " + lastValue, "Valid rarity values: " + RMCUtil.collectionToString(Arrays.asList(ItemRarity.values())).toLowerCase());
             return null;
-        } else {
-            String finalValue = value;
-            return new ConditionString(conditionName, finalValue, (item, meta, condition) -> {
-                ConditionString conditionString = (ConditionString) condition;
-                if (noMeta || finalValue.equals("NO_VALUE")) {
-                    return !meta.hasRarity();
-                }
-
-                if (meta.hasRarity()) {
-                    return !conditionString.hasValue() || meta.getRarity() == ItemRarity.valueOf(conditionString.getValue());
-                }
-
-                return false;
-            });
         }
+
+        if (returnCondition.skipCondition()) {
+            return null;
+        }
+
+        returnCondition.setCheckCallback((item, meta, condition) -> {
+            ConditionString callbackCondition = (ConditionString) condition;
+            if (callbackCondition.shouldHaveNoMeta()) {
+                return !meta.hasRarity();
+            }
+
+            if (meta.hasRarity()) {
+                return !callbackCondition.hasValue() || callbackCondition.contains(meta.getRarity().name());
+            }
+
+            return false;
+        });
+
+        return returnCondition;
     }
 
     @Override
@@ -156,6 +163,10 @@ public class FlagRarity extends Flag {
         return new String[] {
             "  rarity <rarity> = Ingredient must have a specific rarity",
             "    Rarity values: " + RMCUtil.collectionToString(Arrays.asList(ItemRarity.values())).toLowerCase(),
+            "    <rarity> supports multiple values that are comma separated: <rarity1>, <rarity2>, <rarity3>",
+            "    <rarity> supports negative matching by preceding a rarity with an exclamation mark `!`: !<rarity1>, !<rarity2>",
+            "    <rarity> any combination of the above can be combined together: <rarity1>, !<rarity2>",
+            "      Matching for <rarity> must match ANY of the non-negative values and NONE of the negative values",
             "  norarity or !rarity = Ingredient must not have a rarity",
         };
     }

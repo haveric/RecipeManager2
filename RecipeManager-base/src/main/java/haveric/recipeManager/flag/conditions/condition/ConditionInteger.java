@@ -12,15 +12,17 @@ import java.util.List;
 public class ConditionInteger extends Condition {
     private boolean matchesName;
     private boolean noCondition;
+    private final String flagType;
     private final boolean noMeta;
     List<ConditionIntegerRange> values;
     List<ConditionIntegerRange> negativeValues;
 
-    public ConditionInteger(String name, String flagType, String argLower, boolean noMeta) {
+    public ConditionInteger(String name, String flagType, String arg, boolean noMeta) {
         super(name);
         this.noMeta = noMeta;
+        this.flagType = flagType;
 
-        parseArg(argLower, flagType);
+        parseArg(arg.toLowerCase(), flagType);
     }
 
     public boolean skipCondition() {
@@ -157,7 +159,7 @@ public class ConditionInteger extends Condition {
 
     @Override
     public String getHashString() {
-        String toHash = "condition:";
+        String toHash = "conditionInteger:";
         toHash += "name: " + name;
         toHash += "noCondition: " + noCondition;
 
