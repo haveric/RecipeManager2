@@ -19,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class PreparableResultRecipe extends MultiResultRecipe {
+public abstract class PreparableResultRecipe extends MultiChoiceResultRecipe {
     protected PreparableResultRecipe() {
     }
 

@@ -25,10 +25,6 @@ public class RMBaseFurnaceRecipe extends RMBaseCookingRecipe {
         super(recipe);
 
         if (recipe instanceof RMBaseFurnaceRecipe r) {
-            if (r.ingredientChoice != null) {
-                ingredientChoice = r.ingredientChoice.clone();
-            }
-
             if (r.fuel == null) {
                 fuel = null;
             } else {

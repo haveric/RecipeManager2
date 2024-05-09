@@ -5,14 +5,18 @@ import haveric.recipeManager.RecipeRegistrator;
 import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
+import haveric.recipeManager.flag.args.ArgBuilder;
+import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.cooking.furnace.RMBaseFurnaceRecipe;
 import haveric.recipeManager.tools.Tools;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseRecipeParser {
-
     protected RecipeFileReader reader;
     protected String recipeName;
     protected Flags fileFlags;
@@ -137,5 +141,36 @@ public abstract class BaseRecipeParser {
         }
 
         return true; // valid results
+    }
+
+    protected Flags createFlaggableFlags(RecipeChoice choice) {
+        FlaggableRecipeChoice flaggable = new FlaggableRecipeChoice();
+        flaggable.setChoice(choice);
+        return flaggable.getFlags();
+    }
+
+    protected List<ItemStack> parseChoiceToItems(RecipeChoice choice, Flags ingredientFlags) {
+        List<ItemStack> items = new ArrayList<>();
+        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
+            List<Material> materials = materialChoice.getChoices();
+
+            for (Material material : materials) {
+                Args a = ArgBuilder.create().result(new ItemStack(material)).build();
+                ingredientFlags.sendCrafted(a, true);
+
+                items.add(a.result().getItemStack());
+            }
+        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
+            List<ItemStack> exactItems = exactChoice.getChoices();
+
+            for (ItemStack exactItem : exactItems) {
+                Args a = ArgBuilder.create().result(exactItem).build();
+                ingredientFlags.sendCrafted(a, true);
+
+                items.add(a.result().getItemStack());
+            }
+        }
+
+        return items;
     }
 }

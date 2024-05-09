@@ -383,7 +383,7 @@ public class Recipes {
             if (result != null && result.hasFlags()) {
                 result.getFlags().sendRegistered();
             }
-        } else if (recipe instanceof MultiResultRecipe rec) {
+        } else if (recipe instanceof MultiChoiceResultRecipe rec) {
             for (ItemResult result : rec.getResults()) {
                 if (result != null && result.hasFlags()) {
                     result.getFlags().sendRegistered();

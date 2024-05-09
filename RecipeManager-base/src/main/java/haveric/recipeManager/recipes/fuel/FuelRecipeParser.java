@@ -9,14 +9,11 @@ import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.AirChoice;
 import haveric.recipeManager.recipes.BaseRecipeParser;
-import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FuelRecipeParser extends BaseRecipeParser {
@@ -82,33 +79,11 @@ public class FuelRecipeParser extends BaseRecipeParser {
                 return false;
             }
 
-            FlaggableRecipeChoice flaggable = new FlaggableRecipeChoice();
-            flaggable.setChoice(choice);
-            Flags ingredientFlags = flaggable.getFlags();
-
+            Flags ingredientFlags = createFlaggableFlags(choice);
             reader.parseFlags(ingredientFlags, FlagBit.INGREDIENT);
 
             if (ingredientFlags.hasFlags()) {
-                List<ItemStack> items = new ArrayList<>();
-                if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
-                    List<Material> materials = materialChoice.getChoices();
-
-                    for (Material material : materials) {
-                        Args a = ArgBuilder.create().result(new ItemStack(material)).build();
-                        ingredientFlags.sendCrafted(a, true);
-
-                        items.add(a.result().getItemStack());
-                    }
-                } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
-                    List<ItemStack> exactItems = exactChoice.getChoices();
-
-                    for (ItemStack exactItem : exactItems) {
-                        Args a = ArgBuilder.create().result(exactItem).build();
-                        ingredientFlags.sendCrafted(a, true);
-
-                        items.add(a.result().getItemStack());
-                    }
-                }
+                List<ItemStack> items = parseChoiceToItems(choice, ingredientFlags);
 
                 recipe.addIngredientChoiceItems(items);
             } else {

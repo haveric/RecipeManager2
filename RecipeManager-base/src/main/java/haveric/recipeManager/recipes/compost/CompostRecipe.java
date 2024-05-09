@@ -1,5 +1,6 @@
 package haveric.recipeManager.recipes.compost;
 
+import com.google.common.collect.ImmutableList;
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
@@ -7,22 +8,21 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.MultiResultRecipe;
+import haveric.recipeManager.recipes.MultiChoiceResultRecipe;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class CompostRecipe extends MultiResultRecipe {
-    private RecipeChoice ingredientChoice;
+public class CompostRecipe extends MultiChoiceResultRecipe {
     private double levelSuccessChance = 100;
     private double levels = 1;
     public static final ItemResult VANILLA_ITEM_RESULT = new ItemResult(new ItemStack(Material.BONE_MEAL));
 
     public CompostRecipe() {
+        init();
     }
 
     /**
@@ -33,7 +33,11 @@ public class CompostRecipe extends MultiResultRecipe {
      *
      */
     public CompostRecipe(Material ingredient, double levelSuccessChance) {
-        ingredientChoice = new RecipeChoice.MaterialChoice(ingredient);
+        init();
+        setMaxIngredients(1);
+        addValidChars(ImmutableList.of('a'));
+
+        setIngredientChoice(new RecipeChoice.MaterialChoice(ingredient));
         setResult(VANILLA_ITEM_RESULT.getItemStack().clone());
         this.levelSuccessChance = levelSuccessChance;
 
@@ -42,12 +46,9 @@ public class CompostRecipe extends MultiResultRecipe {
 
     public CompostRecipe(BaseRecipe recipe) {
         super(recipe);
+        init();
 
         if (recipe instanceof CompostRecipe r) {
-            if (r.ingredientChoice != null) {
-                ingredientChoice = r.ingredientChoice.clone();
-            }
-
             levelSuccessChance = r.levelSuccessChance;
             levels = r.levels;
         }
@@ -57,44 +58,12 @@ public class CompostRecipe extends MultiResultRecipe {
 
     public CompostRecipe(Flags flags) {
         super(flags);
+        init();
     }
 
-    public RecipeChoice getIngredientChoice() {
-        return ingredientChoice;
-    }
-
-    public void addIngredientChoiceItems(List<ItemStack> items) {
-        if (ingredientChoice == null) {
-            setIngredientChoiceItems(items);
-        } else {
-            ingredientChoice = ToolsRecipeChoice.mergeRecipeChoiceWithItems(ingredientChoice, items);
-            updateHash();
-        }
-    }
-
-    public void setIngredientChoiceItems(List<ItemStack> items) {
-        RecipeChoice.ExactChoice exactChoice = new RecipeChoice.ExactChoice(items);
-        setIngredientChoice(exactChoice);
-    }
-
-    protected void setIngredientChoice(RecipeChoice choice) {
-        ingredientChoice = choice.clone();
-
-        updateHash();
-    }
-
-    private void updateHash() {
-        String newHash = "compost";
-
-        if (hasIngredientChoice()) {
-            newHash += ToolsRecipeChoice.getRecipeChoiceHash(ingredientChoice);
-        }
-
-        hash = newHash.hashCode();
-    }
-
-    public boolean hasIngredientChoice() {
-        return ingredientChoice != null;
+    private void init() {
+        setMaxIngredients(1);
+        addValidChars(ImmutableList.of('a'));
     }
 
     public double getLevelSuccessChance() {
@@ -113,6 +82,27 @@ public class CompostRecipe extends MultiResultRecipe {
         levels = newLevels;
     }
 
+    public RecipeChoice getIngredientChoice() {
+        return getIngredient('a');
+    }
+
+    public void setIngredientChoice(RecipeChoice choice) {
+        setIngredient('a', choice);
+    }
+
+    public boolean hasIngredientChoice() {
+        return hasIngredient('a');
+    }
+
+    public void addIngredientChoiceItems(List<ItemStack> items) {
+        if (hasIngredientChoice()) {
+            setIngredientChoice(ToolsRecipeChoice.mergeRecipeChoiceWithItems(getIngredientChoice(), items));
+        } else {
+            RecipeChoice.ExactChoice exactChoice = new RecipeChoice.ExactChoice(items);
+            setIngredientChoice(exactChoice);
+        }
+    }
+
     @Override
     public void resetName() {
         StringBuilder s = new StringBuilder();
@@ -128,7 +118,7 @@ public class CompostRecipe extends MultiResultRecipe {
             s.append("levels x").append(levels).append(" ");
         }
 
-        s.append(ToolsRecipeChoice.getRecipeChoiceName(ingredientChoice));
+        s.append(ToolsRecipeChoice.getRecipeChoiceName(getIngredientChoice()));
 
         s.append(" to ");
 
@@ -143,26 +133,9 @@ public class CompostRecipe extends MultiResultRecipe {
     }
 
     @Override
-    public List<String> getIndexes() {
-        List<String> indexString = new ArrayList<>();
-
-        if (ingredientChoice instanceof RecipeChoice.MaterialChoice) {
-            for (Material material : ((RecipeChoice.MaterialChoice) ingredientChoice).getChoices()) {
-                indexString.add(material.toString());
-            }
-        } else if (ingredientChoice instanceof RecipeChoice.ExactChoice) {
-            for (ItemStack item : ((RecipeChoice.ExactChoice) ingredientChoice).getChoices()) {
-                indexString.add(item.getType().toString());
-            }
-        }
-
-        return indexString;
-    }
-
-    @Override
     public boolean isValid() {
-        return hasIngredientChoice();
-    } // TODO: Does this need hasResults()?
+        return hasIngredientChoice(); // TODO: Does this need hasResults()?
+    }
 
     @Override
     public String getInvalidErrorMessage() {
@@ -180,32 +153,15 @@ public class CompostRecipe extends MultiResultRecipe {
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(ingredientChoice, RMCChatColor.BLACK, RMCChatColor.BLACK));
+        for (RecipeChoice choice : getIngredients().values()) {
+            s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(choice, RMCChatColor.BLACK, RMCChatColor.BLACK));
+        }
 
         s.append("\n\n");
         s.append(Messages.getInstance().parse("recipebook.header.compostlevel")).append(RMCChatColor.BLACK);
         s.append('\n').append(Messages.getInstance().parse("recipebook.compost.level", "{levelsuccess}", levelSuccessChance, "{levels}", levels));
 
         return s.toString();
-    }
-
-    @Override
-    public int findItemInIngredients(Material type, Short data) {
-        int found = 0;
-
-        found += ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, ingredientChoice);
-
-        return found;
-    }
-
-    @Override
-    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
-        List<String> recipeIndexes = new ArrayList<>();
-        if (ingredients.size() == 1) {
-            recipeIndexes.add(ingredients.get(0).getType().toString());
-        }
-
-        return recipeIndexes;
     }
 
     @Override
@@ -225,7 +181,7 @@ public class CompostRecipe extends MultiResultRecipe {
                 }
             }
 
-            return ToolsRecipeChoice.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
+            return ToolsRecipeChoice.getIngredientMatchQuality(ingredient, getIngredientChoice(), checkExact);
         }
 
         return 0;

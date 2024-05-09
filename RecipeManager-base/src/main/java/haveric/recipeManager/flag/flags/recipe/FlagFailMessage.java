@@ -1,14 +1,11 @@
 package haveric.recipeManager.flag.flags.recipe;
 
 import haveric.recipeManager.ErrorReporter;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.MultiResultRecipe;
-import haveric.recipeManager.recipes.SingleResultRecipe;
-import haveric.recipeManager.common.util.RMCUtil;
+import haveric.recipeManager.recipes.*;
 import org.bukkit.Material;
 
 public class FlagFailMessage extends Flag {
@@ -80,7 +77,7 @@ public class FlagFailMessage extends Flag {
     public boolean onValidate() {
         BaseRecipe recipe = getRecipe();
 
-        if (!(recipe instanceof MultiResultRecipe) && !(recipe instanceof SingleResultRecipe)) {
+        if (!(recipe instanceof MultiChoiceResultRecipe) && !(recipe instanceof SingleResultRecipe)) {
             return ErrorReporter.getInstance().error("Flag " + getFlagType() + " can only be used on recipes that support failure chance.");
         }
 
@@ -96,7 +93,7 @@ public class FlagFailMessage extends Flag {
 
     @Override
     public void onFailed(Args a) {
-        if (!a.hasResult() || !a.hasRecipe() || (!(a.recipe() instanceof MultiResultRecipe) && !(a.recipe() instanceof SingleResultRecipe))) {
+        if (!a.hasResult() || !a.hasRecipe() || (!(a.recipe() instanceof MultiChoiceResultRecipe) && !(a.recipe() instanceof SingleResultRecipe))) {
             a.addCustomReason("Needs fail-supporting recipe and result!");
             return;
         }
@@ -108,7 +105,7 @@ public class FlagFailMessage extends Flag {
         if (a.recipe() instanceof SingleResultRecipe recipe) {
             successChance = recipe.getResult().getChance();
             failChance = 100 - successChance;
-        } else if (a.recipe() instanceof MultiResultRecipe recipe) {
+        } else if (a.recipe() instanceof MultiChoiceResultRecipe recipe) {
             for (ItemResult r : recipe.getResults()) {
                 if (r.getType() == Material.AIR) {
                     failChance = r.getChance();

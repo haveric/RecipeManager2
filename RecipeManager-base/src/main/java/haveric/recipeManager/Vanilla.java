@@ -813,7 +813,7 @@ public class Vanilla {
         ItemStack baseIngredient;
         ItemStack addIngredient;
 
-        RecipeChoice templateChoice = recipe.getTemplateIngredient();
+        RecipeChoice templateChoice = recipe.getTemplateIngredientChoice();
         if (templateChoice instanceof RecipeChoice.MaterialChoice materialChoice) {
             templateIngredient = new ItemStack(materialChoice.getChoices().get(0));
         } else if (templateChoice instanceof RecipeChoice.ExactChoice exactChoice) {
@@ -822,7 +822,7 @@ public class Vanilla {
             return null;
         }
 
-        RecipeChoice baseChoice = recipe.getPrimaryIngredient();
+        RecipeChoice baseChoice = recipe.getPrimaryIngredientChoice();
         if (baseChoice instanceof RecipeChoice.MaterialChoice materialChoice) {
             baseIngredient = new ItemStack(materialChoice.getChoices().get(0));
         } else if (baseChoice instanceof RecipeChoice.ExactChoice exactChoice) {
@@ -831,7 +831,7 @@ public class Vanilla {
             return null;
         }
 
-        RecipeChoice addChoice = recipe.getSecondaryIngredient();
+        RecipeChoice addChoice = recipe.getSecondaryIngredientChoice();
         if (addChoice instanceof RecipeChoice.MaterialChoice materialChoice) {
             addIngredient = new ItemStack(materialChoice.getChoices().get(0));
         } else if (addChoice instanceof RecipeChoice.ExactChoice exactChoice) {
@@ -871,7 +871,7 @@ public class Vanilla {
     }
 
     private static Recipe removeSmithingRecipe(RMSmithingRecipe recipe) {
-        RecipeChoice baseChoice = recipe.getPrimaryIngredient();
+        RecipeChoice baseChoice = recipe.getPrimaryIngredientChoice();
         ItemStack baseIngredient;
         ItemStack addIngredient;
 
@@ -883,7 +883,7 @@ public class Vanilla {
             return null;
         }
 
-        RecipeChoice addChoice = recipe.getSecondaryIngredient();
+        RecipeChoice addChoice = recipe.getSecondaryIngredientChoice();
         if (addChoice instanceof RecipeChoice.MaterialChoice materialChoice) {
             addIngredient = new ItemStack(materialChoice.getChoices().get(0));
         } else if (addChoice instanceof RecipeChoice.ExactChoice exactChoice) {
@@ -939,7 +939,7 @@ public class Vanilla {
                 r = iterator.next();
 
                 if (r instanceof ShapedRecipe sr) {
-                    if (VersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoicePattern(), recipe.getIngredientsChoiceMap())) {
+                    if (VersionHandler.getToolsRecipe().matchesShaped(sr, recipe.getChoicePattern(), recipe.getIngredients())) {
                         iterator.remove();
 
                         return sr;

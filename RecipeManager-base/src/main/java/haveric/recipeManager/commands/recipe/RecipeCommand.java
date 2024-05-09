@@ -8,8 +8,8 @@ import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.MultiChoiceResultRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.MultiResultRecipe;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.recipes.anvil.AnvilRecipe;
 import haveric.recipeManager.recipes.brew.BrewRecipe;
@@ -164,13 +164,13 @@ public class RecipeCommand implements TabExecutor {
     private boolean hasItem(BaseRecipe recipe, ItemStack item, boolean ingredient) {
         if (ingredient) {
             if (recipe instanceof AnvilRecipe anvilRecipe) {
-                return containsRecipeChoice(anvilRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(anvilRecipe.getSecondaryIngredient(), item);
+                return containsRecipeChoice(anvilRecipe.getPrimaryIngredientChoice(), item) || containsRecipeChoice(anvilRecipe.getSecondaryIngredientChoice(), item);
             } else if (recipe instanceof BrewRecipe brewRecipe) {
-                return containsRecipeChoice(brewRecipe.getIngredientChoice(), item) || containsRecipeChoice(brewRecipe.getPotionChoice(), item);
+                return containsRecipeChoice(brewRecipe.getPrimaryIngredientChoice(), item) || containsRecipeChoice(brewRecipe.getPotionIngredientChoice(), item);
             } else if (recipe instanceof CartographyRecipe cartographyRecipe) {
                 return containsRecipeChoice(cartographyRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(cartographyRecipe.getSecondaryIngredient(), item);
             } else if (recipe instanceof CraftRecipe) {
-                return containsRecipeChoiceMap(((CraftRecipe) recipe).getIngredientsChoiceMap(), item);
+                return containsRecipeChoiceMap(((CraftRecipe) recipe).getIngredients(), item);
             } else if (recipe instanceof CombineRecipe) {
                 return containsRecipeChoiceCollection(((CombineRecipe) recipe).getIngredientChoiceList(), item);
             } else if (recipe instanceof CompostRecipe) {
@@ -184,14 +184,14 @@ public class RecipeCommand implements TabExecutor {
             } else if (recipe instanceof RMCampfireRecipe) {
                 return containsRecipeChoice(((RMCampfireRecipe) recipe).getIngredientChoice(), item.getType());
             } else if (recipe instanceof RMSmithing1_19_4TransformRecipe rmSmithing1_19_4TransformRecipe) {
-                return containsRecipeChoice(rmSmithing1_19_4TransformRecipe.getTemplateIngredient(), item) || containsRecipeChoice(rmSmithing1_19_4TransformRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(rmSmithing1_19_4TransformRecipe.getSecondaryIngredient(), item);
+                return containsRecipeChoice(rmSmithing1_19_4TransformRecipe.getTemplateIngredientChoice(), item) || containsRecipeChoice(rmSmithing1_19_4TransformRecipe.getPrimaryIngredientChoice(), item) || containsRecipeChoice(rmSmithing1_19_4TransformRecipe.getSecondaryIngredientChoice(), item);
             } else if (recipe instanceof RMSmithingRecipe rmSmithingRecipe) {
-                return containsRecipeChoice(rmSmithingRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(rmSmithingRecipe.getSecondaryIngredient(), item);
+                return containsRecipeChoice(rmSmithingRecipe.getPrimaryIngredientChoice(), item) || containsRecipeChoice(rmSmithingRecipe.getSecondaryIngredientChoice(), item);
             } else if (recipe instanceof RMStonecuttingRecipe) {
                 return containsRecipeChoice(((RMStonecuttingRecipe) recipe).getIngredientChoice(), item.getType());
             }
         } else {
-            if (recipe instanceof MultiResultRecipe r) {
+            if (recipe instanceof MultiChoiceResultRecipe r) {
                 return containsResult(r.getResults(), item, false);
             } else if (recipe instanceof SingleResultRecipe r) {
                 return containsItem(Collections.singletonList(r.getResult().getItemStack()), item, false);

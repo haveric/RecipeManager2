@@ -6,7 +6,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
-import haveric.recipeManager.recipes.MultiResultRecipe;
+import haveric.recipeManager.recipes.MultiChoiceResultRecipe;
 
 public class FlagIndividualResults extends Flag {
 
@@ -53,7 +53,7 @@ public class FlagIndividualResults extends Flag {
     public boolean onValidate() {
         BaseRecipe recipe = getRecipe();
 
-        if (recipe != null && !(recipe instanceof MultiResultRecipe)) {
+        if (recipe != null && !(recipe instanceof MultiChoiceResultRecipe)) {
             return ErrorReporter.getInstance().error("Flag " + getFlagType() + " only works with recipes that support multiple results!");
         }
 

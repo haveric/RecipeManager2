@@ -131,7 +131,8 @@ public class CombineRecipe extends PreparableResultRecipe {
         return category;
     }
 
-    private void updateHash() {
+    @Override
+    public void updateHash() {
         StringBuilder str = new StringBuilder("combine");
 
         for (RecipeChoice choice : getIngredientChoiceList()) {

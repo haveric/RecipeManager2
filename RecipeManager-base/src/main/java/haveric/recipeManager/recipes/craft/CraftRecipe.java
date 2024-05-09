@@ -1,5 +1,6 @@
 package haveric.recipeManager.recipes.craft;
 
+import com.google.common.collect.ImmutableList;
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
@@ -20,14 +21,11 @@ import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.recipe.CraftingBookCategory;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 public class CraftRecipe extends PreparableResultRecipe {
-    private Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
     private String[] choicePattern;
     private String group;
     private String category;
@@ -36,23 +34,22 @@ public class CraftRecipe extends PreparableResultRecipe {
     private int height;
 
     public CraftRecipe() {
+        init();
     }
 
     public CraftRecipe(ShapedRecipe recipe) {
+        init();
         setBukkitRecipe(recipe);
         setChoicePattern(recipe.getShape());
-        setIngredientsChoiceMap(recipe);
+        setIngredientsMap(recipe.getChoiceMap());
         setResult(recipe.getResult());
     }
 
     public CraftRecipe(BaseRecipe recipe) {
         super(recipe);
+        init();
 
         if (recipe instanceof CraftRecipe r) {
-            if (!r.ingredientsChoiceMap.isEmpty()) {
-                ingredientsChoiceMap.putAll(r.ingredientsChoiceMap);
-            }
-
             choicePattern = r.choicePattern;
             group = r.group;
             category = r.category;
@@ -64,29 +61,17 @@ public class CraftRecipe extends PreparableResultRecipe {
 
     public CraftRecipe(Flags flags) {
         super(flags);
+        init();
+    }
+
+    private void init() {
+        setMaxIngredients(9);
+        addValidChars(ImmutableList.of('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i'));
     }
 
     @Override
     public RMCRecipeType getType() {
         return RMCRecipeType.CRAFT;
-    }
-
-    private void setIngredientsChoiceMap(ShapedRecipe recipe) {
-        ingredientsChoiceMap.clear();
-        ingredientsChoiceMap.putAll(recipe.getChoiceMap());
-
-        updateHash();
-    }
-
-    public void setIngredientsRecipeChoiceMap(Map<Character, RecipeChoice> newIngredientsChoiceMap) {
-        ingredientsChoiceMap.clear();
-        ingredientsChoiceMap.putAll(newIngredientsChoiceMap);
-
-        updateHash();
-    }
-
-    public Map<Character, RecipeChoice> getIngredientsChoiceMap() {
-        return ingredientsChoiceMap;
     }
 
     public void setChoicePattern(String[] pattern) {
@@ -124,7 +109,8 @@ public class CraftRecipe extends PreparableResultRecipe {
         return category;
     }
 
-    private void updateHash() {
+    @Override
+    public void updateHash() {
         StringBuilder str = new StringBuilder("craft ");
         int shapeSize = choicePattern.length;
         for (int i = 0; i < shapeSize; i++) {
@@ -135,7 +121,7 @@ public class CraftRecipe extends PreparableResultRecipe {
             }
         }
 
-        for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
+        for (Entry<Character, RecipeChoice> entry : getIngredients().entrySet()) {
             str.append(" ").append(entry.getKey()).append(":");
 
             str.append(ToolsRecipeChoice.getRecipeChoiceHash(entry.getValue()));
@@ -164,7 +150,7 @@ public class CraftRecipe extends PreparableResultRecipe {
             }
         }
 
-        for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
+        for (Entry<Character, RecipeChoice> entry : getIngredients().entrySet()) {
             s.append(" ").append(entry.getKey()).append(":");
 
             s.append(ToolsRecipeChoice.getRecipeChoiceName(entry.getValue()));
@@ -197,7 +183,7 @@ public class CraftRecipe extends PreparableResultRecipe {
 
     @Override
     public ShapedRecipe toBukkitRecipe(boolean vanilla) {
-        if (!hasIngredientChoices() || !hasResults()) {
+        if (!hasIngredients() || !hasResults()) {
             return null;
         }
 
@@ -230,7 +216,7 @@ public class CraftRecipe extends PreparableResultRecipe {
             bukkitRecipe.setCategory(CraftingBookCategory.valueOf(category));
         }
 
-        for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
+        for (Entry<Character, RecipeChoice> entry : getIngredients().entrySet()) {
             if (Version.has1_21Support()) {
                 if (entry.getValue() == null) {
                     char key = entry.getKey();
@@ -252,13 +238,9 @@ public class CraftRecipe extends PreparableResultRecipe {
         return bukkitRecipe;
     }
 
-    public boolean hasIngredientChoices() {
-        return !ingredientsChoiceMap.isEmpty();
-    }
-
     @Override
     public boolean isValid() {
-        return hasIngredientChoices() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResults());
+        return hasIngredients() && (hasFlag(FlagType.REMOVE) || hasFlag(FlagType.RESTRICT) || hasResults());
     }
 
     @Override
@@ -272,7 +254,7 @@ public class CraftRecipe extends PreparableResultRecipe {
             for (char letter : pattern.toCharArray()) {
                 s.append('[');
 
-                RecipeChoice choice = ingredientsChoiceMap.get(letter);
+                RecipeChoice choice = getIngredients().get(letter);
                 if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
                     List<Material> materials = materialChoice.getChoices();
 
@@ -301,7 +283,7 @@ public class CraftRecipe extends PreparableResultRecipe {
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
+        for (Map.Entry<Character, RecipeChoice> entry : getIngredients().entrySet()) {
             RecipeChoice choice = entry.getValue();
 
             // Skip empty choices which might be air
@@ -325,33 +307,6 @@ public class CraftRecipe extends PreparableResultRecipe {
     }
 
     @Override
-    public int findItemInIngredients(Material type, Short data) {
-        int found = 0;
-
-        for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
-            RecipeChoice choice = entry.getValue();
-
-            int num = ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, choice);
-            if (num > 0) {
-                found += num;
-                break;
-            }
-        }
-
-        return found;
-    }
-
-    @Override
-    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
-        List<String> recipeIndexes = new ArrayList<>();
-        if (result != null) {
-            recipeIndexes.add(Tools.getRecipeIdFromItem(result));
-        }
-
-        return recipeIndexes;
-    }
-
-    @Override
     public int getIngredientMatchQuality(List<ItemStack> ingredients) {
         boolean checkExact = true;
         if (hasFlag(FlagType.INGREDIENT_CONDITION)) {
@@ -371,7 +326,7 @@ public class CraftRecipe extends PreparableResultRecipe {
                 int quality = 0;
                 for (String pattern : choicePattern) {
                     for (Character c : pattern.toCharArray()) {
-                        RecipeChoice ingredientChoice = ingredientsChoiceMap.get(c);
+                        RecipeChoice ingredientChoice = getIngredients().get(c);
                         int newQuality = ToolsRecipeChoice.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
                         if (newQuality > quality) {
                             quality = newQuality;

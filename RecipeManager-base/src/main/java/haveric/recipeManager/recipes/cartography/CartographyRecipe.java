@@ -99,7 +99,8 @@ public class CartographyRecipe extends PreparableResultRecipe {
         return primaryIngredient != null && secondaryIngredient != null;
     }
 
-    private void updateHash() {
+    @Override
+    public void updateHash() {
         StringBuilder str = new StringBuilder("cartography");
 
         str.append(" a:");

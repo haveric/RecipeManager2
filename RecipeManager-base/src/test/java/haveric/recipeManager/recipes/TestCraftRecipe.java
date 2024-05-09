@@ -48,13 +48,13 @@ public class TestCraftRecipe extends FlagBaseTest {
                     String[] pattern = {"ab"};
                     assertArrayEquals(pattern, recipe.getChoicePattern());
 
-                    RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
+                    RecipeChoice choiceA = recipe.getIngredient('a');
                     assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceA);
                     List<Material> choicesA = ((RecipeChoice.MaterialChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
                     assertTrue(choicesA.contains(Material.DIRT));
 
-                    RecipeChoice choiceB = recipe.getIngredientsChoiceMap().get('b');
+                    RecipeChoice choiceB = recipe.getIngredient('b');
                     assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceB);
                     List<Material> choicesB = ((RecipeChoice.MaterialChoice) choiceB).getChoices();
                     assertEquals(1, choicesB.size());
@@ -70,13 +70,13 @@ public class TestCraftRecipe extends FlagBaseTest {
                     String[] pattern = {"ab"};
                     assertArrayEquals(pattern, recipe.getChoicePattern());
 
-                    RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
+                    RecipeChoice choiceA = recipe.getIngredient('a');
                     assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceA);
                     List<Material> choicesA = ((RecipeChoice.MaterialChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
                     assertTrue(choicesA.contains(Material.DIRT));
 
-                    RecipeChoice choiceB = recipe.getIngredientsChoiceMap().get('b');
+                    RecipeChoice choiceB = recipe.getIngredient('b');
                     assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceB);
                     List<Material> choicesB = ((RecipeChoice.MaterialChoice) choiceB).getChoices();
                     assertEquals(1, choicesB.size());
@@ -91,14 +91,14 @@ public class TestCraftRecipe extends FlagBaseTest {
                     String[] pattern = {"a", "b"};
                     assertArrayEquals(pattern, recipe.getChoicePattern());
 
-                    RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
+                    RecipeChoice choiceA = recipe.getIngredient('a');
                     assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceA);
                     List<Material> choicesA = ((RecipeChoice.MaterialChoice) choiceA).getChoices();
                     assertEquals(2, choicesA.size());
                     assertTrue(choicesA.contains(Material.DIRT));
                     assertTrue(choicesA.contains(Material.SHORT_GRASS));
 
-                    RecipeChoice choiceB = recipe.getIngredientsChoiceMap().get('b');
+                    RecipeChoice choiceB = recipe.getIngredient('b');
                     assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceB);
                     List<Material> choicesB = ((RecipeChoice.MaterialChoice) choiceB).getChoices();
                     assertEquals(2, choicesB.size());
@@ -115,14 +115,14 @@ public class TestCraftRecipe extends FlagBaseTest {
                     String[] pattern = {"a", "b"};
                     assertArrayEquals(pattern, recipe.getChoicePattern());
 
-                    RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
+                    RecipeChoice choiceA = recipe.getIngredient('a');
                     assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceA);
                     List<Material> choicesA = ((RecipeChoice.MaterialChoice) choiceA).getChoices();
                     assertEquals(2, choicesA.size());
                     assertTrue(choicesA.contains(Material.SPONGE));
                     assertTrue(choicesA.contains(Material.BRICK));
 
-                    RecipeChoice choiceB = recipe.getIngredientsChoiceMap().get('b');
+                    RecipeChoice choiceB = recipe.getIngredient('b');
                     assertInstanceOf(RecipeChoice.MaterialChoice.class, choiceB);
                     List<Material> choicesB = ((RecipeChoice.MaterialChoice) choiceB).getChoices();
                     assertEquals(2, choicesB.size());
@@ -136,7 +136,7 @@ public class TestCraftRecipe extends FlagBaseTest {
                     assertEquals(1, recipe.getWidth());
                     assertEquals(1, recipe.getHeight());
 
-                    RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
+                    RecipeChoice choiceA = recipe.getIngredient('a');
                     assertInstanceOf(RecipeChoice.ExactChoice.class, choiceA);
                     List<ItemStack> choicesA = ((RecipeChoice.ExactChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
@@ -157,7 +157,7 @@ public class TestCraftRecipe extends FlagBaseTest {
                     assertEquals(1, recipe.getWidth());
                     assertEquals(1, recipe.getHeight());
 
-                    RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
+                    RecipeChoice choiceA = recipe.getIngredient('a');
                     assertInstanceOf(RecipeChoice.ExactChoice.class, choiceA);
                     List<ItemStack> choicesA = ((RecipeChoice.ExactChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
@@ -175,7 +175,7 @@ public class TestCraftRecipe extends FlagBaseTest {
                     assertEquals(1, recipe.getWidth());
                     assertEquals(1, recipe.getHeight());
 
-                    RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
+                    RecipeChoice choiceA = recipe.getIngredient('a');
                     assertInstanceOf(RecipeChoice.ExactChoice.class, choiceA);
                     List<ItemStack> choicesA = ((RecipeChoice.ExactChoice) choiceA).getChoices();
                     assertEquals(1, choicesA.size());
@@ -193,7 +193,7 @@ public class TestCraftRecipe extends FlagBaseTest {
                     assertEquals(1, recipe.getWidth());
                     assertEquals(1, recipe.getHeight());
 
-                    RecipeChoice choiceA = recipe.getIngredientsChoiceMap().get('a');
+                    RecipeChoice choiceA = recipe.getIngredient('a');
                     assertInstanceOf(RecipeChoice.ExactChoice.class, choiceA);
                     List<ItemStack> choicesA = ((RecipeChoice.ExactChoice) choiceA).getChoices();
                     assertEquals(2, choicesA.size());

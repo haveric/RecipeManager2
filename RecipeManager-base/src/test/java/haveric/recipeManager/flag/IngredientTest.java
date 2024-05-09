@@ -30,7 +30,7 @@ public class IngredientTest extends FlagBaseTest {
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
-            Map<Character, RecipeChoice> choiceMap = recipe.getIngredientsChoiceMap();
+            Map<Character, RecipeChoice> choiceMap = recipe.getIngredients();
 
             RecipeChoice choiceA = choiceMap.get('a');
             RecipeChoice.MaterialChoice matChoiceA = (RecipeChoice.MaterialChoice) choiceA;
@@ -114,7 +114,7 @@ public class IngredientTest extends FlagBaseTest {
             ItemResult result = recipe.getResults().get(0);
             Material resultType = result.getType();
 
-            Map<Character, RecipeChoice> choiceMap = recipe.getIngredientsChoiceMap();
+            Map<Character, RecipeChoice> choiceMap = recipe.getIngredients();
 
             if (resultType == Material.DIRT) {
                 RecipeChoice choiceA = choiceMap.get('a');
