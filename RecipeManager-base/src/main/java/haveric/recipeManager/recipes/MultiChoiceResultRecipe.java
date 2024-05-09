@@ -9,33 +9,100 @@ import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.flags.any.meta.FlagDisplayName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
+import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.meta.Damageable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-public abstract class MultiResultRecipe extends BaseRecipe {
+public abstract class MultiChoiceResultRecipe extends BaseRecipe {
+    private Map<Character, RecipeChoice> ingredients = new TreeMap<>();
+    protected int maxIngredients = 1;
+    protected List<Character> validChars = new ArrayList<>();
     private List<ItemResult> results = new ArrayList<>();
 
-    protected MultiResultRecipe() {
+    protected MultiChoiceResultRecipe() {
     }
 
-    public MultiResultRecipe(BaseRecipe recipe) {
+    public MultiChoiceResultRecipe(BaseRecipe recipe) {
         super(recipe);
 
-        if (recipe instanceof MultiResultRecipe r) {
-            results = new ArrayList<>(r.results.size());
+        if (recipe instanceof MultiChoiceResultRecipe r) {
+            ingredients = new HashMap<>(r.ingredients.size());
+            ingredients.putAll(r.ingredients);
+            validChars.clear();
+            validChars.addAll(r.validChars);
 
+            maxIngredients = r.maxIngredients;
+
+            results = new ArrayList<>(r.results.size());
             for (ItemResult i : r.results) {
                 results.add(i.clone());
             }
         }
     }
 
-    public MultiResultRecipe(Flags flags) {
+    public MultiChoiceResultRecipe(Flags flags) {
         super(flags);
+    }
+
+    public Map<Character, RecipeChoice> getIngredients() {
+        return ingredients;
+    }
+
+    public boolean hasIngredient(char character) {
+        return ingredients.containsKey(character);
+    }
+
+    public RecipeChoice getIngredient(char character) {
+        if (hasIngredient(character)) {
+            return ingredients.get(character);
+        }
+
+        return null;
+    }
+
+    public void setIngredient(char character, RecipeChoice ingredient) {
+        if (validChars.contains(character)) {
+            ingredients.put(character, ingredient.clone());
+
+            updateHash();
+        }
+    }
+
+    public void setIngredientsMap(Map<Character, RecipeChoice> newIngredients) {
+        maxIngredients = newIngredients.entrySet().size();
+        validChars.addAll(newIngredients.keySet());
+
+        ingredients.clear();
+        ingredients.putAll(newIngredients);
+
+        updateHash();
+    }
+
+    public boolean hasIngredients() {
+        return !ingredients.isEmpty();
+    }
+
+    public void addValidChars(List<Character> chars) {
+        validChars.addAll(chars);
+    }
+
+    public void setMaxIngredients(int maxIngredients) {
+        this.maxIngredients = maxIngredients;
+    }
+
+    public void updateHash() {
+        StringBuilder str = new StringBuilder(getName());
+
+        for (Map.Entry<Character, RecipeChoice> ingredient : ingredients.entrySet()) {
+            str.append(" ").append(ingredient.getKey()).append(":");
+            str.append(ToolsRecipeChoice.getRecipeChoiceHash(ingredient.getValue()));
+        }
+
+        hash = str.toString().hashCode();
     }
 
     public boolean hasResults() {
@@ -109,9 +176,9 @@ public abstract class MultiResultRecipe extends BaseRecipe {
 
                 s.append(result.getType().toString().toLowerCase());
 
-                if (result instanceof Damageable) {
-                    if (result.getDurability() != 0) {
-                        s.append(':').append(result.getDurability());
+                if (result instanceof Damageable damageable) {
+                    if (damageable.hasDamage() && damageable.getDamage() != 0) {
+                        s.append(':').append(damageable.getDamage());
                     }
                 }
 
@@ -173,6 +240,79 @@ public abstract class MultiResultRecipe extends BaseRecipe {
     }
 
     @Override
+    public boolean isValid() {
+        return hasIngredients() && hasResults();
+    }
+
+    @Override
+    public int findItemInIngredients(Material type, Short data) {
+        int found = 0;
+
+        for (RecipeChoice choice : ingredients.values()) {
+            found += ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, choice);
+        }
+
+        return found;
+    }
+
+    @Override
+    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
+        List<String> recipeIndexes = new ArrayList<>();
+        if (ingredients.size() <= maxIngredients) {
+            StringBuilder indexString = new StringBuilder();
+            boolean first = true;
+            for (ItemStack item : ingredients) {
+                if (!first) {
+                    indexString.append("-");
+                }
+                indexString.append(item.getType());
+
+                first = false;
+            }
+
+            recipeIndexes.add(indexString.toString());
+        }
+
+        return recipeIndexes;
+    }
+
+    @Override
+    public List<String> getIndexes() {
+        List<String> indexString = new ArrayList<>();
+
+        boolean first = true;
+        int index;
+        for (RecipeChoice choice : ingredients.values()) {
+            index = 0;
+            if (choice instanceof RecipeChoice.MaterialChoice) {
+                for (Material material : ((RecipeChoice.MaterialChoice) choice).getChoices()) {
+                    if (first) {
+                        indexString.add(material.toString());
+                    } else {
+                        indexString.set(index, indexString.get(index) + "-" + material.toString());
+                    }
+
+                    index++;
+                }
+            } else if (choice instanceof RecipeChoice.ExactChoice) {
+                for (ItemStack item : ((RecipeChoice.ExactChoice) choice).getChoices()) {
+                    if (first) {
+                        indexString.add(String.valueOf(item.getType()));
+                    } else {
+                        indexString.set(index, indexString.get(index) + "-" + item.getType());
+                    }
+
+                    index++;
+                }
+            }
+
+            first = false;
+        }
+
+        return indexString;
+    }
+
+    @Override
     public List<String> printBookIndices() {
         List<String> print = new ArrayList<>();
 
@@ -230,11 +370,7 @@ public abstract class MultiResultRecipe extends BaseRecipe {
     }
 
     public boolean requiresRecipeManagerModification() {
-        boolean requiresModification = false;
-
-        if (isMultiResult()) {
-            requiresModification = true;
-        }
+        boolean requiresModification = isMultiResult();
 
         if (!requiresModification) {
             if (getFailChance() != 0) {

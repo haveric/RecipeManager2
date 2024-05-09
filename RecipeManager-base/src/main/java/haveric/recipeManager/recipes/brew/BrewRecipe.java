@@ -1,5 +1,6 @@
 package haveric.recipeManager.recipes.brew;
 
+import com.google.common.collect.ImmutableList;
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.Vanilla;
 import haveric.recipeManager.common.RMCChatColor;
@@ -12,7 +13,7 @@ import haveric.recipeManager.flag.flags.any.FlagIngredientCondition;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.MultiResultRecipe;
+import haveric.recipeManager.recipes.MultiChoiceResultRecipe;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Material;
 import org.bukkit.inventory.Inventory;
@@ -22,36 +23,33 @@ import org.bukkit.inventory.RecipeChoice;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BrewRecipe extends MultiResultRecipe {
+public class BrewRecipe extends MultiChoiceResultRecipe {
     private int minTime = -1;
     private int maxTime = -1;
-    private RecipeChoice ingredientChoice;
-    private RecipeChoice potionChoice;
 
     public BrewRecipe() {
-        minTime = Vanilla.BREWING_RECIPE_DEFAULT_TICKS;
+        init();
     }
 
     public BrewRecipe(BaseRecipe recipe) {
         super(recipe);
+        init();
 
         if (recipe instanceof BrewRecipe r) {
             minTime = r.minTime;
             maxTime = r.maxTime;
-
-            if (r.ingredientChoice != null) {
-                setIngredientChoice(r.ingredientChoice.clone());
-            }
-            if (r.potionChoice != null) {
-                setPotionChoice(r.potionChoice.clone());
-            }
         }
     }
 
     public BrewRecipe(Flags flags) {
         super(flags);
+        init();
+    }
 
+    private void init() {
         minTime = Vanilla.BREWING_RECIPE_DEFAULT_TICKS;
+        setMaxIngredients(2);
+        addValidChars(ImmutableList.of('a', 'b'));
     }
 
     @Override
@@ -59,13 +57,38 @@ public class BrewRecipe extends MultiResultRecipe {
         return RMCRecipeType.BREW;
     }
 
+
+    public RecipeChoice getPrimaryIngredientChoice() {
+        return getIngredient('a');
+    }
+
+    public RecipeChoice getPotionIngredientChoice() {
+        return getIngredient('b');
+    }
+
+    public void setPrimaryIngredientChoice(RecipeChoice choice) {
+        setIngredient('a', choice);
+    }
+
+    public void setPotionIngredientChoice(RecipeChoice choice) {
+        setIngredient('b', choice);
+    }
+
+    public boolean hasPrimaryIngredientChoice() {
+        return hasIngredient('a');
+    }
+
+    public boolean hasPotionIngredientChoice() {
+        return hasIngredient('b');
+    }
+
     @Override
     public void resetName() {
         StringBuilder s = new StringBuilder();
 
-        s.append(ToolsRecipeChoice.getRecipeChoiceName(ingredientChoice));
+        s.append(ToolsRecipeChoice.getRecipeChoiceName(getPrimaryIngredientChoice()));
         s.append(" + ");
-        s.append(ToolsRecipeChoice.getRecipeChoiceName(potionChoice));
+        s.append(ToolsRecipeChoice.getRecipeChoiceName(getPotionIngredientChoice()));
 
         s.append(" to ").append(getResultsString());
 
@@ -75,18 +98,18 @@ public class BrewRecipe extends MultiResultRecipe {
 
     @Override
     public boolean isValid() {
-        return hasIngredientChoice() && hasPotionChoice() && hasResults();
+        return hasPrimaryIngredientChoice() && hasPotionIngredientChoice() && hasResults();
     }
 
     @Override
     public void onRegister() {
-        if (hasIngredientChoice()) {
-            List<Material> ingredientMaterials = ToolsRecipeChoice.getMaterialsInRecipeChoice(ingredientChoice);
+        if (hasPrimaryIngredientChoice()) {
+            List<Material> ingredientMaterials = ToolsRecipeChoice.getMaterialsInRecipeChoice(getPrimaryIngredientChoice());
             BrewInventoryUtil.addIngredients(ingredientMaterials);
         }
 
-        if (hasPotionChoice()) {
-            List<Material> potionMaterials = ToolsRecipeChoice.getMaterialsInRecipeChoice(potionChoice);
+        if (hasPotionIngredientChoice()) {
+            List<Material> potionMaterials = ToolsRecipeChoice.getMaterialsInRecipeChoice(getPotionIngredientChoice());
             BrewInventoryUtil.addPotions(potionMaterials);
         }
 
@@ -144,128 +167,21 @@ public class BrewRecipe extends MultiResultRecipe {
         return Math.max(time, 0);
     }
 
-    public boolean hasIngredient(char character) {
-        if (character == 'a') {
-            return ingredientChoice != null;
-        } else if (character == 'b') {
-            return potionChoice != null;
-        }
-
-        return false;
-    }
-
-    public RecipeChoice getIngredient(char character) {
-        if (character == 'a') {
-            return ingredientChoice;
-        } else if (character == 'b') {
-            return potionChoice;
-        }
-
-        return null;
-    }
-
-    public void setIngredient(char character, RecipeChoice choice) {
-        if (character == 'a') {
-            setIngredientChoice(choice);
-        } else if (character == 'b') {
-            setPotionChoice(choice);
-        }
-    }
-
-    public RecipeChoice getIngredientChoice() {
-        return ingredientChoice;
-    }
-
-    public void setIngredientChoice(List<Material> materials) {
-        RecipeChoice.MaterialChoice materialChoice = new RecipeChoice.MaterialChoice(materials);
-        setIngredientChoice(materialChoice);
-    }
-
-    public void setIngredientChoiceItems(List<ItemStack> items) {
-        RecipeChoice.ExactChoice exactChoice = new RecipeChoice.ExactChoice(items);
-        setIngredientChoice(exactChoice);
-    }
-
-    protected void setIngredientChoice(RecipeChoice choice) {
-        ingredientChoice = choice.clone();
-
-        updateHash();
-    }
-
-    public RecipeChoice getPotionChoice() {
-        return potionChoice;
-    }
-
-    protected void setPotionChoice(RecipeChoice choice) {
-        potionChoice = choice.clone();
-
-        updateHash();
-    }
-
-    private void updateHash() {
+    @Override
+    public void updateHash() {
         String newHash = "brew";
 
-        if (hasIngredientChoice()) {
-            newHash += ToolsRecipeChoice.getRecipeChoiceHash(ingredientChoice);
+        if (hasPrimaryIngredientChoice()) {
+            newHash += ToolsRecipeChoice.getRecipeChoiceHash(getPrimaryIngredientChoice());
         }
 
         newHash += " + ";
 
-        if (hasPotionChoice()) {
-            newHash += ToolsRecipeChoice.getRecipeChoiceHash(potionChoice);
+        if (hasPotionIngredientChoice()) {
+            newHash += ToolsRecipeChoice.getRecipeChoiceHash(getPotionIngredientChoice());
         }
 
         hash = newHash.hashCode();
-    }
-
-    public boolean hasIngredientChoice() {
-        return ingredientChoice != null;
-    }
-
-    public boolean hasPotionChoice() {
-        return potionChoice != null;
-    }
-
-    @Override
-    public List<String> getIndexes() {
-        List<String> indexString = new ArrayList<>();
-
-        StringBuilder index = new StringBuilder();
-        if (ingredientChoice instanceof RecipeChoice.MaterialChoice) {
-            for (Material material : ((RecipeChoice.MaterialChoice) ingredientChoice).getChoices()) {
-                index.append(material);
-            }
-        } else if (ingredientChoice instanceof RecipeChoice.ExactChoice) {
-            for (ItemStack item : ((RecipeChoice.ExactChoice) ingredientChoice).getChoices()) {
-                index.append(item.getType());
-            }
-        }
-
-        index.append(" - ");
-
-        if (potionChoice instanceof RecipeChoice.MaterialChoice) {
-            for (Material material : ((RecipeChoice.MaterialChoice) potionChoice).getChoices()) {
-                index.append(material);
-            }
-        } else if (potionChoice instanceof RecipeChoice.ExactChoice) {
-            for (ItemStack item : ((RecipeChoice.ExactChoice) potionChoice).getChoices()) {
-                index.append(item.getType());
-            }
-        }
-
-        indexString.add(index.toString());
-
-        return indexString;
-    }
-
-    @Override
-    public int findItemInIngredients(Material type, Short data) {
-        int found = 0;
-
-        found += ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, ingredientChoice);
-        found += ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, potionChoice);
-
-        return found;
     }
 
     @Override
@@ -302,9 +218,7 @@ public class BrewRecipe extends MultiResultRecipe {
 
         ItemStack ingredient = ingredients.get(0);
         if (ingredient.getType() != Material.AIR) {
-            RecipeChoice ingredientChoice = getIngredient('a');
-
-            int newQuality = ToolsRecipeChoice.getIngredientMatchQuality(ingredient, ingredientChoice, checkExact);
+            int newQuality = ToolsRecipeChoice.getIngredientMatchQuality(ingredient, getPrimaryIngredientChoice(), checkExact);
             if (newQuality > ingredientQuality) {
                 ingredientQuality = newQuality;
             }
@@ -315,9 +229,7 @@ public class BrewRecipe extends MultiResultRecipe {
                 ItemStack potion = ingredients.get(i);
 
                 if (potion.getType() != Material.AIR) {
-                    RecipeChoice potionChoice = getIngredient('b');
-
-                    int newQuality = ToolsRecipeChoice.getIngredientMatchQuality(potion, potionChoice, checkExact);
+                    int newQuality = ToolsRecipeChoice.getIngredientMatchQuality(potion, getPotionIngredientChoice(), checkExact);
                     if (newQuality > potionQuality) {
                         potionQuality = newQuality;
                     }
@@ -337,11 +249,11 @@ public class BrewRecipe extends MultiResultRecipe {
         StringBuilder s = getHeaderResult("brewing", result);
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredient"));
-        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(ingredientChoice, RMCChatColor.BLACK, RMCChatColor.BLACK));
+        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(getPrimaryIngredientChoice(), RMCChatColor.BLACK, RMCChatColor.BLACK));
 
         s.append("\n\n");
         s.append(Messages.getInstance().parse("recipebook.header.potion"));
-        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(potionChoice, RMCChatColor.BLACK, RMCChatColor.BLACK));
+        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(getPotionIngredientChoice(), RMCChatColor.BLACK, RMCChatColor.BLACK));
 
         return s.toString();
     }

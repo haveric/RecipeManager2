@@ -43,13 +43,13 @@ public class TestAnvilRecipe extends FlagBaseTest {
 
                 String name = recipe.getName();
                 if (name.equals("default")) {
-                    RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
+                    RecipeChoice primaryChoice = recipe.getPrimaryIngredientChoice();
                     assertInstanceOf(RecipeChoice.MaterialChoice.class, primaryChoice);
                     List<Material> primaryMaterials = ((RecipeChoice.MaterialChoice) primaryChoice).getChoices();
                     assertEquals(1, primaryMaterials.size());
                     assertTrue(primaryMaterials.contains(Material.DIRT));
 
-                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
+                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredientChoice();
                     assertInstanceOf(RecipeChoice.MaterialChoice.class, secondaryChoice);
                     List<Material> secondaryMaterials = ((RecipeChoice.MaterialChoice) secondaryChoice).getChoices();
                     assertEquals(1, secondaryMaterials.size());
@@ -59,13 +59,13 @@ public class TestAnvilRecipe extends FlagBaseTest {
 
                     numRecipesChecked++;
                 } else if (name.equals("shape")) {
-                    RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
+                    RecipeChoice primaryChoice = recipe.getPrimaryIngredientChoice();
                     assertInstanceOf(RecipeChoice.MaterialChoice.class, primaryChoice);
                     List<Material> primaryMaterials = ((RecipeChoice.MaterialChoice) primaryChoice).getChoices();
                     assertEquals(1, primaryMaterials.size());
                     assertTrue(primaryMaterials.contains(Material.DIRT));
 
-                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
+                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredientChoice();
                     assertInstanceOf(RecipeChoice.MaterialChoice.class, secondaryChoice);
                     List<Material> secondaryMaterials = ((RecipeChoice.MaterialChoice) secondaryChoice).getChoices();
                     assertEquals(1, secondaryMaterials.size());
@@ -75,7 +75,7 @@ public class TestAnvilRecipe extends FlagBaseTest {
 
                     numRecipesChecked++;
                 } else if (name.equals("data")) {
-                    RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
+                    RecipeChoice primaryChoice = recipe.getPrimaryIngredientChoice();
                     assertInstanceOf(RecipeChoice.ExactChoice.class, primaryChoice);
                     List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
                     assertEquals(1, primaryItems.size());
@@ -86,7 +86,7 @@ public class TestAnvilRecipe extends FlagBaseTest {
                     Damageable primaryDamageable = (Damageable) primaryItem.getItemMeta();
                     assertEquals(2, primaryDamageable.getDamage());
 
-                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
+                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredientChoice();
                     assertInstanceOf(RecipeChoice.ExactChoice.class, secondaryChoice);
                     List<ItemStack> secondaryItems = ((RecipeChoice.ExactChoice) secondaryChoice).getChoices();
                     assertEquals(1, secondaryItems.size());
@@ -101,7 +101,7 @@ public class TestAnvilRecipe extends FlagBaseTest {
 
                     numRecipesChecked++;
                 } else if (name.equals("shape-data")) {
-                    RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
+                    RecipeChoice primaryChoice = recipe.getPrimaryIngredientChoice();
                     assertInstanceOf(RecipeChoice.ExactChoice.class, primaryChoice);
                     List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
                     assertEquals(1, primaryItems.size());
@@ -112,7 +112,7 @@ public class TestAnvilRecipe extends FlagBaseTest {
                     Damageable primaryDamageable = (Damageable) primaryItem.getItemMeta();
                     assertEquals(2, primaryDamageable.getDamage());
 
-                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
+                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredientChoice();
                     assertInstanceOf(RecipeChoice.ExactChoice.class, secondaryChoice);
                     List<ItemStack> secondaryItems = ((RecipeChoice.ExactChoice) secondaryChoice).getChoices();
                     assertEquals(1, secondaryItems.size());
@@ -127,7 +127,7 @@ public class TestAnvilRecipe extends FlagBaseTest {
 
                     numRecipesChecked++;
                 } else if (name.equals("shape-ingredient-flag")) {
-                    RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
+                    RecipeChoice primaryChoice = recipe.getPrimaryIngredientChoice();
                     assertInstanceOf(RecipeChoice.ExactChoice.class, primaryChoice);
                     List<ItemStack> primaryItems = ((RecipeChoice.ExactChoice) primaryChoice).getChoices();
                     assertEquals(1, primaryItems.size());
@@ -141,7 +141,7 @@ public class TestAnvilRecipe extends FlagBaseTest {
 
                     assertEquals("Test Sword", primaryMeta.getDisplayName());
 
-                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredient();
+                    RecipeChoice secondaryChoice = recipe.getSecondaryIngredientChoice();
                     assertInstanceOf(RecipeChoice.ExactChoice.class, secondaryChoice);
                     List<ItemStack> secondaryItems = ((RecipeChoice.ExactChoice) secondaryChoice).getChoices();
                     assertEquals(1, secondaryItems.size());

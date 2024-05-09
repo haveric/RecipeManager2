@@ -1,5 +1,6 @@
 package haveric.recipeManager.recipes.smithing;
 
+import com.google.common.collect.ImmutableList;
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
@@ -16,93 +17,40 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.SmithingRecipe;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class RMSmithingRecipe extends PreparableResultRecipe {
-    private RecipeChoice primaryIngredient;
-    private RecipeChoice secondaryIngredient;
-
     public RMSmithingRecipe() {
-
+        init();
     }
 
     public RMSmithingRecipe(SmithingRecipe recipe) {
-        setPrimaryIngredient(recipe.getBase());
-        setSecondaryIngredient(recipe.getAddition());
+        init();
+
+        setIngredient('a', recipe.getBase());
+        setIngredient('b', recipe.getAddition());
 
         setResult(recipe.getResult());
     }
 
     public RMSmithingRecipe(BaseRecipe recipe) {
         super(recipe);
-
-        if (recipe instanceof RMSmithingRecipe r) {
-            if (r.primaryIngredient != null) {
-                primaryIngredient = r.primaryIngredient.clone();
-            }
-            if (r.secondaryIngredient != null) {
-                secondaryIngredient = r.secondaryIngredient.clone();
-            }
-
-            updateHash();
-        }
+        init();
     }
 
     public RMSmithingRecipe(Flags flags) {
         super(flags);
+        init();
+    }
+
+    private void init() {
+        setMaxIngredients(2);
+        addValidChars(ImmutableList.of('a', 'b'));
     }
 
     public boolean isValidBlockMaterial(Material material) {
         return material == Material.SMITHING_TABLE;
-    }
-
-    public boolean hasIngredient(char character) {
-        if (character == 'a') {
-            return primaryIngredient != null;
-        } else if (character == 'b') {
-            return secondaryIngredient != null;
-        }
-
-        return false;
-    }
-
-    public RecipeChoice getIngredient(char character) {
-        if (character == 'a') {
-            return primaryIngredient;
-        } else if (character == 'b') {
-            return secondaryIngredient;
-        }
-
-        return null;
-    }
-
-    public void setIngredient(char character, RecipeChoice choice) {
-        if (character == 'a') {
-            setPrimaryIngredient(choice);
-        } else if (character == 'b') {
-            setSecondaryIngredient(choice);
-        }
-    }
-
-    public RecipeChoice getPrimaryIngredient() {
-        return primaryIngredient;
-    }
-
-    public void setPrimaryIngredient(RecipeChoice choice) {
-        primaryIngredient = choice.clone();
-
-        updateHash();
-    }
-
-    public RecipeChoice getSecondaryIngredient() {
-        return secondaryIngredient;
-    }
-
-    public void setSecondaryIngredient(RecipeChoice choice) {
-        secondaryIngredient = choice.clone();
-
-        updateHash();
     }
 
     @Override
@@ -113,7 +61,7 @@ public class RMSmithingRecipe extends PreparableResultRecipe {
 
         SmithingRecipe bukkitRecipe;
         if (vanilla) {
-            bukkitRecipe = new SmithingRecipe(getNamespacedKey(), getFirstResult(), primaryIngredient, secondaryIngredient);
+            bukkitRecipe = new SmithingRecipe(getNamespacedKey(), getFirstResult(), getPrimaryIngredientChoice(), getSecondaryIngredientChoice());
         } else {
             ItemResult firstResult = getFirstResult();
 
@@ -121,26 +69,39 @@ public class RMSmithingRecipe extends PreparableResultRecipe {
             getFlags().sendPrepare(a, true);
             firstResult.getFlags().sendPrepare(a, true);
 
-            bukkitRecipe = new SmithingRecipe(getNamespacedKey(), a.result(), primaryIngredient, secondaryIngredient);
+            bukkitRecipe = new SmithingRecipe(getNamespacedKey(), a.result(), getPrimaryIngredientChoice(), getSecondaryIngredientChoice());
         }
 
         return bukkitRecipe;
     }
 
+    @Override
     public boolean hasIngredients() {
-        return primaryIngredient != null && secondaryIngredient != null;
+        return hasPrimaryIngredientChoice() && hasSecondaryIngredientChoice();
     }
 
-    private void updateHash() {
-        StringBuilder str = new StringBuilder("smithing");
+    public RecipeChoice getPrimaryIngredientChoice() {
+        return getIngredient('a');
+    }
 
-        str.append(" a:");
-        str.append(ToolsRecipeChoice.getRecipeChoiceHash(primaryIngredient));
+    public RecipeChoice getSecondaryIngredientChoice() {
+        return getIngredient('b');
+    }
 
-        str.append(" b:");
-        str.append(ToolsRecipeChoice.getRecipeChoiceHash(secondaryIngredient));
+    public void setPrimaryIngredientChoice(RecipeChoice choice) {
+        setIngredient('a', choice);
+    }
 
-        hash = str.toString().hashCode();
+    public void setSecondaryIngredientChoice(RecipeChoice choice) {
+        setIngredient('b', choice);
+    }
+
+    public boolean hasPrimaryIngredientChoice() {
+        return hasIngredient('a');
+    }
+
+    public boolean hasSecondaryIngredientChoice() {
+        return hasIngredient('b');
     }
 
     @Override
@@ -149,11 +110,10 @@ public class RMSmithingRecipe extends PreparableResultRecipe {
 
         str.append("smithing (");
 
-        str.append(" a:");
-        str.append(ToolsRecipeChoice.getRecipeChoiceName(primaryIngredient));
-
-        str.append(" b:");
-        str.append(ToolsRecipeChoice.getRecipeChoiceName(secondaryIngredient));
+        for (Map.Entry<Character, RecipeChoice> ingredient : getIngredients().entrySet()) {
+            str.append(" ").append(ingredient.getKey()).append(":");
+            str.append(ToolsRecipeChoice.getRecipeChoiceHash(ingredient.getValue()));
+        }
 
         str.append(")");
 
@@ -161,37 +121,6 @@ public class RMSmithingRecipe extends PreparableResultRecipe {
 
         name = str.toString();
         customName = false;
-    }
-
-    @Override
-    public List<String> getIndexes() {
-        List<String> indexString = new ArrayList<>();
-
-        List<String> primaryIndexes = getIndexForChoice(primaryIngredient);
-        List<String> secondaryIndexes = getIndexForChoice(secondaryIngredient);
-
-        for (String primaryIndex : primaryIndexes) {
-            for (String secondaryIndex : secondaryIndexes) {
-                indexString.add(primaryIndex + "-" + secondaryIndex);
-            }
-        }
-
-        return indexString;
-    }
-
-    protected List<String> getIndexForChoice(RecipeChoice choice) {
-        List<String> choiceString = new ArrayList<>();
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            for (Material material : ((RecipeChoice.MaterialChoice) choice).getChoices()) {
-                choiceString.add(material.toString());
-            }
-        } else if (choice instanceof RecipeChoice.ExactChoice) {
-            for (ItemStack item : ((RecipeChoice.ExactChoice) choice).getChoices()) {
-                choiceString.add(item.getType().toString());
-            }
-        }
-
-        return choiceString;
     }
 
     @Override
@@ -216,31 +145,11 @@ public class RMSmithingRecipe extends PreparableResultRecipe {
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(primaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
-        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(secondaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
-
-        return s.toString();
-    }
-
-
-    @Override
-    public int findItemInIngredients(Material type, Short data) {
-        int found = 0;
-
-        found += ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, primaryIngredient);
-        found += ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, secondaryIngredient);
-
-        return found;
-    }
-
-    @Override
-    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
-        List<String> recipeIndexes = new ArrayList<>();
-        if (ingredients.size() == 2) {
-            recipeIndexes.add(ingredients.get(0).getType() + "-" + ingredients.get(1).getType());
+        for (RecipeChoice choice : getIngredients().values()) {
+            s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(choice, RMCChatColor.BLACK, RMCChatColor.BLACK));
         }
 
-        return recipeIndexes;
+        return s.toString();
     }
 
     @Override

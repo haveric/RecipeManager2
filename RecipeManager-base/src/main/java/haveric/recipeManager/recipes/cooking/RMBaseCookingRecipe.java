@@ -30,10 +30,6 @@ public abstract class RMBaseCookingRecipe extends SingleRecipeChoiceSingleResult
         super(recipe);
 
         if (recipe instanceof RMBaseCookingRecipe r) {
-            if (r.ingredientChoice != null) {
-                ingredientChoice = r.ingredientChoice.clone();
-            }
-
             minTime = r.minTime;
             maxTime = r.maxTime;
 

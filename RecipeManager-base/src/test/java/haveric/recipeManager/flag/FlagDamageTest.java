@@ -7,7 +7,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.flag.flags.result.meta.FlagDamage;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.recipes.MultiResultRecipe;
+import haveric.recipeManager.recipes.MultiChoiceResultRecipe;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.Damageable;
@@ -33,7 +33,7 @@ public class FlagDamageTest extends FlagBaseTest {
         assertEquals(15, queued.size());
 
         for (Map.Entry<BaseRecipe, RMCRecipeInfo> entry : queued.entrySet()) {
-            MultiResultRecipe recipe = (MultiResultRecipe) entry.getKey();
+            MultiChoiceResultRecipe recipe = (MultiChoiceResultRecipe) entry.getKey();
 
             try (MockedStatic<Bukkit> mockedBukkit = mockStatic(Bukkit.class)) {
                 mockedBukkit.when(Bukkit::getItemFactory).thenReturn(itemFactory);

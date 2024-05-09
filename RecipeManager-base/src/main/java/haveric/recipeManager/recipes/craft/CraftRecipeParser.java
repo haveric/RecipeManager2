@@ -6,15 +6,11 @@ import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.flag.args.ArgBuilder;
-import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.BaseRecipeParser;
-import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.recipe.CraftingBookCategory;
@@ -105,33 +101,11 @@ public class CraftRecipeParser extends BaseRecipeParser {
 
                     ingredientsNum += ingredientCharacters.get(ingredientChar);
 
-                    FlaggableRecipeChoice flaggable = new FlaggableRecipeChoice();
-                    flaggable.setChoice(choice);
-                    Flags ingredientFlags = flaggable.getFlags();
-
+                    Flags ingredientFlags = createFlaggableFlags(choice);
                     reader.parseFlags(ingredientFlags, FlagBit.INGREDIENT);
 
                     if (ingredientFlags.hasFlags()) {
-                        List<ItemStack> items = new ArrayList<>();
-                        if (choice instanceof RecipeChoice.MaterialChoice materialChoice) {
-                            List<Material> materials = materialChoice.getChoices();
-
-                            for (Material material : materials) {
-                                Args a = ArgBuilder.create().result(new ItemStack(material)).build();
-                                ingredientFlags.sendCrafted(a, true);
-
-                                items.add(a.result());
-                            }
-                        } else if (choice instanceof RecipeChoice.ExactChoice exactChoice) {
-                            List<ItemStack> exactItems = exactChoice.getChoices();
-
-                            for (ItemStack exactItem : exactItems) {
-                                Args a = ArgBuilder.create().result(exactItem).build();
-                                ingredientFlags.sendCrafted(a, true);
-
-                                items.add(a.result());
-                            }
-                        }
+                        List<ItemStack> items = parseChoiceToItems(choice, ingredientFlags);
 
                         if (!ingredientRecipeChoiceMap.containsKey(ingredientChar)) {
                             ingredientRecipeChoiceMap.put(ingredientChar, new RecipeChoice.ExactChoice(items));
@@ -192,7 +166,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
             }
 
             recipe.setChoicePattern(choicePatternString.toArray(new String[0]));
-            recipe.setIngredientsRecipeChoiceMap(ingredientRecipeChoiceMap);
+            recipe.setIngredientsMap(ingredientRecipeChoiceMap);
         } else {
             Map<Character, RecipeChoice> ingredientsChoiceMap = new HashMap<>();
             char characterKey = 'a';
@@ -289,7 +263,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
             }
 
             recipe.setChoicePattern(choicePatternString.toArray(new String[0]));
-            recipe.setIngredientsRecipeChoiceMap(ingredientsChoiceMap);
+            recipe.setIngredientsMap(ingredientsChoiceMap);
         }
 
         // get results
