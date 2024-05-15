@@ -8,6 +8,7 @@
 * FIX: 1.16: `@BlockPowered` for soul campfires
 * FIX: `@Summon`: `angry` option for Zombified Piglins
 * FIX: `@Summon`: `skeletonhorsetrappedticks` option
+* FIX: `@IngredientCondition` matching for `@CustomModelData`, `@MaxStackSize`, `@OminousBottleItem`, `@Rarity`
 
 ### v2.31.0
 * REMOVED support for Minecraft 1.8 - 1.11

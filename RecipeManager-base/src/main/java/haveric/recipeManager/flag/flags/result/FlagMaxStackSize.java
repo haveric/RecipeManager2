@@ -131,10 +131,6 @@ public class FlagMaxStackSize extends Flag {
                     return !meta.hasMaxStackSize();
                 }
 
-                if (condition.hasValue()) {
-                    return true;
-                }
-
                 if (meta.hasMaxStackSize()) {
                     return !conditionInteger.hasValue() || meta.getMaxStackSize() == conditionInteger.getValue();
                 }
