@@ -6,6 +6,7 @@
 * RE-ADD: 1.20.1-: `@PotionItem` arguments: `level`, `extended`
 * RE-ADD: 1.20.1-: `@IngredientCondition` argument: `potion` options for `level`, `extended`
 * FIX: 1.16: `@BlockPowered` for soul campfires
+* FIX: 1.12: NoSuchFieldError for PLAYER_HEAD
 * FIX: `@Summon`: `angry` option for Zombified Piglins
 * FIX: `@Summon`: `skeletonhorsetrappedticks` option
 * FIX: `@IngredientCondition` matching for `@CustomModelData`, `@MaxStackSize`, `@OminousBottleItem`, `@Rarity`

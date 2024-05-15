@@ -130,7 +130,7 @@ public class Supports {
 
                 playerProfile = true;
             }
-        } catch (NoSuchMethodError | NoClassDefFoundError e) {
+        } catch (NoSuchMethodError | NoClassDefFoundError | NoSuchFieldError e) {
             playerProfile = false;
         }
     }
