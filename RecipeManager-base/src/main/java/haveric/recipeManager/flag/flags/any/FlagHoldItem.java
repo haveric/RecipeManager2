@@ -155,10 +155,18 @@ public class FlagHoldItem extends Flag {
             "",
             "  maxstacksize <amount> = Ingredient must have a custom max stack size",
             "  nomaxstacksize or !maxstacksize = Ingredient must not have a custom max stack size",
-            "",
-            "  rarity <rarity> = Ingredient must have a specific rarity",
-            "    Rarity values: " + RMCUtil.collectionToString(Arrays.asList(ItemRarity.values())).toLowerCase(),
-            "  norarity or !rarity = Ingredient must not have a rarity",
+        };
+
+        if (Version.has1_20_5Support()) {
+            description = ObjectArrays.concat(description, new String[]{
+                "",
+                "  rarity <rarity> = Ingredient must have a specific rarity",
+                "    Rarity values: " + RMCUtil.collectionToString(Arrays.asList(ItemRarity.values())).toLowerCase(),
+                "  norarity or !rarity = Ingredient must not have a rarity",
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[]{
             "",
             "  ominousbottleamplifier <amount> = Ingredient must have an ominous bottle amplifier",
             "  noominousbottleamplifier or !ominousbottleamplifier = Ingredient must not have an ominous bottle amplifier",
@@ -177,7 +185,7 @@ public class FlagHoldItem extends Flag {
             "    amplify <num or min-max>  = Amplify the effects of the potion, default 0 (e.g. 2 = <PotionName> III, numbers after potion's max level will display potion.potency.number instead)",
             "    ambient or !ambient       = Check effect's extra visual particles setting",
             "    particles or !particles   = Check effect's particles setting",
-        };
+        }, String.class);
 
         if (Version.has1_13BasicSupport()) {
             description = ObjectArrays.concat(description, new String[]{

@@ -1,5 +1,8 @@
 ## Change log
 
+### v2.31.1
+* FIXED: 1.20.4-: `@IngredientCondition`, `@HoldItem` NoClassDefFoundError for ItemRarity
+
 ### v2.31.0
 * REMOVED support for Minecraft 1.8 - 1.11
 * REMOVED: 1.20.5+: `@LocalizedName` flag
