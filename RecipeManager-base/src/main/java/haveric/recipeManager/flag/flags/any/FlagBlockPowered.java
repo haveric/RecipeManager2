@@ -116,7 +116,8 @@ public class FlagBlockPowered extends Flag {
 
         if (blockType == Material.FURNACE || blockType == Material.BREWING_STAND || blockType == craftingTableMaterial ||
                 (!Version.has1_13BasicSupport() && blockType == Material.getMaterial("BURNING_FURNACE")) ||
-                (Version.has1_14Support() && (blockType == Material.BLAST_FURNACE || blockType == Material.SMOKER || blockType == Material.STONECUTTER || blockType == Material.CAMPFIRE))) {
+                (Version.has1_14Support() && (blockType == Material.BLAST_FURNACE || blockType == Material.SMOKER || blockType == Material.STONECUTTER || blockType == Material.CAMPFIRE)) ||
+                (Version.has1_16Support() && blockType == Material.SOUL_CAMPFIRE)) {
 
             boolean valid;
             if (indirect) {

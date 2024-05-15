@@ -5,6 +5,7 @@
 * FIXED: 1.20.1-: `@PotionItem` NoClassDefFoundError for getBasePotionType
 * RE-ADD: 1.20.1-: `@PotionItem` arguments: `level`, `extended`
 * RE-ADD: 1.20.1-: `@IngredientCondition` argument: `potion` options for `level`, `extended`
+* FIX: 1.16: `@BlockPowered` for soul campfires
 
 ### v2.31.0
 * REMOVED support for Minecraft 1.8 - 1.11
