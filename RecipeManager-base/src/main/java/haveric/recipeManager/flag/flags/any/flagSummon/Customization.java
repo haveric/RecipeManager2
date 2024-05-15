@@ -328,6 +328,18 @@ public class Customization implements Cloneable {
                 }
             }
 
+            if (ent instanceof PigZombie) {
+                PigZombie npc = (PigZombie) ent;
+
+                if (angry) {
+                    npc.setAngry(true);
+                }
+
+                if (pigAnger > 0) {
+                    npc.setAnger(pigAnger);
+                }
+            }
+
             if (ent instanceof Ocelot) {
                 Ocelot npc = (Ocelot) ent;
 
@@ -487,11 +499,6 @@ public class Customization implements Cloneable {
             if (target && ent instanceof Creature) {
                 Creature npc = (Creature) ent;
                 npc.setTarget(player);
-            }
-
-            if (pigAnger > 0 && ent instanceof PigZombie) {
-                PigZombie npc = (PigZombie) ent;
-                npc.setAnger(pigAnger);
             }
 
             if (hit) {
@@ -1462,7 +1469,7 @@ public class Customization implements Cloneable {
             visualFire = true;
         } else if (Version.has1_18Support() && lower.equals("skeletonhorsetrapped")) {
             skeletonHorseTrapped = true;
-        } else if (Version.has1_18Support() && lower.equals("skeletonhorsetrappedticks")) {
+        } else if (Version.has1_18Support() && lower.startsWith("skeletonhorsetrappedticks")) {
             lower = lower.substring("skeletonhorsetrappedticks".length()).trim();
 
             try {

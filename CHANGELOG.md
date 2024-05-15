@@ -6,6 +6,8 @@
 * RE-ADD: 1.20.1-: `@PotionItem` arguments: `level`, `extended`
 * RE-ADD: 1.20.1-: `@IngredientCondition` argument: `potion` options for `level`, `extended`
 * FIX: 1.16: `@BlockPowered` for soul campfires
+* FIX: `@Summon`: `angry` option for Zombified Piglins
+* FIX: `@Summon`: `skeletonhorsetrappedticks` option
 
 ### v2.31.0
 * REMOVED support for Minecraft 1.8 - 1.11
