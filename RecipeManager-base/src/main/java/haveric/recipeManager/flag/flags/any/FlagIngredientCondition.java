@@ -167,6 +167,16 @@ public class FlagIngredientCondition extends Flag {
             "",
             "  potion <condition>, [...]",
             "    type &lt;potiontype&gt;      = Type of potion, see " + Files.getNameIndexHashLink("potiontype"),
+        }, String.class);
+
+        if (!Supports.basePotionType()) {
+            description = ObjectArrays.concat(description, new String[]{
+                "    level                  = Potion's level/tier, usually 1(default) or 2, you can enter 'max' to set it at highest supported level",
+                "    extended or !extended  = Potion's extended duration",
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[]{
             "",
             "  potioneffect <condition>, [...]",
             "    type &lt;effecttype&gt;         = Type of potion effect, see " + Files.getNameIndexHashLink("potioneffect"),

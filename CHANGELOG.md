@@ -2,6 +2,9 @@
 
 ### v2.31.1
 * FIXED: 1.20.4-: `@IngredientCondition`, `@HoldItem` NoClassDefFoundError for ItemRarity
+* FIXED: 1.20.1-: `@PotionItem` NoClassDefFoundError for getBasePotionType
+* RE-ADD: 1.20.1-: `@PotionItem` arguments: `level`, `extended`
+* RE-ADD: 1.20.1-: `@IngredientCondition` argument: `potion` options for `level`, `extended`
 
 ### v2.31.0
 * REMOVED support for Minecraft 1.8 - 1.11

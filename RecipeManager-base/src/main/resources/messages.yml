@@ -43,6 +43,7 @@ flag:
     nolore: "<yellow>{item}<red> needs lore: <yellow>{lore}"
     emptylore: "<yellow>{item}<red> cannot have any lore"
     nocolor: "<yellow>{item}<red> needs color: <yellow>{color}"
+    nopotion: "<yellow>{item}<red> needs potion: <yellow>{potion}"
     nopotiontype: "<yellow>{item}<red> needs potion type: <yellow>{potion}"
     nopotioneffect: "<yellow>{item}<red> needs effect(s): <yellow>{effect}"
     nosuspicioussteweffect: "<yellow>{item}<red> needs effect(s): <yellow>{effect}"
