@@ -891,7 +891,7 @@ public class Conditions implements Cloneable {
         return !potionConditions.isEmpty();
     }
 
-    public boolean checkPotion(PotionMeta meta, Material potionMaterial) {
+    public boolean checkPotion(PotionMeta meta) {
         int conditionsMet = 0;
 
         for (Map.Entry<PotionType, ConditionPotion> entry : potionConditions.entrySet()) {
@@ -1333,7 +1333,7 @@ public class Conditions implements Cloneable {
                 if (meta instanceof PotionMeta) {
                     PotionMeta potion = (PotionMeta) meta;
 
-                    if (checkPotion(potion, item.getType())) {
+                    if (checkPotion(potion)) {
                         failed = false;
                     }
                 }
