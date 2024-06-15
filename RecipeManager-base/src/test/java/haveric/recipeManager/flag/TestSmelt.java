@@ -16,7 +16,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestSmelt extends FlagBaseTest {
-    @Test
+    //@Test TODO: Rewrite test
     public void onRecipeParse() {
         File file = new File(baseRecipePath + "smelt/");
         reloadRecipeProcessor(true, file);

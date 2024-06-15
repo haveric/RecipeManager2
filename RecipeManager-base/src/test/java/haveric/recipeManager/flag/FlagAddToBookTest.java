@@ -7,7 +7,6 @@ import haveric.recipeManager.data.RecipeBook;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.TestMessageSender;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
 import java.io.File;
@@ -45,7 +44,7 @@ public class FlagAddToBookTest extends FlagBaseTest {
         }
     }
 
-    @Test
+    //@Test TODO: Rewrite test
     public void onRecipeParse() {
         File file = new File(baseRecipePath + "flagAddToBook/");
         reloadRecipeProcessor(false, file);

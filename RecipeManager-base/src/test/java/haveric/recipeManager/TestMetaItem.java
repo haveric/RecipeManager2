@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.inventory.meta.components.FoodComponent;
+import org.bukkit.inventory.meta.components.ToolComponent;
 import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.persistence.PersistentDataContainer;
 
@@ -399,6 +400,21 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
 
     @Override
     public void setFood(FoodComponent foodComponent) {
+
+    }
+
+    @Override
+    public boolean hasTool() {
+        return false;
+    }
+
+    @Override
+    public ToolComponent getTool() {
+        return null;
+    }
+
+    @Override
+    public void setTool(ToolComponent toolComponent) {
 
     }
 
