@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.inventory.meta.components.FoodComponent;
+import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
 import org.bukkit.inventory.meta.components.ToolComponent;
 import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -415,6 +416,21 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
 
     @Override
     public void setTool(ToolComponent toolComponent) {
+
+    }
+
+    @Override
+    public boolean hasJukeboxPlayable() {
+        return false;
+    }
+
+    @Override
+    public JukeboxPlayableComponent getJukeboxPlayable() {
+        return null;
+    }
+
+    @Override
+    public void setJukeboxPlayable(JukeboxPlayableComponent jukeboxPlayableComponent) {
 
     }
 

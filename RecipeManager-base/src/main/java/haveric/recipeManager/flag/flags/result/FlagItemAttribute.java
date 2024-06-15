@@ -4,10 +4,11 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
+import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.common.util.RMCUtil;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
@@ -154,8 +155,12 @@ public class FlagItemAttribute extends Flag {
             }
         }
 
-        UUID uuid = UUID.randomUUID();
-        attributes.put(attribute, new AttributeModifier(uuid, attribute.name() + "-" + uuid, modifier, operation, slot));
+        if (Version.has1_21Support()) {
+            attributes.put(attribute, new AttributeModifier(attribute.getKey(), modifier, operation, slot.getGroup()));
+        } else {
+            UUID uuid = UUID.randomUUID();
+            attributes.put(attribute, new AttributeModifier(uuid, attribute.name() + "-" + uuid, modifier, operation, slot));
+        }
 
         return true;
     }
