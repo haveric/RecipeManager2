@@ -293,11 +293,6 @@ public class TestItemFactory implements ItemFactory {
     }
 
     @Override
-    public Material updateMaterial(ItemMeta meta, Material material) throws IllegalArgumentException {
-        return material;
-    }
-
-    @Override
     public Material getSpawnEgg(EntityType type) {
         return null;
     }

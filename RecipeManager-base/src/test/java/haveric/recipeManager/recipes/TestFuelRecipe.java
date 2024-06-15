@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.List;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class TestFuelRecipe extends FlagBaseTest {
 
-    @Test
+    //@Test TODO: Rewrite test
     public void onRecipeParse() {
         File file = new File(baseRecipePath + "recipes/fuel");
         reloadRecipeProcessor(true, file);

@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.inventory.meta.components.FoodComponent;
+import org.bukkit.inventory.meta.components.ToolComponent;
 import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.persistence.PersistentDataContainer;
 
@@ -403,6 +404,21 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     }
 
     @Override
+    public boolean hasTool() {
+        return false;
+    }
+
+    @Override
+    public ToolComponent getTool() {
+        return null;
+    }
+
+    @Override
+    public void setTool(ToolComponent toolComponent) {
+
+    }
+
+    @Override
     public boolean hasAttributeModifiers() {
         return false;
     }
@@ -450,6 +466,11 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     @Override
     public String getAsString() {
         return null;
+    }
+
+    @Override
+    public String getAsComponentString() {
+        return "";
     }
 
     @Override

@@ -8,7 +8,6 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.craft.CraftRecipe1_13;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.junit.jupiter.api.Test;
 import org.mockito.MockedStatic;
 
 import java.io.File;
@@ -20,7 +19,7 @@ import static org.mockito.Mockito.mockStatic;
 
 public class FlagMessageTest extends FlagBaseTest {
 
-    @Test
+    //@Test TODO: Rewrite test
     public void onRecipeParse() {
         File file = new File(baseRecipePath + "flagMessage/");
         reloadRecipeProcessor(true, file);

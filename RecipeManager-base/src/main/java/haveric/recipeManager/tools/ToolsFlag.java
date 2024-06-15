@@ -17,6 +17,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.map.MapView;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 
@@ -443,9 +444,25 @@ public class ToolsFlag {
 
             if (meta instanceof PotionMeta) {
                 PotionMeta potionMeta = (PotionMeta) meta;
-                PotionType potionType = potionMeta.getBasePotionType();
+                PotionType potionType;
+
+                if (Supports.basePotionType()) {
+                    potionType = potionMeta.getBasePotionType();
+                } else {
+                    PotionData potionData = potionMeta.getBasePotionData();
+                    potionType = potionData.getType();
+                }
 
                 recipeString.append(Files.NL).append("@potionitem type ").append(potionType);
+                if (!Supports.basePotionType()) {
+                    PotionData potionData = potionMeta.getBasePotionData();
+                    if (potionData.isUpgraded()) {
+                        recipeString.append(" | level 2");
+                    }
+                    if (potionData.isExtended()) {
+                        recipeString.append(" | extended");
+                    }
+                }
 
                 if (potionMeta.hasColor()) {
                     Color potionColor = potionMeta.getColor();

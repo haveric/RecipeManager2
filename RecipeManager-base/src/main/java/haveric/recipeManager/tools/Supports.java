@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.*;
 import org.bukkit.inventory.recipe.CraftingBookCategory;
+import org.bukkit.potion.PotionType;
 import org.bukkit.profile.PlayerProfile;
 
 import static org.bukkit.Tag.REGISTRY_BLOCKS;
@@ -26,6 +27,7 @@ public class Supports {
     static boolean campfireStartEvent = false;
     static boolean experimental1_20 = false;
     static boolean playerProfile = false;
+    static boolean basePotionType = false;
     static boolean shortGrassMaterial = false;
 
     public static void init() {
@@ -41,6 +43,7 @@ public class Supports {
         checkCampfireStartEvent();
         checkExperimental1_20();
         checkPlayerProfile();
+        checkBasePotionType();
         checkShortGrassMaterial();
     }
 
@@ -127,7 +130,7 @@ public class Supports {
 
                 playerProfile = true;
             }
-        } catch (NoSuchMethodError | NoClassDefFoundError e) {
+        } catch (NoSuchMethodError | NoClassDefFoundError | NoSuchFieldError e) {
             playerProfile = false;
         }
     }
@@ -191,6 +194,19 @@ public class Supports {
         }
     }
 
+    // 1.20.2
+    private static void checkBasePotionType() {
+        try {
+            ItemStack potion = new ItemStack(Material.POTION);
+            PotionMeta potionMeta = (PotionMeta) potion.getItemMeta();
+            potionMeta.setBasePotionType(PotionType.MUNDANE);
+
+            basePotionType = true;
+        } catch (NoSuchMethodError e) {
+            basePotionType = false;
+        }
+    }
+
     // 1.20.3
     private static void checkShortGrassMaterial() {
         try {
@@ -247,6 +263,10 @@ public class Supports {
 
     public static boolean playerProfile() {
         return playerProfile;
+    }
+
+    public static boolean basePotionType() {
+        return basePotionType;
     }
 
     public static boolean shortGrassMaterial() {

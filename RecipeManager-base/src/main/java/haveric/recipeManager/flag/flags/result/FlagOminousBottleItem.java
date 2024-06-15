@@ -170,10 +170,6 @@ public class FlagOminousBottleItem extends Flag {
                     return !isOminousBottleMeta || !((OminousBottleMeta) meta).hasAmplifier();
                 }
 
-                if (condition.hasValue()) {
-                    return true;
-                }
-
                 if (isOminousBottleMeta && ((OminousBottleMeta) meta).hasAmplifier()) {
                     return !conditionInteger.hasValue() || ((OminousBottleMeta) meta).getAmplifier() == conditionInteger.getValue();
                 }

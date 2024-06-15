@@ -1,4 +1,4 @@
-lastchanged: 2.31.0
+lastchanged: 2.31.1
 # Configurable messages.
 # Parts surrounded by { and } are variables that get replaced in-game, you can move them around or even remove them if you want.
 # To disable messages you can just delete the message or use 'false'.
@@ -43,6 +43,7 @@ flag:
     nolore: "<yellow>{item}<red> needs lore: <yellow>{lore}"
     emptylore: "<yellow>{item}<red> cannot have any lore"
     nocolor: "<yellow>{item}<red> needs color: <yellow>{color}"
+    nopotion: "<yellow>{item}<red> needs potion: <yellow>{potion}"
     nopotiontype: "<yellow>{item}<red> needs potion type: <yellow>{potion}"
     nopotioneffect: "<yellow>{item}<red> needs effect(s): <yellow>{effect}"
     nosuspicioussteweffect: "<yellow>{item}<red> needs effect(s): <yellow>{effect}"

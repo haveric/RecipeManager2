@@ -127,10 +127,6 @@ public class FlagCustomModelData extends Flag {
                     return !meta.hasCustomModelData();
                 }
 
-                if (condition.hasValue()) {
-                    return true;
-                }
-
                 if (meta.hasCustomModelData()) {
                     return !conditionInteger.hasValue() || meta.getCustomModelData() == conditionInteger.getValue();
                 }
