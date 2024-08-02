@@ -6,6 +6,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.AirChoice;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
@@ -36,7 +37,7 @@ public class GrindstoneRecipeParser extends BaseRecipeParser {
 
             if (lineChars.length() == 1 && (ingredientChar == 'a' || ingredientChar == 'b')) {
                 RecipeChoice choice = Tools.parseRecipeChoice(line.substring(2), ParseBit.NONE);
-                if (choice == null) {
+                if (choice == null || choice instanceof AirChoice) {
                     return false;
                 }
 

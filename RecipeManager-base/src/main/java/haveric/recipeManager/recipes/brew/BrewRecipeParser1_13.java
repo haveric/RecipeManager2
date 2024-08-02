@@ -5,6 +5,7 @@ import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.AirChoice;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
@@ -48,7 +49,7 @@ public class BrewRecipeParser1_13 extends BaseBrewParser {
                 choice = Tools.parseRecipeChoice(materialsValue, ParseBit.NONE);
             }
 
-            if (choice == null) {
+            if (choice == null || choice instanceof AirChoice) {
                 return false;
             }
 

@@ -7,6 +7,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.AirChoice;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
@@ -43,7 +44,7 @@ public class RMSmithingRecipeParser extends BaseRecipeParser {
 
             if (lineChars.length() == 1 && (ingredientChar == 'a' || ingredientChar == 'b' || ingredientChar == 't')) {
                 RecipeChoice choice = Tools.parseRecipeChoice(line.substring(2), ParseBit.NONE);
-                if (choice == null) {
+                if (choice == null || choice instanceof AirChoice) {
                     return false;
                 }
 
@@ -131,7 +132,7 @@ public class RMSmithingRecipeParser extends BaseRecipeParser {
         }
 
         RecipeChoice primaryChoice = recipe.getPrimaryIngredient();
-        if (primaryChoice == null || ToolsRecipeChoice.isMaterialChoiceAir(primaryChoice)) {
+        if (primaryChoice == null || ToolsRecipeChoice.isChoiceAir(primaryChoice)) {
             return ErrorReporter.getInstance().error("Base ingredient is empty or air.", "Smithing recipes require a base ingredient.");
         }
 

@@ -2,6 +2,7 @@ package haveric.recipeManager.tools;
 
 import haveric.recipeManager.RecipeManager;
 import haveric.recipeManager.common.RMCChatColor;
+import haveric.recipeManager.recipes.AirChoice;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
 import org.bukkit.block.BlockState;
@@ -269,7 +270,11 @@ public class ToolsRecipeChoice {
 
     public static RecipeChoice mergeRecipeChoiceWithMaterials(RecipeChoice choice, List<Material> materials) {
         if (choice == null) {
-            choice = new RecipeChoice.MaterialChoice(materials);
+            if (materials.size() == 1 && materials.get(0) == Material.AIR) {
+                choice = new AirChoice();
+            } else {
+                choice = new RecipeChoice.MaterialChoice(materials);
+            }
         } else if (choice instanceof RecipeChoice.MaterialChoice) {
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
             List<Material> newMaterials = new ArrayList<>();
@@ -297,7 +302,11 @@ public class ToolsRecipeChoice {
 
     public static RecipeChoice mergeRecipeChoiceWithItems(RecipeChoice choice, List<ItemStack> items) {
         if (choice == null) {
-            choice = new RecipeChoice.ExactChoice(items);
+            if (items.size() == 1 && items.get(0).getType() == Material.AIR) {
+                choice = new AirChoice();
+            } else {
+                choice = new RecipeChoice.ExactChoice(items);
+            }
         } else if (choice instanceof RecipeChoice.ExactChoice) {
             RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
             List<ItemStack> newItems = new ArrayList<>();
@@ -663,21 +672,15 @@ public class ToolsRecipeChoice {
         return 0; // No item match
     }
 
-    public static RecipeChoice convertAirMaterialChoiceToNull(RecipeChoice choice) {
-        if (isMaterialChoiceAir(choice)) {
+    public static RecipeChoice convertAirChoiceToNull(RecipeChoice choice) {
+        if (isChoiceAir(choice)) {
             return null;
         }
 
         return choice;
     }
 
-    public static boolean isMaterialChoiceAir(RecipeChoice choice) {
-        if (choice instanceof RecipeChoice.MaterialChoice) {
-            RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-            List<Material> materials = materialChoice.getChoices();
-            return materials.size() == 1 && materials.get(0) == Material.AIR;
-        }
-
-        return false;
+    public static boolean isChoiceAir(RecipeChoice choice) {
+        return choice instanceof AirChoice;
     }
 }

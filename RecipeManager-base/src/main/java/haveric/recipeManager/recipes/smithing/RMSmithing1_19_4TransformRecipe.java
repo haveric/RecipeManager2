@@ -194,7 +194,7 @@ public class RMSmithing1_19_4TransformRecipe extends RMSmithingRecipe {
 
     @Override
     public boolean isValid() {
-        return hasIngredients() && hasResults() && !ToolsRecipeChoice.isMaterialChoiceAir(getPrimaryIngredient());
+        return hasIngredients() && hasResults() && !ToolsRecipeChoice.isChoiceAir(getPrimaryIngredient());
     }
 
     @Override

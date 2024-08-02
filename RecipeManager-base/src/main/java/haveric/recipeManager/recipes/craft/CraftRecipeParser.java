@@ -116,6 +116,8 @@ public class CraftRecipeParser extends BaseRecipeParser {
                             return false;
                         }
 
+                        choice = ToolsRecipeChoice.convertAirChoiceToNull(choice);
+
                         ingredientsNum += ingredientCharacters.get(ingredientChar);
 
                         FlaggableRecipeChoice flaggable = new FlaggableRecipeChoice();
@@ -254,7 +256,7 @@ public class CraftRecipeParser extends BaseRecipeParser {
                             ingredientErrors = true;
                         }
 
-                        choice = ToolsRecipeChoice.convertAirMaterialChoiceToNull(choice);
+                        choice = ToolsRecipeChoice.convertAirChoiceToNull(choice);
 
                         if (!ingredientErrors) {
                             if (choicePatternString.size() == rows) {

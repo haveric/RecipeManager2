@@ -8,6 +8,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.AirChoice;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.tools.Tools;
@@ -90,7 +91,7 @@ public class FuelRecipeParser extends BaseRecipeParser {
             if (recipe instanceof FuelRecipe1_13) {
                 FuelRecipe1_13 fuelRecipe1_13 = (FuelRecipe1_13) recipe;
                 RecipeChoice choice = Tools.parseRecipeChoice(split[0], ParseBit.NONE);
-                if (choice == null) {
+                if (choice == null || choice instanceof AirChoice) {
                     return false;
                 }
 

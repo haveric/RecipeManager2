@@ -8,6 +8,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.ArgBuilder;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.recipes.AirChoice;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
@@ -48,7 +49,7 @@ public class RMCampfireRecipeParser extends BaseRecipeParser {
             }
 
             RecipeChoice choice = Tools.parseRecipeChoice(materialsValue, ParseBit.NONE);
-            if (choice == null) {
+            if (choice == null || choice instanceof AirChoice) {
                 return false;
             }
 
