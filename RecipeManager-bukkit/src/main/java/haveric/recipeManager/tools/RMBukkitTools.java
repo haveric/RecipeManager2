@@ -1,13 +1,17 @@
 package haveric.recipeManager.tools;
 
 import haveric.recipeManager.common.RMCVanilla;
+import haveric.recipeManager.common.util.RMCUtil;
 import org.bukkit.Material;
+import org.bukkit.Registry;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 import org.bukkit.inventory.ShapedRecipe;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class RMBukkitTools {
     public static boolean compareShapedRecipeToChoice(ShapedRecipe recipe, String[] shape, Map<Character, RecipeChoice> choiceMap) {
@@ -322,5 +326,10 @@ public class RMBukkitTools {
 
             return compare;
         });
+    }
+
+    public static String registryToString(Registry<?> registry) {
+        List<?> list = StreamSupport.stream(registry.spliterator(), false).collect(Collectors.toList());
+        return RMCUtil.collectionToString(list).toLowerCase();
     }
 }

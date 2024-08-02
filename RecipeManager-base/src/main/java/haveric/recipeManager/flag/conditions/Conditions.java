@@ -17,7 +17,6 @@ import haveric.recipeManager.tools.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
-import org.bukkit.Material;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -55,7 +54,7 @@ public class Conditions implements Cloneable {
     private PotionType potionType;
     private Map<PotionEffectType, ConditionPotionEffect> potionEffectConditions = new HashMap<>();
     private Map<PotionEffectType, ConditionPotionEffect> suspiciousStewConditions = new HashMap<>();
-    private Map<PatternType, DyeColor> bannerPatterns = new EnumMap<>(PatternType.class);
+    private Map<PatternType, DyeColor> bannerPatterns = new HashMap<>();
     private EntityType spawnEggEntityType;
     private String localizedName;
 

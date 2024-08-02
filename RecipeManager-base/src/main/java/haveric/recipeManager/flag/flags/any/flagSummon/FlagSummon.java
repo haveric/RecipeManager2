@@ -9,9 +9,11 @@ import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.flag.Flag;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
+import haveric.recipeManager.tools.RMBukkitTools;
 import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.Location;
+import org.bukkit.Registry;
 import org.bukkit.entity.*;
 
 import java.util.ArrayList;
@@ -86,9 +88,21 @@ public class FlagSummon extends Flag {
         }
 
         if (Version.has1_14Support()) {
-            description = ObjectArrays.concat(description, new String[]{
-                String.format(argFormat, "cat <type>", "cat type, available values: " + RMCUtil.collectionToString(Arrays.asList(Cat.Type.values())).toLowerCase()),
-            }, String.class);
+            if (!Cat.Type.class.isEnum()) {
+                try {
+                    if (Registry.CAT_VARIANT != null) {
+                        description = ObjectArrays.concat(description, new String[]{
+                            String.format(argFormat, "cat <type>", "cat type, available values: " + RMBukkitTools.registryToString(Registry.CAT_VARIANT)),
+                        }, String.class);
+                    }
+                } catch (ExceptionInInitializerError | NoClassDefFoundError e) {
+                    // Handle missing registry for testing
+                }
+            } else {
+                description = ObjectArrays.concat(description, new String[]{
+                    String.format(argFormat, "cat <type>", "cat type, available values: " + RMCUtil.collectionToString(Arrays.asList(Cat.Type.values())).toLowerCase()),
+                }, String.class);
+            }
         } else {
             //noinspection deprecation
             description = ObjectArrays.concat(description, new String[]{
@@ -120,10 +134,23 @@ public class FlagSummon extends Flag {
             }, String.class);
         }
 
+
         if (Version.has1_19Support()) {
-            description = ObjectArrays.concat(description, new String[]{
+            if (!Frog.Variant.class.isEnum()) {
+                try {
+                    if (Registry.FROG_VARIANT != null) {
+                        description = ObjectArrays.concat(description, new String[]{
+                            String.format(argFormat, "frog <variant>", "sets the frog variant, values: " + RMBukkitTools.registryToString(Registry.FROG_VARIANT)),
+                        }, String.class);
+                    }
+                } catch (ExceptionInInitializerError | NoClassDefFoundError e) {
+                    // Handle missing registry for testing
+                }
+            } else {
+                description = ObjectArrays.concat(description, new String[]{
                     String.format(argFormat, "frog <variant>", "sets the frog variant, values: " + RMCUtil.collectionToString(Arrays.asList(Frog.Variant.values())).toLowerCase()),
-            }, String.class);
+                }, String.class);
+            }
         }
 
         if (Version.has1_17Support()) {
@@ -234,8 +261,23 @@ public class FlagSummon extends Flag {
 
         description = ObjectArrays.concat(description, new String[] {
             String.format(argFormat, "villager <type>", "set the villager profession"),
-            String.format(argFormatExtra, "", "Values: " + RMCUtil.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()),
         }, String.class);
+
+        if (!Villager.Profession.class.isEnum()) {
+            try {
+                if (Registry.VILLAGER_PROFESSION != null) {
+                    description = ObjectArrays.concat(description, new String[]{
+                        String.format(argFormatExtra, "", "Values: " + RMBukkitTools.registryToString(Registry.VILLAGER_PROFESSION)),
+                    }, String.class);
+                }
+            } catch (ExceptionInInitializerError | NoClassDefFoundError e) {
+                // Handle missing registry for testing
+            }
+        } else {
+            description = ObjectArrays.concat(description, new String[] {
+                String.format(argFormatExtra, "", "Values: " + RMCUtil.collectionToString(Arrays.asList(Villager.Profession.values())).toLowerCase()),
+            }, String.class);
+        }
 
         if (Version.has1_18Support()) {
             ObjectArrays.concat(description, new String[]{
