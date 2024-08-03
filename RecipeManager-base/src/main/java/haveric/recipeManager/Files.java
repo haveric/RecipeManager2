@@ -37,8 +37,8 @@ public class Files {
 
     private final CommandSender sender;
 
-    public static final String LASTCHANGED_CONFIG = "2.31.1";
-    public static final String LASTCHANGED_MESSAGES = "2.31.1";
+    public static final String LASTCHANGED_CONFIG = "2.31.0-dev2";
+    public static final String LASTCHANGED_MESSAGES = "2.31.0-dev2";
     public static final String LASTCHANGED_CHOICE_ALIASES = "2.17.0";
     public static final String LASTCHANGED_ITEM_DATAS = "2.7";
     public static final String LASTCHANGED_ITEM_ALIASES = "2.31.0";
@@ -570,8 +570,21 @@ public class Files {
 
         s.append("</pre></div><div class='doc-section__group'><pre>");
         addNameIndexHeading(s, "bannerpattern", "BANNER PATTERN LIST", "block/banner/PatternType", "PatternType");
-        for (PatternType p : PatternType.values()) {
-            s.append(NL).append(' ').append(p.name());
+        if (Version.has1_21Support()) {
+            List<String> patternsList = new ArrayList<>();
+            for (PatternType patternType : Registry.BANNER_PATTERN) {
+                patternsList.add(String.valueOf(patternType));
+            }
+
+            Collections.sort(patternsList);
+
+            for (String type : patternsList) {
+                s.append(NL).append(' ').append(type);
+            }
+        } else {
+            for (PatternType patternType : PatternType.values()) {
+                s.append(NL).append(' ').append(patternType.name());
+            }
         }
 
         s.append(NL).append("</pre></div><div class='doc-section__group'><pre>");
