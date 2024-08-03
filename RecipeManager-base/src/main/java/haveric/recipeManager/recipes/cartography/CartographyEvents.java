@@ -218,7 +218,7 @@ public class CartographyEvents extends BaseRecipeEvents {
                     }
                 }
 
-                inventory.setItem(2, result);
+                inventory.setItem(2, result.getItemStack());
                 player.updateInventory();
 
                 CartographyTables.remove(player);
@@ -347,7 +347,7 @@ public class CartographyEvents extends BaseRecipeEvents {
                         }
                     }
 
-                    if (!hasMatch || result.getType() == Material.AIR) {
+                    if (!hasMatch || result.isAir()) {
                         skipCraft = true;
                     }
                 } else {
@@ -424,19 +424,19 @@ public class CartographyEvents extends BaseRecipeEvents {
 
                         if (result.hasFlag(FlagType.NO_RESULT)) {
                             noResult = true;
-                        } else if (event.isShiftClick() || ToolsItem.merge(event.getCursor(), result) == null) {
+                        } else if (event.isShiftClick() || ToolsItem.merge(event.getCursor(), result.getItemStack()) == null) {
                             noResult = true;
                             // Make sure inventory can fit the results or drop on the ground
-                            if (Tools.playerCanAddItem(player, result)) {
-                                player.getInventory().addItem(result.clone());
+                            if (Tools.playerCanAddItem(player, result.getItemStack())) {
+                                player.getInventory().addItem(result.getItemStack().clone());
                             } else {
-                                player.getWorld().dropItem(player.getLocation(), result.clone());
+                                player.getWorld().dropItem(player.getLocation(), result.getItemStack().clone());
                             }
                         }
                     }
 
                     if (!noResult) {
-                        ItemStack merged = ToolsItem.merge(event.getCursor(), result);
+                        ItemStack merged = ToolsItem.merge(event.getCursor(), result.getItemStack());
                         player.setItemOnCursor(merged);
                     }
                 }

@@ -197,7 +197,7 @@ public class CombineRecipe extends BaseCombineRecipe {
 
         ItemStack result;
         if (vanilla) {
-            result = getFirstResult();
+            result = getFirstResultItemStack();
         } else {
             ItemResult firstResult = getFirstResult();
 
@@ -206,9 +206,9 @@ public class CombineRecipe extends BaseCombineRecipe {
             firstResult.getFlags().sendPrepare(a, true);
 
             if (requiresRecipeManagerModification()) {
-                result = Tools.createItemRecipeId(a.result(), hashCode());
+                result = Tools.createItemRecipeId(a.result().getItemStack(), hashCode());
             } else {
-                result = a.result();
+                result = a.result().getItemStack();
             }
         }
 

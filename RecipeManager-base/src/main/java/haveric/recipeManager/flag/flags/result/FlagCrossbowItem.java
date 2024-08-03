@@ -151,7 +151,7 @@ public class FlagCrossbowItem extends Flag {
 
                 if (result.getFlags().sendPrepare(itemArgs, true)) {
                     try {
-                        crossbowMeta.addChargedProjectile(itemArgs.result());
+                        crossbowMeta.addChargedProjectile(itemArgs.result().getItemStack());
                     } catch (IllegalArgumentException e) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has an invalid charged projectile: " + result + "!");
                     }
@@ -181,7 +181,7 @@ public class FlagCrossbowItem extends Flag {
 
                 if (result.getFlags().sendCrafted(itemArgs)) {
                     try {
-                        crossbowMeta.addChargedProjectile(itemArgs.result());
+                        crossbowMeta.addChargedProjectile(itemArgs.result().getItemStack());
                     } catch (IllegalArgumentException e) {
                         ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has an invalid charged projectile: " + result + "!");
                     }

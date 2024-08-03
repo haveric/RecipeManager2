@@ -120,7 +120,7 @@ public class RMCampfireEvents extends BaseRecipeEvents {
                     }
 
                     if (recipeCraftSuccess && resultCraftSuccess) {
-                        event.setResult(a.result());
+                        event.setResult(a.result().getItemStack());
                     }
                 }
             }

@@ -179,7 +179,7 @@ public class FlagBookItem extends Flag {
             value = "";
         }
 
-        ItemStack result = getResult();
+        ItemStack result = getResult().getItemStack();
         boolean setTitle = key.equals("title");
         boolean setAuthor = !setTitle && key.equals("author");
 

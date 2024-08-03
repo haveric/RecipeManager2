@@ -73,14 +73,19 @@ public abstract class SingleRecipeChoiceSingleResultRecipe extends SingleResultR
     }
 
     @Override
+    public void setResult(ItemResult newResult) {
+        Preconditions.checkNotNull(newResult);
+
+        result = newResult.setRecipe(this);
+
+        updateHash();
+    }
+
+    @Override
     public void setResult(ItemStack newResult) {
         Preconditions.checkNotNull(newResult);
 
-        if (newResult instanceof ItemResult) {
-            result = ((ItemResult) newResult).setRecipe(this);
-        } else {
-            result = new ItemResult(newResult).setRecipe(this);
-        }
+        result = new ItemResult(newResult).setRecipe(this);
 
         updateHash();
     }

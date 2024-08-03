@@ -109,7 +109,7 @@ public class RMSmithing1_19_4TransformRecipe extends RMSmithingRecipe {
 
         SmithingTransformRecipe bukkitRecipe;
         if (vanilla) {
-            bukkitRecipe = new SmithingTransformRecipe(getNamespacedKey(), getFirstResult(), templateIngredient, getPrimaryIngredient(), getSecondaryIngredient());
+            bukkitRecipe = new SmithingTransformRecipe(getNamespacedKey(), getFirstResultItemStack(), templateIngredient, getPrimaryIngredient(), getSecondaryIngredient());
         } else {
             ItemResult firstResult = getFirstResult();
 
@@ -117,7 +117,7 @@ public class RMSmithing1_19_4TransformRecipe extends RMSmithingRecipe {
             getFlags().sendPrepare(a, true);
             firstResult.getFlags().sendPrepare(a, true);
 
-            bukkitRecipe = new SmithingTransformRecipe(getNamespacedKey(), a.result(), templateIngredient, getPrimaryIngredient(), getSecondaryIngredient());
+            bukkitRecipe = new SmithingTransformRecipe(getNamespacedKey(), a.result().getItemStack(), templateIngredient, getPrimaryIngredient(), getSecondaryIngredient());
         }
 
         return bukkitRecipe;

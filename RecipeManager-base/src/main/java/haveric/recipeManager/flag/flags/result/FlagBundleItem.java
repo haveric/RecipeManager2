@@ -149,7 +149,7 @@ public class FlagBundleItem extends Flag {
                 itemArgs.setFirstRun(true);
 
                 if (result.getFlags().sendPrepare(itemArgs, true)) {
-                    bundleMeta.addItem(itemArgs.result());
+                    bundleMeta.addItem(itemArgs.result().getItemStack());
                 }
             }
 
@@ -175,7 +175,7 @@ public class FlagBundleItem extends Flag {
                 itemArgs.setFirstRun(true);
 
                 if (result.getFlags().sendCrafted(itemArgs)) {
-                    bundleMeta.addItem(itemArgs.result());
+                    bundleMeta.addItem(itemArgs.result().getItemStack());
                 }
             }
 

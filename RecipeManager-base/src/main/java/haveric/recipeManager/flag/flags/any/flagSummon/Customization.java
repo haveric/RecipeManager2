@@ -709,22 +709,22 @@ public class Customization implements Cloneable {
 
                     switch (j) {
                         case 0:
-                            eq.setHelmet(item);
+                            eq.setHelmet(item.getItemStack());
                             eq.setHelmetDropChance(drop[j]);
                             break;
 
                         case 1:
-                            eq.setChestplate(item);
+                            eq.setChestplate(item.getItemStack());
                             eq.setChestplateDropChance(drop[j]);
                             break;
 
                         case 2:
-                            eq.setLeggings(item);
+                            eq.setLeggings(item.getItemStack());
                             eq.setLeggingsDropChance(drop[j]);
                             break;
 
                         case 3:
-                            eq.setBoots(item);
+                            eq.setBoots(item.getItemStack());
                             eq.setBootsDropChance(drop[j]);
                             break;
 
@@ -735,13 +735,13 @@ public class Customization implements Cloneable {
                                     npc.setCarriedMaterial(item.getData());
                                 }
                             } else {
-                                eq.setItemInMainHand(item);
+                                eq.setItemInMainHand(item.getItemStack());
                                 eq.setItemInMainHandDropChance(drop[j]);
                             }
 
                             break;
                         case 5:
-                            eq.setItemInOffHand(item);
+                            eq.setItemInOffHand(item.getItemStack());
                             eq.setItemInOffHandDropChance(drop[j]);
                         default:
                             break;

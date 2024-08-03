@@ -384,7 +384,7 @@ public abstract class Flag implements Cloneable {
     }
 
     protected void addNBTRaw(Args a, String nbtRaw) {
-        Bukkit.getUnsafe().modifyItemStack(a.result(), nbtRaw);
+        Bukkit.getUnsafe().modifyItemStack(a.result().getItemStack(), nbtRaw);
     }
 
     public Condition parseCondition(String argLower, boolean noMeta) {

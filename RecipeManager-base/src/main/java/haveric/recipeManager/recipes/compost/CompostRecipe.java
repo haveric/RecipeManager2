@@ -34,7 +34,7 @@ public class CompostRecipe extends MultiResultRecipe {
      */
     public CompostRecipe(Material ingredient, double levelSuccessChance) {
         ingredientChoice = new RecipeChoice.MaterialChoice(ingredient);
-        setResult(VANILLA_ITEM_RESULT.clone());
+        setResult(VANILLA_ITEM_RESULT.getItemStack().clone());
         this.levelSuccessChance = levelSuccessChance;
 
         updateHash();

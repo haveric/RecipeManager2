@@ -71,7 +71,7 @@ public abstract class BaseRecipeParser {
                 continue;
             }
 
-            if (!allowAir && result.getType() == Material.AIR) {
+            if (!allowAir && result.isAir()) {
                 return ErrorReporter.getInstance().error("Result can not be AIR in this recipe!");
             }
 
@@ -113,7 +113,7 @@ public abstract class BaseRecipeParser {
                 boolean foundAir = false;
 
                 for (ItemResult r : results) {
-                    if (r.getType() == Material.AIR) {
+                    if (r.isAir()) {
                         r.setChance(100.0f - totalPercentage);
                         foundAir = true;
                         break;

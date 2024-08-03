@@ -68,7 +68,7 @@ public class RMSmithingRecipeParser extends BaseRecipeParser {
                             Args a = ArgBuilder.create().result(new ItemStack(material)).build();
                             ingredientFlags.sendCrafted(a, true);
 
-                            items.add(a.result());
+                            items.add(a.result().getItemStack());
                         }
                     } else if (choice instanceof RecipeChoice.ExactChoice) {
                         RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
@@ -78,7 +78,7 @@ public class RMSmithingRecipeParser extends BaseRecipeParser {
                             Args a = ArgBuilder.create().result(exactItem).build();
                             ingredientFlags.sendCrafted(a, true);
 
-                            items.add(a.result());
+                            items.add(a.result().getItemStack());
                         }
                     }
 

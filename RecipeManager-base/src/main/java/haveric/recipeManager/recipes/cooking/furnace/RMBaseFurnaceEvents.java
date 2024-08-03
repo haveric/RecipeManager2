@@ -46,7 +46,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         if (smelted != null && smelted.getType() != Material.AIR) {
             ItemResult result = a.result();
             if (result != null) {
-                isSame = ToolsItem.isSameItem(smelted, result, true);
+                isSame = ToolsItem.isSameItem(smelted, result.getItemStack(), true);
             }
         } else {
             isSame = true;
@@ -137,9 +137,9 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
                             ItemStack recipeFuel;
                             if (recipe instanceof RMBaseFurnaceRecipe1_13) {
-                                recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel();
+                                recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel().getItemStack();
                             } else {
-                                recipeFuel = ((RMFurnaceRecipe) recipe).getFuel();
+                                recipeFuel = ((RMFurnaceRecipe) recipe).getFuel().getItemStack();
                             }
 
                             if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
@@ -260,9 +260,9 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
                             ItemStack recipeFuel;
                             if (recipe instanceof RMBaseFurnaceRecipe1_13) {
-                                recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel();
+                                recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel().getItemStack();
                             } else {
-                                recipeFuel = ((RMFurnaceRecipe) recipe).getFuel();
+                                recipeFuel = ((RMFurnaceRecipe) recipe).getFuel().getItemStack();
                             }
 
                             if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
@@ -490,9 +490,9 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
 
                                 ItemStack recipeFuel;
                                 if (recipe instanceof RMBaseFurnaceRecipe1_13) {
-                                    recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel();
+                                    recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel().getItemStack();
                                 } else {
-                                    recipeFuel = ((RMFurnaceRecipe) recipe).getFuel();
+                                    recipeFuel = ((RMFurnaceRecipe) recipe).getFuel().getItemStack();
                                 }
 
                                 if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
@@ -632,9 +632,9 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         if (recipe != null) {
             ItemStack recipeFuel;
             if (recipe instanceof RMBaseFurnaceRecipe1_13) {
-                recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel();
+                recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel().getItemStack();
             } else {
-                recipeFuel = ((RMFurnaceRecipe) recipe).getFuel();
+                recipeFuel = ((RMFurnaceRecipe) recipe).getFuel().getItemStack();
             }
 
             if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
@@ -761,7 +761,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 if (a.result() == null || a.result().getType() == Material.AIR || result.hasFlag(FlagType.NO_RESULT)) {
                     event.setResult(new ItemStack(Material.AIR));
                 } else {
-                    event.setResult(result.toItemStack());
+                    event.setResult(result.getItemStack());
 
                     if (recipe.hasFlag(FlagType.INGREDIENT_CONDITION) || result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
                         if (recipe instanceof RMBaseFurnaceRecipe1_13) {
@@ -787,9 +787,9 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
         if (recipe != null) {
             ItemStack recipeFuel;
             if (recipe instanceof RMBaseFurnaceRecipe1_13) {
-                recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel();
+                recipeFuel = ((RMBaseFurnaceRecipe1_13) recipe).getFuel().getItemStack();
             } else {
-                recipeFuel = ((RMFurnaceRecipe) recipe).getFuel();
+                recipeFuel = ((RMFurnaceRecipe) recipe).getFuel().getItemStack();
             }
 
             // TODO: Handle Furnace disabling recipe in 1.14
@@ -843,7 +843,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 for (BaseRecipe r : RecipeManager.getRecipes().getRecipesOfType(RMCRecipeType.BLASTING)) {
                     if (r instanceof RMBlastingRecipe) {
                         RMBlastingRecipe br = (RMBlastingRecipe) r;
-                        if (result.isSimilar(br.getResult())) {
+                        if (result.isSimilar(br.getResult().getItemStack())) {
                             smeltRecipe = br;
                             break;
                         }
@@ -853,7 +853,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                 for (BaseRecipe r : RecipeManager.getRecipes().getRecipesOfType(RMCRecipeType.SMOKING)) {
                     if (r instanceof RMSmokingRecipe) {
                         RMSmokingRecipe sr = (RMSmokingRecipe) r;
-                        if (result.isSimilar(sr.getResult())) {
+                        if (result.isSimilar(sr.getResult().getItemStack())) {
                             smeltRecipe = sr;
                             break;
                         }
@@ -864,7 +864,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                     for (BaseRecipe r : RecipeManager.getRecipes().getRecipesOfType(RMCRecipeType.SMELT)) {
                         if (r instanceof RMFurnaceRecipe1_13) {
                             RMFurnaceRecipe1_13 fr = (RMFurnaceRecipe1_13) r;
-                            if (result.isSimilar(fr.getResult())) {
+                            if (result.isSimilar(fr.getResult().getItemStack())) {
                                 smeltRecipe = fr;
                                 break;
                             }
@@ -874,7 +874,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                     for (BaseRecipe r : RecipeManager.getRecipes().getRecipesOfType(RMCRecipeType.SMELT)) {
                         if (r instanceof RMFurnaceRecipe) {
                             RMFurnaceRecipe fr = (RMFurnaceRecipe) r;
-                            if (result.isSimilar(fr.getResult())) {
+                            if (result.isSimilar(fr.getResult().getItemStack())) {
                                 smeltRecipe = fr;
                                 break;
                             }

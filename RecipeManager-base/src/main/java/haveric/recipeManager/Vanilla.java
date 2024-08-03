@@ -920,10 +920,10 @@ public class Vanilla {
         RecipeChoice choice = recipe.getIngredientChoice();
         if (choice instanceof RecipeChoice.MaterialChoice) {
             RecipeChoice.MaterialChoice materialChoice = (RecipeChoice.MaterialChoice) choice;
-            return removeStonecuttingRecipe(new ItemStack(materialChoice.getChoices().get(0)), recipe.getResult());
+            return removeStonecuttingRecipe(new ItemStack(materialChoice.getChoices().get(0)), recipe.getResult().getItemStack());
         } else if (choice instanceof RecipeChoice.ExactChoice) {
             RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
-            return removeStonecuttingRecipe(exactChoice.getChoices().get(0), recipe.getResult());
+            return removeStonecuttingRecipe(exactChoice.getChoices().get(0), recipe.getResult().getItemStack());
         } else {
             return null;
         }
@@ -1135,7 +1135,7 @@ public class Vanilla {
                         if (remove) {
                             iterator.remove();
                         } else {
-                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
+                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResultItemStack(), recipe.hashCode());
                             baseRecipeIterator.replace(overrideItem);
                         }
 
@@ -1188,7 +1188,7 @@ public class Vanilla {
                         if (remove) {
                             iterator.remove();
                         } else {
-                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
+                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResultItemStack(), recipe.hashCode());
                             baseRecipeIterator.replace(overrideItem);
                         }
                         baseRecipeIterator.finish();
@@ -1247,7 +1247,7 @@ public class Vanilla {
                         if (remove) {
                             iterator.remove();
                         } else {
-                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
+                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResultItemStack(), recipe.hashCode());
                             baseRecipeIterator.replace(overrideItem);
                         }
 
@@ -1290,7 +1290,7 @@ public class Vanilla {
                         if (remove) {
                             iterator.remove();
                         } else {
-                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResult(), recipe.hashCode());
+                            ItemStack overrideItem = Tools.createItemRecipeId(recipe.getFirstResultItemStack(), recipe.hashCode());
                             baseRecipeIterator.replace(overrideItem);
                         }
 

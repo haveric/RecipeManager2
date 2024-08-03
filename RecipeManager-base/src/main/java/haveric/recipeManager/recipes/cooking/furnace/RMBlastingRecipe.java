@@ -49,7 +49,7 @@ public class RMBlastingRecipe extends RMBaseFurnaceRecipe1_13 {
         getFlags().sendPrepare(a, true);
         getResult().getFlags().sendPrepare(a, true);
 
-        BlastingRecipe bukkitRecipe = new BlastingRecipe(getNamespacedKey(), a.result(), getIngredientChoice(), experience, getCookTicks());
+        BlastingRecipe bukkitRecipe = new BlastingRecipe(getNamespacedKey(), a.result().getItemStack(), getIngredientChoice(), experience, getCookTicks());
         if (hasGroup()) {
             bukkitRecipe.setGroup(getGroup());
         }

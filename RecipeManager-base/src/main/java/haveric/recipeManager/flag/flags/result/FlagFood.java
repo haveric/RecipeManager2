@@ -192,7 +192,7 @@ public class FlagFood extends Flag {
                         Args itemArgs = ArgBuilder.create(a).recipe(convertsToItemRecipe).result(result).build();
                         itemArgs.setFirstRun(true);
                         if (result.getFlags().sendCrafted(itemArgs)) {
-                            food.setUsingConvertsTo(itemArgs.result());
+                            food.setUsingConvertsTo(itemArgs.result().getItemStack());
                         }
                     }
                 }

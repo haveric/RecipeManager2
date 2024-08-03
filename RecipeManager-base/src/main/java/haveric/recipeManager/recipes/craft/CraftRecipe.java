@@ -293,7 +293,7 @@ public class CraftRecipe extends BaseCraftRecipe {
 
         ItemStack result;
         if (vanilla) {
-            result = getFirstResult();
+            result = getFirstResultItemStack();
         } else {
             ItemResult firstResult = getFirstResult();
 
@@ -302,9 +302,9 @@ public class CraftRecipe extends BaseCraftRecipe {
             firstResult.getFlags().sendPrepare(a, true);
 
             if (requiresRecipeManagerModification()) {
-                result = Tools.createItemRecipeId(a.result(), hashCode());
+                result = Tools.createItemRecipeId(a.result().getItemStack(), hashCode());
             } else {
-                result = a.result();
+                result = a.result().getItemStack();
             }
         }
 

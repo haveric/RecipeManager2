@@ -10,7 +10,6 @@ import haveric.recipeManager.flag.flags.any.FlagDisplayName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 
@@ -85,14 +84,17 @@ public abstract class MultiResultRecipe extends BaseRecipe {
      * @param result
      *            result item, must not be null.
      */
+    public void addResult(ItemResult result) {
+        Preconditions.checkNotNull(result, "The 'result' argument must not be null!");
+
+        results.add(result.setRecipe(this));
+    }
+
     public void addResult(ItemStack result) {
         Preconditions.checkNotNull(result, "The 'result' argument must not be null!");
 
-        if (result instanceof ItemResult) {
-            results.add(((ItemResult) result).setRecipe(this));
-        } else {
-            results.add(new ItemResult(result).setRecipe(this));
-        }
+        results.add(new ItemResult(result).setRecipe(this));
+
     }
 
     public String getResultsString() {
@@ -101,7 +103,7 @@ public abstract class MultiResultRecipe extends BaseRecipe {
         int resultNum = results.size();
 
         if (resultNum > 0) {
-            ItemStack result = getFirstResult();
+            ItemStack result = getFirstResultItemStack();
 
             if (result == null) {
                 s.append("nothing");
@@ -141,7 +143,7 @@ public abstract class MultiResultRecipe extends BaseRecipe {
      */
     public float getFailChance() {
         for (ItemResult r : results) {
-            if (r.getType() == Material.AIR) {
+            if (r.isAir()) {
                 return r.getChance();
             }
         }
@@ -154,9 +156,18 @@ public abstract class MultiResultRecipe extends BaseRecipe {
      */
     public ItemResult getFirstResult() {
         for (ItemResult r : results) {
-            if (r.getType() != Material.AIR) {
+            if (!r.isAir()) {
                 return r.clone();
             }
+        }
+
+        return null; // no valid results defined
+    }
+
+    public ItemStack getFirstResultItemStack() {
+        ItemResult itemResult = getFirstResult();
+        if (itemResult != null) {
+            return itemResult.getItemStack().clone();
         }
 
         return null; // no valid results defined
@@ -166,7 +177,7 @@ public abstract class MultiResultRecipe extends BaseRecipe {
         boolean valid = false;
 
         for (ItemResult r : results) {
-            if (r.getType() != Material.AIR) {
+            if (!r.isAir()) {
                 valid = true;
                 break;
             }
@@ -220,7 +231,7 @@ public abstract class MultiResultRecipe extends BaseRecipe {
             FlagDisplayName flag = (FlagDisplayName)result.getFlag(FlagType.DISPLAY_NAME);
             s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getPrintName(), false));
         } else {
-            s.append(ToolsItem.print(getFirstResult(), RMCChatColor.DARK_GREEN, null));
+            s.append(ToolsItem.print(getFirstResultItemStack(), RMCChatColor.DARK_GREEN, null));
         }
 
         if (isMultiResult() && !hasFlag(FlagType.INDIVIDUAL_RESULTS)) {

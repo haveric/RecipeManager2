@@ -11,6 +11,7 @@ import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
+import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
@@ -82,7 +83,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
     public void setIngredientsChoiceMap(Map<Character, List<Material>> newIngredientsChoiceMap) {
         ingredientsChoiceMap.clear();
 
-        for (Map.Entry<Character, List<Material>> entry : newIngredientsChoiceMap.entrySet()) {
+        for (Entry<Character, List<Material>> entry : newIngredientsChoiceMap.entrySet()) {
             List<Material> materials = entry.getValue();
 
             if (materials.size() == 1 && materials.get(0) == Material.AIR) {
@@ -214,7 +215,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
 
         ShapedRecipe bukkitRecipe;
         if (vanilla) {
-            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResult());
+            bukkitRecipe = new ShapedRecipe(getNamespacedKey(), getFirstResultItemStack());
         } else {
             ItemResult firstResult = getFirstResult();
 
@@ -224,9 +225,9 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
 
             ItemStack result;
             if (requiresRecipeManagerModification()) {
-                result = Tools.createItemRecipeId(a.result(), hashCode());
+                result = Tools.createItemRecipeId(a.result().getItemStack(), hashCode());
             } else {
-                result = a.result();
+                result = a.result().getItemStack();
             }
 
             bukkitRecipe = new ShapedRecipe(getNamespacedKey(), result);
@@ -242,7 +243,22 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
         }
 
         for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
-            bukkitRecipe.setIngredient(entry.getKey(), entry.getValue());
+            if (Version.has1_21Support()) {
+                if (entry.getValue() == null) {
+                    char key = entry.getKey();
+
+                    String[] replacementPattern = new String[choicePattern.length];
+                    for (int i = 0; i < choicePattern.length; i++) {
+                        replacementPattern[i] = choicePattern[i].replace(key, ' ');
+                    }
+
+                    bukkitRecipe.shape(replacementPattern);
+                } else {
+                    bukkitRecipe.setIngredient(entry.getKey(), entry.getValue());
+                }
+            } else {
+                bukkitRecipe.setIngredient(entry.getKey(), entry.getValue());
+            }
         }
 
         return bukkitRecipe;
@@ -299,7 +315,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
+        for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             RecipeChoice choice = entry.getValue();
 
             // Skip empty choices which might be air
@@ -327,7 +343,7 @@ public class CraftRecipe1_13 extends BaseCraftRecipe {
     public int findItemInIngredients(Material type, Short data) {
         int found = 0;
 
-        for (Map.Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
+        for (Entry<Character, RecipeChoice> entry : ingredientsChoiceMap.entrySet()) {
             RecipeChoice choice = entry.getValue();
 
             int num = ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, choice);

@@ -72,7 +72,7 @@ public abstract class SingleResultRecipe extends BaseRecipe {
 
         a.setResult(r);
 
-        if (r.getType() == Material.AIR && hasFlags()) {
+        if (r.isAir() && hasFlags()) {
             sendFailed(a);
             a.sendEffects(a.player(), Messages.getInstance().get("flag.prefix.recipe"));
         }
@@ -80,14 +80,16 @@ public abstract class SingleResultRecipe extends BaseRecipe {
         return r;
     }
 
+    public void setResult(ItemResult newResult) {
+        Preconditions.checkNotNull(newResult);
+
+        result = newResult.setRecipe(this);
+    }
+
     public void setResult(ItemStack newResult) {
         Preconditions.checkNotNull(newResult);
 
-        if (newResult instanceof ItemResult) {
-            result = ((ItemResult) newResult).setRecipe(this);
-        } else {
-            result = new ItemResult(newResult).setRecipe(this);
-        }
+        result = new ItemResult(newResult).setRecipe(this);
     }
 
     public boolean hasResult() {
@@ -149,7 +151,7 @@ public abstract class SingleResultRecipe extends BaseRecipe {
             FlagDisplayName flag = (FlagDisplayName)result.getFlag(FlagType.DISPLAY_NAME);
             s.append(RMCChatColor.BLACK).append(RMCUtil.parseColors(flag.getPrintName(), false));
         } else {
-            s.append(ToolsItem.print(getResult(), RMCChatColor.DARK_GREEN, null));
+            s.append(ToolsItem.print(getResult().getItemStack(), RMCChatColor.DARK_GREEN, null));
         }
 
         s.append("\n\n");
@@ -162,7 +164,7 @@ public abstract class SingleResultRecipe extends BaseRecipe {
         String print = "";
         if (result.hasFlag(FlagType.INGREDIENT_CONDITION)) {
             FlagIngredientCondition flag = (FlagIngredientCondition) result.getFlag(FlagType.INGREDIENT_CONDITION);
-            List<ConditionsIngredient> conditions = flag.getIngredientConditions(result);
+            List<ConditionsIngredient> conditions = flag.getIngredientConditions(result.getItemStack());
 
             if (!conditions.isEmpty()) {
                 ConditionsIngredient condition = conditions.get(0);

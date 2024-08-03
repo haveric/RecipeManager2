@@ -51,6 +51,10 @@ public class ToolsItem {
         return item;
     }
 
+    public static String print(ItemResult result) {
+        return print(result.getItemStack());
+    }
+
     /**
      * Displays the ItemStack in a user-friendly and colorful manner.<br>
      * If item is null or air it will print "nothing" in gray.<br>

@@ -243,7 +243,7 @@ public class FlagKeepItem extends Flag {
                 itemArgs.setFirstRun(true);
 
                 if (result.getFlags().sendCrafted(itemArgs, true)) {
-                    clone = itemArgs.result();
+                    clone = itemArgs.result().getItemStack();
                 }
             }
 

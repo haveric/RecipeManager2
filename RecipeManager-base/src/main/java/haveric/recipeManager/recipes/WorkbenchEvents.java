@@ -85,7 +85,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 result = new ItemResult(inv.getResult());
             }
 
-            if (prepareSpecialRecipe(player, inv, result, bukkitRecipe, location)) {
+            if (prepareSpecialRecipe(player, inv, result.getItemStack(), bukkitRecipe, location)) {
                 return; // stop here if it's a special recipe
             }
 
@@ -131,7 +131,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 }
             }
 
-            inv.setResult(result);
+            inv.setResult(result.getItemStack());
         } catch (Throwable e) {
             if (event.getInventory() != null) {
                 event.getInventory().setResult(null);
@@ -327,7 +327,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
         RecipeManagerPrepareCraftEvent callEvent = new RecipeManagerPrepareCraftEvent(null, new ItemResult(result), player, location);
         Bukkit.getPluginManager().callEvent(callEvent);
 
-        result = callEvent.getResult();
+        result = callEvent.getResult().getItemStack();
 
         if (result != null && result.getType() != Material.AIR) {
             SoundNotifier.sendRepairSound(player, location);
@@ -465,7 +465,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                             }
                         }
 
-                        if (!hasMatch || result.getType() == Material.AIR) {
+                        if (!hasMatch || result.isAir()) {
                             skipCraft = true;
                         }
                     } else {
@@ -551,13 +551,13 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                             if (!noResult) {
                                 if (result.hasFlag(FlagType.NO_RESULT)) {
                                     noResult = true;
-                                } else if (event.isShiftClick() || ToolsItem.merge(event.getCursor(), result) == null) {
+                                } else if (event.isShiftClick() || ToolsItem.merge(event.getCursor(), result.getItemStack()) == null) {
                                     noResult = true;
                                     // Make sure inventory can fit the results or drop on the ground
-                                    if (Tools.playerCanAddItem(player, result)) {
-                                        player.getInventory().addItem(result.clone());
+                                    if (Tools.playerCanAddItem(player, result.getItemStack())) {
+                                        player.getInventory().addItem(result.getItemStack().clone());
                                     } else {
-                                        player.getWorld().dropItem(player.getLocation(), result.clone());
+                                        player.getWorld().dropItem(player.getLocation(), result.getItemStack().clone());
                                     }
 
                                     for (ItemStack item : originalMatrix) {
@@ -599,7 +599,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                             }
                             event.setCancelled(true);
                         } else {
-                            event.setCurrentItem(result);
+                            event.setCurrentItem(result.getItemStack());
                         }
                     }
 
@@ -638,7 +638,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
     }
 
     private int craftResult(CraftItemEvent event, CraftingInventory inv, ItemResult result) {
-        if (result == null || result.getType() == Material.AIR) {
+        if (result == null || result.isAir()) {
             event.setCurrentItem(null);
             return 0;
         }

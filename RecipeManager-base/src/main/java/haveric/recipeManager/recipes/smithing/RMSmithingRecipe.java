@@ -115,7 +115,7 @@ public class RMSmithingRecipe extends PreparableResultRecipe {
 
         SmithingRecipe bukkitRecipe;
         if (vanilla) {
-            bukkitRecipe = new SmithingRecipe(getNamespacedKey(), getFirstResult(), primaryIngredient, secondaryIngredient);
+            bukkitRecipe = new SmithingRecipe(getNamespacedKey(), getFirstResultItemStack(), primaryIngredient, secondaryIngredient);
         } else {
             ItemResult firstResult = getFirstResult();
 
@@ -123,7 +123,7 @@ public class RMSmithingRecipe extends PreparableResultRecipe {
             getFlags().sendPrepare(a, true);
             firstResult.getFlags().sendPrepare(a, true);
 
-            bukkitRecipe = new SmithingRecipe(getNamespacedKey(), a.result(), primaryIngredient, secondaryIngredient);
+            bukkitRecipe = new SmithingRecipe(getNamespacedKey(), a.result().getItemStack(), primaryIngredient, secondaryIngredient);
         }
 
         return bukkitRecipe;

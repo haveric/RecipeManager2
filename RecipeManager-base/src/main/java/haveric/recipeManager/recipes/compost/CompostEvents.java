@@ -73,7 +73,7 @@ public class CompostEvents extends BaseRecipeEvents {
 
                         ItemResult result = takeCompostResult(data, recipe, block);
                         if (result != null) {
-                            dropCompostResult(block, result);
+                            dropCompostResult(block, result.getItemStack());
                         }
                     }
                 }
@@ -172,7 +172,7 @@ public class CompostEvents extends BaseRecipeEvents {
                     a.setResult(r);
 
                     if (r.checkFlags(a)) {
-                        if (r.getType() != Material.AIR) {
+                        if (!r.isAir()) {
                             anyResultPassed = true;
                             break;
                         }
@@ -375,7 +375,7 @@ public class CompostEvents extends BaseRecipeEvents {
                 }
             }
 
-            if (!hasMatch || result.getType() == Material.AIR) {
+            if (!hasMatch || result.isAir()) {
                 skipCraft = true;
             }
         } else {
@@ -468,7 +468,7 @@ public class CompostEvents extends BaseRecipeEvents {
                 if (recipe != null) {
                     ItemResult result = takeCompostResult(data, recipe, block);
                     if (result != null) {
-                        event.setItem(result);
+                        event.setItem(result.getItemStack());
                     }
                 }
             }

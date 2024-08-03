@@ -210,7 +210,7 @@ public class FlagCloneIngredient extends Flag {
     public boolean onValidate() {
         ItemResult result = getResult();
 
-        if (result == null || result.getType() == Material.AIR) {
+        if (result == null || result.isAir()) {
             return ErrorReporter.getInstance().error("Flag " + getFlagType() + " can not be used on AIR results!", "The type of result defines the type of ingredient it searches for");
         }
 
@@ -347,7 +347,7 @@ public class FlagCloneIngredient extends Flag {
             return;
         }
 
-        boolean cloned = cloneIngredientToResult(a.result(), a);
+        boolean cloned = cloneIngredientToResult(a.result().getItemStack(), a);
 
         if (!cloned) {
             a.addCustomReason("Failed to clone ingredient."); // TODO remove ?

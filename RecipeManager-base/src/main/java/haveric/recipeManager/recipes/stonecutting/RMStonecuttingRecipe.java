@@ -67,7 +67,7 @@ public class RMStonecuttingRecipe extends SingleRecipeChoiceSingleResultRecipe {
         getFlags().sendPrepare(a, true);
         getResult().getFlags().sendPrepare(a, true);
 
-        StonecuttingRecipe bukkitRecipe = new StonecuttingRecipe(getNamespacedKey(), a.result(), ingredientChoice);
+        StonecuttingRecipe bukkitRecipe = new StonecuttingRecipe(getNamespacedKey(), a.result().getItemStack(), ingredientChoice);
         if (hasGroup()) {
             bukkitRecipe.setGroup(group);
         }

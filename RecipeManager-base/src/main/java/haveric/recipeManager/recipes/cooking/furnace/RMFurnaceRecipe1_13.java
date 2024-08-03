@@ -49,7 +49,7 @@ public class RMFurnaceRecipe1_13 extends RMBaseFurnaceRecipe1_13 {
         getFlags().sendPrepare(a, true);
         getResult().getFlags().sendPrepare(a, true);
 
-        FurnaceRecipe bukkitRecipe = new FurnaceRecipe(getNamespacedKey(), a.result(), getIngredientChoice(), experience, getCookTicks());
+        FurnaceRecipe bukkitRecipe = new FurnaceRecipe(getNamespacedKey(), a.result().getItemStack(), getIngredientChoice(), experience, getCookTicks());
         if (hasGroup()) {
             bukkitRecipe.setGroup(getGroup());
         }

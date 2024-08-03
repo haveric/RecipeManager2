@@ -119,7 +119,7 @@ public class FlagDisplayResult extends Flag {
                 Args a = ArgBuilder.create().result(result).build();
                 result.getFlags().sendCrafted(a, true);
 
-                displayItem = a.result();
+                displayItem = a.result().getItemStack();
             }
         } else if (!value.equals("first")) {
             ItemStack item = Tools.parseItem(value, 0);

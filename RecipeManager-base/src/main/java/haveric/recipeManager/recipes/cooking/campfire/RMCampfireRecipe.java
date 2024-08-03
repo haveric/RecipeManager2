@@ -61,7 +61,7 @@ public class RMCampfireRecipe extends RMBaseCookingRecipe {
         getFlags().sendPrepare(a, true);
         getResult().getFlags().sendPrepare(a, true);
 
-        CampfireRecipe bukkitRecipe = new CampfireRecipe(getNamespacedKey(), a.result(), ingredientChoice, experience, getCookTicks());
+        CampfireRecipe bukkitRecipe = new CampfireRecipe(getNamespacedKey(), a.result().getItemStack(), ingredientChoice, experience, getCookTicks());
         if (hasGroup()) {
             bukkitRecipe.setGroup(getGroup());
         }

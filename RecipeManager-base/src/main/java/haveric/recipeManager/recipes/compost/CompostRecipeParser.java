@@ -63,7 +63,7 @@ public class CompostRecipeParser extends BaseRecipeParser {
                         Args a = ArgBuilder.create().result(new ItemStack(material)).build();
                         ingredientFlags.sendCrafted(a, true);
 
-                        items.add(a.result());
+                        items.add(a.result().getItemStack());
                     }
                 } else if (choice instanceof RecipeChoice.ExactChoice) {
                     RecipeChoice.ExactChoice exactChoice = (RecipeChoice.ExactChoice) choice;
@@ -73,7 +73,7 @@ public class CompostRecipeParser extends BaseRecipeParser {
                         Args a = ArgBuilder.create().result(exactItem).build();
                         ingredientFlags.sendCrafted(a, true);
 
-                        items.add(a.result());
+                        items.add(a.result().getItemStack());
                     }
                 }
 
@@ -102,7 +102,7 @@ public class CompostRecipeParser extends BaseRecipeParser {
 
         ItemResult result = results.get(0);
 
-        recipe.setResult(result);
+        recipe.setResult(result.getItemStack());
 
         if (isRemove) { // un-ignore result errors
             ErrorReporter.getInstance().setIgnoreErrors(false);

@@ -251,7 +251,7 @@ public abstract class BaseRecipe extends AbstractBaseRecipe implements Flaggable
             FlagDisplayName flag = (FlagDisplayName)result.getFlag(FlagType.DISPLAY_NAME);
             print = RMCUtil.parseColors(flag.getPrintName(), false);
         } else {
-            print = ToolsItem.getName(result);
+            print = ToolsItem.getName(result.getItemStack());
         }
 
         return print;

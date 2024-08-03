@@ -192,7 +192,7 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
 
         ShapelessRecipe bukkitRecipe;
         if (vanilla) {
-            bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), getFirstResult());
+            bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), getFirstResultItemStack());
         } else {
             ItemResult firstResult = getFirstResult();
 
@@ -202,9 +202,9 @@ public class CombineRecipe1_13 extends BaseCombineRecipe {
 
             ItemStack result;
             if (requiresRecipeManagerModification()) {
-                result = Tools.createItemRecipeId(a.result(), hashCode());
+                result = Tools.createItemRecipeId(a.result().getItemStack(), hashCode());
             } else {
-                result = a.result();
+                result = a.result().getItemStack();
             }
 
             bukkitRecipe = new ShapelessRecipe(getNamespacedKey(), result);

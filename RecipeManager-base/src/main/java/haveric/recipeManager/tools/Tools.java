@@ -177,7 +177,7 @@ public class Tools {
                     itemArgs.setFirstRun(true);
 
                     if (result.getFlags().sendCrafted(itemArgs, true)) {
-                        choice = ToolsRecipeChoice.mergeRecipeChoiceWithItems(choice, itemArgs.result());
+                        choice = ToolsRecipeChoice.mergeRecipeChoiceWithItems(choice, itemArgs.result().getItemStack());
                     }
                 }
             } else {

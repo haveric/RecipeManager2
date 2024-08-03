@@ -372,7 +372,7 @@ public class ExtractCommand implements TabExecutor {
                 recipeString.append(" % ").append(compostRecipe.getLevelSuccessChance()).append(" % ").append(compostRecipe.getLevels());
 
                 recipeString.append(Files.NL);
-                parseResult(compostRecipe.getFirstResult(), recipeString);
+                parseResult(compostRecipe.getFirstResultItemStack(), recipeString);
 
                 parsedCompostRecipes.add(recipeString.toString());
             }

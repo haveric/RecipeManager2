@@ -488,7 +488,7 @@ public class BrewEvents extends BaseRecipeEvents {
                             boolean resultCraft = result.sendCrafted(a);
 
                             if (recipeCraft && resultCraft) {
-                                ItemStack bukkitResult = result.toItemStack();
+                                ItemStack bukkitResult = result.getItemStack();
                                 if (a.hasExtra()) {
                                     @SuppressWarnings("unchecked")
                                     List<Boolean> potionBools = (List<Boolean>) a.extra();

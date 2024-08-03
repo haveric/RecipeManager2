@@ -46,7 +46,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
             result = new ItemResult(inventory.getResult());
         }
 
-        if (prepareSpecialSmithingRecipe(player, inventory, result)) {
+        if (prepareSpecialSmithingRecipe(player, inventory, result.getItemStack())) {
             return; // stop here if it's a special smithing recipe
         }
 
@@ -91,7 +91,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                     }
                 }
 
-                event.setResult(result);
+                event.setResult(result.getItemStack());
             }
         }
     }
@@ -395,7 +395,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                                 }
                             }
 
-                            if (!hasMatch || result.getType() == Material.AIR) {
+                            if (!hasMatch || result.isAir()) {
                                 skipCraft = true;
                             }
                         } else {
@@ -474,13 +474,13 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                                 if (!noResult) {
                                     if (result.hasFlag(FlagType.NO_RESULT)) {
                                         noResult = true;
-                                    } else if (event.isShiftClick() || ToolsItem.merge(event.getCursor(), result) == null) {
+                                    } else if (event.isShiftClick() || ToolsItem.merge(event.getCursor(), result.getItemStack()) == null) {
                                         noResult = true;
                                         // Make sure inventory can fit the results or drop on the ground
-                                        if (Tools.playerCanAddItem(player, result)) {
-                                            player.getInventory().addItem(result.clone());
+                                        if (Tools.playerCanAddItem(player, result.getItemStack())) {
+                                            player.getInventory().addItem(result.getItemStack().clone());
                                         } else {
-                                            player.getWorld().dropItem(player.getLocation(), result.clone());
+                                            player.getWorld().dropItem(player.getLocation(), result.getItemStack().clone());
                                         }
                                     }
                                 }
@@ -489,7 +489,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                             if (noResult) {
                                 event.setCancelled(true);
                             } else {
-                                ItemStack merged = ToolsItem.merge(event.getCursor(), result);
+                                ItemStack merged = ToolsItem.merge(event.getCursor(), result.getItemStack());
                                 player.setItemOnCursor(merged);
                             }
                         }
@@ -662,7 +662,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                                 }
                             }
 
-                            if (!hasMatch || result.getType() == Material.AIR) {
+                            if (!hasMatch || result.isAir()) {
                                 skipCraft = true;
                             }
                         } else {
@@ -741,13 +741,13 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                                 if (!noResult) {
                                     if (result.hasFlag(FlagType.NO_RESULT)) {
                                         noResult = true;
-                                    } else if (event.isShiftClick() || ToolsItem.merge(event.getCursor(), result) == null) {
+                                    } else if (event.isShiftClick() || ToolsItem.merge(event.getCursor(), result.getItemStack()) == null) {
                                         noResult = true;
                                         // Make sure inventory can fit the results or drop on the ground
-                                        if (Tools.playerCanAddItem(player, result)) {
-                                            player.getInventory().addItem(result.clone());
+                                        if (Tools.playerCanAddItem(player, result.getItemStack())) {
+                                            player.getInventory().addItem(result.getItemStack().clone());
                                         } else {
-                                            player.getWorld().dropItem(player.getLocation(), result.clone());
+                                            player.getWorld().dropItem(player.getLocation(), result.getItemStack().clone());
                                         }
                                     }
                                 }
@@ -756,7 +756,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                             if (noResult) {
                                 event.setCancelled(true);
                             } else {
-                                ItemStack merged = ToolsItem.merge(event.getCursor(), result);
+                                ItemStack merged = ToolsItem.merge(event.getCursor(), result.getItemStack());
                                 player.setItemOnCursor(merged);
                             }
                         }

@@ -5,12 +5,16 @@ import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.Flaggable;
 import haveric.recipeManager.flag.Flags;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.tools.Version;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.material.MaterialData;
 
-public class ItemResult extends ItemStack implements Flaggable {
+import java.util.Map;
+
+public class ItemResult implements Flaggable {
+    private ItemStack itemStack;
     private Flags flags;
     private float chance = 100;
     private BaseRecipe recipe;
@@ -19,11 +23,11 @@ public class ItemResult extends ItemStack implements Flaggable {
     }
 
     public ItemResult(ItemStack item) {
-        super(item);
+        itemStack = item.clone();
     }
 
     public ItemResult(ItemResult result, boolean cloneFlags) {
-        super(result);
+        itemStack = result.itemStack.clone();
 
         if (result.hasFlags()) {
             // don't clone, needs to be a reference to allow some flags (ex: FlagCooldown) to work
@@ -41,49 +45,34 @@ public class ItemResult extends ItemStack implements Flaggable {
     }
 
     public ItemResult(ItemStack item, float newChance) {
-        super(item);
+        itemStack = item.clone();
 
         chance = newChance;
     }
 
     public ItemResult(Material type, int amount, int data, float newChance) {
-        super(type, amount, (short) data);
+        itemStack = new ItemStack(type, amount, (short) data);
 
         chance = newChance;
     }
 
     public ItemResult(ItemStack item, Flags newFlags) {
-        super(item);
+        itemStack = item.clone();
 
         flags = newFlags.clone(this);
     }
 
     @Override
     public ItemResult clone() {
-        super.clone();
         return new ItemResult(this, false);
     }
 
     public void setItemStack(ItemStack item) {
-        setType(item.getType());
-        setAmount(item.getAmount());
-
-        if (!Version.has1_13BasicSupport() || item instanceof Damageable) {
-            setDurability(item.getDurability());
-        }
-
-        setItemMeta(item.getItemMeta());
+        itemStack = item.clone();
     }
 
-    public void clearMetadata() {
-        setItemMeta(null);
-    }
-
-    public ItemStack toItemStack() {
-        ItemStack converted = new ItemStack(getType(), getAmount(), getDurability());
-        converted.setItemMeta(getItemMeta());
-
-        return converted;
+    public ItemStack getItemStack() {
+        return itemStack;
     }
 
     public void setChance(float newChance) {
@@ -202,5 +191,63 @@ public class ItemResult extends ItemStack implements Flaggable {
         toHash += "chance: " + chance;
 
         return toHash.hashCode();
+    }
+
+    // ItemStack shortcut methods
+
+    public ItemMeta getItemMeta() {
+        return itemStack.getItemMeta();
+    }
+
+    public void setItemMeta(ItemMeta itemMeta) {
+        itemStack.setItemMeta(itemMeta);
+    }
+
+    public void clearMetadata() {
+        setItemMeta(null);
+    }
+
+    public Material getType() {
+        return itemStack.getType();
+    }
+
+    public void setType(Material type) {
+        itemStack.setType(type);
+    }
+
+    public boolean isAir() {
+        return getType() == Material.AIR;
+    }
+
+    public MaterialData getData() {
+        return itemStack.getData();
+    }
+
+    public int getAmount() {
+        return itemStack.getAmount();
+    }
+
+    public void setAmount(int amount) {
+        itemStack.setAmount(amount);
+    }
+
+    public short getDurability() {
+        return itemStack.getDurability();
+    }
+
+    public void setDurability(short durability) {
+        itemStack.setDurability(durability);
+    }
+
+    public Map<Enchantment, Integer> getEnchantments() {
+        return itemStack.getEnchantments();
+    }
+
+    public void addUnsafeEnchantment(Enchantment ench, int level) {
+        itemStack.addUnsafeEnchantment(ench, level);
+    }
+
+    public int removeEnchantment(Enchantment ench) {
+        return itemStack.removeEnchantment(ench);
     }
 }

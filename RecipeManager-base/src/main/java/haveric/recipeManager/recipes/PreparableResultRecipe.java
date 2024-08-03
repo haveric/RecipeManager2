@@ -74,12 +74,12 @@ public abstract class PreparableResultRecipe extends MultiResultRecipe {
                 if (recipeHasSecret || r.hasFlag(FlagType.SECRET)) {
                     secretNum++;
                     secretChance += r.getChance();
-                } else if (r.getType() == Material.AIR) {
+                } else if (r.isAir()) {
                     failChance = r.getChance();
                 } else {
                     displayResults.add(r);
 
-                    a.sendEffects(a.player(), Messages.getInstance().parse("flag.prefix.result", "{item}", ToolsItem.print(r)));
+                    a.sendEffects(a.player(), Messages.getInstance().parse("flag.prefix.result", "{item}", ToolsItem.print(r.getItemStack())));
                 }
             } else {
                 unavailableNum++;
@@ -165,7 +165,7 @@ public abstract class PreparableResultRecipe extends MultiResultRecipe {
             if (r.hasFlag(FlagType.CLONE_INGREDIENT)) {
                 cloneMessage = Messages.getInstance().get("flag.clone.resultdisplay");
             }
-            lore.add(Messages.getInstance().parse("craft.result.list.item", "{chance}", formatChance(r.getChance()), "{item}", ToolsItem.print(r), "{clone}", cloneMessage));
+            lore.add(Messages.getInstance().parse("craft.result.list.item", "{chance}", formatChance(r.getChance()), "{item}", ToolsItem.print(r.getItemStack()), "{clone}", cloneMessage));
         }
 
         if (failChance > 0) {

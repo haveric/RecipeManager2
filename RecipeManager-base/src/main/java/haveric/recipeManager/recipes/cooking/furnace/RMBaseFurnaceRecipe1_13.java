@@ -62,14 +62,16 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseCookingRecipe {
         return fuel;
     }
 
+    public void setFuel(ItemResult newFuel) {
+        Preconditions.checkNotNull(newFuel);
+
+        fuel = newFuel.setRecipe(this);
+    }
+
     public void setFuel(ItemStack newFuel) {
         Preconditions.checkNotNull(newFuel);
 
-        if (newFuel instanceof ItemResult) {
-            fuel = ((ItemResult) newFuel).setRecipe(this);
-        } else {
-            fuel = new ItemResult(newFuel).setRecipe(this);
-        }
+        fuel = new ItemResult(newFuel).setRecipe(this);
     }
 
     public String getFuelIndex() {
@@ -119,7 +121,7 @@ public class RMBaseFurnaceRecipe1_13 extends RMBaseCookingRecipe {
         if (hasFuel()) {
             s.append("\n\n");
             s.append(Messages.getInstance().parse("recipebook.header.requirefuel"));
-            s.append('\n').append(ToolsItem.print(fuel, RMCChatColor.RESET, RMCChatColor.BLACK));
+            s.append('\n').append(ToolsItem.print(fuel.getItemStack(), RMCChatColor.RESET, RMCChatColor.BLACK));
         }
 
         return s.toString();

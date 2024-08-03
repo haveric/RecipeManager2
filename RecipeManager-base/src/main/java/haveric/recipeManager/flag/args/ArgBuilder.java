@@ -102,11 +102,7 @@ public class ArgBuilder {
 
     public ArgBuilder result(ItemStack result) {
         if (result != null) {
-            if (result instanceof ItemResult) {
-                a.setResult((ItemResult) result);
-            } else {
-                a.setResult(new ItemResult(result));
-            }
+            a.setResult(new ItemResult(result));
         }
 
         return this;

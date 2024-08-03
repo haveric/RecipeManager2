@@ -8,6 +8,7 @@ import haveric.recipeManager.common.util.RMCUtil;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
+import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.MultiResultRecipe;
 import haveric.recipeManager.recipes.SingleResultRecipe;
 import haveric.recipeManager.recipes.anvil.AnvilRecipe;
@@ -220,11 +221,11 @@ public class RecipeCommand implements TabExecutor {
             if (recipe instanceof MultiResultRecipe) {
                 MultiResultRecipe r = (MultiResultRecipe) recipe;
 
-                return containsItem(r.getResults(), item, false);
+                return containsResult(r.getResults(), item, false);
             } else if (recipe instanceof SingleResultRecipe) {
                 SingleResultRecipe r = (SingleResultRecipe) recipe;
 
-                return containsItem(Collections.singletonList(r.getResult()), item, false);
+                return containsItem(Collections.singletonList(r.getResult().getItemStack()), item, false);
             }
         }
 
@@ -291,7 +292,18 @@ public class RecipeCommand implements TabExecutor {
         return false;
     }
 
-    private boolean containsItem(Collection<? extends ItemStack> items, ItemStack item, boolean ingredient) {
+    private boolean containsResult(Collection<ItemResult> items, ItemStack item, boolean ingredient) {
+        for (ItemResult result : items) {
+            ItemStack i = result.getItemStack();
+            if (i != null && i.getType() == item.getType() && (item.getDurability() == RMCVanilla.DATA_WILDCARD || i.getDurability() == item.getDurability()) && (ingredient || item.getAmount() == 1 || item.getAmount() == i.getAmount())) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private boolean containsItem(Collection<ItemStack> items, ItemStack item, boolean ingredient) {
         for (ItemStack i : items) {
             if (i != null && i.getType() == item.getType() && (item.getDurability() == RMCVanilla.DATA_WILDCARD || i.getDurability() == item.getDurability()) && (ingredient || item.getAmount() == 1 || item.getAmount() == i.getAmount())) {
                 return true;

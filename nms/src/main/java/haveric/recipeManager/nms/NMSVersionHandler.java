@@ -36,22 +36,17 @@ public class NMSVersionHandler {
             String serverVersion = getServerVersion();
 
             int minorVersion = getMinorVersion(serverVersion);
-            if (minorVersion > 19 || (minorVersion == 19 && getPatchVersion(serverVersion) >= 4)) {
+            int patchVersion = getPatchVersion(serverVersion);
+            if (minorVersion > 19 || (minorVersion == 19 && patchVersion >= 4)) {
                 toolsRecipe = new ToolsRecipeV1_19_4();
             } else if (minorVersion >= 16) {
                 toolsRecipe = new ToolsRecipeV1_16_1();
             } else if (minorVersion >= 14) {
                 toolsRecipe = new ToolsRecipeV1_14_R1();
+            } else if (minorVersion == 13 && patchVersion == 2) {
+                toolsRecipe = new ToolsRecipeV1_13_2();
             } else {
-                switch (serverVersion) {
-                    case "v1_13_R2":
-                        toolsRecipe = new ToolsRecipeV1_13_2();
-                        break;
-                    case "v1_12_R1":
-                    default:
-                        toolsRecipe = new ToolsRecipeOld();
-                        break;
-                }
+                toolsRecipe = new ToolsRecipeOld();
             }
         }
 
@@ -59,15 +54,16 @@ public class NMSVersionHandler {
     }
 
 
+    // Example return: "1.21-R0.1-SNAPSHOT"
     private static String getServerVersion() {
-        return Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+        return Bukkit.getServer().getBukkitVersion();
     }
 
     private static int getMinorVersion(String serverVersion) {
         int minorVersion = 0;
-        String[] versionSplit = serverVersion.split("_");
+        String[] versionSplit = serverVersion.split("-")[0].split("\\.");
 
-        if (versionSplit.length == 3) {
+        if (versionSplit.length > 1) {
             try {
                 minorVersion = Integer.parseInt(versionSplit[1]);
             } catch (NumberFormatException ignored) {}
@@ -78,9 +74,9 @@ public class NMSVersionHandler {
 
     private static int getPatchVersion(String serverVersion) {
         int patchVersion = 0;
-        String[] versionSplit = serverVersion.split("_");
+        String[] versionSplit = serverVersion.split("-")[0].split("\\.");
 
-        if (versionSplit.length == 3) {
+        if (versionSplit.length > 2) {
             try {
                 patchVersion = Integer.parseInt(versionSplit[2]);
             } catch (NumberFormatException ignored) {}

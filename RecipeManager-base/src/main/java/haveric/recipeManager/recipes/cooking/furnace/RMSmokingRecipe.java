@@ -49,7 +49,7 @@ public class RMSmokingRecipe extends RMBaseFurnaceRecipe1_13 {
         getFlags().sendPrepare(a, true);
         getResult().getFlags().sendPrepare(a, true);
 
-        SmokingRecipe bukkitRecipe = new SmokingRecipe(getNamespacedKey(), a.result(), getIngredientChoice(), experience, getCookTicks());
+        SmokingRecipe bukkitRecipe = new SmokingRecipe(getNamespacedKey(), a.result().getItemStack(), getIngredientChoice(), experience, getCookTicks());
         if (hasGroup()) {
             bukkitRecipe.setGroup(getGroup());
         }
