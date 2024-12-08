@@ -1,8 +1,9 @@
 ## Change log
 
 ### v2.32.0 (Coming soon)
-* REMOVED support for Minecraft 1.12 - 1.15
-* REMOVED FLAG: `SpawnEgg`
+* REMOVED support for Minecraft 1.12 - 1.17
+* REMOVED FLAG: `@SpawnEgg`
+* FIX: `@BlockPowered` for soul campfires
 * REMOVED: `@Summon`: `ocelot` option
 * NEW: `@Food` convertsto argument to change food once eaten
 * FIXED: 1.20.4-: `@IngredientCondition`, `@HoldItem` NoClassDefFoundError for ItemRarity
@@ -13,6 +14,14 @@
 * FIX: `@Summon`: `angry` option for Zombified Piglins
 * FIX: `@Summon`: `skeletonhorsetrappedticks` option
 * FIX: `@IngredientCondition` matching for `@CustomModelData`, `@MaxStackSize`, `@OminousBottleItem`, `@Rarity`
+* NEW FLAG: `@Damage`: Sets the damage/durability of an item
+  * The result shorthand `item:damage:amount` will automatically apply this flag, but will be overridden by a flag if it is also applied
+* NEW FLAG: 1.20.5+: `@MaxDamage`: Sets the max damage/durability of an item
+* REMOVED: Shorthand item/result options for name, lore, and enchants on items. Flags should be used instead
+* NEW `@IngredientCondition`, `@HoldItem` argument: `repaircost <amount>`
+* FIX: `@IngredientCondition` matching for `@CustomModelData`, `@MaxStackSize`, `@OminousBottleItem`, `@Rarity`
+* NEW: `@CustomModelData`, `@Damage`, `@MaxDamage`, `@MaxStackSize`, `@OminousBottleItem`, `@RepairCost`: Added condition support for ranges (min-max), comma separated values, and negative matching
+* NEW: `@DisplayName`, `@ItemName`, `@LocalizedName`, `@Rarity`: Added condition support for comma separated values and negative matching
 
 ### v2.31.0
 * REMOVED support for Minecraft 1.8 - 1.11
