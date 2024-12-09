@@ -96,7 +96,7 @@ public class Customization implements Cloneable {
     private boolean poweredCreeper = false;
     private Rabbit.Type rabbit = null;
     private boolean saddle = false;
-    private boolean shearedSheep = false;
+    private boolean sheared = false;
 
     private boolean skeletonHorseTrapped = false;
     private int skeletonHorseTrappedTicks = 0;
@@ -181,7 +181,7 @@ public class Customization implements Cloneable {
         poweredCreeper = c.poweredCreeper;
         rabbit = c.rabbit;
         saddle = c.saddle;
-        shearedSheep = c.shearedSheep;
+        sheared = c.sheared;
         skeletonHorseTrapped = c.skeletonHorseTrapped;
         skeletonHorseTrappedTicks = c.skeletonHorseTrappedTicks;
         spread = c.spread;
@@ -387,8 +387,12 @@ public class Customization implements Cloneable {
                 npc.setPlayerCreated(true);
             }
 
-            if (shearedSheep && ent instanceof Sheep npc) {
-                npc.setSheared(true);
+            if (sheared) {
+                if (ent instanceof Shearable shearable) {
+                    shearable.setSheared(true);
+                } else if (ent instanceof Sheep npc) {
+                    npc.setSheared(true);
+                }
             }
 
             if (color != null && ent instanceof Colorable npc) {
@@ -1112,13 +1116,8 @@ public class Customization implements Cloneable {
                     ErrorReporter.getInstance().warning("Flag " + flagType + " has 'saddle' argument with unknown value: " + lower);
                 }
             }
-        } else if (lower.equals("shearedsheep")) {
-            if (entityType != EntityType.SHEEP) {
-                ErrorReporter.getInstance().warning("Flag " + flagType + " has 'shearedsheep' on non-sheep entity!");
-                return false;
-            }
-
-            shearedSheep = true;
+        } else if (lower.startsWith("sheared")) {
+            sheared = true;
         } else if (lower.startsWith("spread")) {
             lower = lower.substring("spread".length()).trim();
 
@@ -1495,7 +1494,7 @@ public class Customization implements Cloneable {
         toHash += "poweredCreeper: " + poweredCreeper;
         toHash += "rabbit: " + rabbit.toString();
         toHash += "saddle: " + saddle;
-        toHash += "shearedSheep: " + shearedSheep;
+        toHash += "sheared: " + sheared;
         toHash += "skeletonHorseTrapped: " + skeletonHorseTrapped;
         toHash += "skeletonHorseTrappedTicks: " + skeletonHorseTrappedTicks;
         toHash += "spread: " + spread;

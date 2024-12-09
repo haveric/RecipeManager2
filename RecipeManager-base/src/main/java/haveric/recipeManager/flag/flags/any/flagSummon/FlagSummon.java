@@ -167,7 +167,7 @@ public class FlagSummon extends Flag {
             String.format(argFormat, "poweredcreeper", "makes creeper a powered one, only works for creepers."),
             String.format(argFormat, "rabbit <type>", "set the rabbit type, values: " + RMCUtil.collectionToString(Arrays.asList(Rabbit.Type.values())).toLowerCase()),
             String.format(argFormat, "saddle [mount]", "adds saddle on entity (forces animal to be adult), only works for pig and horse, optionally you can specify 'mount' to make crafter mount entity."),
-            String.format(argFormat, "shearedsheep", "sets the sheep as sheared, only works for sheep."),
+            String.format(argFormat, "sheared", "sets the entity as sheared."),
             String.format(argFormat, "skeletonhorsetrapped", "sets if the skeleton horse is trapped. When a player goes near the trapped horse, lightning will strike and convert it into a skeleton horseman."),
             String.format(argFormat, "skeletonhorsetrappedtime <ticks>", "sets the trapped time (in ticks) of the skeleton horse. Trap time is increased every tick if skeletonhorsetrapped is also set. The horse will despawn when ticks is greater than 18000."),
             String.format(argFormat, "spread <range>", "spawns entities spread within block range instead of on top of workbench or furnace. (WARNING: can be CPU intensive)"),

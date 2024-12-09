@@ -23,6 +23,8 @@
 * NEW: `@DisplayName`, `@ItemName`, `@LocalizedName`, `@Rarity`: Added condition support for comma separated values and negative matching
 * FIX: 1.21.1+: `@FireworkItem` max power increased to 255
 * FIX: 1.20.5+: New compost recipes will automatically be added and no longer require plugin updates
+* FIX: 1.21.0+: `@Summon`: Change `shearedsheep` to `sheared` to support bogged entities being shearable
+
 
 ### v2.31.0
 * REMOVED support for Minecraft 1.8 - 1.11
