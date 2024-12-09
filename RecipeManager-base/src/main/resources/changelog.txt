@@ -22,6 +22,8 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: `@IngredientCondition` matching for `@CustomModelData`, `@MaxStackSize`, `@OminousBottleItem`, `@Rarity`
 * NEW: `@CustomModelData`, `@Damage`, `@MaxDamage`, `@MaxStackSize`, `@OminousBottleItem`, `@RepairCost`: Added condition support for ranges (min-max), comma separated values, and negative matching
 * NEW: `@DisplayName`, `@ItemName`, `@LocalizedName`, `@Rarity`: Added condition support for comma separated values and negative matching
+* FIX: 1.21.1+: `@FireworkItem` max power increased to 255
+* FIX: 1.20.5+: New compost recipes will automatically be added and no longer require plugin updates
 
 ### v2.31.0
 * REMOVED support for Minecraft 1.8 - 1.11

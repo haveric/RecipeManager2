@@ -8,6 +8,7 @@ import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.recipes.FlaggableRecipeChoice;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsRecipeChoice;
 import org.bukkit.Color;
@@ -30,7 +31,8 @@ public class FlagFireworkItem extends Flag {
     protected String[] getArguments() {
         return new String[] {
             "{flag} effect <effect data>",
-            "{flag} power <0-127>", };
+            "{flag} power <0-" + maxPower + ">",
+        };
     }
 
     @Override
@@ -50,7 +52,7 @@ public class FlagFireworkItem extends Flag {
             "Effects can be listed in any order.",
             "Colors must be 3 numbers ranging from 0 to 255, basic RGB format.",
             "",
-            "The 'power <number 0-127>' value sets how long rocket will fly, each number is 0.5 seconds of flight, default 2, recommended max 4.",
+            "The 'power <number 0-" + maxPower + ">' value sets how long rocket will fly, each number is 0.5 seconds of flight, default 2, recommended max 4.",
             "",
             "Specific item: firework.", };
     }
@@ -64,10 +66,12 @@ public class FlagFireworkItem extends Flag {
     }
 
 
+    private int maxPower = 127;
     private int power = 2;
     private List<FireworkEffect> effects = new ArrayList<>();
 
     public FlagFireworkItem() {
+        init();
     }
 
     public FlagFireworkItem(FlagFireworkItem flag) {
@@ -75,6 +79,16 @@ public class FlagFireworkItem extends Flag {
         effects.addAll(flag.effects);
 
         power = flag.power;
+
+        init();
+    }
+
+    private void init() {
+        if (Supports.fireworkMetaIncreasedPower()) {
+            maxPower = 255;
+        } else {
+            maxPower = 127;
+        }
     }
 
     @Override
@@ -154,8 +168,8 @@ public class FlagFireworkItem extends Flag {
                 // TODO: Handle exception
             }
 
-            if (power < 0 || power > 127) {
-                return ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'power' argument: '" + value + "', it must be a number from 0 to 127.");
+            if (power < 0 || power > maxPower) {
+                return ErrorReporter.getInstance().error("Flag " + getFlagType() + " invalid 'power' argument: '" + value + "', it must be a number from 0 to " + maxPower + ".");
             }
         } else {
             ErrorReporter.getInstance().warning("Flag " + getFlagType() + " has unknown argument: " + value);

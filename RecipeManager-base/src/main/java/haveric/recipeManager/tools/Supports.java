@@ -23,6 +23,8 @@ public class Supports {
     static boolean playerProfile = false;
     static boolean basePotionType = false;
     static boolean shortGrassMaterial = false;
+    static boolean materialIsCompostable = false;
+    static boolean fireworkMetaIncreasedPower = false;
 
     public static void init() {
         checkItemFlagHideArmorTrimSupport();
@@ -33,6 +35,8 @@ public class Supports {
         checkPlayerProfile();
         checkBasePotionType();
         checkShortGrassMaterial();
+        checkMaterialIsCompostable();
+        checkFireworkMetaIncreasedPower();
     }
 
     // 1.18.1
@@ -135,6 +139,31 @@ public class Supports {
         }
     }
 
+    // 1.20.5
+    private static void checkMaterialIsCompostable() {
+        try {
+            Material material = Material.OAK_LOG;
+            @SuppressWarnings("unused")
+            boolean isCompostable = material.isCompostable();
+            materialIsCompostable = true;
+        } catch (NoSuchMethodError e) {
+            materialIsCompostable = false;
+        }
+    }
+
+    // 1.21.1
+    private static void checkFireworkMetaIncreasedPower() {
+        try {
+            ItemStack firework = new ItemStack(Material.FIREWORK_ROCKET);
+            FireworkMeta meta = (FireworkMeta) firework.getItemMeta();
+            @SuppressWarnings("unused")
+            boolean hasPower = meta.hasPower();
+            fireworkMetaIncreasedPower = true;
+        } catch (NoSuchMethodError e) {
+            fireworkMetaIncreasedPower = false;
+        }
+    }
+
     public static boolean itemFlagHideArmorTrim() {
         return itemFlagHideArmorTrim;
     }
@@ -164,5 +193,13 @@ public class Supports {
 
     public static boolean shortGrassMaterial() {
         return shortGrassMaterial;
+    }
+
+    public static boolean materialIsCompostable() {
+        return materialIsCompostable;
+    }
+
+    public static boolean fireworkMetaIncreasedPower() {
+        return fireworkMetaIncreasedPower;
     }
 }

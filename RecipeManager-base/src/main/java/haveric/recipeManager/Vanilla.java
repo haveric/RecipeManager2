@@ -369,6 +369,16 @@ public class Vanilla {
     }
 
     private static void initCompostRecipes() {
+        if (Supports.materialIsCompostable()) {
+            for (Material material : Material.values()) {
+                if (material.isCompostable()) {
+                    addCompostRecipe(material, material.getCompostChance() * 100);
+                }
+            }
+
+            return;
+        }
+
         addCompostRecipe(Material.BEETROOT_SEEDS, 30);
         addCompostRecipe(Material.DRIED_KELP, 30);
 
