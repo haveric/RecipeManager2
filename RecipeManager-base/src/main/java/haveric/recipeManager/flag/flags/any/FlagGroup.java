@@ -95,7 +95,7 @@ public class FlagGroup extends Flag {
 
         for (Entry<String, Boolean> e : groups.entrySet()) {
             if (allowed == e.getValue()) {
-                if (s.length() > 0) {
+                if (!s.isEmpty()) {
                     s.append(", ");
                 }
 

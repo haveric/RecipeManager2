@@ -6,7 +6,6 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.craft.CraftRecipe;
 import org.bukkit.Material;
-import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.Map;

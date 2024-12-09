@@ -285,7 +285,7 @@ public class FlagSummon extends Flag {
                 String original = split[n].trim();
 
                 if (!c.parseArgument(original)) {
-                    continue;
+                    continue; // TODO: This might be a bug as it does nothing
                 }
             }
         }

@@ -271,7 +271,7 @@ public class Conditions implements Cloneable {
         StringBuilder s = new StringBuilder();
 
         for (Entry<Short, Boolean> e : dataValues.entrySet()) {
-            if (s.length() > 0) {
+            if (!s.isEmpty()) {
                 s.append(", ");
             }
 
@@ -283,7 +283,7 @@ public class Conditions implements Cloneable {
         }
 
         for (Entry<Short, Boolean> e : dataBits.entrySet()) {
-            if (s.length() > 0) {
+            if (!s.isEmpty()) {
                 s.append(", ");
             }
 
@@ -445,7 +445,7 @@ public class Conditions implements Cloneable {
         StringBuilder s = new StringBuilder();
 
         for (Entry<Enchantment, Map<Integer, Boolean>> e : enchantMap.entrySet()) {
-            if (s.length() > 0) {
+            if (!s.isEmpty()) {
                 s.append("; ");
             }
 
@@ -775,7 +775,7 @@ public class Conditions implements Cloneable {
             }
         }
 
-        return conditionsMet == potionConditions.entrySet().size();
+        return conditionsMet == potionConditions.size();
     }
 
     public boolean hasPotionEffect() {
@@ -842,7 +842,7 @@ public class Conditions implements Cloneable {
             }
         }
 
-        return conditionsMet == potionEffectConditions.entrySet().size();
+        return conditionsMet == potionEffectConditions.size();
     }
     public boolean hasSuspiciousStewEffect() {
         return !suspiciousStewConditions.isEmpty();
@@ -908,7 +908,7 @@ public class Conditions implements Cloneable {
             }
         }
 
-        return conditionsMet == suspiciousStewConditions.entrySet().size();
+        return conditionsMet == suspiciousStewConditions.size();
     }
 
     public void addBannerPattern(PatternType pattern, DyeColor color) {
@@ -937,7 +937,7 @@ public class Conditions implements Cloneable {
             }
         }
 
-        return conditionsMet == bannerPatterns.entrySet().size();
+        return conditionsMet == bannerPatterns.size();
     }
 
     public boolean hasPotionType() {
@@ -1109,9 +1109,7 @@ public class Conditions implements Cloneable {
             if (hasPotion()) {
                 boolean failed = true;
 
-                if (meta instanceof PotionMeta) {
-                    PotionMeta potion = (PotionMeta) meta;
-
+                if (meta instanceof PotionMeta potion) {
                     if (checkPotion(potion)) {
                         failed = false;
                     }

@@ -39,9 +39,9 @@ public class FlagGameModeTest extends FlagBaseTest{
         FlagGameMode clone = flag.clone();
         assertTrue(clone.getGameModes().contains(GameMode.ADVENTURE));
         assertTrue(clone.getGameModes().contains(GameMode.SURVIVAL));
-        assertEquals(clone.getGameModes().size(), 2);
+        assertEquals(2, clone.getGameModes().size());
 
-        assertEquals(clone.getFailMessage(), "Recipe has failed");
+        assertEquals("Recipe has failed", clone.getFailMessage());
     }
 
     @Test
@@ -89,8 +89,8 @@ public class FlagGameModeTest extends FlagBaseTest{
                 assertNull(flag);
             } else if (resultType == Material.TROPICAL_FISH) {
                 assertTrue(flag.getGameModes().contains(GameMode.ADVENTURE));
-                assertEquals(flag.getGameModes().size(), 1);
-                assertEquals(flag.getFailMessage(), "fail");
+                assertEquals(1, flag.getGameModes().size());
+                assertEquals("fail", flag.getFailMessage());
             } else if (resultType == Material.COOKED_SALMON) {
                 assertNull(flag);
             } else if (resultType == Material.BRICK) {

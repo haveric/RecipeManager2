@@ -10,7 +10,7 @@ public class WordUtil {
         StringBuilder replaced = new StringBuilder(str.length());
 
         for (String word : words) {
-            if (replaced.length() > 0) {
+            if (!replaced.isEmpty()) {
                 replaced.append(" ");
             }
 

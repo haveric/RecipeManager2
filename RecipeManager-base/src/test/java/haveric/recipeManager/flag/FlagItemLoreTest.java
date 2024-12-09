@@ -58,11 +58,11 @@ public class FlagItemLoreTest extends FlagBaseTest {
                 if (resultType == Material.DIRT) {
                     assertTrue(lores.contains("One"));
                     assertTrue(lores.contains("Two"));
-                    assertEquals(lores.size(), 2);
+                    assertEquals(2, lores.size());
                 } else if (resultType == Material.COBBLESTONE) {
                     assertTrue(lores.contains("One"));
                     assertTrue(lores.contains("   Two   "));
-                    assertEquals(lores.size(), 2);
+                    assertEquals(2, lores.size());
                 }
             }
         }

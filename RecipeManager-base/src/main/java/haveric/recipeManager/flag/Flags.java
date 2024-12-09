@@ -29,7 +29,7 @@ public class Flags implements Cloneable {
         }
 
         String toReturn;
-        if (s.length() > 0) {
+        if (!s.isEmpty()) {
             toReturn =  s.toString();
         } else {
             toReturn = "empty";

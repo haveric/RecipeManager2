@@ -7,7 +7,6 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.cooking.furnace.RMFurnaceRecipe;
 import org.bukkit.Material;
 import org.bukkit.inventory.RecipeChoice;
-import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.List;

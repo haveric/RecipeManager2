@@ -214,7 +214,7 @@ public class Files {
 
         String[] category = new String[] { "Recipe", "Ingredient", "Result" };
 
-        int size = FlagFactory.getInstance().getFlags().values().size();
+        int size = FlagFactory.getInstance().getFlags().size();
 
         for (String c : category) {
             flags.put(c, new ArrayList<>(size));

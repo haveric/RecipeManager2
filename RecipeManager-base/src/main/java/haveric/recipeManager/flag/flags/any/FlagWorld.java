@@ -93,7 +93,7 @@ public class FlagWorld extends Flag {
 
         for (Entry<String, Boolean> e : worlds.entrySet()) {
             if (allowed == e.getValue()) {
-                if (s.length() > 0) {
+                if (!s.isEmpty()) {
                     s.append(", ");
                 }
 
@@ -118,7 +118,7 @@ public class FlagWorld extends Flag {
 
         for (Entry<String, Boolean> e : worldsPartial.entrySet()) {
             if (allowed == e.getValue()) {
-                if (s.length() > 0) {
+                if (!s.isEmpty()) {
                     s.append(", ");
                 }
 

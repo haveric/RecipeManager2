@@ -95,7 +95,7 @@ public class FlagBiome extends Flag {
 
         for (Entry<Biome, Boolean> e : biomes.entrySet()) {
             if (allowed == e.getValue()) {
-                if (s.length() > 0) {
+                if (!s.isEmpty()) {
                     s.append(", ");
                 }
 

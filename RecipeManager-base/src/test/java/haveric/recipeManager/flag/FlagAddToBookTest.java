@@ -59,7 +59,7 @@ public class FlagAddToBookTest extends FlagBaseTest {
         }
 
         Map<String, RecipeBook> books = RecipeBooks.getInstance().getBooks();
-        assertEquals(2, books.entrySet().size());
+        assertEquals(2, books.size());
 
         RecipeBook bookOne = RecipeBooks.getInstance().getBook("random stuff");
         assertEquals("Random Stuff", bookOne.getTitle());

@@ -26,7 +26,7 @@ public class TestLastChangedVersions {
         YamlConfiguration yamlConfig = YamlConfiguration.loadConfiguration(pluginFile);
         String version = yamlConfig.getString("lastchanged");
 
-        assertEquals(version, Files.LASTCHANGED_CONFIG);
+        assertEquals(Files.LASTCHANGED_CONFIG, version);
     }
 
     @Test
@@ -35,7 +35,7 @@ public class TestLastChangedVersions {
         YamlConfiguration yamlConfig = YamlConfiguration.loadConfiguration(pluginFile);
         String version = yamlConfig.getString("lastchanged");
 
-        assertEquals(version, Files.LASTCHANGED_MESSAGES);
+        assertEquals(Files.LASTCHANGED_MESSAGES, version);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class TestLastChangedVersions {
         YamlConfiguration yamlConfig = YamlConfiguration.loadConfiguration(pluginFile);
         String version = yamlConfig.getString("lastchanged");
 
-        assertEquals(version, Files.LASTCHANGED_CHOICE_ALIASES);
+        assertEquals(Files.LASTCHANGED_CHOICE_ALIASES, version);
     }
 
     @Test
@@ -53,7 +53,7 @@ public class TestLastChangedVersions {
         YamlConfiguration yamlConfig = YamlConfiguration.loadConfiguration(pluginFile);
         String version = yamlConfig.getString("lastchanged");
 
-        assertEquals(version, Files.LASTCHANGED_ITEM_DATAS);
+        assertEquals(Files.LASTCHANGED_ITEM_DATAS, version);
     }
 
     @Test
@@ -62,6 +62,6 @@ public class TestLastChangedVersions {
         YamlConfiguration yamlConfig = YamlConfiguration.loadConfiguration(pluginFile);
         String version = yamlConfig.getString("lastchanged");
 
-        assertEquals(version, Files.LASTCHANGED_ITEM_ALIASES);
+        assertEquals(Files.LASTCHANGED_ITEM_ALIASES, version);
     }
 }

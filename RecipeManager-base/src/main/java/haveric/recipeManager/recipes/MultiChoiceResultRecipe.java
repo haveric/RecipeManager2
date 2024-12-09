@@ -73,7 +73,7 @@ public abstract class MultiChoiceResultRecipe extends BaseRecipe {
     }
 
     public void setIngredientsMap(Map<Character, RecipeChoice> newIngredients) {
-        maxIngredients = newIngredients.entrySet().size();
+        maxIngredients = newIngredients.size();
         validChars.addAll(newIngredients.keySet());
 
         ingredients.clear();

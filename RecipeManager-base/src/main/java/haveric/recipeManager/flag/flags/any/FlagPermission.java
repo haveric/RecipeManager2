@@ -91,7 +91,7 @@ public class FlagPermission extends Flag {
 
         for (Entry<String, Boolean> e : permissions.entrySet()) {
             if (allowed == e.getValue()) {
-                if (s.length() > 0) {
+                if (!s.isEmpty()) {
                     s.append(", ");
                 }
 
