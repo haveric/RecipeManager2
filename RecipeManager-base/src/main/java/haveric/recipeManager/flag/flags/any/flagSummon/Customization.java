@@ -322,7 +322,12 @@ public class Customization implements Cloneable {
                 ent.setHealth(hp);
 
                 if (maxHp > 0) {
-                    ent.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(maxHp);
+                    if (!Attribute.class.isEnum()) {
+                        ent.getAttribute(Attribute.MAX_HEALTH).setBaseValue(maxHp);
+                    } else {
+
+                        ent.getAttribute(Attribute.valueOf("GENERIC_MAX_HEALTH")).setBaseValue(maxHp);
+                    }
                 }
             }
 

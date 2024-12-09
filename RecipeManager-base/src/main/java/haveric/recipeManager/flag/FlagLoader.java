@@ -117,7 +117,6 @@ public class FlagLoader {
         loadFlag(FlagType.FIREWORK_STAR_ITEM, new FlagFireworkStarItem(), APPLIED_TO_ITEM, "fireworkstar", "fireworkchargeitem", "fireworkcharge", "fireworkeffect");
         if (Version.has1_20_5Support()) {
             loadFlag(FlagType.FOOD, new FlagFood(), APPLIED_TO_ITEM);
-            loadFlag(FlagType.FOOD_POTION_EFFECT, new FlagFoodPotionEffect(), APPLIED_TO_ITEM, "foodeffect", "foodpotion");
         }
         loadFlag(FlagType.HIDE, new FlagHide(), APPLIED_TO_ITEM);
         if (Version.has1_20_5Support()) {

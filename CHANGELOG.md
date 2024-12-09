@@ -5,7 +5,6 @@
 * REMOVED FLAG: `@SpawnEgg`
 * FIX: `@BlockPowered` for soul campfires
 * REMOVED: `@Summon`: `ocelot` option
-* NEW: `@Food` convertsto argument to change food once eaten
 * FIXED: 1.20.4-: `@IngredientCondition`, `@HoldItem` NoClassDefFoundError for ItemRarity
 * FIXED: 1.20.1-: `@PotionItem` NoClassDefFoundError for getBasePotionType
 * RE-ADD: 1.20.1-: `@PotionItem` arguments: `level`, `extended`

@@ -10,7 +10,7 @@ import haveric.recipeManager.flag.args.Args;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -41,13 +41,25 @@ public class FlagBiome extends Flag {
 
     @Override
     protected String[] getExamples() {
-        return new String[]{
-            "{flag} " + Biome.JUNGLE.name().toLowerCase() + ", " + Biome.BAMBOO_JUNGLE.name().toLowerCase() + ", " + Biome.SPARSE_JUNGLE.name().toLowerCase(),
-            "{flag} !" + Biome.DRIPSTONE_CAVES.name().toLowerCase() + ", !" + Biome.LUSH_CAVES.name().toLowerCase()
-        };
+        try {
+            if (!Biome.class.isEnum()) {
+                return new String[]{
+                    "{flag} " + Biome.JUNGLE.getKey().getKey().toLowerCase() + ", " + Biome.BAMBOO_JUNGLE.getKey().getKey().toLowerCase() + ", " + Biome.SPARSE_JUNGLE.getKey().getKey().toLowerCase(),
+                    "{flag} !" + Biome.DRIPSTONE_CAVES.getKey().getKey().toLowerCase() + ", !" + Biome.LUSH_CAVES.getKey().getKey().toLowerCase()
+                };
+            } else {
+                return new String[]{
+                    "{flag} " + Biome.JUNGLE.name().toLowerCase() + ", " + Biome.BAMBOO_JUNGLE.name().toLowerCase() + ", " + Biome.SPARSE_JUNGLE.name().toLowerCase(),
+                    "{flag} !" + Biome.DRIPSTONE_CAVES.name().toLowerCase() + ", !" + Biome.LUSH_CAVES.name().toLowerCase()
+                };
+            }
+        } catch (NoClassDefFoundError e) {
+            // Skip for tests
+            return new String[]{""};
+        }
     }
 
-    private Map<Biome, Boolean> biomes = new EnumMap<>(Biome.class);
+    private Map<Biome, Boolean> biomes = new HashMap<>();
     private String failMessage;
 
     public FlagBiome() {
@@ -68,7 +80,7 @@ public class FlagBiome extends Flag {
         return biomes;
     }
 
-    public void setBiomes(EnumMap<Biome, Boolean> newBiomes) {
+    public void setBiomes(Map<Biome, Boolean> newBiomes) {
         Preconditions.checkNotNull(newBiomes, "The 'biomes' argument must not be null!");
 
         biomes = newBiomes;

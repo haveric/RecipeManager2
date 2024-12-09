@@ -193,6 +193,21 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
     }
 
     @Override
+    public boolean hasCustomName() {
+        return false;
+    }
+
+    @Override
+    public String getCustomName() {
+        return "";
+    }
+
+    @Override
+    public void setCustomName(String s) {
+
+    }
+
+    @Override
     public boolean equalsCommon(TestMetaItem meta) {
         if (!super.equalsCommon(meta)) {
             return false;

@@ -2,6 +2,7 @@ package haveric.recipeManager.flag.flags.result.meta;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
+import com.google.common.collect.ObjectArrays;
 import haveric.recipeManager.ErrorReporter;
 import haveric.recipeManager.Files;
 import haveric.recipeManager.common.util.RMCUtil;
@@ -35,21 +36,32 @@ public class FlagItemAttribute extends Flag {
 
     @Override
     protected String[] getDescription() {
-        return new String[] {
-                "Adds an attribute, such as max health to the result",
-                "",
-                "<attribute> The attribute you want to modify.",
-                "  Values: all, or see: " + Files.getNameIndexHashLink("itemattribute"),
-                "    Values starting with 'GENERIC_' such as " + Attribute.GENERIC_MAX_HEALTH + " can be used without 'GENERIC_' for ease of use. max_health would be valid in this case.",
-                "",
-                "[modifier] can be x for multiplication otherwise it will use addition",
-                "<num> is the amount you want the attribute modified by. If you're not using multiplication as a modifier, the value with be added/subtracted.",
-                "  Note that with multiplication, 1 = 100%. Values are expected in decimal/double format: '1.5'.",
-                "",
-                "The <slot> argument is the slot you want the attribute to affect. Default is " + EquipmentSlot.HAND + ".",
-                "  Values: all, " + RMCUtil.collectionToString(Arrays.asList(EquipmentSlot.values())).toLowerCase(),
-                "    'all' will let the attribute affect all of the equipment slots",
-                "    offhand can be used instead of off_hand as well.", };
+        String[] description = new String[]{
+            "Adds an attribute, such as max health to the result",
+            "",
+            "<attribute> The attribute you want to modify.",
+            "  Values: all, or see: " + Files.getNameIndexHashLink("itemattribute"),
+        };
+
+        if (Attribute.class.isEnum()) {
+            description = ObjectArrays.concat(description, new String[]{
+                "    Values starting with 'GENERIC_' such as " + Attribute.valueOf("GENERIC_MAX_HEALTH") + " can be used without 'GENERIC_' for ease of use. max_health would be valid in this case.",
+            }, String.class);
+        }
+
+        description = ObjectArrays.concat(description, new String[]{
+            "",
+            "[modifier] can be x for multiplication otherwise it will use addition",
+            "<num> is the amount you want the attribute modified by. If you're not using multiplication as a modifier, the value with be added/subtracted.",
+            "  Note that with multiplication, 1 = 100%. Values are expected in decimal/double format: '1.5'.",
+            "",
+            "The <slot> argument is the slot you want the attribute to affect. Default is " + EquipmentSlot.HAND + ".",
+            "  Values: all, " + RMCUtil.collectionToString(Arrays.asList(EquipmentSlot.values())).toLowerCase(),
+            "    'all' will let the attribute affect all of the equipment slots",
+            "    offhand can be used instead of off_hand as well.",
+        }, String.class);
+
+        return description;
     }
 
     @Override

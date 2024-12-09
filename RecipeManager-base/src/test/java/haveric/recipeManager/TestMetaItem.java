@@ -4,22 +4,26 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Multimap;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.damage.DamageType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemRarity;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockDataMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
-import org.bukkit.inventory.meta.components.FoodComponent;
-import org.bukkit.inventory.meta.components.JukeboxPlayableComponent;
-import org.bukkit.inventory.meta.components.ToolComponent;
+import org.bukkit.inventory.meta.components.*;
 import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.persistence.PersistentDataContainer;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 
@@ -139,9 +143,35 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
         return customModelData;
     }
 
+    @NotNull
+    @Override
+    public CustomModelDataComponent getCustomModelDataComponent() {
+        return null;
+    }
+
     @Override
     public void setCustomModelData(Integer data) {
         this.customModelData = data;
+    }
+
+    @Override
+    public void setCustomModelDataComponent(@Nullable CustomModelDataComponent customModelDataComponent) {
+
+    }
+
+    @Override
+    public boolean hasEnchantable() {
+        return false;
+    }
+
+    @Override
+    public int getEnchantable() {
+        return 0;
+    }
+
+    @Override
+    public void setEnchantable(Integer integer) {
+
     }
 
     @Override
@@ -251,6 +281,36 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     }
 
     @Override
+    public boolean hasTooltipStyle() {
+        return false;
+    }
+
+    @Override
+    public NamespacedKey getTooltipStyle() {
+        return null;
+    }
+
+    @Override
+    public void setTooltipStyle(NamespacedKey namespacedKey) {
+
+    }
+
+    @Override
+    public boolean hasItemModel() {
+        return false;
+    }
+
+    @Override
+    public NamespacedKey getItemModel() {
+        return null;
+    }
+
+    @Override
+    public void setItemModel(NamespacedKey namespacedKey) {
+
+    }
+
+    @Override
     public boolean hasDamage() {
         return damage > 0;
     }
@@ -350,12 +410,37 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     }
 
     @Override
+    public boolean isGlider() {
+        return false;
+    }
+
+    @Override
+    public void setGlider(boolean b) {
+
+    }
+
+    @Override
     public boolean isFireResistant() {
         return false;
     }
 
     @Override
     public void setFireResistant(boolean b) {
+
+    }
+
+    @Override
+    public boolean hasDamageResistant() {
+        return false;
+    }
+
+    @Override
+    public Tag<DamageType> getDamageResistant() {
+        return null;
+    }
+
+    @Override
+    public void setDamageResistant(Tag<DamageType> tag) {
 
     }
 
@@ -390,6 +475,36 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     }
 
     @Override
+    public boolean hasUseRemainder() {
+        return false;
+    }
+
+    @Override
+    public ItemStack getUseRemainder() {
+        return null;
+    }
+
+    @Override
+    public void setUseRemainder(ItemStack itemStack) {
+
+    }
+
+    @Override
+    public boolean hasUseCooldown() {
+        return false;
+    }
+
+    @Override
+    public UseCooldownComponent getUseCooldown() {
+        return null;
+    }
+
+    @Override
+    public void setUseCooldown(UseCooldownComponent useCooldownComponent) {
+
+    }
+
+    @Override
     public boolean hasFood() {
         return false;
     }
@@ -416,6 +531,21 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
 
     @Override
     public void setTool(ToolComponent toolComponent) {
+
+    }
+
+    @Override
+    public boolean hasEquippable() {
+        return false;
+    }
+
+    @Override
+    public EquippableComponent getEquippable() {
+        return null;
+    }
+
+    @Override
+    public void setEquippable(EquippableComponent equippableComponent) {
 
     }
 

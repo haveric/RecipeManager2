@@ -5,6 +5,7 @@ import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.block.Biome;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.damage.DamageEffect;
 import org.bukkit.damage.DamageSource;
@@ -143,6 +144,11 @@ public class TestUnsafeValues implements UnsafeValues {
 
     @Override
     public <B extends Keyed> B get(Registry<B> registry, NamespacedKey namespacedKey) {
+        return null;
+    }
+
+    @Override
+    public Biome getCustomBiome() {
         return null;
     }
 }

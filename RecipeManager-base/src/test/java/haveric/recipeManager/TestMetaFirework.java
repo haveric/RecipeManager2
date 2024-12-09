@@ -88,7 +88,8 @@ public class TestMetaFirework extends TestMetaItem implements FireworkMeta {
         return  !(hasEffects() || hasPower());
     }
 
-    boolean hasPower() {
+    @Override
+    public boolean hasPower() {
         return power != 0;
     }
 

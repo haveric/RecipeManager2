@@ -69,7 +69,6 @@ public class FlagType {
     public static final String FIREWORK_ITEM = "@fireworkitem";
     public static final String FIREWORK_STAR_ITEM = "@fireworkstaritem";
     public static final String FOOD = "@food";
-    public static final String FOOD_POTION_EFFECT = "@foodpotioneffect";
     public static final String GET_RECIPE_BOOK = "@getrecipebook";
     public static final String HIDE = "@hide";
     public static final String HIDE_TOOLTIP = "@hidetooltip";
