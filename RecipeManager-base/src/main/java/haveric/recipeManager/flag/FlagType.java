@@ -89,4 +89,5 @@ public class FlagType {
     public static final String STORE_ENCHANTMENT = "@storeenchantment";
     public static final String SUSPICIOUS_STEW_ITEM = "@suspiciousstewitem";
     public static final String TROPICAL_FISH_BUCKET_ITEM = "@tropicalfishbucketitem";
+    public static final String USE_COOLDOWN = "@usecooldown";
 }

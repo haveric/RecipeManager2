@@ -15,6 +15,7 @@ import haveric.recipeManager.flag.flags.result.applyEnchantment.FlagApplyEnchant
 import haveric.recipeManager.flag.flags.result.applyEnchantment.FlagStoreEnchantment;
 import haveric.recipeManager.flag.flags.result.meta.*;
 import haveric.recipeManager.messages.MessageSender;
+import haveric.recipeManager.tools.Supports;
 import haveric.recipeManager.tools.Version;
 import org.bukkit.ChatColor;
 
@@ -146,6 +147,9 @@ public class FlagLoader {
         loadFlag(FlagType.STORE_ENCHANTMENT, new FlagStoreEnchantment(), FlagBit.RESULT | FlagBit.NO_VALUE_REQUIRED | FlagBit.NO_DELAY, "storeenchant", "storeenchantments", "storeenchants");
         loadFlag(FlagType.SUSPICIOUS_STEW_ITEM, new FlagSuspiciousStewItem(), APPLIED_TO_ITEM, "suspicioussoupitem", "suspiciousstew", "suspicioussoup");
         loadFlag(FlagType.TROPICAL_FISH_BUCKET_ITEM, new FlagTropicalFishBucketItem(), APPLIED_TO_ITEM, "tropicalfishbucket", "fishbucket");
+        if (Supports.supports1_21_2()) {
+            loadFlag(FlagType.USE_COOLDOWN, new FlagUseCooldown(), APPLIED_TO_ITEM);
+        }
     }
 
     public void loadFlag(String mainAlias, Flag newFlag, String aliases) {
