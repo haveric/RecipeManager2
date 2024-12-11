@@ -40,7 +40,8 @@ public class RMSmithingRecipeParser extends BaseRecipeParser {
 
             if (lineChars.length() == 1 && (ingredientChar == 'a' || ingredientChar == 'b' || ingredientChar == 't')) {
                 RecipeChoice choice = Tools.parseRecipeChoice(line.substring(2), ParseBit.NONE);
-                if (choice == null || choice instanceof AirChoice) {
+
+                if (!Supports.supports1_21_2() && choice == null || choice instanceof AirChoice) {
                     return false;
                 }
 
@@ -74,7 +75,7 @@ public class RMSmithingRecipeParser extends BaseRecipeParser {
 
                 if (Supports.experimental1_20() && numIngredients == 3) {
                     RecipeChoice templateChoice = Tools.parseRecipeChoice(ingredientsRaw[ingredient], ParseBit.NO_WARNINGS);
-                    if (templateChoice == null) {
+                    if (!Supports.supports1_21_2() && templateChoice == null || templateChoice instanceof AirChoice) {
                         return false;
                     }
 
@@ -83,7 +84,7 @@ public class RMSmithingRecipeParser extends BaseRecipeParser {
                 }
 
                 RecipeChoice primaryChoice = Tools.parseRecipeChoice(ingredientsRaw[ingredient], ParseBit.NO_WARNINGS);
-                if (primaryChoice == null) {
+                if (!Supports.supports1_21_2() && primaryChoice == null || primaryChoice instanceof AirChoice) {
                     return false;
                 }
 
@@ -92,7 +93,7 @@ public class RMSmithingRecipeParser extends BaseRecipeParser {
 
                 if ((Supports.experimental1_20() && numIngredients > 2) || (!Supports.experimental1_20() && numIngredients > 1)) {
                     RecipeChoice secondaryChoice = Tools.parseRecipeChoice(ingredientsRaw[ingredient], ParseBit.NO_WARNINGS);
-                    if (secondaryChoice == null) {
+                    if (!Supports.supports1_21_2() && secondaryChoice == null || secondaryChoice instanceof AirChoice) {
                         return false;
                     }
 

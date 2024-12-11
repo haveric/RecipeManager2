@@ -3,6 +3,7 @@ package haveric.recipeManager.tools;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.event.block.CampfireStartEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -27,6 +28,7 @@ public class Supports {
     static boolean shortGrassMaterial = false;
     static boolean materialIsCompostable = false;
     static boolean fireworkMetaIncreasedPower = false;
+    static boolean supports1_21_2 = false;
 
     public static void init() {
         checkItemFlagHideArmorTrimSupport();
@@ -39,6 +41,7 @@ public class Supports {
         checkShortGrassMaterial();
         checkMaterialIsCompostable();
         checkFireworkMetaIncreasedPower();
+        checkSupports1_21_2();
     }
 
     // 1.18.1
@@ -166,6 +169,11 @@ public class Supports {
         }
     }
 
+    // 1.21.2
+    private static void checkSupports1_21_2() {
+        supports1_21_2 = !Attribute.class.isEnum();
+    }
+
     public static boolean itemFlagHideArmorTrim() {
         return itemFlagHideArmorTrim;
     }
@@ -203,5 +211,9 @@ public class Supports {
 
     public static boolean fireworkMetaIncreasedPower() {
         return fireworkMetaIncreasedPower;
+    }
+
+    public static boolean supports1_21_2() {
+        return supports1_21_2;
     }
 }
