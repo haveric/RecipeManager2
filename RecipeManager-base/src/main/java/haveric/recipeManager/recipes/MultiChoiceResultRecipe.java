@@ -292,13 +292,12 @@ public abstract class MultiChoiceResultRecipe extends BaseRecipe {
     public List<String> getIndexes() {
         List<String> indexString = new ArrayList<>();
 
-        boolean first = true;
         int index;
         for (RecipeChoice choice : ingredients.values()) {
             index = 0;
             if (choice instanceof RecipeChoice.MaterialChoice) {
                 for (Material material : ((RecipeChoice.MaterialChoice) choice).getChoices()) {
-                    if (first) {
+                    if (indexString.isEmpty()) {
                         indexString.add(material.toString());
                     } else {
                         indexString.set(index, indexString.get(index) + "-" + material.toString());
@@ -308,7 +307,7 @@ public abstract class MultiChoiceResultRecipe extends BaseRecipe {
                 }
             } else if (choice instanceof RecipeChoice.ExactChoice) {
                 for (ItemStack item : ((RecipeChoice.ExactChoice) choice).getChoices()) {
-                    if (first) {
+                    if (indexString.isEmpty()) {
                         indexString.add(String.valueOf(item.getType()));
                     } else {
                         indexString.set(index, indexString.get(index) + "-" + item.getType());
@@ -317,8 +316,6 @@ public abstract class MultiChoiceResultRecipe extends BaseRecipe {
                     index++;
                 }
             }
-
-            first = false;
         }
 
         return indexString;

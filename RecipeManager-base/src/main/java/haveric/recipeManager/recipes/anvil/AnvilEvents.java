@@ -5,9 +5,9 @@ import haveric.recipeManager.Recipes;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.args.Args;
-import haveric.recipeManager.flag.flags.any.meta.FlagDisplayName;
 import haveric.recipeManager.flag.flags.any.FlagModLevel;
 import haveric.recipeManager.flag.flags.any.FlagNeedLevel;
+import haveric.recipeManager.flag.flags.any.meta.FlagDisplayName;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
 import haveric.recipeManager.recipes.BaseRecipe;
@@ -15,6 +15,7 @@ import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.anvil.data.Anvil;
 import haveric.recipeManager.recipes.anvil.data.Anvils;
+import haveric.recipeManager.tools.InventoryCompatibilityUtil;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Bukkit;
@@ -63,9 +64,8 @@ public class AnvilEvents extends BaseRecipeEvents {
 
             if (location != null) {
                 Block block = location.getBlock();
-                InventoryView view = event.getView();
-
-                Player player = (Player) view.getPlayer();
+                InventoryView view = ((InventoryEvent) event).getView(); // TODO: Remove InventoryEvent cast once 1.20 support is dropped
+                Player player = (Player) InventoryCompatibilityUtil.getPlayer(event);
 
                 Args a = Args.create().player(player).inventoryView(view).location(block.getLocation()).recipe(recipe).build();
                 ItemResult result = recipe.getDisplayResult(a);
@@ -107,8 +107,7 @@ public class AnvilEvents extends BaseRecipeEvents {
                 Anvils.add(player, recipe, ingredients, result, renameText);
             }
         } else {
-            InventoryView view = event.getView();
-            Player player = (Player) view.getPlayer();
+            Player player = (Player) InventoryCompatibilityUtil.getPlayer(event);
 
             Anvils.remove(player);
             String renameText = inventory.getRenameText();

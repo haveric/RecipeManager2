@@ -9,6 +9,7 @@ import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.brew.data.BrewingStandData;
 import haveric.recipeManager.recipes.brew.data.BrewingStands;
+import haveric.recipeManager.tools.InventoryCompatibilityUtil;
 import haveric.recipeManager.tools.ToolsInventory;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Location;
@@ -75,7 +76,7 @@ public class BrewEvents extends BaseRecipeEvents {
             InventoryHolder holder = inv.getHolder();
 
             if (inv instanceof BrewerInventory brewerInventory && holder instanceof BrewingStand) {
-                Inventory bottomInventory = event.getView().getBottomInventory();
+                Inventory bottomInventory = InventoryCompatibilityUtil.getBottomInventory(event);
 
                 Set<Integer> rawSlots = event.getRawSlots();
                 ItemStack cursor = event.getOldCursor();
@@ -135,7 +136,7 @@ public class BrewEvents extends BaseRecipeEvents {
                         }
 
                         if (clickType == ClickType.NUMBER_KEY) {
-                            Inventory bottomInventory = event.getView().getBottomInventory();
+                            Inventory bottomInventory = InventoryCompatibilityUtil.getBottomInventory(event);
                             int hotbarButton = event.getHotbarButton();
                             ItemStack item = bottomInventory.getItem(hotbarButton);
                             if (item != null) {
@@ -178,7 +179,7 @@ public class BrewEvents extends BaseRecipeEvents {
                             if (currentItem != null) {
                                 material = currentItem.getType();
 
-                                Inventory bottomInventory = event.getView().getBottomInventory();
+                                Inventory bottomInventory = InventoryCompatibilityUtil.getBottomInventory(event);
                                 if (BrewInventoryUtil.isIngredient(material)) {
                                     event.setCancelled(true);
                                     ToolsInventory.simulateShiftClick(bottomInventory,brewerInventory, event.getSlot(), 64, 3);

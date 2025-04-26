@@ -8,6 +8,7 @@ import haveric.recipeManager.flag.args.Args;
 import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.messages.SoundNotifier;
+import haveric.recipeManager.tools.InventoryCompatibilityUtil;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsItem;
 import haveric.recipeManager.tools.Version;
@@ -29,7 +30,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.CraftingInventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.Recipe;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -54,8 +54,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 return; // event was cancelled by some other plugin
             }
 
-            InventoryView view = event.getView();
-            Player player = (Player) view.getPlayer();
+            Player player = (Player) InventoryCompatibilityUtil.getPlayer(event);
 
             if (RecipeManager.getPlugin() != null) { // Needed for tests
                 if (!RecipeManager.getPlugin().canCraft(player)) {
@@ -93,7 +92,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 return; // not a custom recipe or recipe not found, no need to move on
             }
 
-            Args a = Args.create().player(player).inventoryView(view).location(location).recipe(recipe).build();
+            Args a = Args.create().player(player).inventoryView(event.getView()).location(location).recipe(recipe).build();
 
             result = recipe.getDisplayResult(a);
 
@@ -137,8 +136,9 @@ public class WorkbenchEvents extends BaseRecipeEvents {
             }
 
             CommandSender sender;
-            if (event.getView() != null && event.getView().getPlayer() instanceof Player) {
-                sender = event.getView().getPlayer();
+            HumanEntity humanEntity = InventoryCompatibilityUtil.getPlayer(event);
+            if (humanEntity instanceof Player) {
+                sender = humanEntity;
             } else {
                 sender = null;
             }
@@ -334,8 +334,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 result = new ItemResult(inv.getResult());
             }
 
-            InventoryView view = event.getView();
-            final Player player = (Player) view.getPlayer();
+            final Player player = (Player) InventoryCompatibilityUtil.getPlayer(event);
 
             Location location = Workbenches.get(player);
             if (!event.isShiftClick() && result == null) {
@@ -350,7 +349,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 return;
             }
 
-            Args a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).build();
+            Args a = Args.create().player(player).inventoryView(event.getView()).recipe(recipe).location(location).build();
 
             if (!recipe.checkFlags(a)) {
                 SoundNotifier.sendDenySound(player, location);
@@ -385,7 +384,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
 
             int times = craftResult(event, inv, result); // craft the result
             if (result != null) {
-                a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).result(result).build();
+                a = Args.create().player(player).inventoryView(event.getView()).recipe(recipe).location(location).result(result).build();
 
                 ItemStack[] originalMatrix = inv.getMatrix().clone();
                 boolean firstRun = true;
@@ -586,8 +585,9 @@ public class WorkbenchEvents extends BaseRecipeEvents {
         } catch (Throwable e) {
             event.setCancelled(true);
             CommandSender sender;
-            if (event.getView() != null && event.getView().getPlayer() instanceof Player) {
-                sender = event.getView().getPlayer();
+            HumanEntity humanEntity = InventoryCompatibilityUtil.getPlayer(event);
+            if (humanEntity instanceof Player) {
+                sender = humanEntity;
             } else {
                 sender = null;
             }
@@ -616,7 +616,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
     public void inventoryClose(InventoryCloseEvent event) {
         HumanEntity human = event.getPlayer();
 
-        if (event.getView().getType() == InventoryType.WORKBENCH) {
+        if (InventoryCompatibilityUtil.getType(event) == InventoryType.WORKBENCH) {
             Workbenches.remove(human);
         }
     }

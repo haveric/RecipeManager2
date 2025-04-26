@@ -13,6 +13,7 @@ import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.BaseRecipeEvents;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.recipes.grindstone.data.Grindstones;
+import haveric.recipeManager.tools.InventoryCompatibilityUtil;
 import haveric.recipeManager.tools.Tools;
 import haveric.recipeManager.tools.ToolsInventory;
 import haveric.recipeManager.tools.ToolsItem;
@@ -120,7 +121,7 @@ public class GrindstoneEvents extends BaseRecipeEvents {
                     } else if (rawSlot == 0 || rawSlot == 1) {
                         if (clickType == ClickType.NUMBER_KEY) {
                             event.setCancelled(true);
-                            ToolsInventory.simulateHotbarSwap(grindstoneInventory, rawSlot, event.getView().getBottomInventory(), event.getHotbarButton());
+                            ToolsInventory.simulateHotbarSwap(grindstoneInventory, rawSlot, InventoryCompatibilityUtil.getBottomInventory(event), event.getHotbarButton());
                         } else if (clickType != ClickType.SHIFT_LEFT && clickType != ClickType.SHIFT_RIGHT && clickType != ClickType.DOUBLE_CLICK) {
                             event.setCancelled(true);
                             ToolsInventory.simulateDefaultClick(player, grindstoneInventory, rawSlot, clickType);

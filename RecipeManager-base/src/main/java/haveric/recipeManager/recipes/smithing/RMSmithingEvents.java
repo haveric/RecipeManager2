@@ -495,7 +495,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                     if (rawSlot >= 0 && rawSlot < smithingTableInventory.getSize() - 1) {
                         if (clickType == ClickType.NUMBER_KEY) {
                             event.setCancelled(true);
-                            ToolsInventory.simulateHotbarSwap(smithingTableInventory, rawSlot, event.getView().getBottomInventory(), event.getHotbarButton());
+                            ToolsInventory.simulateHotbarSwap(smithingTableInventory, rawSlot, InventoryCompatibilityUtil.getBottomInventory(event), event.getHotbarButton());
                         } else if (clickType != ClickType.SHIFT_LEFT && clickType != ClickType.SHIFT_RIGHT && clickType != ClickType.DOUBLE_CLICK) {
                             event.setCancelled(true);
                             ToolsInventory.simulateDefaultClick(player, smithingTableInventory, rawSlot, clickType);
