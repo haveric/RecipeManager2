@@ -1,7 +1,7 @@
 name: RecipeManager
 description: Add, edit or remove recipes and fuels
 version: 2.32.0
-api-version: 1.13
+api-version: 1.18
 authors: [haveric, ProgrammerDan, Digi]
 website: https://dev.bukkit.org/projects/recipemanager
 dev-url: https://dev.bukkit.org/projects/recipemanager
