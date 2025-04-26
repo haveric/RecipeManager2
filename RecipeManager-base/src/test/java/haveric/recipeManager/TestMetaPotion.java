@@ -9,6 +9,7 @@ import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -204,6 +205,22 @@ public class TestMetaPotion extends TestMetaItem implements PotionMeta {
 
     @Override
     public void setCustomName(String s) {
+
+    }
+
+    @Override
+    public boolean hasDurationScale() {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public float getDurationScale() {
+        return 0;
+    }
+
+    @Override
+    public void setDurationScale(@Nullable Float aFloat) {
 
     }
 

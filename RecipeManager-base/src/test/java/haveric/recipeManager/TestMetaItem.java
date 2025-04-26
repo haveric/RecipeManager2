@@ -5,6 +5,7 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Multimap;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
 import org.bukkit.Tag;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -153,6 +154,11 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     @Override
     public void setCustomModelData(Integer data) {
         this.customModelData = data;
+    }
+
+    @Override
+    public boolean hasCustomModelDataComponent() {
+        return false;
     }
 
     @Override
@@ -552,6 +558,38 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
     }
 
     @Override
+    public boolean hasWeapon() {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public WeaponComponent getWeapon() {
+        return null;
+    }
+
+    @Override
+    public void setWeapon(@Nullable WeaponComponent weaponComponent) {
+
+    }
+
+    @Override
+    public boolean hasBlocksAttacks() {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public BlocksAttacksComponent getBlocksAttacks() {
+        return null;
+    }
+
+    @Override
+    public void setBlocksAttacks(@Nullable BlocksAttacksComponent blocksAttacksComponent) {
+
+    }
+
+    @Override
     public boolean hasEquippable() {
         return false;
     }
@@ -578,6 +616,22 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
 
     @Override
     public void setJukeboxPlayable(JukeboxPlayableComponent jukeboxPlayableComponent) {
+
+    }
+
+    @Override
+    public boolean hasBreakSound() {
+        return false;
+    }
+
+    @Nullable
+    @Override
+    public Sound getBreakSound() {
+        return null;
+    }
+
+    @Override
+    public void setBreakSound(@Nullable Sound sound) {
 
     }
 
