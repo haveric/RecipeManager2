@@ -4,6 +4,8 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class TestEnchantmentUnbreaking extends Enchantment {
     private final Enchantment target;
@@ -60,5 +62,22 @@ public class TestEnchantmentUnbreaking extends Enchantment {
     @Override
     public String getTranslationKey() {
         return null;
+    }
+
+    @NotNull
+    @Override
+    public NamespacedKey getKeyOrThrow() {
+        return null;
+    }
+
+    @Nullable
+    @Override
+    public NamespacedKey getKeyOrNull() {
+        return null;
+    }
+
+    @Override
+    public boolean isRegistered() {
+        return false;
     }
 }

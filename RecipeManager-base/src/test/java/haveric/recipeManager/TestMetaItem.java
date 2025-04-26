@@ -20,6 +20,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.inventory.meta.components.*;
+import org.bukkit.inventory.meta.components.consumable.ConsumableComponent;
 import org.bukkit.inventory.meta.tags.CustomItemTagContainer;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.jetbrains.annotations.NotNull;
@@ -516,6 +517,22 @@ public class TestMetaItem implements ItemMeta, Damageable, Repairable, BlockData
 
     @Override
     public void setFood(FoodComponent foodComponent) {
+
+    }
+
+    @Override
+    public boolean hasConsumable() {
+        return false;
+    }
+
+    @NotNull
+    @Override
+    public ConsumableComponent getConsumable() {
+        return null;
+    }
+
+    @Override
+    public void setConsumable(@Nullable ConsumableComponent consumableComponent) {
 
     }
 

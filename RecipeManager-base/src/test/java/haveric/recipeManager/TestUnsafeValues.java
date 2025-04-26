@@ -11,6 +11,7 @@ import org.bukkit.damage.DamageEffect;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Villager;
 import org.bukkit.inventory.CreativeCategory;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -149,6 +150,16 @@ public class TestUnsafeValues implements UnsafeValues {
 
     @Override
     public Biome getCustomBiome() {
+        return null;
+    }
+
+    @Override
+    public Villager.ReputationType createReputationType(String s) {
+        return null;
+    }
+
+    @Override
+    public Villager.ReputationEvent createReputationEvent(String s) {
         return null;
     }
 }
