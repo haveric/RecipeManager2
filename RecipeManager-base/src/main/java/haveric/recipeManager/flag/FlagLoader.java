@@ -138,6 +138,7 @@ public class FlagLoader {
         if (Version.has1_20_5Support()) {
             loadFlag(FlagType.OMINOUS_BOTTLE_ITEM, new FlagOminousBottleItem(), APPLIED_TO_ITEM, "ominousbottle");
         }
+        loadFlag(FlagType.PERSISTENT_DATA_CONTAINER, new FlagPersistentDataContainer(), APPLIED_TO_ITEM, "pdc");
         loadFlag(FlagType.POTION_ITEM, new FlagPotionItem(), APPLIED_TO_ITEM, "potion");
         if (Version.has1_20_5Support()) {
             loadFlag(FlagType.RARITY, new FlagRarity(), APPLIED_TO_ITEM);

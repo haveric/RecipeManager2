@@ -1,7 +1,7 @@
 == Change log ==
 This file will be automatically overwritten when a new version is installed.
 
-### v2.32.0
+### v2.32.0 (Coming soon)
 * REMOVED support for Minecraft 1.12 - 1.17
 * REMOVED FLAG: `@SpawnEgg`
 * FIX: `@BlockPowered` for soul campfires
@@ -26,6 +26,7 @@ This file will be automatically overwritten when a new version is installed.
 * FIX: 1.20.5+: New compost recipes will automatically be added and no longer require plugin updates
 * FIX: 1.21.0+: `@Summon`: Change `shearedsheep` to `sheared` to support bogged entities being shearable
 * NEW FLAG: 1.21.2+: `@UseCooldown` Adds a cooldown to the use of an item, typically used in conjunction with `@Food`
+* NEW FLAG: `@PersistentDataContainer <arguments` Sets persistent data on items
 
 ### v2.31.0
 * REMOVED support for Minecraft 1.8 - 1.11
