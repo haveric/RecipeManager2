@@ -138,7 +138,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                             if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                                 event.setCancelled(true);
                             } else {
-                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView()).extra(inventory.getSmelting()).build();
+                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView(), event).extra(inventory.getSmelting()).build();
                                 ItemResult result = recipe.getResult(a);
 
                                 if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {
@@ -201,7 +201,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                             if (recipe != null) {
                                 data.setFuelerUUID(player.getUniqueId());
 
-                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView()).extra(inventory.getSmelting()).build();
+                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView(), event).extra(inventory.getSmelting()).build();
 
                                 if (furnaceHandleFlaggable(recipe, a, false, true) && isRecipeSameAsResult(a)) {
                                     assert recipe instanceof RMBaseFurnaceRecipe;
@@ -228,7 +228,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                             if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                                 event.setCancelled(true);
                             } else {
-                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView()).extra(inventory.getSmelting()).build();
+                                Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView(), event).extra(inventory.getSmelting()).build();
                                 ItemResult result = recipe.getResult(a);
 
 
@@ -431,7 +431,7 @@ public class RMBaseFurnaceEvents extends BaseRecipeEvents {
                                 if (recipeFuel != null && !ToolsItem.isSameItem(recipeFuel, fuel, true)) {
                                     event.setCancelled(true);
                                 } else {
-                                    Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView()).extra(inventory.getSmelting()).build();
+                                    Args a = Args.create().player(data.getFuelerUUID()).location(furnace.getLocation()).recipe(recipe).result(recipe.getResult()).inventoryView(event.getView(), event).extra(inventory.getSmelting()).build();
                                     ItemResult result = recipe.getResult(a);
 
                                     if (furnaceHandleFlaggable(recipe, a, false, true) && (result == null || furnaceHandleFlaggable(result, a, false, true)) && isRecipeSameAsResult(a)) {

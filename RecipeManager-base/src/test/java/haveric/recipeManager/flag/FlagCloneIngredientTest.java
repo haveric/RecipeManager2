@@ -86,7 +86,7 @@ public class FlagCloneIngredientTest extends FlagBaseTest {
 
                 ItemResult result = recipe.getFirstResult();
 
-                Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).inventoryView(inventoryView).build();
+                Args a = ArgBuilder.create().recipe(recipe).result(result).player(testUUID).inventoryViewTest(inventoryView).build();
 
                 FlagCloneIngredient flag = (FlagCloneIngredient) result.getFlag(FlagType.CLONE_INGREDIENT);
                 flag.onPrepare(a);

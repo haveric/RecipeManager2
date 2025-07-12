@@ -1,10 +1,11 @@
 package haveric.recipeManager.flag.args;
 
+import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
-import haveric.recipeManager.common.recipes.RMCRecipeType;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
@@ -51,8 +52,11 @@ public class ArgBuilder {
         if (newArgs.hasRecipeType()) {
             a.setRecipeType(newArgs.recipeType());
         }
-        if (newArgs.hasInventoryView()) {
-            a.setInventoryView(newArgs.inventoryView());
+        if (newArgs.hasInventory()) {
+            a.setInventory(newArgs.inventory());
+        }
+        if (newArgs.hasInventoryTitle()) {
+            a.setInventoryTitle(newArgs.inventoryTitle());
         }
         if (newArgs.hasInventory()) {
             a.setInventory(newArgs.inventory());
@@ -90,8 +94,13 @@ public class ArgBuilder {
         return this;
     }
 
-    public ArgBuilder inventoryView(InventoryView inventoryView) {
-        a.setInventoryView(inventoryView);
+    public ArgBuilder inventoryViewTest(InventoryView inventoryView) {
+        a.setInventoryViewTest(inventoryView);
+        return this;
+    }
+
+    public ArgBuilder inventoryView(InventoryView inventoryView, InventoryEvent event) {
+        a.setInventoryView(inventoryView, event);
         return this;
     }
 

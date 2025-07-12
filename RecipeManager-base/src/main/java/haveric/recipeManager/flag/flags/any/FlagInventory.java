@@ -163,8 +163,8 @@ public class FlagInventory extends Flag {
     public void onCheck(Args a) {
         boolean success = false;
 
-        if (a.hasInventoryView()) {
-            InventoryType craftedType = a.inventoryView().getType();
+        if (a.hasInventory() && a.hasInventoryTitle()) {
+            InventoryType craftedType = a.inventory().getType();
 
             for (InventoryType type : inventories) {
                 if (craftedType.equals(type)) {
@@ -174,7 +174,7 @@ public class FlagInventory extends Flag {
             }
 
             if (hasTitles()) {
-                String inventoryTitle = a.inventoryView().getTitle();
+                String inventoryTitle = a.inventoryTitle();
 
                 boolean allowed = false;
 
@@ -202,7 +202,7 @@ public class FlagInventory extends Flag {
         }
 
         if (!success) {
-            a.addReason("flag.inventory", failMessage, "{inventory}", inventories.toString(), "{title}", a.inventoryView().getTitle());
+            a.addReason("flag.inventory", failMessage, "{inventory}", inventories.toString(), "{title}", a.inventoryTitle());
         }
     }
 

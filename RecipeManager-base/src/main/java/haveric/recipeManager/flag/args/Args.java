@@ -9,11 +9,13 @@ import haveric.recipeManager.messages.MessageSender;
 import haveric.recipeManager.messages.Messages;
 import haveric.recipeManager.recipes.BaseRecipe;
 import haveric.recipeManager.recipes.ItemResult;
+import haveric.recipeManager.tools.InventoryCompatibilityUtil;
 import haveric.recipeManager.tools.ToolsItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.meta.BookMeta;
@@ -34,7 +36,10 @@ public class Args {
     private Location location;
     private BaseRecipe recipe;
     private RMCRecipeType recipeType;
-    private InventoryView inventoryView;
+
+    private InventoryView inventoryView; // For testing only // TODO: Remove once 1.20 support is dropped
+    private String inventoryTitle;
+
     private Inventory inventory;
     private ItemResult result;
     private Object extra;
@@ -68,13 +73,26 @@ public class Args {
         recipeType = newRecipeType;
     }
 
-    public void setInventoryView(InventoryView newInventoryView) {
+    public void setInventoryViewTest(InventoryView newInventoryView) { // For testing only // TODO: Remove once 1.20 support is dropped
         inventoryView = newInventoryView;
-        inventory = inventoryView.getTopInventory();
+        inventory = newInventoryView.getTopInventory();
+    }
+
+    public void setInventoryView(InventoryView newInventoryView, InventoryEvent event) {
+        if (event != null) {
+            inventory = InventoryCompatibilityUtil.getTopInventory(event);
+            inventoryTitle = InventoryCompatibilityUtil.getTitle(event);
+        } else {
+            setInventoryViewTest(newInventoryView);
+        }
     }
 
     public void setInventory(Inventory newInventory) {
         inventory = newInventory;
+    }
+
+    public void setInventoryTitle(String newInventoryTitle) {
+        inventoryTitle = newInventoryTitle;
     }
 
     public void setResult(ItemResult newResult) {
@@ -144,6 +162,14 @@ public class Args {
 
     public boolean hasInventoryView() {
         return inventoryView != null;
+    }
+
+    public String inventoryTitle() {
+        return inventoryTitle;
+    }
+
+    public boolean hasInventoryTitle() {
+        return inventoryTitle != null;
     }
 
     public Inventory inventory() {
@@ -534,7 +560,7 @@ public class Args {
             string = string.replace("{recipetype}", (hasRecipeType() ? recipeType().toString().toLowerCase() : "(unknown)"));
         }
         if (string.contains("{inventorytype}")) {
-            string = string.replace("{inventorytype}", (hasInventoryView() ? inventoryView().getType().toString().toLowerCase() : "(unknown)"));
+            string = string.replace("{inventorytype}", (hasInventory() ? inventory().getType().toString().toLowerCase() : "(unknown)"));
         }
         if (string.contains("{world}")) {
             string = string.replace("{world}", (hasLocation() ? location().getWorld().getName() : "(unknown)"));

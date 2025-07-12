@@ -92,7 +92,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 return; // not a custom recipe or recipe not found, no need to move on
             }
 
-            Args a = Args.create().player(player).inventoryView(event.getView()).location(location).recipe(recipe).build();
+            Args a = Args.create().player(player).inventoryView(event.getView(), event).location(location).recipe(recipe).build();
 
             result = recipe.getDisplayResult(a);
 
@@ -349,7 +349,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
                 return;
             }
 
-            Args a = Args.create().player(player).inventoryView(event.getView()).recipe(recipe).location(location).build();
+            Args a = Args.create().player(player).inventoryView(event.getView(), event).recipe(recipe).location(location).build();
 
             if (!recipe.checkFlags(a)) {
                 SoundNotifier.sendDenySound(player, location);
@@ -384,7 +384,7 @@ public class WorkbenchEvents extends BaseRecipeEvents {
 
             int times = craftResult(event, inv, result); // craft the result
             if (result != null) {
-                a = Args.create().player(player).inventoryView(event.getView()).recipe(recipe).location(location).result(result).build();
+                a = Args.create().player(player).inventoryView(event.getView(), event).recipe(recipe).location(location).result(result).build();
 
                 ItemStack[] originalMatrix = inv.getMatrix().clone();
                 boolean firstRun = true;

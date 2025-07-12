@@ -1,5 +1,6 @@
 package haveric.recipeManager.recipes.cartography;
 
+import com.google.common.collect.ImmutableList;
 import haveric.recipeManager.common.RMCChatColor;
 import haveric.recipeManager.common.recipes.RMCRecipeType;
 import haveric.recipeManager.flag.FlagType;
@@ -13,103 +14,64 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.RecipeChoice;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class CartographyRecipe extends PreparableResultRecipe {
-    private RecipeChoice primaryIngredient;
-    private RecipeChoice secondaryIngredient;
-
     public CartographyRecipe() {
-
+        init();
     }
 
     public CartographyRecipe(BaseRecipe recipe) {
         super(recipe);
+        init();
 
         if (recipe instanceof CartographyRecipe r) {
-            if (r.primaryIngredient != null) {
-                primaryIngredient = r.primaryIngredient.clone();
-            }
-            if (r.secondaryIngredient != null) {
-                secondaryIngredient = r.secondaryIngredient.clone();
-            }
-
             updateHash();
         }
     }
 
     public CartographyRecipe(Flags flags) {
         super(flags);
+        init();
+    }
+
+    private void init() {
+        setMaxIngredients(2);
+        addValidChars(ImmutableList.of('a', 'b'));
     }
 
     public boolean isValidBlockMaterial(Material material) {
         return material == Material.CARTOGRAPHY_TABLE;
     }
 
-    public boolean hasIngredient(char character) {
-        if (character == 'a') {
-            return primaryIngredient != null;
-        } else if (character == 'b') {
-            return secondaryIngredient != null;
-        }
-
-        return false;
+    public RecipeChoice getPrimaryIngredientChoice() {
+        return getIngredient('a');
     }
 
-    public RecipeChoice getIngredient(char character) {
-        if (character == 'a') {
-            return primaryIngredient;
-        } else if (character == 'b') {
-            return secondaryIngredient;
-        }
-
-        return null;
+    public void setPrimaryIngredientChoice(RecipeChoice choice) {
+        setIngredient('a', choice);
     }
 
-    public void setIngredient(char character, RecipeChoice choice) {
-        if (character == 'a') {
-            setPrimaryIngredient(choice);
-        } else if (character == 'b') {
-            setSecondaryIngredient(choice);
-        }
+    public RecipeChoice getSecondaryIngredientChoice() {
+        return getIngredient('b');
     }
 
-    public RecipeChoice getPrimaryIngredient() {
-        return primaryIngredient;
-    }
-
-    public void setPrimaryIngredient(RecipeChoice choice) {
-        primaryIngredient = choice.clone();
-
-        updateHash();
-    }
-
-    public RecipeChoice getSecondaryIngredient() {
-        return secondaryIngredient;
-    }
-
-    public void setSecondaryIngredient(RecipeChoice choice) {
-        secondaryIngredient = choice.clone();
-
-        updateHash();
-    }
-
-    public boolean hasIngredients() {
-        return primaryIngredient != null && secondaryIngredient != null;
+    public void setSecondaryIngredientChoice(RecipeChoice choice) {
+        setIngredient('b', choice);
     }
 
     @Override
-    public void updateHash() {
-        StringBuilder str = new StringBuilder("cartography");
+    public boolean hasIngredients() {
+        return hasPrimaryIngredientChoice() && hasSecondaryIngredientChoice();
+    }
 
-        str.append(" a:");
-        str.append(ToolsRecipeChoice.getRecipeChoiceHash(primaryIngredient));
+    public boolean hasPrimaryIngredientChoice() {
+        return hasIngredient('a');
+    }
 
-        str.append(" b:");
-        str.append(ToolsRecipeChoice.getRecipeChoiceHash(secondaryIngredient));
-
-        hash = str.toString().hashCode();
+    public boolean hasSecondaryIngredientChoice() {
+        return hasIngredient('b');
     }
 
     @Override
@@ -118,11 +80,10 @@ public class CartographyRecipe extends PreparableResultRecipe {
 
         str.append("cartography (");
 
-        str.append(" a:");
-        str.append(ToolsRecipeChoice.getRecipeChoiceName(primaryIngredient));
-
-        str.append(" b:");
-        str.append(ToolsRecipeChoice.getRecipeChoiceName(secondaryIngredient));
+        for (Map.Entry<Character, RecipeChoice> ingredient : getIngredients().entrySet()) {
+            str.append(" ").append(ingredient.getKey()).append(":");
+            str.append(ToolsRecipeChoice.getRecipeChoiceHash(ingredient.getValue()));
+        }
 
         str.append(")");
 
@@ -130,44 +91,6 @@ public class CartographyRecipe extends PreparableResultRecipe {
 
         name = str.toString();
         customName = false;
-    }
-
-    @Override
-    public List<String> getIndexes() {
-        List<String> indexString = new ArrayList<>();
-
-        if (primaryIngredient instanceof RecipeChoice.MaterialChoice) {
-            for (Material material : ((RecipeChoice.MaterialChoice) primaryIngredient).getChoices()) {
-                if (secondaryIngredient instanceof RecipeChoice.MaterialChoice) {
-                    for (Material material2 : ((RecipeChoice.MaterialChoice) secondaryIngredient).getChoices()) {
-                        indexString.add(material.toString() + "-" + material2.toString());
-                    }
-                } else if (secondaryIngredient instanceof RecipeChoice.ExactChoice) {
-                    for (ItemStack item : ((RecipeChoice.ExactChoice) secondaryIngredient).getChoices()) {
-                        indexString.add(material.toString() + "-" + item.getType());
-                    }
-                }
-            }
-        } else if (primaryIngredient instanceof RecipeChoice.ExactChoice) {
-            for (ItemStack item : ((RecipeChoice.ExactChoice) primaryIngredient).getChoices()) {
-                if (secondaryIngredient instanceof RecipeChoice.MaterialChoice) {
-                    for (Material material : ((RecipeChoice.MaterialChoice) secondaryIngredient).getChoices()) {
-                        indexString.add(item.getType() + "-" + material.toString());
-                    }
-                } else if (secondaryIngredient instanceof RecipeChoice.ExactChoice) {
-                    for (ItemStack item2 : ((RecipeChoice.ExactChoice) secondaryIngredient).getChoices()) {
-                        indexString.add(item.getType() + "-" + item2.getType());
-                    }
-                }
-            }
-        }
-
-        return indexString;
-    }
-
-    @Override
-    public boolean isValid() {
-        return hasIngredients() && hasResults();
     }
 
     @Override
@@ -187,31 +110,11 @@ public class CartographyRecipe extends PreparableResultRecipe {
 
         s.append(Messages.getInstance().parse("recipebook.header.ingredients"));
 
-        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(primaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
-        s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(secondaryIngredient, RMCChatColor.BLACK, RMCChatColor.BLACK));
-
-        return s.toString();
-    }
-
-
-    @Override
-    public int findItemInIngredients(Material type, Short data) {
-        int found = 0;
-
-        found += ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, primaryIngredient);
-        found += ToolsRecipeChoice.getNumMaterialsInRecipeChoice(type, secondaryIngredient);
-
-        return found;
-    }
-
-    @Override
-    public List<String> getRecipeIndexesForInput(List<ItemStack> ingredients, ItemStack result) {
-        List<String> recipeIndexes = new ArrayList<>();
-        if (ingredients.size() == 2) {
-            recipeIndexes.add(ingredients.get(0).getType() + "-" + ingredients.get(1).getType());
+        for (RecipeChoice choice : getIngredients().values()) {
+            s.append('\n').append(ToolsRecipeChoice.printRecipeChoice(choice, RMCChatColor.BLACK, RMCChatColor.BLACK));
         }
 
-        return recipeIndexes;
+        return s.toString();
     }
 
     @Override
@@ -250,5 +153,10 @@ public class CartographyRecipe extends PreparableResultRecipe {
         }
 
         return totalQuality;
+    }
+
+    @Override
+    public boolean requiresRecipeManagerModification() {
+        return true;
     }
 }

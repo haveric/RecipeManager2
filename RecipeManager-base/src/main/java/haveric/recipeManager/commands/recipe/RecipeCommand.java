@@ -168,7 +168,7 @@ public class RecipeCommand implements TabExecutor {
             } else if (recipe instanceof BrewRecipe brewRecipe) {
                 return containsRecipeChoice(brewRecipe.getPrimaryIngredientChoice(), item) || containsRecipeChoice(brewRecipe.getPotionIngredientChoice(), item);
             } else if (recipe instanceof CartographyRecipe cartographyRecipe) {
-                return containsRecipeChoice(cartographyRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(cartographyRecipe.getSecondaryIngredient(), item);
+                return containsRecipeChoice(cartographyRecipe.getPrimaryIngredientChoice(), item) || containsRecipeChoice(cartographyRecipe.getSecondaryIngredientChoice(), item);
             } else if (recipe instanceof CraftRecipe) {
                 return containsRecipeChoiceMap(((CraftRecipe) recipe).getIngredients(), item);
             } else if (recipe instanceof CombineRecipe) {
@@ -178,7 +178,7 @@ public class RecipeCommand implements TabExecutor {
             } else if (recipe instanceof FuelRecipe) {
                 return containsRecipeChoice(((FuelRecipe) recipe).getIngredientChoice(), item.getType());
             } else if (recipe instanceof GrindstoneRecipe grindstoneRecipe) {
-                return containsRecipeChoice(grindstoneRecipe.getPrimaryIngredient(), item) || containsRecipeChoice(grindstoneRecipe.getSecondaryIngredient(), item);
+                return containsRecipeChoice(grindstoneRecipe.getPrimaryIngredientChoice(), item) || containsRecipeChoice(grindstoneRecipe.getSecondaryIngredientChoice(), item);
             } else if (recipe instanceof RMBaseFurnaceRecipe) {
                 return containsRecipeChoice(((RMBaseFurnaceRecipe) recipe).getIngredientChoice(), item.getType());
             } else if (recipe instanceof RMCampfireRecipe) {

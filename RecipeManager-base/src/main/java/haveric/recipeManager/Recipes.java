@@ -205,7 +205,7 @@ public class Recipes {
         List<String> recipeIndexes = blankBaseRecipe.getRecipeIndexesForInput(ingredients, result);
         if (recipeIndexes != null) {
             if (index.containsKey(type)) {
-                Map<String, List<BaseRecipe>> recipes = index.get(type);
+                Map<String, List<BaseRecipe>> recipes = indexRecipes.get(type);
 
                 for (String recipeIndex : recipeIndexes) {
                     if (recipes.containsKey(recipeIndex)) {

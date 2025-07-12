@@ -67,7 +67,7 @@ public class AnvilEvents extends BaseRecipeEvents {
                 InventoryView view = ((InventoryEvent) event).getView(); // TODO: Remove InventoryEvent cast once 1.20 support is dropped
                 Player player = (Player) InventoryCompatibilityUtil.getPlayer(event);
 
-                Args a = Args.create().player(player).inventoryView(view).location(block.getLocation()).recipe(recipe).build();
+                Args a = Args.create().player(player).inventoryView(view, event).location(block.getLocation()).recipe(recipe).build();
                 ItemResult result = recipe.getDisplayResult(a);
                 if (result != null) {
                     a.setResult(result);
@@ -310,7 +310,7 @@ public class AnvilEvents extends BaseRecipeEvents {
 
         // Clone the recipe, so we can add custom flags to it
         AnvilRecipe recipe = new AnvilRecipe(anvil.getRecipe());
-        Args a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).build();
+        Args a = Args.create().player(player).inventoryView(view, event).recipe(recipe).location(location).build();
 
         String renameText = anvil.getRenameText();
         boolean toRename = recipe.isRenamingAllowed() && renameText != null && !renameText.isEmpty();
@@ -355,7 +355,7 @@ public class AnvilEvents extends BaseRecipeEvents {
         }
 
         if (result != null) {
-            a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).result(result).build();
+            a = Args.create().player(player).inventoryView(view, event).recipe(recipe).location(location).result(result).build();
 
             boolean firstRun = true;
             for (int i = 0; i < times; i++) {

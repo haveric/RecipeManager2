@@ -2,6 +2,7 @@
 This file will be automatically overwritten when a new version is installed.
 
 ### v2.32.0 (Coming soon)
+* KNOWN ISSUE: Cartography tables with an air ingredient may not render the result (but should still work)
 * REMOVED support for Minecraft 1.12 - 1.17
 * REMOVED FLAG: `@SpawnEgg`
 * FIX: `@BlockPowered` for soul campfires

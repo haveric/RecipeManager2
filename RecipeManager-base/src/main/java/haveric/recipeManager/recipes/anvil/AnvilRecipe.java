@@ -42,7 +42,6 @@ public class AnvilRecipe extends PreparableResultRecipe {
 
     public AnvilRecipe(Flags flags) {
         super(flags);
-
         init();
     }
 

@@ -26,10 +26,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -92,7 +89,7 @@ public class CartographyEvents extends BaseRecipeEvents {
                 if (location != null) {
                     Player player = (Player) ent;
 
-                    prepareCartographyLater(cartographyInventory, player, event.getView());
+                    prepareCartographyLater(cartographyInventory, player, event.getView(), event);
                 }
             }
         }
@@ -123,12 +120,12 @@ public class CartographyEvents extends BaseRecipeEvents {
                             if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT || clickType == ClickType.CONTROL_DROP) {
                                 event.setCancelled(true);
                                 craftFinishCartography(event, player, cartographyInventory, true);
-                                prepareCartographyLater(cartographyInventory, player, event.getView());
+                                prepareCartographyLater(cartographyInventory, player, event.getView(), event);
                                 new UpdateInventory(player, 2);
                             } else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP) {
                                 event.setCancelled(true);
                                 craftFinishCartography(event, player, cartographyInventory, false);
-                                prepareCartographyLater(cartographyInventory, player, event.getView());
+                                prepareCartographyLater(cartographyInventory, player, event.getView(), event);
                                 new UpdateInventory(player, 2);
                             }
                         }
@@ -141,7 +138,7 @@ public class CartographyEvents extends BaseRecipeEvents {
                             ToolsInventory.simulateDefaultClick(player, cartographyInventory, rawSlot, clickType);
                         }
 
-                        prepareCartographyLater(cartographyInventory, player, event.getView());
+                        prepareCartographyLater(cartographyInventory, player, event.getView(), event);
                     } else if (rawSlot > 2) {
                         if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
                             ItemStack currentItem = event.getCurrentItem();
@@ -154,7 +151,7 @@ public class CartographyEvents extends BaseRecipeEvents {
                                     case MAP:
                                     case PAPER:
                                     case GLASS_PANE:
-                                        prepareCartographyLater(cartographyInventory, player, event.getView());
+                                        prepareCartographyLater(cartographyInventory, player, event.getView(), event);
                                         break;
 
                                     default:
@@ -168,16 +165,16 @@ public class CartographyEvents extends BaseRecipeEvents {
         }
     }
 
-    private void prepareCartographyLater(CartographyInventory inventory, Player player, InventoryView view) {
+    private void prepareCartographyLater(CartographyInventory inventory, Player player, InventoryView view, InventoryEvent event) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                prepareCartography(inventory, player, view);
+                prepareCartography(inventory, player, view, event);
             }
         }.runTaskLater(RecipeManager.getPlugin(), 0);
     }
 
-    private void prepareCartography(CartographyInventory inventory, Player player, InventoryView view) {
+    private void prepareCartography(CartographyInventory inventory, Player player, InventoryView view, InventoryEvent event) {
         ItemStack top = inventory.getItem(0);
         ItemStack bottom = inventory.getItem(1);
 
@@ -189,9 +186,8 @@ public class CartographyEvents extends BaseRecipeEvents {
         if (baseRecipe instanceof CartographyRecipe recipe) {
             CartographyTable cartographyTable = CartographyTables.get(player);
             Location location = cartographyTable.getLocation();
-
             if (location != null) {
-                Args a = Args.create().player(player).inventoryView(view).location(location).recipe(recipe).build();
+                Args a = Args.create().player(player).inventoryView(view, event).location(location).recipe(recipe).build();
                 ItemResult result = recipe.getDisplayResult(a);
                 if (result != null) {
                     a.setResult(result);
@@ -213,8 +209,14 @@ public class CartographyEvents extends BaseRecipeEvents {
                     }
                 }
 
-                inventory.setItem(2, result.getItemStack());
-                player.updateInventory();
+                ItemStack clone = result.getItemStack().clone();
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        inventory.setItem(2, clone);
+                        player.updateInventory();
+                    }
+                }.runTaskLater(RecipeManager.getPlugin(), 0);
 
                 CartographyTables.remove(player);
                 CartographyTables.add(player, recipe, ingredients, result, location);
@@ -256,7 +258,7 @@ public class CartographyEvents extends BaseRecipeEvents {
 
         // Clone the recipe, so we can add custom flags to it
         CartographyRecipe recipe = new CartographyRecipe(cartographyTable.getRecipe());
-        Args a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).build();
+        Args a = Args.create().player(player).inventoryView(view, event).recipe(recipe).location(location).build();
 
         if (!recipe.checkFlags(a)) {
             SoundNotifier.sendDenySound(player, location);
@@ -271,7 +273,7 @@ public class CartographyEvents extends BaseRecipeEvents {
         }
 
         if (result != null) {
-            a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).result(result).build();
+            a = Args.create().player(player).inventoryView(view, event).recipe(recipe).location(location).result(result).build();
 
             boolean firstRun = true;
             for (int i = 0; i < times; i++) {

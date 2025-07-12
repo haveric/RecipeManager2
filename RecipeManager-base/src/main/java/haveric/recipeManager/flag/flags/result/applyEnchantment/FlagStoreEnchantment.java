@@ -86,7 +86,7 @@ public class FlagStoreEnchantment extends BaseFlagApplyStoreEnchantment {
 
     @Override
     public void onCrafted(Args a) {
-        if (!a.hasResult() || !a.hasInventoryView()) {
+        if (!a.hasResult() || !a.hasInventory()) {
             a.addCustomReason("Needs inventory and result!");
             return;
         }

@@ -5,7 +5,6 @@ import haveric.recipeManager.common.util.ParseBit;
 import haveric.recipeManager.flag.FlagBit;
 import haveric.recipeManager.flag.FlagType;
 import haveric.recipeManager.flag.Flags;
-import haveric.recipeManager.recipes.AirChoice;
 import haveric.recipeManager.recipes.BaseRecipeParser;
 import haveric.recipeManager.recipes.ItemResult;
 import haveric.recipeManager.tools.Tools;
@@ -34,7 +33,7 @@ public class AnvilRecipeParser extends BaseRecipeParser {
 
             if (lineChars.length() == 1 && (ingredientChar == 'a' || ingredientChar == 'b')) {
                 RecipeChoice choice = Tools.parseRecipeChoice(lineSplit[0].substring(2), ParseBit.NONE);
-                if (choice == null || choice instanceof AirChoice) {
+                if (choice == null) {
                     return false;
                 }
 

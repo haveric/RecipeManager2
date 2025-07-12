@@ -74,22 +74,22 @@ public class FlagInventoryTest extends FlagBaseTest {
                 if (resultType == Material.DIRT) {
                     assertTrue(flag.getInventories().contains(InventoryType.CRAFTING));
 
-                    a.setInventoryView(custom);
+                    a.setInventoryViewTest(custom);
                     flag.onCheck(a);
                     assertFalse(a.hasReasons());
 
-                    a.setInventoryView(workbench);
+                    a.setInventoryViewTest(workbench);
                     flag.onCheck(a);
                     assertTrue(a.hasReasons());
                 } else if (resultType == Material.COBBLESTONE) {
                     assertTrue(flag.getInventories().contains(InventoryType.CRAFTING));
                     assertTrue(flag.getInventories().contains(InventoryType.WORKBENCH));
 
-                    a.setInventoryView(custom);
+                    a.setInventoryViewTest(custom);
                     flag.onCheck(a);
                     assertFalse(a.hasReasons());
 
-                    a.setInventoryView(workbench);
+                    a.setInventoryViewTest(workbench);
                     flag.onCheck(a);
                     assertFalse(a.hasReasons());
                 } else if (resultType == Material.STONE) {
@@ -100,11 +100,11 @@ public class FlagInventoryTest extends FlagBaseTest {
                     assertTrue(flag.getAllowedTitles().contains("Custom"));
                     assertTrue(flag.getUnallowedTitles().isEmpty());
 
-                    a.setInventoryView(custom);
+                    a.setInventoryViewTest(custom);
                     flag.onCheck(a);
                     assertFalse(a.hasReasons());
 
-                    a.setInventoryView(second);
+                    a.setInventoryViewTest(second);
                     flag.onCheck(a);
                     assertTrue(a.hasReasons());
 
@@ -114,19 +114,19 @@ public class FlagInventoryTest extends FlagBaseTest {
                     assertTrue(flag.getAllowedTitles().contains("Second"));
                     assertTrue(flag.getUnallowedTitles().contains("  Third  "));
 
-                    a.setInventoryView(custom);
+                    a.setInventoryViewTest(custom);
                     flag.onCheck(a);
                     assertFalse(a.hasReasons());
 
-                    a.setInventoryView(second);
+                    a.setInventoryViewTest(second);
                     flag.onCheck(a);
                     assertFalse(a.hasReasons());
 
-                    a.setInventoryView(third);
+                    a.setInventoryViewTest(third);
                     flag.onCheck(a);
                     assertTrue(a.hasReasons());
 
-                    a.setInventoryView(workbench);
+                    a.setInventoryViewTest(workbench);
                     flag.onCheck(a);
                     assertTrue(a.hasReasons());
                 }

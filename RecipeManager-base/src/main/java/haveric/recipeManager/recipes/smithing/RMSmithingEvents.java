@@ -32,8 +32,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
 
     @EventHandler(priority = EventPriority.LOW)
     public void smithingPrepare(PrepareSmithingEvent event) {
-        InventoryView view = event.getView();
-        Player player = (Player) view.getPlayer();
+        Player player = (Player) InventoryCompatibilityUtil.getPlayer(event);
 
         SmithingInventory inventory = event.getInventory();
 
@@ -67,7 +66,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
         if (recipe != null) {
             Location location = inventory.getLocation();
             if (location != null) {
-                Args a = Args.create().player(player).inventoryView(view).location(location).recipe(recipe).build();
+                Args a = Args.create().player(player).inventoryView(event.getView(), event).location(location).recipe(recipe).build();
                 result = recipe.getDisplayResult(a);
                 if (result != null) {
                     a.setResult(result);
@@ -256,9 +255,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
     @EventHandler
     public void smithingCraft(SmithItemEvent event) {
         SmithingInventory inventory = event.getInventory();
-
-        InventoryView view = event.getView();
-        Player player = (Player) view.getPlayer();
+        Player player = (Player) InventoryCompatibilityUtil.getPlayer(event);
 
         Location location = inventory.getLocation();
         if (location != null) {
@@ -298,7 +295,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
             }
 
             if (recipe != null) {
-                Args a = Args.create().player(player).inventoryView(view).location(location).recipe(recipe).build();
+                Args a = Args.create().player(player).inventoryView(event.getView(), event).location(location).recipe(recipe).build();
 
                 if (!recipe.checkFlags(a)) {
                     SoundNotifier.sendDenySound(player, location);
@@ -316,7 +313,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (result != null) {
-                    a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).result(result).build();
+                    a = Args.create().player(player).inventoryView(event.getView(), event).recipe(recipe).location(location).result(result).build();
 
                     boolean firstRun = true;
                     for (int i = 0; i < times; i++) {
@@ -547,7 +544,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
 
             if (recipe != null) {
                 event.setCancelled(true);
-                Args a = Args.create().player(player).inventoryView(view).location(location).recipe(recipe).build();
+                Args a = Args.create().player(player).inventoryView(view, event).location(location).recipe(recipe).build();
 
                 if (!recipe.checkFlags(a)) {
                     SoundNotifier.sendDenySound(player, location);
@@ -565,7 +562,7 @@ public class RMSmithingEvents extends BaseRecipeEvents {
                 }
 
                 if (result != null) {
-                    a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).result(result).build();
+                    a = Args.create().player(player).inventoryView(view, event).recipe(recipe).location(location).result(result).build();
 
                     boolean firstRun = true;
                     for (int i = 0; i < times; i++) {

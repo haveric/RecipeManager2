@@ -26,10 +26,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.inventory.ClickType;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryDragEvent;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.GrindstoneInventory;
@@ -80,7 +77,7 @@ public class GrindstoneEvents extends BaseRecipeEvents {
                 if (location != null) {
                     Player player = (Player) ent;
 
-                    prepareGrindstoneLater(grindstoneInventory, player, event.getView());
+                    prepareGrindstoneLater(grindstoneInventory, player, event.getView(), event);
                 }
             }
         }
@@ -109,12 +106,12 @@ public class GrindstoneEvents extends BaseRecipeEvents {
                             if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT || clickType == ClickType.CONTROL_DROP) {
                                 event.setCancelled(true);
                                 craftFinishGrindstone(event, player, grindstoneInventory, true);
-                                prepareGrindstoneLater(grindstoneInventory, player, event.getView());
+                                prepareGrindstoneLater(grindstoneInventory, player, event.getView(), event);
                                 new UpdateInventory(player, 2);
                             } else if (clickType == ClickType.LEFT || clickType == ClickType.RIGHT || clickType == ClickType.NUMBER_KEY || clickType == ClickType.DROP) {
                                 event.setCancelled(true);
                                 craftFinishGrindstone(event, player, grindstoneInventory, false);
-                                prepareGrindstoneLater(grindstoneInventory, player, event.getView());
+                                prepareGrindstoneLater(grindstoneInventory, player, event.getView(), event);
                                 new UpdateInventory(player, 2);
                             }
                         }
@@ -127,14 +124,14 @@ public class GrindstoneEvents extends BaseRecipeEvents {
                             ToolsInventory.simulateDefaultClick(player, grindstoneInventory, rawSlot, clickType);
                         }
 
-                        prepareGrindstoneLater(grindstoneInventory, player, event.getView());
+                        prepareGrindstoneLater(grindstoneInventory, player, event.getView(), event);
                     } else if (rawSlot > 2) {
                         if (clickType == ClickType.SHIFT_LEFT || clickType == ClickType.SHIFT_RIGHT) {
                             ItemStack currentItem = event.getCurrentItem();
 
                             if (currentItem != null) {
                                 if (currentItem.getItemMeta() instanceof EnchantmentStorageMeta || currentItem.getType().getMaxDurability() > 0) {
-                                    prepareGrindstoneLater(grindstoneInventory, player, event.getView());
+                                    prepareGrindstoneLater(grindstoneInventory, player, event.getView(), event);
                                 }
                             }
                         }
@@ -144,16 +141,16 @@ public class GrindstoneEvents extends BaseRecipeEvents {
         }
     }
 
-    private void prepareGrindstoneLater(GrindstoneInventory inventory, Player player, InventoryView view) {
+    private void prepareGrindstoneLater(GrindstoneInventory inventory, Player player, InventoryView view, InventoryEvent event) {
         new BukkitRunnable() {
             @Override
             public void run() {
-                prepareGrindstone(inventory, player, view);
+                prepareGrindstone(inventory, player, view, event);
             }
         }.runTaskLater(RecipeManager.getPlugin(), 0);
     }
 
-    private void prepareGrindstone(GrindstoneInventory inventory, Player player, InventoryView view) {
+    private void prepareGrindstone(GrindstoneInventory inventory, Player player, InventoryView view, InventoryEvent event) {
         ItemStack top = inventory.getItem(0);
         ItemStack bottom = inventory.getItem(1);
 
@@ -168,7 +165,7 @@ public class GrindstoneEvents extends BaseRecipeEvents {
             if (location != null) {
                 Block block = location.getBlock();
 
-                Args a = Args.create().player(player).inventoryView(view).location(block.getLocation()).recipe(recipe).build();
+                Args a = Args.create().player(player).inventoryView(view, event).location(block.getLocation()).recipe(recipe).build();
                 ItemResult result = recipe.getDisplayResult(a);
                 if (result != null) {
                     a.setResult(result);
@@ -332,7 +329,7 @@ public class GrindstoneEvents extends BaseRecipeEvents {
         }
         // Clone the recipe, so we can add custom flags to it
         GrindstoneRecipe recipe = new GrindstoneRecipe(grindstone.getRecipe());
-        Args a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).build();
+        Args a = Args.create().player(player).inventoryView(view, event).recipe(recipe).location(location).build();
 
         if (!recipe.checkFlags(a)) {
             SoundNotifier.sendDenySound(player, location);
@@ -347,7 +344,7 @@ public class GrindstoneEvents extends BaseRecipeEvents {
         }
 
         if (result != null) {
-            a = Args.create().player(player).inventoryView(view).recipe(recipe).location(location).result(result).build();
+            a = Args.create().player(player).inventoryView(view, event).recipe(recipe).location(location).result(result).build();
 
             boolean firstRun = true;
             for (int i = 0; i < times; i++) {

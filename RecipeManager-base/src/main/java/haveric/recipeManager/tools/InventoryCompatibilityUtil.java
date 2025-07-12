@@ -38,12 +38,34 @@ public class InventoryCompatibilityUtil {
         }
     }
 
+    public static Inventory getTopInventory(InventoryEvent event) {
+        try {
+            Object view = event.getView();
+            Method getTopInventory = view.getClass().getMethod("getTopInventory");
+            getTopInventory.setAccessible(true);
+            return (Inventory) getTopInventory.invoke(view);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static Inventory getBottomInventory(InventoryEvent event) {
         try {
             Object view = event.getView();
             Method getBottomInventory = view.getClass().getMethod("getBottomInventory");
             getBottomInventory.setAccessible(true);
             return (Inventory) getBottomInventory.invoke(view);
+        } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static String getTitle(InventoryEvent event) {
+        try {
+            Object view = event.getView();
+            Method getTitle = view.getClass().getMethod("getTitle");
+            getTitle.setAccessible(true);
+            return (String) getTitle.invoke(view);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
